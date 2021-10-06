@@ -4,6 +4,9 @@
 			"Code Sample",
 			"Component versus Class",
 			"Inspired by Piet Mondrian"
+		],
+		"forms": [
+			"COLOR_PALETTE"
 		]
 	},
 	"Classes": {
