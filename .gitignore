@@ -1,0 +1,9 @@
+.*
+!.gitignore
+Data
+Resources/php.ini
+Settings/backup.4DSettings
+userPreferences.*
+Project/DerivedData/CompiledCode
+Project/DerivedData
+Preferences

@@ -1,0 +1,16 @@
+{
+	"00_ SAMPLES": {
+		"methods": [
+			"Code Sample",
+			"Component versus Class",
+			"Inspired by Piet Mondrian"
+		]
+	},
+	"Classes": {
+		"classes": [
+			"svg",
+			"xml"
+		]
+	},
+	"trash": {}
+}
