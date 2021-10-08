@@ -3,7 +3,9 @@
 After creating and using the [4D SVG component](https://doc.4d.com/4Dv19/4D/19/4D-SVG-Component.100-5461938.en.html), I became aware of the need to build a new API much smaller, faster and closer to the SVG format and my use to manage the user interface. 
 
 The goal of this class is to reduce the complexity of code to create and manipulate svg images/documents.
-This class will be augmented according to my needs but you are strongly encouraged to participate yourself through pull request.
+<br/>This class will be augmented according to my needs but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/SVG-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com/search?q=4D%20for%20iOS). 
+
+`Enjoy the 4th dimension`
 
 ## Code sample
 Using the 4D SVG component to create and manipulate SVG elements requires knowledge of many commands and becomes difficult to understand and maintain. Creating a simple SVG requires many lines of code:
