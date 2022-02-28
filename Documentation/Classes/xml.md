@@ -21,11 +21,11 @@ This class is intended to work with the [enhanced XPath support](https://blog.4d
 
 > 📌 With the exception of functions that return a specific result (getter function), each call returns the original `cs.xml` object, and you can include one call after another.
 
-### Document
+### Document functions
 
 |Function|Action|
 |--------|------|   
-|.**newRef** ({root : `Text`} {; nameSpaceName : `Text` ; nameSpaceValue : `Text`} … {; nameSpaceNameN : `Text` ; nameSpaceValueN : `Text`}  ) → `cs.xml` | Create a new XML tree in memory
+|.**newRef** ({root : `Text`} {; nameSpaceName : `Text`} {; nameSpaceName1 : `Text`; nameSpaceValue1 : `Text`} … {; nameSpaceNameN : `Text` ; nameSpaceValueN : `Text`}  ) → `cs.xml` | Create a new XML tree in memory
 |.**setOption** ( selector : `Integer` ; value : `integer` ) → `cs.xml` | Modify the value of one XML option for the structure
 |.**setOptions** ( selector : `Integer` ; value : `integer` … {selectorN : `Integer` ; valueN : `integer`}) → `cs.xml` | Modify the value of one or more XML options for the structure
 |.**parse** ( value : `Text` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` <br/> .**parse** ( value : `Blob` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` | Parses a BLOB or Text type variable containing an XML structure 
@@ -37,7 +37,7 @@ This class is intended to work with the [enhanced XPath support](https://blog.4d
 |.**toObject()** ({withAdresses : `Boolean`}) → `Blob` |  Returns the XML structure as Object.<br/> If withAdresses is True, an attribute `@` is populated for each element with it's XML reference.
 
 
-### Elements
+### Elements functions
 
 |Function|Action|
 |--------|------|  
@@ -59,7 +59,7 @@ This class is intended to work with the [enhanced XPath support](https://blog.4d
 |.**removeAttribute** ( node : `XML Ref` ; attribute : `Text` ; value :`Variant` )  → `cs.xml` | Removes an attribute, if exists
 
 
-### Naviguation
+### Naviguation functions
 
 |Function|Action|
 |--------|------| 
@@ -100,12 +100,36 @@ The class constructor also accepts an optional parameter, so you can create a XM
 >`cs.xml.new(Blob)` Parses the blob variable content     
 >`cs.xml.new(Text)` Parses the text variable content
 
-## .create()
-.**create** ( XPath : `Text` {; attributes `Object | Collection`} ) → `cs.xml`    
+## 🔹 .newRef()
+>. newRef() → `cs.xml` 
+
+
+>. newRef( rootName : `Text`) → `cs.xml` 
+
+## 🔹 .create()
+>.create( XPath : `Text` {; attributes `Object | Collection`} ) → `cs.xml` 
+   
 Creates a new element in the root
 
-.**create** ( target : `XML Ref`; XPath : `Text` {; attributes `Object | Collection`} ) → `cs.xml`    
+>.create( target : `XML Ref`; XPath : `Text` {; attributes `Object | Collection`} ) → `cs.xml`  
+  
 Creates a new element in the target element
 
 `attributes` are attribute/value pairs. It can be an object or a collection. [see .setAttributes()]
+
+## 🔹 .setAttributes()
+>.setAttributes( target : `XML Ref`; attribute : `Text` ; value ) → `cs.xml` 
+
+Set one attribute for the target element
+
+>.setAttributes( target : `XML Ref`; attributes : `Object` ) → `cs.xml` 
+
+Defines one or more attributes for the target element from a definition object.<br/>
+Each property corresponding to an attribute name stores the value of the attribute.
+
+>.setAttributes( target : `XML Ref`; attributes : `Collection` ) → `cs.xml` 
+
+Defines one or more attributes for the target element from a collection.<br/>
+Each element of the collection is an object with "key" and "value" properties.
+
 
