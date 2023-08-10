@@ -81,9 +81,19 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**ry** ( ry : `Real` {; applyTo } ) → `cs.svg` | Sets the ry of an ellipse
 |.**cx** ( cx : `Real` {; applyTo } ) → `cs.svg` | Sets the cx of a circle or ellipse
 |.**cy** ( cy : `Real` {; applyTo } ) → `cs.svg` | Sets the cy of a rect or an ellipse
+|.**d** ( points : `Text` {; applyTo } ) → `cs.svg` | Sets the "d" property of a path element
 |.**points** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Sets the "points" property of a polyline/polygon
 |.**M** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Absolute moveTo
+|.**m** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Relative moveTo
 |.**L** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Absolute lineTo
+|.**l** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Relative lineTo
+|.**H** ( x : `Real` {; applyTo } ) → `cs.svg` | Absolute horizontal lineTo
+|.**h** ( x : `Real` {; applyTo } ) → `cs.svg` | Relative horizontal lineTo
+|.**H** ( y : `Real` {; applyTo } ) → `cs.svg` | Absolute vertical lineTo
+|.**h** ( x : `Real` {; applyTo } ) → `cs.svg` | Relative horizontal lineTo
+|.**A** ( rx : `Real`; ry : `Real`; rotation : `Real`; largeArcFlag : `Real`; sweepFlag : `Real`; x : `Real`; y : `Real`; {; applyTo } ) → `cs.svg` | Absolute elliptical arc
+|.**a** ( rx : `Real`; ry : `Real`; rotation : `Real`; largeArcFlag : `Real`; sweepFlag : `Real`; x : `Real`; y : `Real`; {; applyTo } ) → `cs.svg` | Relative elliptical arc
+|.**Z** ( ) → `cs.svg` | Close a path element
 |.**setAttribute** ( name : `Text`; value : `Variant` {; applyTo } ) → `cs.svg` | Sets one attribute
 |.**setAttributes** ( attributes : `Text` \| `Collection` \| `Object`; value : `Variant` {; applyTo})  → `cs.svg` | Defines multiple attributes
 

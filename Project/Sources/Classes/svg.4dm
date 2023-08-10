@@ -28,7 +28,7 @@ Class constructor($content)
 	// Elements that provide additional descriptive information about their parent.
 	This:C1470._descriptive:=New collection:C1472("desc"; "metadata"; "title")
 	
-	This:C1470._notContainer:=New collection:C1472("rect"; "line"; "image"; "circle"; "ellipse"; "path"; "polygon"; "polyline"; "use"; "textArea")
+	This:C1470._notContainer:=New collection:C1472("rect"; "line"; "image"; "circle"; "ellipse"; "polygon"; "polyline"; "use"; "textArea")  //; "path"
 	
 	This:C1470._aspectRatioValues:=New collection:C1472("none"; "xMinYMin"; "xMidYMin"; "xMaxYMin"; "xMinYMid"; "xMidYMid"; "xMaxYMid"; "xMinYMax"; "xMidYMax"; "xMaxYMax")
 	This:C1470._textRenderingValue:=New collection:C1472("auto"; "optimizeSpeed"; "optimizeLegibility"; "geometricPrecision"; "inherit")
@@ -344,7 +344,7 @@ Function styleSheet($file : 4D:C1709.File) : cs:C1710.svg
 	
 	//MARK:-DRAWING
 	//———————————————————————————————————————————————————————————
-Function rect($height : Real; $width : Variant; $attachTo) : cs:C1710.svg
+Function rect($width : Variant; $height : Real; $attachTo) : cs:C1710.svg
 	
 	var $node : Text
 	var $breadth : Real
@@ -354,26 +354,29 @@ Function rect($height : Real; $width : Variant; $attachTo) : cs:C1710.svg
 	
 	If (This:C1470._requiredParams($paramNumber; 1))
 		
-		$breadth:=$height  // Square by default
+		$breadth:=$width  // Square by default
 		
 		Case of 
 				
 				//…………………………………………………………………………………………
 			: ($paramNumber=1)
 				
+				// .rect(width)
 				$node:=This:C1470._getContainer()
 				
 				//…………………………………………………………………………………………
 			: ($paramNumber=2)
 				
-				If (Value type:C1509($width)=Is real:K8:4)\
+				If (Value type:C1509($height)=Is real:K8:4)\
 					 | (Value type:C1509($width)=Is longint:K8:6)
 					
-					$breadth:=$width
+					// .rect(width; height)
+					$breadth:=$height
 					$node:=This:C1470._getContainer()
 					
 				Else 
 					
+					// .rect(width; attachTo)
 					$node:=This:C1470._getContainer($width)
 					
 				End if 
@@ -381,14 +384,15 @@ Function rect($height : Real; $width : Variant; $attachTo) : cs:C1710.svg
 				//…………………………………………………………………………………………
 			: ($paramNumber=3)
 				
+				// .rect(width; height; attachTo)
 				$node:=This:C1470._getContainer($attachTo)
-				$breadth:=$width
+				$breadth:=$height
 				
 				//…………………………………………………………………………………………
 		End case 
 		
 		This:C1470.latest:=Super:C1706.create($node; "rect"; New object:C1471(\
-			"width"; $height; \
+			"width"; $width; \
 			"height"; $breadth))
 		
 	End if 
@@ -894,7 +898,7 @@ Function path($data : Text; $attachTo) : cs:C1710.svg
 	$node:=Count parameters:C259=2 ? This:C1470._getContainer($attachTo) : This:C1470._getContainer()
 	
 	This:C1470.latest:=Super:C1706.create($node; "path")
-	This:C1470.setAttribute("d"; $data)
+	This:C1470.setAttribute("d"; $data; This:C1470.latest)
 	
 	return This:C1470
 	
@@ -1018,6 +1022,65 @@ Function M($points : Variant; $applyTo) : cs:C1710.svg
 			//…………………………………………………………………………………………………
 		: ($element="path")
 			
+			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+" M"+$data)
+			
+			//…………………………………………………………………………………………………
+		Else 
+			
+			This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+			
+			//…………………………………………………………………………………………………
+	End case 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Relative moveTo
+Function m($points : Variant; $applyTo) : cs:C1710.svg
+	
+	var $data; $element; $node : Text
+	
+	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
+		
+		return This:C1470
+		
+	End if 
+	
+	Case of 
+			//______________________________________________________
+		: (Value type:C1509($points)=Is collection:K8:32)
+			
+			$data:=" m"+String:C10($points[0]; "&xml")+","+String:C10($points[1]; "&xml")
+			
+			//______________________________________________________
+		: (Value type:C1509($points)=Is text:K8:3)
+			
+			$data:=$points
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError(Current method name:C684+" Points must be passed as string or collection")
+			return This:C1470
+			
+			//______________________________________________________
+	End case 
+	
+	$node:=Count parameters:C259>=2 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
+	
+	DOM GET XML ELEMENT NAME:C730($node; $element)
+	
+	Case of 
+			
+			//…………………………………………………………………………………………………
+		: ($element="polyline")\
+			 | ($element="polygon")
+			
+			Super:C1706.setAttribute($node; "points"; $data)
+			
+			//…………………………………………………………………………………………………
+		: ($element="path")
+			
 			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+$data)
 			
 			//…………………………………………………………………………………………………
@@ -1027,6 +1090,27 @@ Function M($points : Variant; $applyTo) : cs:C1710.svg
 			
 			//…………………………………………………………………………………………………
 	End case 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Close path
+Function Z($applyTo) : cs:C1710.svg
+	
+	var $element; $node : Text
+	
+	$node:=Count parameters:C259>=1 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
+	DOM GET XML ELEMENT NAME:C730($node; $element)
+	
+	If ($element="path")
+		
+		Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+"Z")
+		
+	Else 
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+		
+	End if 
 	
 	return This:C1470
 	
@@ -1090,7 +1174,7 @@ Function L($points : Variant; $applyTo) : cs:C1710.svg
 			//…………………………………………………………………………………………………
 		: ($element="path")
 			
-			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+$data)
+			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+" L"+$data)
 			
 			//…………………………………………………………………………………………………
 		Else 
@@ -1103,39 +1187,192 @@ Function L($points : Variant; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Relative moveTo
-Function m($points : Variant; $applyTo) : cs:C1710.svg
-	
-	//FIXME:TO_DO
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
 	// Relative lineTo
 Function l($points : Variant; $applyTo) : cs:C1710.svg
 	
-	//FIXME:TO_DO
+	var $data; $name; $node; $element : Text
+	var $i : Integer
+	
+	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
+		
+		return This:C1470
+		
+	End if 
+	
+	Case of 
+			//______________________________________________________
+		: (Value type:C1509($points)=Is collection:K8:32)
+			
+			If ($points.length%2=0)
+				
+				For ($i; 0; $points.length-1; 2)
+					
+					$data:=$data+String:C10($points[$i]; "&xml")+" "+String:C10($points[$i+1]; "&xml")
+					
+				End for 
+				
+			Else 
+				
+				This:C1470._pushError(Current method name:C684+" The length of the point collection must be a multiple of 2")
+				return This:C1470
+				
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($points)=Is text:K8:3)
+			
+			$data:=$points
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError(Current method name:C684+" Points must be passed as string or collection")
+			return This:C1470
+			
+			//______________________________________________________
+	End case 
+	
+	$node:=Count parameters:C259>=2 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
+	DOM GET XML ELEMENT NAME:C730($node; $element)
+	
+	Case of 
+			
+			//…………………………………………………………………………………………………
+		: ($element="polyline")\
+			 | ($element="polygon")
+			
+			Super:C1706.setAttribute($node; "points"; String:C10(This:C1470.getAttribute($node; "points"))+" "+$data)
+			
+			//…………………………………………………………………………………………………
+		: ($element="path")
+			
+			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+" l"+$data)
+			
+			//…………………………………………………………………………………………………
+		Else 
+			
+			This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+			
+			//…………………………………………………………………………………………………
+	End case 
+	
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Close path
-Function Z($applyTo) : cs:C1710.svg
+	// Absolute horizontal lineTo
+Function H($x : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._lineTo(False:C215; Copy parameters:C1790; True:C214)
+	
+	//———————————————————————————————————————————————————————————
+	// Relative horizontal lineTo
+Function h($x : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._lineTo(False:C215; Copy parameters:C1790)
+	
+	//———————————————————————————————————————————————————————————
+	// Absolute vertical lineTo
+Function V($x : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._lineTo(True:C214; Copy parameters:C1790; True:C214)
+	
+	//———————————————————————————————————————————————————————————
+	// Relative vertical lineTo
+Function v($x : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._lineTo(True:C214; Copy parameters:C1790)
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _lineTo($vertical : Boolean; $parameters : Collection; $absolute : Boolean) : cs:C1710.svg
 	
 	var $element; $node : Text
+	var $c : Collection
 	
-	$node:=Count parameters:C259>=1 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
+	$node:=$parameters.length=2 ? This:C1470._getContainer($parameters[1]) : This:C1470._getContainer()
+	
 	DOM GET XML ELEMENT NAME:C730($node; $element)
 	
-	If ($element="path")
+	If ($element#"path")
 		
-		Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+"Z")
+		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"A\" property")
+		return This:C1470
 		
-	Else 
+	End if 
+	
+	$c:=This:C1470._data($node)
+	
+	If (This:C1470.success)
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+		$c.push(($vertical ? ($absolute ? "V" : "v") : ($absolute ? "H" : "h"))+String:C10($parameters[0]; "&xml"))
+		
+		Super:C1706.setAttribute($node; "d"; $c.join(" "))
 		
 	End if 
 	
 	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Absolute elliptical arc
+Function A($rx : Real; $ry : Real; $rotation : Real; $largeArcFlag : Integer; $sweepFlag : Integer; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._a(Copy parameters:C1790; True:C214)
+	
+	//———————————————————————————————————————————————————————————
+	// Relative elliptical arc
+Function a($rx : Real; $ry : Real; $rotation : Real; $largeArcFlag : Integer; $sweepFlag : Integer; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._a(Copy parameters:C1790)
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Elliptical arc
+Function _a($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
+	
+	var $element; $node : Text
+	var $c : Collection
+	
+	$node:=$parameters.length=8 ? This:C1470._getContainer($parameters[7]) : This:C1470._getContainer()
+	
+	DOM GET XML ELEMENT NAME:C730($node; $element)
+	
+	If ($element#"path")
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"A\" property")
+		return This:C1470
+		
+	End if 
+	
+	$c:=This:C1470._data($node)
+	
+	If (This:C1470.success)
+		
+		$c.push(($absolute ? "A" : "a")+String:C10($parameters[0]; "&xml")+","+String:C10($parameters[1]; "&xml"))
+		$c.push(String:C10($parameters[2]; "&xml"))
+		$c.push(String:C10($parameters[3])+","+String:C10($parameters[4]))
+		$c.push(String:C10($parameters[5]; "&xml")+","+String:C10($parameters[6]; "&xml"))
+		
+		Super:C1706.setAttribute($node; "d"; $c.join(" "))
+		
+	End if 
+	
+	return This:C1470
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _data($node : Text) : Collection
+	
+	var $data; $element : Text
+	
+	$data:=This:C1470.getAttribute($node; "d")
+	
+	If (This:C1470.success)
+		
+		return Split string:C1554($data; " "; sk ignore empty strings:K86:1)
+		
+	Else 
+		
+		DOM GET XML ELEMENT NAME:C730($node; $element)
+		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" has no \"d\" property")
+		
+	End if 
 	
 	//———————————————————————————————————————————————————————————
 	// Populate the "d" property of a path
