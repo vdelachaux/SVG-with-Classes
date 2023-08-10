@@ -2408,15 +2408,17 @@ Function class($class : Text; $applyTo) : cs:C1710.svg
 	
 	//———————————————————————————————————————————————————————————
 	// Assigns an embedded style to an element
-Function style($tyle : Text; $applyTo) : cs:C1710.svg
+Function style($style : Text; $applyTo) : cs:C1710.svg
+	
+	//TODO: if root create a <style> element
 	
 	If (Count parameters:C259=2)
 		
-		Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "style"; $tyle)
+		Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "style"; $style)
 		
 	Else 
 		
-		Super:C1706.setAttribute(This:C1470._getTarget(); "style"; $tyle)
+		Super:C1706.setAttribute(This:C1470._getTarget(); "style"; $style)
 		
 	End if 
 	
