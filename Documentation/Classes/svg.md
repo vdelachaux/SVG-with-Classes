@@ -89,8 +89,8 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**l** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Relative lineTo
 |.**H** ( x : `Real` {; applyTo } ) → `cs.svg` | Absolute horizontal lineTo
 |.**h** ( x : `Real` {; applyTo } ) → `cs.svg` | Relative horizontal lineTo
-|.**H** ( y : `Real` {; applyTo } ) → `cs.svg` | Absolute vertical lineTo
-|.**h** ( x : `Real` {; applyTo } ) → `cs.svg` | Relative horizontal lineTo
+|.**V** ( y : `Real` {; applyTo } ) → `cs.svg` | Absolute vertical lineTo
+|.**v** ( x : `Real` {; applyTo } ) → `cs.svg` | Relative horizontal lineTo
 |.**A** ( rx : `Real`; ry : `Real`; rotation : `Real`; largeArcFlag : `Real`; sweepFlag : `Real`; x : `Real`; y : `Real`; {; applyTo } ) → `cs.svg` | Absolute elliptical arc
 |.**a** ( rx : `Real`; ry : `Real`; rotation : `Real`; largeArcFlag : `Real`; sweepFlag : `Real`; x : `Real`; y : `Real`; {; applyTo } ) → `cs.svg` | Relative elliptical arc
 |.**Z** ( ) → `cs.svg` | Close a path element
