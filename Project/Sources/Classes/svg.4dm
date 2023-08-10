@@ -315,6 +315,29 @@ Function use($symbol; $attachTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Assigns a built-in style to an element or creates a root style element 
+Function style($style : Text; $applyTo) : cs:C1710.svg
+	
+	var $node : Text
+	
+	$node:=$applyTo#Null:C1517 ? This:C1470._getContainer($applyTo) : This:C1470._getContainer()
+	
+	If ($node=This:C1470.root)
+		
+		// Create an internal CSS style sheet
+		$node:=Super:C1706.create(This:C1470.root; "style"; {type: "text/css"})
+		Super:C1706.setValue($node; $style; True:C214)
+		
+	Else 
+		
+		// Assigns a built-in style to an element
+		Super:C1706.setAttribute($node; "style"; $style)
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Attach a style sheet
 Function styleSheet($file : 4D:C1709.File) : cs:C1710.svg
 	
@@ -1324,7 +1347,6 @@ Function a($rx : Real; $ry : Real; $rotation : Real; $largeArcFlag : Integer; $s
 	return This:C1470._a(Copy parameters:C1790)
 	
 	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	// Elliptical arc
 Function _a($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
 	
 	var $element; $node : Text
@@ -1336,7 +1358,7 @@ Function _a($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
 	
 	If ($element#"path")
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"A\" property")
+		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \""+($absolute ? "A" : "a")+"\" property")
 		return This:C1470
 		
 	End if 
@@ -1356,23 +1378,90 @@ Function _a($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
 	
 	return This:C1470
 	
+	//———————————————————————————————————————————————————————————
+	// Absolute curvTo
+Function C($x1 : Real; $y1 : Real; $x2 : Real; $y2 : Real; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._curveTo(Copy parameters:C1790; True:C214)
+	
+	//———————————————————————————————————————————————————————————
+	// Relative curvTo
+Function c($x1 : Real; $y1 : Real; $x2 : Real; $y2 : Real; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._curveTo(Copy parameters:C1790)
+	
 	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _data($node : Text) : Collection
+Function _curveTo($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
 	
-	var $data; $element : Text
+	var $element; $node : Text
+	var $c : Collection
 	
-	$data:=This:C1470.getAttribute($node; "d")
+	$node:=$parameters.length=7 ? This:C1470._getContainer($parameters[6]) : This:C1470._getContainer()
+	
+	DOM GET XML ELEMENT NAME:C730($node; $element)
+	
+	If ($element#"path")
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \""+($absolute ? "C" : "c")+"\" property")
+		return This:C1470
+		
+	End if 
+	
+	$c:=This:C1470._data($node)
 	
 	If (This:C1470.success)
 		
-		return Split string:C1554($data; " "; sk ignore empty strings:K86:1)
+		$c.push(($absolute ? "C" : "c")+String:C10($parameters[0]; "&xml")+","+String:C10($parameters[1]; "&xml"))
+		$c.push(String:C10($parameters[2]; "&xml")+","+String:C10($parameters[3]; "&xml"))
+		$c.push(String:C10($parameters[4]; "&xml")+","+String:C10($parameters[5]; "&xml"))
 		
-	Else 
-		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
-		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" has no \"d\" property")
+		Super:C1706.setAttribute($node; "d"; $c.join(" "))
 		
 	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Absolute shorthand/smooth curvTo
+Function S($x2 : Real; $y2 : Real; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._smoothCurveTo(Copy parameters:C1790; True:C214)
+	
+	//———————————————————————————————————————————————————————————
+	// Relative shorthand/smooth curvTo
+Function s($x2 : Real; $y2 : Real; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._smoothCurveTo(Copy parameters:C1790)
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _smoothCurveTo($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
+	
+	var $element; $node : Text
+	var $c : Collection
+	
+	$node:=$parameters.length=5 ? This:C1470._getContainer($parameters[4]) : This:C1470._getContainer()
+	
+	DOM GET XML ELEMENT NAME:C730($node; $element)
+	
+	If ($element#"path")
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \""+($absolute ? "S" : "s")+"\" property")
+		return This:C1470
+		
+	End if 
+	
+	$c:=This:C1470._data($node)
+	
+	If (This:C1470.success)
+		
+		$c.push(($absolute ? "S" : "s")+String:C10($parameters[0]; "&xml")+","+String:C10($parameters[1]; "&xml"))
+		$c.push(String:C10($parameters[2]; "&xml")+","+String:C10($parameters[3]; "&xml"))
+		
+		Super:C1706.setAttribute($node; "d"; $c.join(" "))
+		
+	End if 
+	
+	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
 	// Populate the "d" property of a path
@@ -2401,24 +2490,6 @@ Function class($class : Text; $applyTo) : cs:C1710.svg
 	Else 
 		
 		Super:C1706.setAttribute(This:C1470._getTarget(); "class"; $class)
-		
-	End if 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Assigns an embedded style to an element
-Function style($style : Text; $applyTo) : cs:C1710.svg
-	
-	//TODO: if root create a <style> element
-	
-	If (Count parameters:C259=2)
-		
-		Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "style"; $style)
-		
-	Else 
-		
-		Super:C1706.setAttribute(This:C1470._getTarget(); "style"; $style)
 		
 	End if 
 	
@@ -3636,7 +3707,7 @@ Function setText($text : Text; $applyTo)
 	$node:=DOM Append XML child node:C1080($node; XML DATA:K45:12; $text)
 	
 	//MARK:-PRIVATES
-	//———————————————————————————————————————————————————————————
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// ⚠️ Overrides the method of the inherited class
 Function _reset
 	
@@ -3646,7 +3717,7 @@ Function _reset
 	This:C1470.graphic:=Null:C1517
 	This:C1470.store:=New collection:C1472
 	
-	//———————————————————————————————————————————————————————————
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Get an available container
 Function _getContainer($param)->$container : Text
 	
@@ -3674,7 +3745,7 @@ Function _getContainer($param)->$container : Text
 		End if 
 	End if 
 	
-	//———————————————————————————————————————————————————————————
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Returns the target of the function call
 Function _getTarget($param)->$target : Text
 	
@@ -3752,7 +3823,7 @@ Function _getTarget($param)->$target : Text
 		
 	End if 
 	
-	//———————————————————————————————————————————————————————————
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Looks for element "defs", create if not exists
 Function _defs()->$reference
 	
@@ -3786,3 +3857,20 @@ Function _defs()->$reference
 		End if 
 	End if 
 	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _data($node : Text) : Collection
+	
+	var $data; $element : Text
+	
+	$data:=This:C1470.getAttribute($node; "d")
+	
+	If (This:C1470.success)
+		
+		return Split string:C1554($data; " "; sk ignore empty strings:K86:1)
+		
+	Else 
+		
+		DOM GET XML ELEMENT NAME:C730($node; $element)
+		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" has no \"d\" property")
+		
+	End if 
