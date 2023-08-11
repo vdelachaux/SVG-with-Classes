@@ -26,6 +26,29 @@ This class will be augmented according to my needs but you are strongly encourag
 
 > 📌 With the exception of functions that return a specific result (getter function), each call returns the original `cs.svg` object, and you can include one call after another.
 
+### Document & structure functions
+
+|Function|Action|
+|--------|------|
+|.**load** ( source : `4D.File` \| `Text` \| `Blob` {; validate : `Boolean` {; schema : `Text` }} ) → `cs.svg` | Loads a SVG tree from a file or a variable (TEXT or BLOB)
+|.**picture** ( { exportType : `Integer`} {; keepStructure : `Boolean` } ) → `Picture`  | Returns the picture described by the SVG structure & populates the `.graphic` property if success.
+|.**content** ( { keepStructure : `Boolean` } ) → `Text`  | Returns the SVG tree as text & populates the `.xml` property if success.
+|.**exportPicture** ( file : `4D.file` {; keepStructure : `Boolean`} ) → `cs.svg` | Saves the SVG tree as a picture file.
+|.**exportText** ( file : `4D.file` {; keepStructure : `Boolean`} ) → `cs.svg` | Writes the content of the SVG tree into a disk file.
+|.**newCanvas** ( { attributes : `Object` } ) → `cs.svg` | Close the current tree if any & create a new svg default structure.
+|.**close** () → `cs.svg` | Frees the memory taken up by the SVG tree \*
+|.**save** ( { keepStructure : `Boolean` } ) → `cs.svg` | Saves the content of the SVG tree into the initially loaded file or the last created file by calling `exportText()`
+|.**group** ( { id : `Text` {; attachTo }} ) → `cs.svg` | Defines a `g` element who is a container element for grouping together related graphics elements.
+|.**symbol** ( name : `Text` {; applyTo } ) → `cs.svg` | To define a symbol
+|.**use** ( symbol : `Text` {; attachTo } ) → `cs.svg` | To place an occurence of a symbol
+|.**style** ( style : `Text` {; applyTo } ) → `cs.svg` | Creates an internal CSS style sheet if applied to the root
+|.**styleSheet** ( file : `4D.File` ) → `cs.svg` | Attach a style sheet
+|.**viewbox** ( left : `Real`; top : `Real` ; width : `Real` ; height : `Real` {; attachTo } ) → `cs.svg` | Sets the `viewBox` attribute of an SVG viewport.
+|.**relative**() → `cs.svg` | Defines the following coordinates as relative
+|.**absolute**() → `cs.svg` | Defines the following coordinates as absolute
+
+\* After the execution,`.root`is null but `.graphic` & `.xml` are always available
+
 ### Basic elements
 
 > 📌 When a element creation function is called without passing the `attachTo` parameter, the object is included to the last created structure that can be used to add an object. If the `attachTo` parameter is passed, it can be: a DOM reference, an id, the name of a reference stored with the `.push()` function or a reserved name (`"root"`, `"latest"` or `"parent"`).
@@ -43,6 +66,44 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**image** ( picture : `Picture` \| `4D.File` {; attachTo } ) → `cs.svg` | Creates an image element.<br>Can refer to an image file or a picture type variable (embedded picture)
 
 \* The `textArea` elements are well rendered by 4D widgets but may not be supported by some browsers.
+
+### path
+
+> 📌 If a definition function is called, without passing the `applyTo` parameter, the target is the last created path. If the `applyTo` parameter is passed, it must be a DOM reference.   
+
+> 📌 `Point` type is a collection of 2 reals `[ x , y ]`  
+
+|Function|Action|
+|--------|------|   
+|.**path** ( data : `Text` {; attachTo } ) → `cs.svg` | Creates a `path` element.<br>The element definition can be given in text form, or the path can be constructed using the hight level functions below.
+||
+|**# Hight Level**\* |
+|.**moveTo**\** ( point : `Point` {; applyTo } ) → `cs.svg` | Starts a new sub-path at the given `point` [x,y] coordinate
+|.**lineTo** ( point : `Point` {; applyTo } ) → `cs.svg` | Draws a line from the current point to the given `point` [x,y] coordinate which becomes the new current point<br>A number of coordinates pairs may be specified to draw a polyline
+|.**horizontalLineto** ( x : `Real` {; applyTo } ) → `cs.svg` | Draws an horizontal line from the current point (cpx, cpy) to (x, cpy)
+|.**verticalLineto** ( y : `Real` {; applyTo } ) → `cs.svg` |  Draws a vertical line from the current point (cpx, cpy) to (cpx, y)
+|.**arc** ( to : `Point`; radii  : `[rx,ry]`; rotation : `Real`; flags : `[ large-arc-flag , sweep-flag ]` {; applyTo } ) → `cs.svg` |  Draws a section of an ellipse from the current point to [x, y]<br>The ellipse has two `radii [ rx , ry ]`<br>The x-axis of the ellipse is rotated by `rotation`<br>`flags [large-arc-flag , sweep-flag]` indicate how the arc is drawn (4 different arcs could be drawn.
+|.**cubicBezierCurveto** ( to : `Point`; beginCtrlPoint :`Point`; endCtrlPoint :`Point` {; applyTo } ) → `cs.svg` |  Draws a cubic Bézier curve from the current point to [x,y] using `beginCtrlPoint` [x1,y1] as the control point at the beginning of the curve and `endCtrlPoint` [x2,y2] as the control point at the end of the curve.
+|.**smoothCubicBezierCurveto** ( to : `Point`; endCtrlPoint :`Point` {; applyTo } ) → `cs.svg` |  Draws a cubic Bézier curve from the current point to [x,y] using `endCtrlPoint` as the control point at the end of the curve.<br>The first control point is assumed to be the reflection of the second control point on the previous command relative to the current point.
+|.**quadraticBezierCurveto** ( to : `Point`; controlPoint :`Point` {; applyTo } ) → `cs.svg` |  Draws a quadratic Bézier curve from the current point to [x,y] using `controlPoint` [x1,y1] as the control point.
+|.**smoothQuadraticBezierCurveto** ( to : `Point` {; applyTo } ) → `cs.svg` |  Draws a quadratic Bézier curve from the current point to [x,y].<br>The control point is assumed to be the reflection of the control point on the previous command relative to the current point.
+|.**d** ( points : `Text` {; applyTo } ) → `cs.svg` | Sets the "d" property of a path element
+||
+|# **Low Level**|
+|.**M** / **m** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Absolute/Relative moveTo
+|.**L**\** / **l**\** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Absolute/Relative lineTo
+|.**H** / **h** ( x : `Real` {; applyTo } ) → `cs.svg` | Absolute/Relative horizontal lineTo
+|.**V** / **v** ( y : `Real` {; applyTo } ) → `cs.svg` | Absolute/Relative vertical lineTo
+|.**A** / **a** ( rx : `Real`; ry : `Real`; rotation : `Real`; largeArcFlag : `Integer`; sweepFlag : `Integer`; x : `Real`; y : `Real` {; applyTo } ) → `cs.svg` | Absolute/Relative  elliptical arc
+|.**C** / **c** ( x1 : `Real`; y1 : `Real`; x2 : `Real`; y2 : `Real`; x : `Real`; y : `Real` {; applyTo } ) → `cs.svg` | Absolute/Relative  cubic Bézier curvTo
+|.**S** / **s** ( x2 : `Real`; y2 : `Real`; x : `Real`; y : `Real` {; applyTo } ) → `cs.svg` | Absolute/Relative  shorthand/smooth cubic Bézier curvTo
+|.**Q** / **q** ( x1 : `Real`; y1 : `Real`; x : `Real`; y : `Real` {; applyTo } ) → `cs.svg` | Absolute/Relative  quadratic Bézier curvTo
+|.**T** / **t** ( x : `Real`; y : `Real` {; applyTo } ) → `cs.svg` | Absolute/Relative  shorthand/smooth quadratic Bézier curvTo
+
+\* Theses functions use **absolute** or **relative** coordinates according to the `absolute` property. Default is **absolute**. 
+> 📌 To switch to relative coordinates, call the .**relative**() function: All subsequent coordinates will be interpreted as relative. To return to absolute coordinates, call the .**absolute**() function.
+
+\** These functions can also be applied to `polyline` and `poligon` elements.
 
 ### Setting functions
 
@@ -81,42 +142,11 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**ry** ( ry : `Real` {; applyTo } ) → `cs.svg` | Sets the ry of an ellipse
 |.**cx** ( cx : `Real` {; applyTo } ) → `cs.svg` | Sets the cx of a circle or ellipse
 |.**cy** ( cy : `Real` {; applyTo } ) → `cs.svg` | Sets the cy of a rect or an ellipse
-|.**d** ( points : `Text` {; applyTo } ) → `cs.svg` | Sets the "d" property of a path element
 |.**points** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Sets the "points" property of a polyline/polygon
-|.**M** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Absolute moveTo
-|.**m** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Relative moveTo
-|.**L** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Absolute lineTo
-|.**l** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Relative lineTo
-|.**H** ( x : `Real` {; applyTo } ) → `cs.svg` | Absolute horizontal lineTo
-|.**h** ( x : `Real` {; applyTo } ) → `cs.svg` | Relative horizontal lineTo
-|.**V** ( y : `Real` {; applyTo } ) → `cs.svg` | Absolute vertical lineTo
-|.**v** ( x : `Real` {; applyTo } ) → `cs.svg` | Relative horizontal lineTo
-|.**A** ( rx : `Real`; ry : `Real`; rotation : `Real`; largeArcFlag : `Real`; sweepFlag : `Real`; x : `Real`; y : `Real`; {; applyTo } ) → `cs.svg` | Absolute elliptical arc
-|.**a** ( rx : `Real`; ry : `Real`; rotation : `Real`; largeArcFlag : `Real`; sweepFlag : `Real`; x : `Real`; y : `Real`; {; applyTo } ) → `cs.svg` | Relative elliptical arc
+|.**A** / **a** ( rx : `Real`; ry : `Real`; rotation : `Real`; largeArcFlag : `Real`; sweepFlag : `Real`; x : `Real`; y : `Real`; {; applyTo } ) → `cs.svg` | Absolute/Relative elliptical arc
 |.**Z** ( ) → `cs.svg` | Close a path element
 |.**setAttribute** ( name : `Text`; value : `Variant` {; applyTo } ) → `cs.svg` | Sets one attribute
 |.**setAttributes** ( attributes : `Text` \| `Collection` \| `Object`; value : `Variant` {; applyTo})  → `cs.svg` | Defines multiple attributes
-
-
-### Document & structure functions
-
-|Function|Action|
-|--------|------|
-|.**load** ( source : `4D.File` \| `Text` \| `Blob` {; validate : `Boolean` {; schema : `Text` }} ) → `cs.svg` | Loads a SVG tree from a file or a variable (TEXT or BLOB)
-|.**picture** ( { exportType : `Integer`} {; keepStructure : `Boolean` } ) → `Picture`  | Returns the picture described by the SVG structure & populates the `.graphic` property if success.
-|.**content** ( { keepStructure : `Boolean` } ) → `Text`  | Returns the SVG tree as text & populates the `.xml` property if success.
-|.**exportPicture** ( file : `4D.file` {; keepStructure : `Boolean`} ) → `cs.svg` | Saves the SVG tree as a picture file.
-|.**exportText** ( file : `4D.file` {; keepStructure : `Boolean`} ) → `cs.svg` | Writes the content of the SVG tree into a disk file.
-|.**newCanvas** ( { attributes : `Object` } ) → `cs.svg` | Close the current tree if any & create a new svg default structure.
-|.**close** () → `cs.svg` | Frees the memory taken up by the SVG tree \*
-|.**save** ( { keepStructure : `Boolean` } ) → `cs.svg` | Saves the content of the SVG tree into the initially loaded file or the last created file by calling `exportText()`
-|.**group** ( { id : `Text` {; attachTo }} ) → `cs.svg` | Defines a `g` element who is a container element for grouping together related graphics elements.
-|.**symbol** ( name : `Text` {; applyTo } ) → `cs.svg` | To define a symbol
-|.**use** ( symbol : `Text` {; attachTo } ) → `cs.svg` | To place an occurence of a symbol
-|.**styleSheet** ( file : `4D.File` ) → `cs.svg` | Attach a style sheet
-|.**viewbox** ( left : `Real`; top : `Real` ; width : `Real` ; height : `Real` {; attachTo } ) → `cs.svg` | Sets the `viewBox` attribute of an SVG viewport.
-
-\* After the execution,`.root`is null but `.graphic` & `.xml` are always available
 
 ### Shortcuts & utilities functions
  
@@ -149,7 +179,6 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**with** ( name : `Text` ) → `Boolean` | Defines an element for the next operations
 |.**preview** ( { keepStructure : `Boolean` } ) | Display the SVG image & tree into the SVG Viewer if the component 4D SVG is available.
 
-
 ## 🔸 cs.svg.new()
 The class constructor `cs.svg.new()` can be called without parameters to create a default svg structure with these attributes:
 >`"viewport-fill"="none"`    
@@ -165,6 +194,7 @@ The class constructor also accepts an optional parameter, so you can create a sv
 >`cs.svg.new(4D.file)` Loads & parses the file content    
 >`cs.svg.new(Blob)` Parses the blob variable content     
 >`cs.svg.new(Text)` Parses the text variable content
+
 
 
 

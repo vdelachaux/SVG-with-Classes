@@ -7,6 +7,7 @@ $svg:=cs:C1710.svg.new()
 // Create a symbol
 $svg.square(20).color("orange").symbol("square")
 
+
 // Create a "background" & "foreground" group & apply a translation to the last one
 $svg.layer("background"; "foreground").translate(45; 45)  // Layers are automatically created at the root level
 
@@ -60,12 +61,8 @@ If ($svg.with("background"))  // Set "background" layer for the next operations
 	
 	// Draw a green hexagon with a blue border 10 pixels wide, translate & rotate. The plot is defined point by point
 	$svg.polygon()\
-		.M(New collection:C1472(850; 75))\
-		.L(New collection:C1472(958; 137.5))\
-		.L(New collection:C1472(958; 262.5))\
-		.L(New collection:C1472(850; 325))\
-		.L(New collection:C1472(742; 262.6))\
-		.L(New collection:C1472(742; 137.5))\
+		.moveTo([850; 75])\
+		.lineTo([958; 137.5; 958; 262.5; 850; 325; 742; 262.6; 742; 137.5])\
 		.fill("lime")\
 		.stroke("blue").stroke(10)\
 		.translate(0; -40).rotate(20; 850; 160)
