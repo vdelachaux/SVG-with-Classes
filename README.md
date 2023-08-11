@@ -5,6 +5,8 @@ After creating and using the [4D SVG component](https://doc.4d.com/4Dv19/4D/19/4
 The goal of this class is to reduce the complexity of code to create and manipulate svg images/documents.
 <br/>This class will be augmented according to my needs but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/SVG-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com/search?q=4D%20for%20iOS). 
 
+For more details on properties and functions, see the [documentation for the svg class](Documentation/Classes/svg.md)
+
 `Enjoy the 4th dimension`
 
 ## Code sample
