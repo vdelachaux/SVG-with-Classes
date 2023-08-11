@@ -1,3 +1,6 @@
+property store : Collection
+property _containers; _shapes; _descriptive; _notContainer; _aspectRatioValues; _textRenderingValue; _reservedNames : Collection
+
 Class extends xml
 
 Class constructor($content)
@@ -19,6 +22,10 @@ Class constructor($content)
 	This:C1470.graphic:=Null:C1517
 	This:C1470.store:=New collection:C1472
 	
+	This:C1470[""]:=New object:C1471(\
+		"absolute"; True:C214\
+		)
+	
 	// Elements that can have graphic elements and other container elements as child elements.
 	This:C1470._containers:=New collection:C1472("a"; "defs"; "g"; "marker"; "mask"; "pattern"; "svg"; "switch"; "symbol")
 	
@@ -28,7 +35,7 @@ Class constructor($content)
 	// Elements that provide additional descriptive information about their parent.
 	This:C1470._descriptive:=New collection:C1472("desc"; "metadata"; "title")
 	
-	This:C1470._notContainer:=New collection:C1472("rect"; "line"; "image"; "circle"; "ellipse"; "polygon"; "polyline"; "use"; "textArea")  //; "path"
+	This:C1470._notContainer:=New collection:C1472("rect"; "line"; "image"; "circle"; "ellipse"; "polygon"; "polyline"; "use"; "textArea"; "path")
 	
 	This:C1470._aspectRatioValues:=New collection:C1472("none"; "xMinYMin"; "xMidYMin"; "xMaxYMin"; "xMinYMid"; "xMidYMid"; "xMaxYMid"; "xMinYMax"; "xMidYMax"; "xMaxYMax")
 	This:C1470._textRenderingValue:=New collection:C1472("auto"; "optimizeSpeed"; "optimizeLegibility"; "geometricPrecision"; "inherit")
@@ -218,7 +225,30 @@ Function exportPicture($file : 4D:C1709.File; $keepStructure : Boolean) : cs:C17
 	//———————————————————————————————————————————————————————————
 Function group($id : Text; $attachTo) : cs:C1710.svg
 	
-	This:C1470.latest:=Count parameters:C259>=2 ? Super:C1706.create(This:C1470._getContainer($attachTo); "g") : Super:C1706.create(This:C1470._getContainer(); "g")
+	If (Count parameters:C259>=2)
+		
+		This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "g")
+		
+	Else 
+		
+		If (This:C1470.latest=Null:C1517)
+			
+			This:C1470.latest:=This:C1470.root
+			
+		Else 
+			
+			var $name : Text
+			DOM GET XML ELEMENT NAME:C730(This:C1470.latest; $name)
+			
+			If (This:C1470._notContainer.includes($name))
+				
+				This:C1470.latest:=This:C1470.parent(This:C1470.latest)
+				
+			End if 
+		End if 
+	End if 
+	
+	This:C1470.latest:=Super:C1706.create(This:C1470.latest; "g")
 	
 	If (Count parameters:C259>=1)
 		
@@ -315,6 +345,29 @@ Function use($symbol; $attachTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Assigns a built-in style to an element or creates a root style element 
+Function style($style : Text; $applyTo) : cs:C1710.svg
+	
+	var $node : Text
+	
+	$node:=$applyTo#Null:C1517 ? This:C1470._getContainer($applyTo) : This:C1470._getContainer()
+	
+	If ($node=This:C1470.root)
+		
+		// Create an internal CSS style sheet
+		$node:=Super:C1706.create(This:C1470.root; "style"; {type: "text/css"})
+		Super:C1706.setValue($node; $style; True:C214)
+		
+	Else 
+		
+		// Assigns a built-in style to an element
+		Super:C1706.setAttribute($node; "style"; $style)
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Attach a style sheet
 Function styleSheet($file : 4D:C1709.File) : cs:C1710.svg
 	
@@ -342,7 +395,52 @@ Function styleSheet($file : 4D:C1709.File) : cs:C1710.svg
 	
 	return This:C1470
 	
+	//———————————————————————————————————————————————————————————
+	// Create, if any, & set the document 'title' element
+Function title($title : Text) : cs:C1710.svg
+	
+	var $node : Text
+	
+	$node:=This:C1470.findOrCreate(This:C1470.root; "title")
+	Super:C1706.setValue($node; $title)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Create, if any, & set the document 'desc' element
+Function desc($description : Text) : cs:C1710.svg
+	
+	var $node : Text
+	
+	$node:=This:C1470.findOrCreate(This:C1470.root; "desc")
+	Super:C1706.setValue($node; $description)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Append a comment element
+Function comment($comment : Text; $attachTo) : cs:C1710.svg
+	
+	var $node : Text
+	
+	$node:=Count parameters:C259=2 ? This:C1470._getContainer($attachTo) : This:C1470.root
+	Super:C1706.comment($node; $comment)
+	
 	//MARK:-DRAWING
+	//———————————————————————————————————————————————————————————
+	// Defines the following coordinates as absolute 
+Function absolute() : cs:C1710.svg
+	
+	This:C1470[""].absolute:=True:C214
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Defines the following coordinates as relative
+Function relative() : cs:C1710.svg
+	
+	This:C1470[""].absolute:=False:C215
+	return This:C1470
+	
 	//———————————————————————————————————————————————————————————
 Function rect($width : Variant; $height : Real; $attachTo) : cs:C1710.svg
 	
@@ -404,11 +502,11 @@ Function square($side : Real; $attachTo) : cs:C1710.svg
 	
 	If (Count parameters:C259=2)
 		
-		This:C1470.rect($side; This:C1470._getContainer($attachTo))
+		This:C1470.rect($side; $side; This:C1470._getContainer($attachTo))
 		
 	Else 
 		
-		This:C1470.rect($side; This:C1470._getContainer())
+		This:C1470.rect($side; $side; This:C1470._getContainer())
 		
 	End if 
 	
@@ -889,24 +987,10 @@ Function polygon($points : Variant; $attachTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Defines a new path element.
-Function path($data : Text; $attachTo) : cs:C1710.svg
-	
-	var $node : Text
-	
-	//TODO:Accept other data formats (Collection, …)
-	$node:=Count parameters:C259=2 ? This:C1470._getContainer($attachTo) : This:C1470._getContainer()
-	
-	This:C1470.latest:=Super:C1706.create($node; "path")
-	This:C1470.setAttribute("d"; $data; This:C1470.latest)
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
 	// Populate the "points" property of a polyline, polygon
 Function points($points : Variant; $applyTo) : cs:C1710.svg
 	
-	var $data; $node; $element : Text
+	var $data; $node; $name : Text
 	var $i; $paramNumber : Integer
 	
 	$paramNumber:=Count parameters:C259
@@ -924,10 +1008,10 @@ Function points($points : Variant; $applyTo) : cs:C1710.svg
 			
 		End if 
 		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
+		DOM GET XML ELEMENT NAME:C730($node; $name)
 		
-		If ($element="polyline")\
-			 | ($element="polygon")
+		If ($name="polyline")\
+			 | ($name="polygon")
 			
 			Case of 
 					//______________________________________________________
@@ -967,7 +1051,7 @@ Function points($points : Variant; $applyTo) : cs:C1710.svg
 			//…………………………………………………………………………………………………
 		Else 
 			
-			This:C1470._pushError("The element \""+$element+"\" is not compatible withe \"points\" property")
+			This:C1470._pushError("The element \""+$name+"\" is not compatible withe \"points\" property")
 			
 			//…………………………………………………………………………………………………
 		End if 
@@ -976,10 +1060,24 @@ Function points($points : Variant; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Absolute moveTo
-Function M($points : Variant; $applyTo) : cs:C1710.svg
+	// Defines a new path element.
+Function path($data : Text; $attachTo) : cs:C1710.svg
 	
-	var $data; $element; $node : Text
+	var $node : Text
+	
+	//TODO:Accept other data formats (Collection, …)
+	$node:=Count parameters:C259=2 ? This:C1470._getContainer($attachTo) : This:C1470._getContainer()
+	
+	This:C1470.latest:=Super:C1706.create($node; "path")
+	This:C1470.setAttribute("d"; $data; This:C1470.latest)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Populate the "d" property of a path
+Function d($data : Text; $applyTo) : cs:C1710.svg
+	
+	var $name; $node : Text
 	
 	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
 		
@@ -987,139 +1085,71 @@ Function M($points : Variant; $applyTo) : cs:C1710.svg
 		
 	End if 
 	
-	Case of 
-			//______________________________________________________
-		: (Value type:C1509($points)=Is collection:K8:32)
-			
-			$data:=String:C10($points[0]; "&xml")+","+String:C10($points[1]; "&xml")
-			
-			//______________________________________________________
-		: (Value type:C1509($points)=Is text:K8:3)
-			
-			$data:=$points
-			
-			//______________________________________________________
-		Else 
-			
-			This:C1470._pushError(Current method name:C684+" Points must be passed as string or collection")
-			return This:C1470
-			
-			//______________________________________________________
-	End case 
-	
 	$node:=Count parameters:C259>=2 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
+	DOM GET XML ELEMENT NAME:C730($node; $name)
 	
-	DOM GET XML ELEMENT NAME:C730($node; $element)
-	
-	Case of 
-			
-			//…………………………………………………………………………………………………
-		: ($element="polyline")\
-			 | ($element="polygon")
-			
-			Super:C1706.setAttribute($node; "points"; $data)
-			
-			//…………………………………………………………………………………………………
-		: ($element="path")
-			
-			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+" M"+$data)
-			
-			//…………………………………………………………………………………………………
-		Else 
-			
-			This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
-			
-			//…………………………………………………………………………………………………
-	End case 
+	If ($name="path")
+		
+		Super:C1706.setAttribute($node; "d"; $data)
+		
+	Else 
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \"points\" property")
+		
+	End if 
 	
 	return This:C1470
+	
+	//mark:-
+	//———————————————————————————————————————————————————————————
+	// Start a new sub-path at the given point [x,y] coordinate
+Function moveTo($point : Collection; $applyTo) : cs:C1710.svg
+	
+	If (This:C1470[""].absolute)
+		
+		return This:C1470.M($point; $applyTo)
+		
+	Else 
+		
+		return This:C1470.m($point; $applyTo)
+		
+	End if 
+	
+	//———————————————————————————————————————————————————————————
+	// Absolute moveTo
+Function M($points : Variant; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._moveTo(Copy parameters:C1790; True:C214)
 	
 	//———————————————————————————————————————————————————————————
 	// Relative moveTo
 Function m($points : Variant; $applyTo) : cs:C1710.svg
 	
-	var $data; $element; $node : Text
+	return This:C1470._moveTo(Copy parameters:C1790)
 	
-	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
-		
-		return This:C1470
-		
-	End if 
-	
-	Case of 
-			//______________________________________________________
-		: (Value type:C1509($points)=Is collection:K8:32)
-			
-			$data:=" m"+String:C10($points[0]; "&xml")+","+String:C10($points[1]; "&xml")
-			
-			//______________________________________________________
-		: (Value type:C1509($points)=Is text:K8:3)
-			
-			$data:=$points
-			
-			//______________________________________________________
-		Else 
-			
-			This:C1470._pushError(Current method name:C684+" Points must be passed as string or collection")
-			return This:C1470
-			
-			//______________________________________________________
-	End case 
-	
-	$node:=Count parameters:C259>=2 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
-	
-	DOM GET XML ELEMENT NAME:C730($node; $element)
-	
-	Case of 
-			
-			//…………………………………………………………………………………………………
-		: ($element="polyline")\
-			 | ($element="polygon")
-			
-			Super:C1706.setAttribute($node; "points"; $data)
-			
-			//…………………………………………………………………………………………………
-		: ($element="path")
-			
-			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+$data)
-			
-			//…………………………………………………………………………………………………
-		Else 
-			
-			This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
-			
-			//…………………………………………………………………………………………………
-	End case 
-	
-	return This:C1470
-	
+	//mark:-
 	//———————————————————————————————————————————————————————————
-	// Close path
-Function Z($applyTo) : cs:C1710.svg
+	// Draw a line from the current point to the given point [x,y] coordinate which becomes the new current point
+	// A number of coordinates pairs may be specified to draw a polyline
+Function lineTo($point : Collection; $applyTo) : cs:C1710.svg
 	
-	var $element; $node : Text
-	
-	$node:=Count parameters:C259>=1 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
-	DOM GET XML ELEMENT NAME:C730($node; $element)
-	
-	If ($element="path")
+	If (This:C1470[""].absolute)
 		
-		Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+"Z")
+		return This:C1470.L($point; $applyTo)
 		
 	Else 
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+		return This:C1470.l($point; $applyTo)
 		
 	End if 
 	
-	return This:C1470
-	
 	//———————————————————————————————————————————————————————————
 	// Absolute lineTo
-Function L($points : Variant; $applyTo) : cs:C1710.svg
+Function L($points; $applyTo) : cs:C1710.svg
 	
-	var $data; $name; $node; $element : Text
+	var $data; $name; $node : Text
 	var $i : Integer
+	var $c : Collection
 	
 	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
 		
@@ -1133,11 +1163,15 @@ Function L($points : Variant; $applyTo) : cs:C1710.svg
 			
 			If ($points.length%2=0)
 				
+				$c:=[]
+				
 				For ($i; 0; $points.length-1; 2)
 					
-					$data:=$data+String:C10($points[$i]; "&xml")+" "+String:C10($points[$i+1]; "&xml")
+					$c.push(String:C10($points[$i]; "&xml")+" "+String:C10($points[$i+1]; "&xml"))
 					
 				End for 
+				
+				$data:=$c.join(" ")
 				
 			Else 
 				
@@ -1161,25 +1195,25 @@ Function L($points : Variant; $applyTo) : cs:C1710.svg
 	End case 
 	
 	$node:=Count parameters:C259>=2 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
-	DOM GET XML ELEMENT NAME:C730($node; $element)
+	DOM GET XML ELEMENT NAME:C730($node; $name)
 	
 	Case of 
 			
 			//…………………………………………………………………………………………………
-		: ($element="polyline")\
-			 | ($element="polygon")
+		: ($name="polyline")\
+			 | ($name="polygon")
 			
 			Super:C1706.setAttribute($node; "points"; String:C10(This:C1470.getAttribute($node; "points"))+" "+$data)
 			
 			//…………………………………………………………………………………………………
-		: ($element="path")
+		: ($name="path")
 			
 			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+" L"+$data)
 			
 			//…………………………………………………………………………………………………
 		Else 
 			
-			This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+			This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \"points\" property")
 			
 			//…………………………………………………………………………………………………
 	End case 
@@ -1188,10 +1222,11 @@ Function L($points : Variant; $applyTo) : cs:C1710.svg
 	
 	//———————————————————————————————————————————————————————————
 	// Relative lineTo
-Function l($points : Variant; $applyTo) : cs:C1710.svg
+Function l($points; $applyTo) : cs:C1710.svg
 	
-	var $data; $name; $node; $element : Text
+	var $data; $name; $node : Text
 	var $i : Integer
+	var $c : Collection
 	
 	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
 		
@@ -1205,11 +1240,15 @@ Function l($points : Variant; $applyTo) : cs:C1710.svg
 			
 			If ($points.length%2=0)
 				
+				$c:=[]
+				
 				For ($i; 0; $points.length-1; 2)
 					
-					$data:=$data+String:C10($points[$i]; "&xml")+" "+String:C10($points[$i+1]; "&xml")
+					$c.push(String:C10($points[$i]; "&xml")+" "+String:C10($points[$i+1]; "&xml"))
 					
 				End for 
+				
+				$data:=$c.join(" ")
 				
 			Else 
 				
@@ -1233,30 +1272,45 @@ Function l($points : Variant; $applyTo) : cs:C1710.svg
 	End case 
 	
 	$node:=Count parameters:C259>=2 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
-	DOM GET XML ELEMENT NAME:C730($node; $element)
+	DOM GET XML ELEMENT NAME:C730($node; $name)
 	
 	Case of 
 			
 			//…………………………………………………………………………………………………
-		: ($element="polyline")\
-			 | ($element="polygon")
+		: ($name="polyline")\
+			 | ($name="polygon")
 			
 			Super:C1706.setAttribute($node; "points"; String:C10(This:C1470.getAttribute($node; "points"))+" "+$data)
 			
 			//…………………………………………………………………………………………………
-		: ($element="path")
+		: ($name="path")
 			
 			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+" l"+$data)
 			
 			//…………………………………………………………………………………………………
 		Else 
 			
-			This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+			This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \"points\" property")
 			
 			//…………………………………………………………………………………………………
 	End case 
 	
 	return This:C1470
+	
+	//mark:-
+	//———————————————————————————————————————————————————————————
+	// Draws an horizontal line from the current point (cpx, cpy) to (x, cpy)
+Function horizontalLineto($x : Real; $applyTo) : cs:C1710.svg
+	
+	If (This:C1470[""].absolute)
+		
+		return This:C1470.H($x; $applyTo)
+		
+	Else 
+		
+		return This:C1470.h($x; $applyTo)
+		
+	End if 
 	
 	//———————————————————————————————————————————————————————————
 	// Absolute horizontal lineTo
@@ -1270,6 +1324,21 @@ Function h($x : Real; $applyTo) : cs:C1710.svg
 	
 	return This:C1470._lineTo(False:C215; Copy parameters:C1790)
 	
+	//mark:-
+	//———————————————————————————————————————————————————————————
+	// Draws a vertical line from the current point (cpx, cpy) to (cpx, y)
+Function verticalLineto($y : Real; $applyTo) : cs:C1710.svg
+	
+	If (This:C1470[""].absolute)
+		
+		return This:C1470.V($y; $applyTo)
+		
+	Else 
+		
+		return This:C1470.v($y; $applyTo)
+		
+	End if 
+	
 	//———————————————————————————————————————————————————————————
 	// Absolute vertical lineTo
 Function V($x : Real; $applyTo) : cs:C1710.svg
@@ -1282,120 +1351,168 @@ Function v($x : Real; $applyTo) : cs:C1710.svg
 	
 	return This:C1470._lineTo(True:C214; Copy parameters:C1790)
 	
-	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _lineTo($vertical : Boolean; $parameters : Collection; $absolute : Boolean) : cs:C1710.svg
+	//mark:-
+	//———————————————————————————————————————————————————————————
+	// Draws an elliptical arc from the current point to [x, y]
+	// The size and orientation of the ellipse are defined by two radii [rx, ry] and an x-axis-rotation
+	// The center of the ellipse is calculated automatically to satisfy the constraints imposed by the other parameters.
+	// flags [large-arc-flag and sweep-flag] contribute to the automatic calculations and help determine how the arc is drawn.
+Function arc($to : Collection; $radii : Collection; $axis : Real; $flags : Collection; $applyTo) : cs:C1710.svg
 	
-	var $element; $node : Text
-	var $c : Collection
-	
-	$node:=$parameters.length=2 ? This:C1470._getContainer($parameters[1]) : This:C1470._getContainer()
-	
-	DOM GET XML ELEMENT NAME:C730($node; $element)
-	
-	If ($element#"path")
+	If (This:C1470[""].absolute)
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"A\" property")
-		return This:C1470
+		return This:C1470.A($radii[0]; $radii[1]; $axis; $flags[0]; $flags[1]; $to[0]; $to[1]; $applyTo)
 		
-	End if 
-	
-	$c:=This:C1470._data($node)
-	
-	If (This:C1470.success)
+	Else 
 		
-		$c.push(($vertical ? ($absolute ? "V" : "v") : ($absolute ? "H" : "h"))+String:C10($parameters[0]; "&xml"))
-		
-		Super:C1706.setAttribute($node; "d"; $c.join(" "))
+		return This:C1470.a($radii[0]; $radii[1]; $axis; $flags[0]; $flags[1]; $to[0]; $to[1]; $applyTo)
 		
 	End if 
-	
-	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
 	// Absolute elliptical arc
 Function A($rx : Real; $ry : Real; $rotation : Real; $largeArcFlag : Integer; $sweepFlag : Integer; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
 	
-	return This:C1470._a(Copy parameters:C1790; True:C214)
+	return This:C1470._ellipticalArc(Copy parameters:C1790; True:C214)
 	
 	//———————————————————————————————————————————————————————————
 	// Relative elliptical arc
 Function a($rx : Real; $ry : Real; $rotation : Real; $largeArcFlag : Integer; $sweepFlag : Integer; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
 	
-	return This:C1470._a(Copy parameters:C1790)
+	return This:C1470._ellipticalArc(Copy parameters:C1790)
 	
-	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-	// Elliptical arc
-Function _a($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
+	//mark:-
+	//———————————————————————————————————————————————————————————
+	// Draws a cubic Bézier curve from the current point to [x,y] using beginCtrlPoint [x1,y1] as the control point at the beginning of the curve
+	// and endCtrlPoint [x2,y2] as the control point at the end of the curve
+Function cubicBezierCurveto($to : Collection; $beginCtrlPoint : Collection; $endCtrlPoint : Collection; $applyTo) : cs:C1710.svg
 	
-	var $element; $node : Text
-	var $c : Collection
-	
-	$node:=$parameters.length=8 ? This:C1470._getContainer($parameters[7]) : This:C1470._getContainer()
-	
-	DOM GET XML ELEMENT NAME:C730($node; $element)
-	
-	If ($element#"path")
+	If (This:C1470[""].absolute)
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"A\" property")
-		return This:C1470
-		
-	End if 
-	
-	$c:=This:C1470._data($node)
-	
-	If (This:C1470.success)
-		
-		$c.push(($absolute ? "A" : "a")+String:C10($parameters[0]; "&xml")+","+String:C10($parameters[1]; "&xml"))
-		$c.push(String:C10($parameters[2]; "&xml"))
-		$c.push(String:C10($parameters[3])+","+String:C10($parameters[4]))
-		$c.push(String:C10($parameters[5]; "&xml")+","+String:C10($parameters[6]; "&xml"))
-		
-		Super:C1706.setAttribute($node; "d"; $c.join(" "))
-		
-	End if 
-	
-	return This:C1470
-	
-	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _data($node : Text) : Collection
-	
-	var $data; $element : Text
-	
-	$data:=This:C1470.getAttribute($node; "d")
-	
-	If (This:C1470.success)
-		
-		return Split string:C1554($data; " "; sk ignore empty strings:K86:1)
+		return This:C1470.C($beginCtrlPoint[0]; $beginCtrlPoint[1]; $endCtrlPoint[0]; $endCtrlPoint[1]; $to[0]; $to[1]; $applyTo)
 		
 	Else 
 		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
-		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" has no \"d\" property")
+		return This:C1470.c($beginCtrlPoint[0]; $beginCtrlPoint[1]; $endCtrlPoint[0]; $endCtrlPoint[1]; $to[0]; $to[1]; $applyTo)
 		
 	End if 
 	
 	//———————————————————————————————————————————————————————————
-	// Populate the "d" property of a path
-Function d($data : Text; $applyTo) : cs:C1710.svg
+	// Absolute curvTo
+Function C($x1 : Real; $y1 : Real; $x2 : Real; $y2 : Real; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
 	
-	var $element; $node : Text
+	return This:C1470._curveTo(Copy parameters:C1790; True:C214)
 	
-	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
+	//———————————————————————————————————————————————————————————
+	// Relative curvTo
+Function c($x1 : Real; $y1 : Real; $x2 : Real; $y2 : Real; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._curveTo(Copy parameters:C1790)
+	
+	//mark:-
+	//———————————————————————————————————————————————————————————
+	// Draws a cubic Bézier curve from the current point to [x,y]
+Function smoothCubicBezierCurveto($to : Collection; $endCtrlPoint : Collection; $applyTo) : cs:C1710.svg
+	
+	If (This:C1470[""].absolute)
 		
-		return This:C1470
-		
-	End if 
-	
-	$node:=Count parameters:C259>=2 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
-	DOM GET XML ELEMENT NAME:C730($node; $element)
-	
-	If ($element="path")
-		
-		Super:C1706.setAttribute($node; "d"; $data)
+		return This:C1470.S($endCtrlPoint[0]; $endCtrlPoint[1]; $to[0]; $to[1]; $applyTo)
 		
 	Else 
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$element+"\" is not compatible with \"points\" property")
+		return This:C1470.c($endCtrlPoint[0]; $endCtrlPoint[1]; $to[0]; $to[1]; $applyTo)
+		
+	End if 
+	
+	//———————————————————————————————————————————————————————————
+	// Absolute shorthand/smooth curvTo
+Function S($x2 : Real; $y2 : Real; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._smoothCurveTo(Copy parameters:C1790; True:C214)
+	
+	//———————————————————————————————————————————————————————————
+	// Relative shorthand/smooth curvTo
+Function s($x2 : Real; $y2 : Real; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._smoothCurveTo(Copy parameters:C1790)
+	
+	//mark:-
+	//———————————————————————————————————————————————————————————
+	// Draws a quadratic Bézier curve from the current point to [x,y] using controlPoint [x1,y1] as the control point
+Function quadraticBezierCurveto($to : Collection; $controlPoint : Collection; $applyTo) : cs:C1710.svg
+	
+	If (This:C1470[""].absolute)
+		
+		return This:C1470.Q($controlPoint[0]; $controlPoint[1]; $to[0]; $to[1]; $applyTo)
+		
+	Else 
+		
+		return This:C1470.q($controlPoint[0]; $controlPoint[1]; $to[0]; $to[1]; $applyTo)
+		
+	End if 
+	
+	//———————————————————————————————————————————————————————————
+	// Absolute quadratic Bézier curveto
+Function Q($x1 : Real; $y1 : Real; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._quadraticCurveto(Copy parameters:C1790; True:C214)
+	
+	//———————————————————————————————————————————————————————————
+	// Relative quadratic Bézier curveto
+Function q($x1 : Real; $y1 : Real; $x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._quadraticCurveto(Copy parameters:C1790)
+	
+	//mark:-
+	//———————————————————————————————————————————————————————————
+	// Draws a quadratic Bézier curve from the current point to [x,y]
+Function smoothQuadraticBezierCurveto($to : Collection; $applyTo) : cs:C1710.svg
+	
+	If (This:C1470[""].absolute)
+		
+		return This:C1470.T($to[0]; $to[1]; $applyTo)
+		
+	Else 
+		
+		return This:C1470.t($to[0]; $to[1]; $applyTo)
+		
+	End if 
+	
+	//———————————————————————————————————————————————————————————
+	// Absolute shorthand/smooth quadratic Bézier curveto
+Function T($x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._smoothQuadraticCurveto(Copy parameters:C1790; True:C214)
+	
+	//———————————————————————————————————————————————————————————
+	// Relative shorthand/smooth quadratic Bézier curveto
+Function t($x : Real; $y : Real; $applyTo) : cs:C1710.svg
+	
+	return This:C1470._smoothQuadraticCurveto(Copy parameters:C1790)
+	
+	//mark:-
+	//———————————————————————————————————————————————————————————
+	// Close the current subpath by drawing a straight line from the current point to current subpath's initial point
+Function closePath($applyTo) : cs:C1710.svg
+	
+	return This:C1470.Z($applyTo)
+	
+	//———————————————————————————————————————————————————————————
+	// Close path
+Function Z($applyTo) : cs:C1710.svg
+	
+	var $name; $node : Text
+	
+	$node:=Count parameters:C259>=1 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
+	DOM GET XML ELEMENT NAME:C730($node; $name)
+	
+	If ($name="path")
+		
+		Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+"Z")
+		
+	Else 
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \"points\" property")
 		
 	End if 
 	
@@ -1501,21 +1618,13 @@ Function viewbox($left; $top : Real; $width : Real; $height : Real; $applyTo) : 
 	var $name; $node; $viewbox : Text
 	var $c : Collection
 	
-	If (Count parameters:C259>=5)
-		
-		$node:=This:C1470._getTarget($applyTo)
-		
-	Else 
-		
-		$node:=This:C1470._getTarget("root")
-		
-	End if 
+	$node:=Count parameters:C259>=5 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget("root")
 	
 	DOM GET XML ELEMENT NAME:C730($node; $name)
 	
 	$c:=New collection:C1472("svg"; "symbol"; "marker"; "pattern"; "view")
 	
-	If ($c.indexOf($name)#-1)
+	If ($c.includes($name))
 		
 		If (Value type:C1509($left)=Is text:K8:3)
 			
@@ -1581,7 +1690,7 @@ Function id($id : Text; $applyTo) : cs:C1710.svg
 Function x($x : Real; $applyTo) : cs:C1710.svg
 	
 	
-	var $node; $element : Text
+	var $node; $name : Text
 	var $spans : Collection
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
@@ -1597,12 +1706,12 @@ Function x($x : Real; $applyTo) : cs:C1710.svg
 			
 		End if 
 		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
+		DOM GET XML ELEMENT NAME:C730($node; $name)
 		
 		Case of 
 				
 				//______________________________________________________
-			: ($element="text")
+			: ($name="text")
 				
 				Super:C1706.setAttribute($node; "x"; $x)
 				
@@ -1619,16 +1728,16 @@ Function x($x : Real; $applyTo) : cs:C1710.svg
 				End if 
 				
 				//______________________________________________________
-			: ($element="rect")\
-				 | ($element="image")\
-				 | ($element="textArea")
+			: ($name="rect")\
+				 | ($name="image")\
+				 | ($name="textArea")
 				
 				Super:C1706.setAttribute($node; "x"; $x)
 				
 				//______________________________________________________
 			Else 
 				
-				This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+				This:C1470._pushError("cannot be fixed for the element \""+$name+"\"")
 				
 				//______________________________________________________
 		End case 
@@ -1659,7 +1768,7 @@ Function y($y : Real; $applyTo) : cs:C1710.svg
 	// Sets the radius of a circle
 Function r($r : Real; $applyTo) : cs:C1710.svg
 	
-	var $node; $element : Text
+	var $node; $name : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
@@ -1674,15 +1783,15 @@ Function r($r : Real; $applyTo) : cs:C1710.svg
 			
 		End if 
 		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
+		DOM GET XML ELEMENT NAME:C730($node; $name)
 		
-		If ($element="circle")
+		If ($name="circle")
 			
 			Super:C1706.setAttribute($node; "r"; $r)
 			
 		Else 
 			
-			This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+			This:C1470._pushError("cannot be fixed for the element \""+$name+"\"")
 			
 		End if 
 	End if 
@@ -1691,7 +1800,7 @@ Function r($r : Real; $applyTo) : cs:C1710.svg
 	// Sets the rx of a rect or an ellipse
 Function rx($rx : Real; $applyTo) : cs:C1710.svg
 	
-	var $node; $element : Text
+	var $node; $name : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
@@ -1706,16 +1815,16 @@ Function rx($rx : Real; $applyTo) : cs:C1710.svg
 			
 		End if 
 		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
+		DOM GET XML ELEMENT NAME:C730($node; $name)
 		
-		If ($element="rect")\
-			 | ($element="ellipse")
+		If ($name="rect")\
+			 | ($name="ellipse")
 			
 			Super:C1706.setAttribute($node; "rx"; $rx)
 			
 		Else 
 			
-			This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+			This:C1470._pushError("cannot be fixed for the element \""+$name+"\"")
 			
 		End if 
 	End if 
@@ -1724,7 +1833,7 @@ Function rx($rx : Real; $applyTo) : cs:C1710.svg
 	// Sets the ry of an ellipse
 Function ry($ry : Real; $applyTo) : cs:C1710.svg
 	
-	var $node; $element : Text
+	var $node; $name : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
@@ -1739,16 +1848,16 @@ Function ry($ry : Real; $applyTo) : cs:C1710.svg
 			
 		End if 
 		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
+		DOM GET XML ELEMENT NAME:C730($node; $name)
 		
-		If ($element="rect")\
-			 | ($element="ellipse")
+		If ($name="rect")\
+			 | ($name="ellipse")
 			
 			Super:C1706.setAttribute($node; "ry"; $ry)
 			
 		Else 
 			
-			This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+			This:C1470._pushError("cannot be fixed for the element \""+$name+"\"")
 			
 		End if 
 	End if 
@@ -1757,7 +1866,7 @@ Function ry($ry : Real; $applyTo) : cs:C1710.svg
 	// Sets the cx of a circle or ellipse
 Function cx($cx : Real; $applyTo) : cs:C1710.svg
 	
-	var $node; $element : Text
+	var $node; $name : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
@@ -1772,16 +1881,16 @@ Function cx($cx : Real; $applyTo) : cs:C1710.svg
 			
 		End if 
 		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
+		DOM GET XML ELEMENT NAME:C730($node; $name)
 		
-		If ($element="circle")\
-			 | ($element="ellipse")
+		If ($name="circle")\
+			 | ($name="ellipse")
 			
 			Super:C1706.setAttribute($node; "cx"; $cx)
 			
 		Else 
 			
-			This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+			This:C1470._pushError("cannot be fixed for the element \""+$name+"\"")
 			
 		End if 
 	End if 
@@ -1790,7 +1899,7 @@ Function cx($cx : Real; $applyTo) : cs:C1710.svg
 	// Sets the cy of a circle or ellipse
 Function cy($cy : Real; $applyTo) : cs:C1710.svg
 	
-	var $node; $element : Text
+	var $node; $name : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
@@ -1805,16 +1914,16 @@ Function cy($cy : Real; $applyTo) : cs:C1710.svg
 			
 		End if 
 		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
+		DOM GET XML ELEMENT NAME:C730($node; $name)
 		
-		If ($element="circle")\
-			 | ($element="ellipse")
+		If ($name="circle")\
+			 | ($name="ellipse")
 			
 			Super:C1706.setAttribute($node; "cy"; $cy)
 			
 		Else 
 			
-			This:C1470._pushError("cannot be fixed for the element \""+$element+"\"")
+			This:C1470._pushError("cannot be fixed for the element \""+$name+"\"")
 			
 		End if 
 	End if 
@@ -2294,7 +2403,7 @@ Function fontStyle($style : Integer; $applyTo) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 Function alignment($alignment : Integer; $applyTo) : cs:C1710.svg
 	
-	var $node; $element : Text
+	var $node; $name : Text
 	
 	If (Count parameters:C259>=2)
 		
@@ -2307,14 +2416,14 @@ Function alignment($alignment : Integer; $applyTo) : cs:C1710.svg
 		
 	End if 
 	
-	DOM GET XML ELEMENT NAME:C730($node; $element)
+	DOM GET XML ELEMENT NAME:C730($node; $name)
 	
 	Case of 
 			
 			//…………………………………………………………………………………………
 		: ($alignment=Align center:K42:3)
 			
-			If ($element="textArea")
+			If ($name="textArea")
 				
 				Super:C1706.setAttribute($node; "text-align"; "center")
 				
@@ -2327,24 +2436,24 @@ Function alignment($alignment : Integer; $applyTo) : cs:C1710.svg
 			//…………………………………………………………………………………………
 		: ($alignment=Align right:K42:4)
 			
-			Super:C1706.setAttribute($node; Choose:C955($element="textArea"; "text-align"; "text-anchor"); "end")
+			Super:C1706.setAttribute($node; Choose:C955($name="textArea"; "text-align"; "text-anchor"); "end")
 			
 			//…………………………………………………………………………………………
 		: ($alignment=Align left:K42:2)\
 			 | ($alignment=Align default:K42:1)
 			
-			Super:C1706.setAttribute($node; Choose:C955($element="textArea"; "text-align"; "text-anchor"); "start")
+			Super:C1706.setAttribute($node; Choose:C955($name="textArea"; "text-align"; "text-anchor"); "start")
 			
 			//…………………………………………………………………………………………
 		: ($alignment=5)\
-			 & ($element="textArea")
+			 & ($name="textArea")
 			
 			Super:C1706.setAttribute($node; "text-align"; "justify")
 			
 			//…………………………………………………………………………………………
 		Else 
 			
-			Super:C1706.setAttribute($node; Choose:C955($element="textArea"; "text-align"; "text-anchor"); "inherit")
+			Super:C1706.setAttribute($node; Choose:C955($name="textArea"; "text-align"; "text-anchor"); "inherit")
 			
 			//…………………………………………………………………………………………
 	End case 
@@ -2401,22 +2510,6 @@ Function class($class : Text; $applyTo) : cs:C1710.svg
 	Else 
 		
 		Super:C1706.setAttribute(This:C1470._getTarget(); "class"; $class)
-		
-	End if 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Assigns an embedded style to an element
-Function style($tyle : Text; $applyTo) : cs:C1710.svg
-	
-	If (Count parameters:C259=2)
-		
-		Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "style"; $tyle)
-		
-	Else 
-		
-		Super:C1706.setAttribute(This:C1470._getTarget(); "style"; $tyle)
 		
 	End if 
 	
@@ -2932,22 +3025,22 @@ Function font($attributes : Object; $applyTo) : cs:C1710.svg
 	// Set the position of an object
 Function position($x : Real; $y : Variant; $unit : Text) : cs:C1710.svg
 	
-	var $element; $node : Text
+	var $name; $node : Text
 	
 	$node:=This:C1470._getTarget()
-	DOM GET XML ELEMENT NAME:C730($node; $element)
+	DOM GET XML ELEMENT NAME:C730($node; $name)
 	
 	Case of 
 			
 			//______________________________________________________
-		: ($element="svg")\
-			 | ($element="g")
+		: ($name="svg")\
+			 | ($name="g")
 			
-			This:C1470._pushError("You can't set position for the element"+$element+"!")
+			This:C1470._pushError("You can't set position for the element"+$name+"!")
 			
 			//______________________________________________________
-		: ($element="circle")\
-			 | ($element="ellipse")
+		: ($name="circle")\
+			 | ($name="ellipse")
 			
 			Case of 
 					
@@ -3003,7 +3096,7 @@ Function position($x : Real; $y : Variant; $unit : Text) : cs:C1710.svg
 			End case 
 			
 			//______________________________________________________
-		: ($element="line")
+		: ($name="line")
 			
 			Case of 
 					
@@ -3111,21 +3204,21 @@ Function position($x : Real; $y : Variant; $unit : Text) : cs:C1710.svg
 	// Set the dimensions of an object
 Function size($width : Real; $height : Real; $unit : Text) : cs:C1710.svg
 	
-	var $node; $element : Text
+	var $node; $name : Text
 	
 	$node:=This:C1470._getTarget()
-	DOM GET XML ELEMENT NAME:C730($node; $element)
+	DOM GET XML ELEMENT NAME:C730($node; $name)
 	
 	Case of 
 			
 			//______________________________________________________
-		: ($element="g")\
-			 | ($element="use")
+		: ($name="g")\
+			 | ($name="use")
 			
-			This:C1470._pushError("You can't set dimensions for the element"+$element+"!")
+			This:C1470._pushError("You can't set dimensions for the element"+$name+"!")
 			
 			//______________________________________________________
-		: ($element="textArea")
+		: ($name="textArea")
 			
 			Case of 
 					
@@ -3159,7 +3252,7 @@ Function size($width : Real; $height : Real; $unit : Text) : cs:C1710.svg
 			End case 
 			
 			//______________________________________________________
-		: ($element="line")
+		: ($name="line")
 			
 			Case of 
 					
@@ -3184,8 +3277,8 @@ Function size($width : Real; $height : Real; $unit : Text) : cs:C1710.svg
 			End case 
 			
 			//______________________________________________________
-		: ($element="circle")\
-			 | ($element="ellipse")
+		: ($name="circle")\
+			 | ($name="ellipse")
 			
 			//FIXME:TO_DO?
 			
@@ -3260,7 +3353,7 @@ Function moveVertically($y : Real; $applyTo) : cs:C1710.svg
 	// or the "data" proprety of a path
 Function plot($points : Variant; $applyTo) : cs:C1710.svg
 	
-	var $data; $node; $element : Text
+	var $data; $node; $name : Text
 	var $i; $paramNumber : Integer
 	
 	$paramNumber:=Count parameters:C259
@@ -3278,25 +3371,25 @@ Function plot($points : Variant; $applyTo) : cs:C1710.svg
 			
 		End if 
 		
-		DOM GET XML ELEMENT NAME:C730($node; $element)
+		DOM GET XML ELEMENT NAME:C730($node; $name)
 		
 		Case of 
 				
 				//…………………………………………………………………………………………………
-			: ($element="polyline")\
-				 | ($element="polygon")
+			: ($name="polyline")\
+				 | ($name="polygon")
 				
 				This:C1470.points($points; $node)
 				
 				//…………………………………………………………………………………………………
-			: ($element="path")
+			: ($name="path")
 				
 				This:C1470.d($points; $node)
 				
 				//…………………………………………………………………………………………………
 			Else 
 				
-				This:C1470._pushError("The element \""+$element+"\" is not compatible withe \"plot\" property")
+				This:C1470._pushError("The element \""+$name+"\" is not compatible withe \"plot\" property")
 				
 				//…………………………………………………………………………………………………
 		End case 
@@ -3308,7 +3401,7 @@ Function plot($points : Variant; $applyTo) : cs:C1710.svg
 	// Fix the radius of a circle or a rounded rectangle
 Function radius($radius : Integer; $applyTo) : cs:C1710.svg
 	
-	var $element; $node : Text
+	var $name; $node : Text
 	
 	If (Count parameters:C259=2)
 		
@@ -3321,25 +3414,25 @@ Function radius($radius : Integer; $applyTo) : cs:C1710.svg
 		
 	End if 
 	
-	DOM GET XML ELEMENT NAME:C730($node; $element)
+	DOM GET XML ELEMENT NAME:C730($node; $name)
 	
 	Case of 
 			
 			//______________________________________________________
-		: ($element="rect")\
-			 | ($element="g")
+		: ($name="rect")\
+			 | ($name="g")
 			
 			Super:C1706.setAttribute($node; "rx"; $radius)
 			
 			//______________________________________________________
-		: ($element="circle")
+		: ($name="circle")
 			
 			Super:C1706.setAttribute($node; "r"; $radius)
 			
 			//______________________________________________________
 		Else 
 			
-			This:C1470._pushError("Cant set radius for an object "+$element)
+			This:C1470._pushError("Cant set radius for an object "+$name)
 			
 			//______________________________________________________
 	End case 
@@ -3634,7 +3727,7 @@ Function setText($text : Text; $applyTo)
 	$node:=DOM Append XML child node:C1080($node; XML DATA:K45:12; $text)
 	
 	//MARK:-PRIVATES
-	//———————————————————————————————————————————————————————————
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// ⚠️ Overrides the method of the inherited class
 Function _reset
 	
@@ -3644,9 +3737,12 @@ Function _reset
 	This:C1470.graphic:=Null:C1517
 	This:C1470.store:=New collection:C1472
 	
-	//———————————————————————————————————————————————————————————
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Get an available container
-Function _getContainer($param)->$container : Text
+Function _getContainer($param) : Text
+	
+	var $name : Text
+	var $container
 	
 	// Keep a backup of the current item reference.
 	// We might need it, if the created element is assigned to a symbol
@@ -3663,20 +3759,42 @@ Function _getContainer($param)->$container : Text
 		
 	End if 
 	
-	If ($container#This:C1470.root)
+	If ($container=This:C1470.root)
 		
-		If (This:C1470._notContainer.indexOf(This:C1470.getName($container))#-1)
-			
-			$container:=This:C1470.parent($container)
-			
-		End if 
+		return $container
+		
 	End if 
 	
-	//———————————————————————————————————————————————————————————
-	// Returns the target of the function call
-Function _getTarget($param)->$target : Text
+	DOM GET XML ELEMENT NAME:C730($container; $name)
 	
-	var $tryToBeSmart : Boolean
+	If (This:C1470._containers.includes($name))
+		
+		return $container
+		
+	End if 
+	
+	$name:=Split string:C1554(Get call chain:C1662[1].name; ".")[1]
+	
+	If (This:C1470._notContainer.includes($name))
+		
+		return This:C1470.parent($container)
+		
+	End if 
+	
+	DOM GET XML ELEMENT NAME:C730($container; $name)
+	
+	If ($name#"path")
+		
+		return This:C1470.parent($container)
+		
+	End if 
+	
+	return $container
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Returns the target of the function call
+Function _getTarget($param) : Text
+	
 	var $o : Object
 	
 	Case of 
@@ -3684,73 +3802,60 @@ Function _getTarget($param)->$target : Text
 			//______________________________________________________
 		: (Count parameters:C259=0)
 			
-			$tryToBeSmart:=True:C214
+			//
 			
 			//_______________________________
 		: (Value type:C1509($param)#Is text:K8:3)
 			
-			$tryToBeSmart:=True:C214
+			//
 			
 			//_______________________________
 		: ($param="root")
 			
-			$target:=This:C1470.root
+			return This:C1470.root
 			
 			//_______________________________
 		: ($param="latest")
 			
-			$tryToBeSmart:=True:C214
+			//
 			
 			//_______________________________
 		: ($param="parent")
 			
 			If (This:C1470.latest=Null:C1517)
 				
-				$target:=This:C1470.root
+				return This:C1470.root
 				
 			Else 
 				
 				// Get the parent
-				$target:=This:C1470.parent(This:C1470.latest)
+				return This:C1470.parent(This:C1470.latest)
 				
 			End if 
 			
 			//_______________________________
-		: (This:C1470._reservedNames.indexOf($param)#-1)
+		: (This:C1470._reservedNames.includes($param))
 			
-			$tryToBeSmart:=True:C214
+			//
 			
 			//_______________________________
 		: (This:C1470.isReference($param))
 			
-			$target:=$param  // The given reference
+			return $param  // The given reference
 			
 			//_______________________________
 		Else 
 			
 			// Find a memorized targets
-			$o:=This:C1470.store.query("id=:1"; $param).pop()
-			
-			If ($o#Null:C1517)
-				
-				$target:=$o.dom
-				
-			Else 
-				
-				$tryToBeSmart:=True:C214
-				
-			End if 
+			$o:=This:C1470.store.query("id=:1"; $param).first()
+			return $o#Null:C1517 ? $o.dom : ""
 			
 			//_______________________________
 	End case 
 	
-	If ($tryToBeSmart)
-		
-		$target:=Choose:C955(This:C1470.latest#Null:C1517; This:C1470.latest; This:C1470.root)
-		
-	End if 
+	return This:C1470.latest#Null:C1517 ? This:C1470.latest : This:C1470.root
 	
-	//———————————————————————————————————————————————————————————
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Looks for element "defs", create if not exists
 Function _defs()->$reference
 	
@@ -3784,3 +3889,262 @@ Function _defs()->$reference
 		End if 
 	End if 
 	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _data($node : Text) : Collection
+	
+	var $data; $name : Text
+	
+	$data:=This:C1470.getAttribute($node; "d")
+	
+	If (This:C1470.success)
+		
+		return Split string:C1554($data; " "; sk ignore empty strings:K86:1)
+		
+	Else 
+		
+		DOM GET XML ELEMENT NAME:C730($node; $name)
+		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" has no \"d\" property")
+		
+	End if 
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _ellipticalArc($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
+	
+	var $name; $node : Text
+	var $c : Collection
+	
+	$node:=$parameters.length=8 ? This:C1470._getContainer($parameters[7]) : This:C1470._getContainer()
+	
+	DOM GET XML ELEMENT NAME:C730($node; $name)
+	
+	If ($name#"path")
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "A" : "a")+"\" property")
+		return This:C1470
+		
+	End if 
+	
+	$c:=This:C1470._data($node)
+	
+	If (This:C1470.success)
+		
+		$c.push(($absolute ? "A" : "a")+String:C10($parameters[0]; "&xml")+","+String:C10($parameters[1]; "&xml"))
+		$c.push(String:C10($parameters[2]; "&xml"))
+		$c.push(String:C10($parameters[3])+","+String:C10($parameters[4]))
+		$c.push(String:C10($parameters[5]; "&xml")+","+String:C10($parameters[6]; "&xml"))
+		
+		Super:C1706.setAttribute($node; "d"; $c.join(" "))
+		
+	End if 
+	
+	return This:C1470
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _moveTo($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
+	
+	var $data; $name; $node : Text
+	var $points
+	
+	$node:=$parameters.length=2 ? This:C1470._getContainer($parameters[1]) : This:C1470._getContainer()
+	
+	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
+		
+		return This:C1470
+		
+	End if 
+	
+	$points:=$parameters[0]
+	
+	Case of 
+			//______________________________________________________
+		: (Value type:C1509($points)=Is collection:K8:32)
+			
+			$data:=String:C10($points[0]; "&xml")+","+String:C10($points[1]; "&xml")
+			
+			//______________________________________________________
+		: (Value type:C1509($points)=Is text:K8:3)
+			
+			$data:=$points
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError(Current method name:C684+" Points must be passed as string or collection")
+			return This:C1470
+			
+			//______________________________________________________
+	End case 
+	
+	DOM GET XML ELEMENT NAME:C730($node; $name)
+	
+	Case of 
+			
+			//…………………………………………………………………………………………………
+		: ($name="polyline")\
+			 | ($name="polygon")
+			
+			Super:C1706.setAttribute($node; "points"; $data)
+			
+			//…………………………………………………………………………………………………
+		: ($name="path")
+			
+			Super:C1706.setAttribute($node; "d"; Super:C1706.getAttribute($node; "d")+($absolute ? " M" : " m")+$data)
+			
+			//…………………………………………………………………………………………………
+		Else 
+			
+			This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? " M" : " m")+"\" property")
+			
+			//…………………………………………………………………………………………………
+	End case 
+	
+	return This:C1470
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _lineTo($vertical : Boolean; $parameters : Collection; $absolute : Boolean) : cs:C1710.svg
+	
+	var $name; $node : Text
+	var $c : Collection
+	
+	$node:=$parameters.length=2 ? This:C1470._getContainer($parameters[1]) : This:C1470._getContainer()
+	
+	DOM GET XML ELEMENT NAME:C730($node; $name)
+	
+	If ($name#"path")
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "V" : "v")+"\" property")
+		return This:C1470
+		
+	End if 
+	
+	$c:=This:C1470._data($node)
+	
+	If (This:C1470.success)
+		
+		$c.push(($vertical ? ($absolute ? "V" : "v") : ($absolute ? "H" : "h"))+String:C10($parameters[0]; "&xml"))
+		
+		Super:C1706.setAttribute($node; "d"; $c.join(" "))
+		
+	End if 
+	
+	return This:C1470
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _curveTo($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
+	
+	var $name; $node : Text
+	var $c : Collection
+	
+	$node:=$parameters.length=7 ? This:C1470._getContainer($parameters[6]) : This:C1470._getContainer()
+	
+	DOM GET XML ELEMENT NAME:C730($node; $name)
+	
+	If ($name#"path")
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "C" : "c")+"\" property")
+		return This:C1470
+		
+	End if 
+	
+	$c:=This:C1470._data($node)
+	
+	If (This:C1470.success)
+		
+		$c.push(($absolute ? "C" : "c")+String:C10($parameters[0]; "&xml")+","+String:C10($parameters[1]; "&xml"))
+		$c.push(String:C10($parameters[2]; "&xml")+","+String:C10($parameters[3]; "&xml"))
+		$c.push(String:C10($parameters[4]; "&xml")+","+String:C10($parameters[5]; "&xml"))
+		
+		Super:C1706.setAttribute($node; "d"; $c.join(" "))
+		
+	End if 
+	
+	return This:C1470
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _smoothCurveTo($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
+	
+	var $name; $node : Text
+	var $c : Collection
+	
+	$node:=$parameters.length=5 ? This:C1470._getContainer($parameters[4]) : This:C1470._getContainer()
+	
+	DOM GET XML ELEMENT NAME:C730($node; $name)
+	
+	If ($name#"path")
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "S" : "s")+"\" property")
+		return This:C1470
+		
+	End if 
+	
+	$c:=This:C1470._data($node)
+	
+	If (This:C1470.success)
+		
+		$c.push(($absolute ? "S" : "s")+String:C10($parameters[0]; "&xml")+","+String:C10($parameters[1]; "&xml"))
+		$c.push(String:C10($parameters[2]; "&xml")+","+String:C10($parameters[3]; "&xml"))
+		
+		Super:C1706.setAttribute($node; "d"; $c.join(" "))
+		
+	End if 
+	
+	return This:C1470
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _quadraticCurveto($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
+	
+	var $name; $node : Text
+	var $c : Collection
+	
+	$node:=$parameters.length=5 ? This:C1470._getContainer($parameters[4]) : This:C1470._getContainer()
+	
+	DOM GET XML ELEMENT NAME:C730($node; $name)
+	
+	If ($name#"path")
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "Q" : "q")+"\" property")
+		return This:C1470
+		
+	End if 
+	
+	$c:=This:C1470._data($node)
+	
+	If (This:C1470.success)
+		
+		$c.push(($absolute ? "Q" : "q")+String:C10($parameters[0]; "&xml")+","+String:C10($parameters[1]; "&xml"))
+		$c.push(String:C10($parameters[2]; "&xml")+","+String:C10($parameters[3]; "&xml"))
+		
+		Super:C1706.setAttribute($node; "d"; $c.join(" "))
+		
+	End if 
+	
+	return This:C1470
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _smoothQuadraticCurveto($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
+	
+	var $name; $node : Text
+	var $c : Collection
+	
+	$node:=$parameters.length=3 ? This:C1470._getContainer($parameters[2]) : This:C1470._getContainer()
+	
+	DOM GET XML ELEMENT NAME:C730($node; $name)
+	
+	If ($name#"path")
+		
+		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "T" : "t")+"\" property")
+		return This:C1470
+		
+	End if 
+	
+	$c:=This:C1470._data($node)
+	
+	If (This:C1470.success)
+		
+		$c.push(($absolute ? "T" : "t")+String:C10($parameters[0]; "&xml")+","+String:C10($parameters[1]; "&xml"))
+		
+		Super:C1706.setAttribute($node; "d"; $c.join(" "))
+		
+	End if 
+	
+	return This:C1470

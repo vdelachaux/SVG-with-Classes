@@ -1,6 +1,6 @@
 //%attributes = {}
 
-If (False:C215)  // Use 4D SVG component
+If (Shift down:C543)  // Use 4D SVG component
 	
 	// Create a new canvas
 	var $root : Text

@@ -456,6 +456,16 @@ Function append($target : Text; $source : Text)->$node : Text
 	End if 
 	
 	//———————————————————————————————————————————————————————————
+	// Append a comment to the target element
+Function comment($target : Text; $comment : Text) : Text
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 1))
+		
+		return DOM Append XML child node:C1080($target; XML comment:K45:8; $comment)
+		
+	End if 
+	
+	//———————————————————————————————————————————————————————————
 	// Insert a XML element among the child elements of the $target element
 Function insert($target : Text; $source : Text; $index : Integer)->$node : Text
 	

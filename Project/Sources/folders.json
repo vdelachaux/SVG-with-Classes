@@ -3,8 +3,6 @@
 		"methods": [
 			"Code Sample",
 			"Component versus Class",
-			"HDI_ellipticalArcCurve",
-			"HDI_path",
 			"Inspired by Piet Mondrian"
 		],
 		"forms": [
@@ -15,6 +13,14 @@
 		"classes": [
 			"svg",
 			"xml"
+		]
+	},
+	"HDI": {
+		"methods": [
+			"HDI_cubicBezierCurve",
+			"HDI_ellipticalArcCurve",
+			"HDI_path",
+			"HDI_quadraticBezierCurve"
 		]
 	},
 	"trash": {}
