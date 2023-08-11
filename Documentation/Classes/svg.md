@@ -77,7 +77,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |--------|------|   
 |.**path** ( data : `Text` {; attachTo } ) → `cs.svg` | Creates a `path` element.<br>The element definition can be given in text form, or the path can be constructed using the hight level functions below.
 ||
-|**# Hight Level**\* |
+|**# High-level**\* |
 |.**moveTo**\** ( point : `Point` {; applyTo } ) → `cs.svg` | Starts a new sub-path at the given `point` [x,y] coordinate
 |.**lineTo** ( point : `Point` {; applyTo } ) → `cs.svg` | Draws a line from the current point to the given `point` [x,y] coordinate which becomes the new current point<br>A number of coordinates pairs may be specified to draw a polyline
 |.**horizontalLineto** ( x : `Real` {; applyTo } ) → `cs.svg` | Draws an horizontal line from the current point (cpx, cpy) to (x, cpy)
@@ -89,7 +89,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**smoothQuadraticBezierCurveto** ( to : `Point` {; applyTo } ) → `cs.svg` |  Draws a quadratic Bézier curve from the current point to [x,y].<br>The control point is assumed to be the reflection of the control point on the previous command relative to the current point.
 |.**d** ( points : `Text` {; applyTo } ) → `cs.svg` | Sets the "d" property of a path element
 ||
-|# **Low Level**|
+|# **Low-level**|
 |.**M** / **m** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Absolute/Relative moveTo
 |.**L**\** / **l**\** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Absolute/Relative lineTo
 |.**H** / **h** ( x : `Real` {; applyTo } ) → `cs.svg` | Absolute/Relative horizontal lineTo
