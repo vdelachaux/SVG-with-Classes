@@ -126,7 +126,7 @@ Function picture($exportType; $keepStructure : Boolean) : Picture
 			If (This:C1470.autoClose)\
 				 & (Not:C34($keepStructure))
 				
-				This:C1470.close()
+				Super:C1706.close()
 				
 			End if 
 			
@@ -140,7 +140,7 @@ Function picture($exportType; $keepStructure : Boolean) : Picture
 				If (This:C1470.autoClose)\
 					 & (Not:C34($exportType))
 					
-					This:C1470.close()
+					Super:C1706.close()
 					
 				End if 
 				
@@ -150,7 +150,7 @@ Function picture($exportType; $keepStructure : Boolean) : Picture
 				
 				If (This:C1470.autoClose)
 					
-					This:C1470.close()
+					Super:C1706.close()
 					
 				End if 
 			End if 
@@ -162,7 +162,7 @@ Function picture($exportType; $keepStructure : Boolean) : Picture
 			
 			If (This:C1470.autoClose)
 				
-				This:C1470.close()
+				Super:C1706.close()
 				
 			End if 
 			
@@ -678,6 +678,29 @@ Function ellipse($rx : Real; $ry : Real; $cx : Real; $cy : Real; $attachTo) : cs
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+Function boundedEllipse($x : Real; $y : Real; $width : Real; $height : Real; $attachTo) : cs:C1710.svg
+	
+	var $rx; $ry : Real
+	var $node : Text
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 4))
+		
+		$node:=$attachTo#Null:C1517 ? This:C1470._getContainer($attachTo) : This:C1470._getContainer()
+		
+		$rx:=$width\2
+		$ry:=$height\2
+		
+		This:C1470.latest:=Super:C1706.create($node; "ellipse"; New object:C1471(\
+			"cx"; $x+$rx; \
+			"cy"; $y+$ry; \
+			"rx"; $rx; \
+			"ry"; $ry))
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 Function line($x1 : Real; $y1 : Real; $x2 : Real; $y2 : Real; $attachTo) : cs:C1710.svg
 	
 	var $paramNumber : Integer
@@ -983,6 +1006,76 @@ Function polygon($points : Variant; $attachTo) : cs:C1710.svg
 			
 		End if 
 	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Draws a regular polygon with number of sides fit into a circle
+Function regularPolygon($diameter : Real; $sides : Integer; $cx : Real; $cy : Real) : cs:C1710.svg
+	
+	var $angle; $r : Real
+	var $i : Integer
+	var $c : Collection
+	
+	$r:=$diameter/2
+	$cx:=$cx=0 ? $r+1 : $cx
+	$cy:=$cy=0 ? $r+1 : $cy
+	
+	$c:=[]
+	
+	For ($i; 1; $sides; 1)
+		
+		$angle:=((2*Pi:K30:1)/$sides)*$i
+		$c.push([Round:C94($cx+($r*Cos:C18($angle)); 2); Round:C94($cy+($r*Sin:C17($angle)); 2)])
+		
+	End for 
+	
+	This:C1470.polygon($c)
+	
+	If (($sides%2)#0)
+		
+		This:C1470.rotate(-(360/$sides)/4; $cx; $cy; This:C1470.latest)
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Draws a five pointed star fit into a circle
+Function fivePointStar($diameter : Real; $cx : Real; $cy : Real) : cs:C1710.svg
+	
+	var $angle; $r; $x; $y : Real
+	var $i : Integer
+	var $c : Collection
+	
+	$r:=$diameter/2
+	$cx:=$cx=0 ? $r+1 : $cx
+	$cy:=$cy=0 ? $r+1 : $cy
+	
+	This:C1470.absolute()
+	
+	$c:=[]
+	
+	For ($i; 1; 5; 1)
+		
+		$angle:=((2*Pi:K30:1)/5)*$i
+		$x:=Round:C94($cx+($r*Cos:C18($angle)); 2)
+		$y:=Round:C94($cy+($r*Sin:C17($angle)); 2)
+		
+		$c.push([$x; $y])
+		
+	End for 
+	
+	This:C1470.path()
+	This:C1470.moveTo($c[0])
+	This:C1470.lineTo($c[2])
+	This:C1470.lineTo($c[4])
+	This:C1470.lineTo($c[1])
+	This:C1470.lineTo($c[3])
+	This:C1470.closePath()
+	
+	This:C1470.rotate(-(360/5)/4; $cx; $cy)\
+		.setAttribute("fill-rule"; "nonzero"; This:C1470.latest)
 	
 	return This:C1470
 	
@@ -2582,6 +2675,38 @@ Function attachTo($parent : Variant) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Draws a pie edge 
+Function pie()
+	
+	// TODO: a group for a pie-graphic
+	
+	//———————————————————————————————————————————————————————————
+	// Draws a pie edge 
+Function pieWedge($cx : Real; $cy : Real; $r : Real; $start : Real; $percent : Real; $applyTo) : cs:C1710.svg
+	
+	var $end : Real
+	var $flags : Collection
+	
+	$end:=$start+(360*($percent/100))
+	
+	If (($end-$start)>=360)  // It's a circle !
+		
+		This:C1470.circle($r; $cx; $cy)
+		return This:C1470
+		
+	End if 
+	
+	$flags:=($end-$start)>180 ? [1; 1] : [0; 1]
+	
+	This:C1470.path()
+	This:C1470.moveTo([$cx; $cy])
+	This:C1470.lineTo([(Sin:C17($start*Degree:K30:2)*$r)+$cx; -(Cos:C18($start*Degree:K30:2)*$r)+$cy])
+	This:C1470.A($r; $r; 0; $flags[0]; $flags[1]; (Sin:C17($end*Degree:K30:2)*$r)+$cx; -(Cos:C18($end*Degree:K30:2)*$r)+$cy)
+	This:C1470.Z()
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// ⚠️ Overrides the method of the inherited class
 Function clone($source : Text; $attachTo) : cs:C1710.svg
 	
@@ -3623,7 +3748,7 @@ Function preview($keepStructure : Boolean)
 		If (This:C1470.autoClose)\
 			 & (Not:C34($keepStructure))
 			
-			This:C1470.close()
+			Super:C1706.close()
 			
 		End if 
 		
@@ -3631,7 +3756,7 @@ Function preview($keepStructure : Boolean)
 		
 		If (This:C1470.autoClose)
 			
-			This:C1470.close()
+			Super:C1706.close()
 			
 		End if 
 	End if 

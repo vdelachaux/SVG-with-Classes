@@ -43,7 +43,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**use** ( symbol : `Text` {; attachTo } ) → `cs.svg` | To place an occurence of a symbol
 |.**style** ( style : `Text` {; applyTo } ) → `cs.svg` | Creates an internal CSS style sheet if applied to the root
 |.**styleSheet** ( file : `4D.File` ) → `cs.svg` | Attach a style sheet
-|.**viewbox** ( left : `Real`; top : `Real` ; width : `Real` ; height : `Real` {; attachTo } ) → `cs.svg` | Sets the `viewBox` attribute of an SVG viewport.
+|.**viewbox** ( left : `Real`; top : `Real` ; width : `Real` ; height : `Real` {; attachTo } ) → `cs.svg` | Sets the `viewBox` attribute of a SVG viewport.
 |.**relative**() → `cs.svg` | Defines the following coordinates as relative
 |.**absolute**() → `cs.svg` | Defines the following coordinates as absolute
 
@@ -87,6 +87,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**smoothCubicBezierCurveto** ( to : `Point`; endCtrlPoint :`Point` {; applyTo } ) → `cs.svg` |  Draws a cubic Bézier curve from the current point to [x,y] using `endCtrlPoint` as the control point at the end of the curve.<br>The first control point is assumed to be the reflection of the second control point on the previous command relative to the current point.
 |.**quadraticBezierCurveto** ( to : `Point`; controlPoint :`Point` {; applyTo } ) → `cs.svg` |  Draws a quadratic Bézier curve from the current point to [x,y] using `controlPoint` [x1,y1] as the control point.
 |.**smoothQuadraticBezierCurveto** ( to : `Point` {; applyTo } ) → `cs.svg` |  Draws a quadratic Bézier curve from the current point to [x,y].<br>The control point is assumed to be the reflection of the control point on the previous command relative to the current point.
+|.**closePath** ( ) → `cs.svg` | Close a path element
 |.**d** ( points : `Text` {; applyTo } ) → `cs.svg` | Sets the "d" property of a path element
 ||
 |# **Low-level**|
@@ -99,6 +100,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**S** / **s** ( x2 : `Real`; y2 : `Real`; x : `Real`; y : `Real` {; applyTo } ) → `cs.svg` | Absolute/Relative  shorthand/smooth cubic Bézier curvTo
 |.**Q** / **q** ( x1 : `Real`; y1 : `Real`; x : `Real`; y : `Real` {; applyTo } ) → `cs.svg` | Absolute/Relative  quadratic Bézier curvTo
 |.**T** / **t** ( x : `Real`; y : `Real` {; applyTo } ) → `cs.svg` | Absolute/Relative  shorthand/smooth quadratic Bézier curvTo
+|.**Z** ( ) → `cs.svg` | Close a path element
 
 \* Theses functions use **absolute** or **relative** coordinates according to the `absolute` property. Default is **absolute**. 
 > 📌 To switch to relative coordinates, call the .**relative**() function: All subsequent coordinates will be interpreted as relative. To return to absolute coordinates, call the .**absolute**() function.
@@ -143,8 +145,6 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**cx** ( cx : `Real` {; applyTo } ) → `cs.svg` | Sets the cx of a circle or ellipse
 |.**cy** ( cy : `Real` {; applyTo } ) → `cs.svg` | Sets the cy of a rect or an ellipse
 |.**points** ( points : `Text` \| `Collection` {; applyTo } ) → `cs.svg` | Sets the "points" property of a polyline/polygon
-|.**A** / **a** ( rx : `Real`; ry : `Real`; rotation : `Real`; largeArcFlag : `Real`; sweepFlag : `Real`; x : `Real`; y : `Real`; {; applyTo } ) → `cs.svg` | Absolute/Relative elliptical arc
-|.**Z** ( ) → `cs.svg` | Close a path element
 |.**setAttribute** ( name : `Text`; value : `Variant` {; applyTo } ) → `cs.svg` | Sets one attribute
 |.**setAttributes** ( attributes : `Text` \| `Collection` \| `Object`; value : `Variant` {; applyTo})  → `cs.svg` | Defines multiple attributes
 
@@ -153,6 +153,9 @@ This class will be augmented according to my needs but you are strongly encourag
 |Function|Action|
 |--------|------| 
 |.**square** ( side : `Real` {; attachTo } ) → `cs.svg` | To draw a square
+|.**regularPolygon** ( diameter : `Real` ; sides : `Integer`{; cx : `Real` ; cy : `Real` {; attachTo }} ) → `cs.svg` | Draws a regular polygon, with the given number of sides, fits into the circle set by `diameter`, `cx` & `cy`.
+|.**fivePointStar** ( diameter : `Real` {; cx : `Real` ; cy : `Real` {; attachTo }} ) → `cs.svg` | Draws a five pointed star fits into the circle set by `diameter`, `cx` & `cy`.
+|.**boundedEllipse** ( x : `Real` ; y : `Real` ; width : `Real` ; height : `Real`{; attachTo }} ) → `cs.svg` | Draws an ellipse fits into the rectangle set by `x`, `y`, `width` and `height`.
 |.**color** ( color : `Text` {; applyTo } ) → `cs.svg` | Defines the color of both the line and the fill (`stroke` & `fill` attributes)
 |.**opacity** ( opacity : `Real` {; applyTo } ) → `cs.svg` | Sets stroke and fill opacity
 |.**fill** ( value `Text` \| `Boolean` \| `Object` {; applyTo } ) → `cs.svg` |  To define the painting of the inside of a shape (`fill` attributes)

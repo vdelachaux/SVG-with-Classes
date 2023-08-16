@@ -9,18 +9,21 @@
 			"COLOR_PALETTE"
 		]
 	},
-	"Classes": {
-		"classes": [
-			"svg",
-			"xml"
-		]
-	},
 	"HDI": {
 		"methods": [
-			"HDI_cubicBezierCurve",
-			"HDI_ellipticalArcCurve",
-			"HDI_path",
-			"HDI_quadraticBezierCurve"
+			"HDI circle01",
+			"HDI ellipse01",
+			"HDI line01",
+			"HDI polygon01",
+			"HDI polygon02",
+			"HDI polyline01",
+			"HDI rect01",
+			"HDI rect02",
+			"HDI_arcs01",
+			"HDI_cubic01",
+			"HDI_pieWedge",
+			"HDI_quad01",
+			"HDI_triangle01"
 		]
 	},
 	"trash": {}
