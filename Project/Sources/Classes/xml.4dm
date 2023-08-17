@@ -1315,7 +1315,22 @@ Function setAttribute($node : Text; $name : Text; $value)->$this : cs:C1710.xml
 		
 		If (This:C1470._requiredRef($node))
 			
-			DOM SET XML ATTRIBUTE:C866($node; $name; $value)
+			Case of 
+					//______________________________________________________
+				: (Value type:C1509($value)=Is collection:K8:32)\
+					 | (Value type:C1509($value)=Is object:K8:27)
+					
+					DOM SET XML ATTRIBUTE:C866($node; $name; JSON Stringify:C1217($value))
+					
+					//______________________________________________________
+				Else 
+					
+					DOM SET XML ATTRIBUTE:C866($node; $name; $value)
+					
+					//______________________________________________________
+			End case 
+			
+			
 			This:C1470.success:=Bool:C1537(OK)
 			
 		End if 
@@ -1366,7 +1381,7 @@ Function setAttributes($node : Text; $attributes; $value) : cs:C1710.xml
 				For each ($o; $attributes) While (This:C1470.success)
 					
 					DOM SET XML ATTRIBUTE:C866($node; \
-						String:C10($o.key); $o.value)
+						String:C10($o.key); JSON Stringify:C1217($o.value))
 					
 					This:C1470.success:=Bool:C1537(OK)
 					
@@ -1493,17 +1508,22 @@ Function _convert($textValue : Text)->$value
 	Case of 
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$"; $textValue; 1))
+		: (Match regex:C1019("(?mi-s)^\\[.*\\]$"; $textValue; 1; *))
+			
+			$value:=JSON Parse:C1218($textValue)
+			
+			//______________________________________________________
+		: (Match regex:C1019("(?m-is)^(?:[tT]rue|[fF]alse)$"; $textValue; 1; *))
 			
 			$value:=($textValue="true")
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$textValue+"\\d+)?$"; $textValue; 1))
+		: (Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$textValue+"\\d+)?$"; $textValue; 1; *))
 			
 			$value:=Num:C11($textValue)
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?m-si)^\\d+-\\d+-\\d+$"; $textValue; 1))
+		: (Match regex:C1019("(?m-si)^\\d+-\\d+-\\d+$"; $textValue; 1; *))
 			
 			$value:=Date:C102($textValue+"T00:00:00")
 			

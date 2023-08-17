@@ -246,9 +246,10 @@ Function group($id : Text; $attachTo) : cs:C1710.svg
 				
 			End if 
 		End if 
+		
+		This:C1470.latest:=Super:C1706.create(This:C1470.latest; "g")
+		
 	End if 
-	
-	This:C1470.latest:=Super:C1706.create(This:C1470.latest; "g")
 	
 	If (Count parameters:C259>=1)
 		
@@ -2675,36 +2676,133 @@ Function attachTo($parent : Variant) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Draws a pie edge 
-Function pie()
+	// Begin a pie group
+Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $start : Integer) : cs:C1710.svg
 	
-	// TODO: a group for a pie-graphic
+	This:C1470.group($id)\
+		.setAttributes({cx: $cx; cy: $cy; r: $r; start: $start; cur: $start; values: []})
+	
+	// TODO:Allow title
+	
+	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Draws a pie edge 
-Function pieWedge($cx : Real; $cy : Real; $r : Real; $start : Real; $percent : Real; $applyTo) : cs:C1710.svg
+	// Begin a pie group fit into a square
+Function pieBounded($id : Text; $x : Real; $y : Real; $width : Real; $start : Integer) : cs:C1710.svg
 	
-	var $end : Real
-	var $flags : Collection
+	var $r : Real
 	
-	$end:=$start+(360*($percent/100))
+	$r:=$width/2
 	
-	If (($end-$start)>=360)  // It's a circle !
+	If (Count parameters:C259>=5)
 		
-		This:C1470.circle($r; $cx; $cy)
-		return This:C1470
+		This:C1470.pie($id; $x+$r; $y+$r; $r; $start)
+		
+	Else 
+		
+		This:C1470.pie($id; $x+$r; $y+$r; $r)
 		
 	End if 
 	
-	$flags:=($end-$start)>180 ? [1; 1] : [0; 1]
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Draws a pie wedge
+Function wedge($id : Text; $percent : Real) : cs:C1710.svg
+	
+	var $cx; $cy; $r : Real
+	var $pie : Text
+	var $cur; $start; $to : Integer
+	var $flags; $values : Collection
+	
+	// TODO:Allow labels
+	
+	// Get pie datas
+	$pie:=This:C1470.findById($id)
+	$cx:=Num:C11(Super:C1706.getAttribute($pie; "cx"))
+	$cy:=Num:C11(Super:C1706.getAttribute($pie; "cy"))
+	$r:=Num:C11(Super:C1706.getAttribute($pie; "r"))
+	$cur:=Num:C11(Super:C1706.getAttribute($pie; "cur"))
+	$start:=Num:C11(Super:C1706.getAttribute($pie; "start"))
+	$values:=Super:C1706.getAttribute($pie; "values")
+	
+	If (Count parameters:C259>=2)
+		
+		$to:=$cur+(360*($percent/100))
+		
+	Else 
+		
+		$to:=$start>=0 ? 360-$start : 360+$start
+		$percent:=100-$values.sum()
+		
+	End if 
+	
+	$values.push($percent)
+	
+	$to:=$to>360 ? 360 : $to
+	
+	$flags:=($to-$cur)>180 ? [1; 1] : [0; 1]
 	
 	This:C1470.path()
+	
 	This:C1470.moveTo([$cx; $cy])
-	This:C1470.lineTo([(Sin:C17($start*Degree:K30:2)*$r)+$cx; -(Cos:C18($start*Degree:K30:2)*$r)+$cy])
-	This:C1470.A($r; $r; 0; $flags[0]; $flags[1]; (Sin:C17($end*Degree:K30:2)*$r)+$cx; -(Cos:C18($end*Degree:K30:2)*$r)+$cy)
+	
+	var $xA; $yA : Real
+	$xA:=(Sin:C17($cur*Degree:K30:2)*$r)+$cx
+	$yA:=-(Cos:C18($cur*Degree:K30:2)*$r)+$cy
+	This:C1470.lineTo([$xA; $yA])
+	
+	var $xB; $yB : Real
+	$xB:=(Sin:C17($to*Degree:K30:2)*$r)+$cx
+	$yB:=-(Cos:C18($to*Degree:K30:2)*$r)+$cy
+	This:C1470.A($r; $r; 0; $flags[0]; $flags[1]; $xB; $yB)
+	
 	This:C1470.Z()
 	
+	This:C1470.setAttribute("indx"; $values.length)
+	
+	// Update pie datas
+	Super:C1706.setAttribute($pie; "cur"; $to)
+	Super:C1706.setAttribute($pie; "values"; $values)
+	
+	// TODO:Display the value (option)
+	
+/*
+var $latest : Text
+$latest:=This.latest
+	
+// The AB chord
+This.line($xA; $yA; $xB; $yB).color("white").stroke(2)
+	
+// The chord mediator
+var $xP; $yP : Real
+$xP:=($xA+$xB)/2
+$yP:=($yA+$yB)/2
+This.line($cx; $cy; $xP; $yP).color("white").stroke(2)
+This.circle(5; $xP; $yP).color("white")
+	
+	
+	
+// Midle of the Arc
+var $x; $y : Real
+$x:=Square root(($xB^2)+($yB^2))/Square root(((($yA+$yB)/($xA+$XB))^2)+1)
+$y:=(($yA+$yB)/($xA+$XB))*$x
+This.circle(2; $x; $y).color("red")
+	
+This.text(String($percent)+" %"; This.parent(This.latest)).position($x; $y)
+	
+This.latest:=$latest
+*/
+	
+	// TODO:Display the legend (option)
+	
 	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// End a pie group
+Function closePie() : cs:C1710.svg
+	
+	This:C1470.latest:=This:C1470.parent(This:C1470.parent(This:C1470.latest))
 	
 	//———————————————————————————————————————————————————————————
 	// ⚠️ Overrides the method of the inherited class
