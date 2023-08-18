@@ -1265,7 +1265,7 @@ Function popAttribute($node : Text; $attribute : Text)->$value
 	// Returns a node attributes as object
 Function getAttributes($node : Text)->$attributes : Object
 	
-	var $key; $nodeƒ; $t; $value : Text
+	var $key; $nodeƒ; $value : Text
 	var $i : Integer
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
@@ -1284,8 +1284,6 @@ Function getAttributes($node : Text)->$attributes : Object
 		If (This:C1470._requiredRef($nodeƒ))
 			
 			$attributes:=New object:C1471
-			
-			GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $t)
 			
 			For ($i; 1; DOM Count XML attributes:C727($nodeƒ); 1)
 				
@@ -1380,8 +1378,18 @@ Function setAttributes($node : Text; $attributes; $value) : cs:C1710.xml
 				
 				For each ($o; $attributes) While (This:C1470.success)
 					
-					DOM SET XML ATTRIBUTE:C866($node; \
-						String:C10($o.key); JSON Stringify:C1217($o.value))
+					If (Value type:C1509($o.value)=Is object:K8:27)\
+						 | (Value type:C1509($o.value)=Is collection:K8:32)
+						
+						DOM SET XML ATTRIBUTE:C866($node; \
+							String:C10($o.key); JSON Stringify:C1217($o.value))
+						
+					Else 
+						
+						DOM SET XML ATTRIBUTE:C866($node; \
+							String:C10($o.key); $o.value)
+						
+					End if 
 					
 					This:C1470.success:=Bool:C1537(OK)
 					
