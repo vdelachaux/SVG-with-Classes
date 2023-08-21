@@ -1,24 +1,24 @@
 //%attributes = {}
-var $svg : cs:C1710.svg
+var $chart : cs:C1710.chart
 
-$svg:=cs:C1710.svg.new()\
+$chart:=cs:C1710.chart.new()\
 .title("Example donutChart01 - make a donut chart")\
 .desc("Picture of a donut chart with the donut & wedge commands")\
 
-$svg.group().stroke("blue")
-$svg.rect(1000; 398).position(1; 1)
+$chart.group().stroke("blue")
+$chart.rect(1000; 398).position(1; 1)
 
 // Mark:- First 
-$svg.donut("1st"; 200; 200; 120; 0)
+$chart.donut("1st"; 200; 200; 120; 0)
 
 // Draws the wedges 
-$svg.wedge("1st"; 25).fill("lemonchiffon")
-$svg.wedge("1st"; 12).fill("thistle")
-$svg.wedge("1st"; 25).fill("palegreen")
-$svg.wedge("1st"; 40).fill("lightcyan")
-$svg.closePie()
+$chart.wedge("1st"; 25).fill("lemonchiffon")
+$chart.wedge("1st"; 12).fill("thistle")
+$chart.wedge("1st"; 25).fill("palegreen")
+$chart.wedge("1st"; 40).fill("lightcyan")
+$chart.closePie()
 
 
-$svg.preview()
+$chart.preview()
 
 
