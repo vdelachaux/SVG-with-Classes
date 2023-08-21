@@ -233,8 +233,8 @@ $offset:=$offset/100
 	This:C1470.setAttribute("indx"; $values.length)
 	
 	// Update chart datas
-	Super:C1706.setAttribute($chart; "cur"; $to)
-	Super:C1706.setAttribute($chart; "values"; $values)
+	Super:C1706.setAttribute("cur"; $to; $chart)
+	Super:C1706.setAttribute("values"; $values; $chart)
 	
 	// TODO:Display the legend (option)
 	

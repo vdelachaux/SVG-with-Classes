@@ -21,6 +21,7 @@ $chart.closePie()
 
 // Mark:-Second pie-chart, fit into a square, with no start point
 //.pieBounded($id ; $x ; $y ; $width {; $start})
+
 $chart.pieBounded("2ndPie"; 550; 30; 340)
 
 $values:=[5.25; 8.75; 12.5; 8; 6; 12.5; 6; 14]
@@ -36,5 +37,6 @@ End for
 // 📌 The pie is not complete, so call .wedge() without value.
 $chart.wedge("2ndPie")\
 .fill($colors[$i])
+
 
 $chart.preview()
