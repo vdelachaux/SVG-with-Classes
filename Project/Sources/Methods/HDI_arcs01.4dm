@@ -17,6 +17,7 @@ $svg:=cs:C1710.svg.new()\
 $svg.rect(1198; 398).position(1; 1)\
 .stroke("blue")
 
+// Using arc() with a single radius
 $svg.path()\
 .fill("red")\
 .stroke("blue")\
@@ -24,7 +25,7 @@ $svg.path()\
 .moveTo([300; 200])\
 .relative()\
 .horizontalLineto(-150)\
-.arc([150; -150]; [150; 150]; 0; [1; 0])\
+.arc([150; -150]; 150; 0; [1; 0])\
 .closePath()
 
 $svg.path()\
@@ -35,9 +36,10 @@ $svg.path()\
 .moveTo([275; 175])\
 .relative()\
 .verticalLineto(-150)\
-.arc([-150; 150]; [150; 150]; 0; [0; 0])\
+.arc([-150; 150]; 150; 0; [0; 0])\
 .closePath()
 
+// Using arc() with 2 radii
 $svg.path()\
 .fill("none")\
 .stroke("red")\
