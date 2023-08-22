@@ -1342,6 +1342,7 @@ Function setAttributes($node : Text; $attributes; $value) : cs:C1710.xml
 	
 	var $t : Text
 	var $o : Object
+	var $val
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 2)) && (This:C1470._requiredRef($node))
 		
@@ -1361,8 +1362,10 @@ Function setAttributes($node : Text; $attributes; $value) : cs:C1710.xml
 				
 				For each ($t; $attributes) While (This:C1470.success)
 					
-					DOM SET XML ATTRIBUTE:C866($node; \
-						$t; $attributes[$t])
+					$val:=$attributes[$t]
+					
+					DOM SET XML ATTRIBUTE:C866($node; $t; $val)
+					
 					This:C1470.success:=Bool:C1537(OK)
 					
 					If (Not:C34(This:C1470.success))
@@ -1381,13 +1384,12 @@ Function setAttributes($node : Text; $attributes; $value) : cs:C1710.xml
 					If (Value type:C1509($o.value)=Is object:K8:27)\
 						 | (Value type:C1509($o.value)=Is collection:K8:32)
 						
-						DOM SET XML ATTRIBUTE:C866($node; \
-							String:C10($o.key); JSON Stringify:C1217($o.value))
+						DOM SET XML ATTRIBUTE:C866($node; String:C10($o.key); JSON Stringify:C1217($o.value))
 						
 					Else 
 						
-						DOM SET XML ATTRIBUTE:C866($node; \
-							String:C10($o.key); $o.value)
+						$val:=$o.value
+						DOM SET XML ATTRIBUTE:C866($node; String:C10($o.key); $val)
 						
 					End if 
 					
