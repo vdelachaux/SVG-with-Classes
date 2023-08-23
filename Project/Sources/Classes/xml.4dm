@@ -1363,7 +1363,6 @@ Function setAttributes($node : Text; $attributes; $value) : cs:C1710.xml
 				For each ($t; $attributes) While (This:C1470.success)
 					
 					$val:=$attributes[$t]
-					
 					DOM SET XML ATTRIBUTE:C866($node; $t; $val)
 					
 					This:C1470.success:=Bool:C1537(OK)
@@ -1528,9 +1527,9 @@ Function _convert($textValue : Text)->$value
 			$value:=($textValue="true")
 			
 			//______________________________________________________
-		: (Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.|"+$textValue+"\\d+)?$"; $textValue; 1; *))
+		: (Match regex:C1019("(?m-si)^(?:\\+|-)?\\d+(?:\\.\\d+)?$"; $textValue; 1; *))
 			
-			$value:=Num:C11($textValue)
+			$value:=Num:C11($textValue; ".")
 			
 			//______________________________________________________
 		: (Match regex:C1019("(?m-si)^\\d+-\\d+-\\d+$"; $textValue; 1; *))

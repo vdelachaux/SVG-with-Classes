@@ -60,6 +60,7 @@ Function newCanvas($attributes : Object) : cs:C1710.svg
 		Super:C1706.setDeclaration("UTF-8"; True:C214)
 		Super:C1706.setOption(XML indentation:K45:34; Is compiled mode:C492 ? XML no indentation:K45:36 : XML with indentation:K45:35)
 		Super:C1706.setAttribute(This:C1470.root; "xmlns:xlink"; "http://www.w3.org/1999/xlink")
+		Super:C1706.setAttribute(This:C1470.root; "xmlns:vdl"; "https://github.com/vdelachaux")
 		
 		If (This:C1470.success)
 			
@@ -2680,30 +2681,6 @@ Function attachTo($parent : Variant) : cs:C1710.svg
 	End if 
 	
 	return This:C1470
-	
-	////———————————————————————————————————————————————————————————
-	//// Begin a pie group
-	//Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $start : Integer) : cs.svg
-	
-	//This.layer("chart"; "dev")
-	
-	//This.group($id)\
-								.setAttributes({type: "pie"; cx: $cx; cy: $cy; r: $r; start: $start; cur: $start; values: []; dev: True})\
-								.attachTo("chart")
-	
-	// TODO:Allow title & more…
-	
-	//return This
-	
-	////———————————————————————————————————————————————————————————
-	//// Begin a donut group
-	//Function donut($id : Text; $cx : Real; $cy : Real; $r : Real; $start : Integer) : cs.svg
-	
-	//This.layer("chart"; "dev")
-	
-	//This.group($id)\
-								.setAttributes({type: "donut"; cx: $cx; cy: $cy; r: $r; start: $start; cur: $start; values: []; dev: True})\
-								.attachTo("chart")
 	
 	//———————————————————————————————————————————————————————————
 	// ⚠️ Overrides the method of the inherited class

@@ -18,7 +18,7 @@ $chart.pie("1st"; 200; 200; 120; {origin: -10})
 $chart.wedge("1st"; 15).fill("mediumaquamarine")
 $chart.wedge("1st"; 35).fill("yellow")
 $chart.wedge("1st"; 50).fill("royalblue")
-$chart.closeChart()  // Closing the chart
+//$chart.closeChart("1st")  // Closing the chart
 
 // Mark:-Second pie-chart, fit into a square defined by top-left corner [x, y] & side length [width]
 //.pieBounded($id ; $x ; $y ; $width {; $options})
