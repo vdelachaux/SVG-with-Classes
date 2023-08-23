@@ -10,7 +10,7 @@ $chart.rect(1000; 398).position(1; 1)
 
 // Mark:- First
 //.donutBounded($id; $cx; $cy; $r {; $thickness {; $margin {; $options}}})
-$chart.donut("1st"; 200; 200; 120)
+$chart.donut("1st"; 200; 200; 120).stroke("lightgray")
 
 // Draws the wedges
 $chart.wedge("1st"; 25).fill("lemonchiffon")

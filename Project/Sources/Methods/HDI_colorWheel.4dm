@@ -11,7 +11,7 @@ $angle:=100/$colorNumber
 $hsl:={hue: 0; saturation: 70; lightness: 100}
 $color:=cs:C1710.color.new()
 
-$chart:=cs:C1710.chart.new().pie("wheel"; 300; 300; 240).rotate(-90)
+$chart:=cs:C1710.chart.new().pie("wheel"; 300; 300; 240).translate(200; 50).rotate(-90)
 
 For ($i; 1; $colorNumber; 1)
 	

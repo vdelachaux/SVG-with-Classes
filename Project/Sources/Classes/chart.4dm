@@ -121,13 +121,13 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 	$cx:=$o.cx
 	$cy:=$o.cy
 	$r:=$o.r
-	$from:=$o.cur+Num:C11($o.margin)
+	$from:=$o.cur
 	$origin:=$o.origin
 	$values:=$o.values
 	
 	If (Count parameters:C259>=2)
 		
-		$to:=$from+(360*($percent/100))
+		$to:=$from+(360*($percent/100))-Num:C11($o.margin)
 		
 	Else 
 		
@@ -139,8 +139,8 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 	
 	$values.push($percent)
 	
-	$to:=$to>360 ? 360 : $to  // Limited to 360°.
-	$arc:=Abs:C99($to-$from)>180 ? 1 : 0
+	$to:=$to<=(360-Num:C11($o.margin)) ? $to : 360-Num:C11($o.margin)  // Limited to 360°.
+	$arc:=Num:C11(Abs:C99($to-$from)>180)
 	
 	This:C1470.path()
 	
@@ -156,8 +156,17 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 			//______________________________________________________
 		: ($o.type="donut")
 			
+			$to:=$values.sum()#100 ? $to : 360
+			
+			If ($to>(360-$o.margin))
+				
+				$to:=360-$o.margin
+				
+			End if 
+			
 			This:C1470.moveTo(This:C1470._getPoint($from; $r; $cx; $cy))
 			This:C1470.arc(This:C1470._getPoint($to; $r; $cx; $cy); $r; 0; [$arc; 1])
+			
 			$r:=$r*Num:C11($o.thickness)/100
 			This:C1470.lineTo(This:C1470._getPoint($to; $r; $cx; $cy))
 			This:C1470.arc(This:C1470._getPoint($from; $r; $cx; $cy); $r; 0; [$arc; 0])
@@ -170,7 +179,7 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 	This:C1470.setAttribute("indx"; $values.length)
 	
 	// Update chart datas
-	Super:C1706.setAttribute("cur"; $to; $chart)
+	Super:C1706.setAttribute("cur"; $to+Num:C11($o.margin); $chart)
 	Super:C1706.setAttribute("values"; $values; $chart)
 	
 	// TODO:Display the legend (option)

@@ -1,57 +1,27 @@
 //%attributes = {}
+//https://github.com/vdelachaux/SVG-with-Classes/issues/6#issuecomment-1688479882
+
+var $i; $segment : Integer
+var $hsl : Object
 var $chart : cs:C1710.chart
+var $color : cs:C1710.color
 
-$chart:=cs:C1710.chart.new()\
-.title("Example donutChart02 - make a donut chart")\
-.desc("Picture of donut charts with the donut & wedge commands")\
+$chart:=cs:C1710.chart.new().donut("bug"; 400; 400; 240; 0; 5).translate(200; 50)
 
-//$chart.group().stroke("blue")
-//$chart.rect(1000; 398).position(1; 1)
+$chart.line(400; 0; 400; 800).stroke(0.5).stroke("lightblue")
+$chart.line(0; 400; 800; 400).stroke(0.5).stroke("lightblue")
 
-// Mark:- First
-//.donutBounded($id; $cx; $cy; $r {; $thickness {; $margin {; $options}}})
-$chart.donut("1st"; 400; 400; 240; 0.2; 5)  //.stroke(5)
+$hsl:={hue: 0; saturation: 100; lightness: 100}
 
-var $segment : Integer
+$color:=cs:C1710.color.new()
+
 $segment:=12
-var $percent : Real
-$percent:=(100/$segment)-(5/$segment)
-var $degree : Real
-$degree:=360/$segment
 
-var $i : Integer
 For ($i; 1; $segment; 1)
 	
-	If ($i=12)
-		
-		$chart.wedge("1st"; $percent).fill(False:C215).stroke("red")
-		
-	Else 
-		
-		If ($i=11)
-			
-			$chart.wedge("1st"; $percent).fill(False:C215).stroke("green")
-			
-		Else 
-			
-			$chart.wedge("1st"; $percent).fill(False:C215).stroke("lightgray")
-			
-		End if 
-		
-	End if 
+	$hsl.hue:=$i*360/$segment
+	$chart.wedge("bug"; 100/$segment).color($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
+	
 End for 
-
-//$chart.closeChart("1st")  // Closing the chart
-
-//// Mark:-Second, fit into a square defined by top-left corner [x, y] & side length [width]
-//// The thickness is equal to 50% of the radius and the segments are separated by a margin of 10 
-////.donutBounded($id; $x; $y; $width {; $thickness {; $margin {; $options}}})
-//$chart.donutBounded("2nd"; 550; 30; 340; 50; 10)
-//$chart.wedge("2nd"; 25).fill("crimson")
-//$chart.wedge("2nd"; 12).fill("gold")
-//$chart.wedge("2nd"; 25).fill("mediumaquamarine")
-//$chart.wedge("2nd"; 40).fill("coral")
-//$chart.closeChart()  // Closing the chart
-
 
 $chart.preview()
