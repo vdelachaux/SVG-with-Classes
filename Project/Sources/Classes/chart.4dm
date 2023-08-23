@@ -136,11 +136,22 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Closing the chart
+	// Rotates a pie chart or donut chart
 	// ⚠️ overight the super function
+Function rotate($angle : Integer) : cs:C1710.chart
+	
+	var $o : Object
+	
+	$o:=Super:C1706.getAttributes(This:C1470.latest)
+	Super:C1706.rotate($angle; Num:C11($o.cx); Num:C11($o.cy); This:C1470.latest)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Closing the chart
 Function closeChart($id : Text) : cs:C1710.svg
 	
-	var $name; $chart : Text
+	var $chart; $name : Text
 	var $o : Object
 	
 	$chart:=Count parameters:C259>=1 ? This:C1470.findById($id) : This:C1470.parent(This:C1470.latest)
@@ -158,3 +169,5 @@ Function closeChart($id : Text) : cs:C1710.svg
 			
 		End if 
 	End if 
+	
+	return This:C1470
