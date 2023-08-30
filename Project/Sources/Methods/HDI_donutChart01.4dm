@@ -27,5 +27,4 @@ $chart.wedge("2nd"; 12).color("gold")
 $chart.wedge("2nd"; 25).color("mediumaquamarine")
 $chart.wedge("2nd"; 40).color("coral")
 
-
 $chart.preview()

@@ -14,11 +14,7 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 	
 	// TODO:Allow title & more…
 	
-	If (Length:C16(This:C1470.id)=0)
-		
-		This:C1470._closeChart(This:C1470.id)
-		
-	End if 
+	This:C1470._closeChart(This:C1470.id)
 	
 	This:C1470.id:=$id
 	
@@ -59,11 +55,7 @@ Function donut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real;
 	
 	// TODO:Allow title & more…
 	
-	If (Length:C16(This:C1470.id)=0)
-		
-		This:C1470._closeChart(This:C1470.id)
-		
-	End if 
+	This:C1470._closeChart(This:C1470.id)
 	
 	This:C1470.id:=$id
 	
@@ -98,9 +90,9 @@ Function donutBounded($id : Text; $x : Real; $y : Real; $width : Real; $thicknes
 	// Draws a portion of a pie chart/donut chart
 Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 	
-	var $cx; $cy; $r : Real
+	var $arc; $cx; $cy; $from; $origin; $r : Real
+	var $to : Real
 	var $chart : Text
-	var $arc; $from; $origin; $to : Integer
 	var $o : Object
 	var $values : Collection
 	
@@ -139,7 +131,6 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 	
 	$values.push($percent)
 	
-	$to:=$to<=(360-Num:C11($o.margin)) ? $to : 360-Num:C11($o.margin)  // Limited to 360°.
 	$arc:=Num:C11(Abs:C99($to-$from)>180)
 	
 	This:C1470.path()
@@ -155,8 +146,6 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 			
 			//______________________________________________________
 		: ($o.type="donut")
-			
-			$to:=$values.sum()#100 ? $to : 360
 			
 			If ($to>(360-$o.margin))
 				
@@ -204,7 +193,7 @@ Function rotate($angle : Integer) : cs:C1710.chart
 	// Closing the chart
 Function _closeChart($id : Text)
 	
-	var $chart; $node : Text
+	var $chart : Text
 	
 	If (Length:C16(This:C1470.id)=0)
 		
@@ -216,7 +205,7 @@ Function _closeChart($id : Text)
 	
 	If (This:C1470.success)
 		
-		This:C1470.latest:=This:C1470.parent(This:C1470.parent($node))
+		This:C1470.latest:=This:C1470.parent(This:C1470.parent($chart))
 		
 	End if 
 	
