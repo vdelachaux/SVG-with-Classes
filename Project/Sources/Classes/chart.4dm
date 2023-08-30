@@ -98,9 +98,9 @@ Function donutBounded($id : Text; $x : Real; $y : Real; $width : Real; $thicknes
 	// Draws a portion of a pie chart/donut chart
 Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 	
-	var $cx; $cy; $r : Real
+	var $arc; $cx; $cy; $from; $origin; $r : Real
+	var $to : Real
 	var $chart : Text
-	var $arc; $from; $origin; $to : Integer
 	var $o : Object
 	var $values : Collection
 	
@@ -139,7 +139,6 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 	
 	$values.push($percent)
 	
-	$to:=$to<=(360-Num:C11($o.margin)) ? $to : 360-Num:C11($o.margin)  // Limited to 360°.
 	$arc:=Num:C11(Abs:C99($to-$from)>180)
 	
 	This:C1470.path()
@@ -155,8 +154,6 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 			
 			//______________________________________________________
 		: ($o.type="donut")
-			
-			$to:=$values.sum()#100 ? $to : 360
 			
 			If ($to>(360-$o.margin))
 				

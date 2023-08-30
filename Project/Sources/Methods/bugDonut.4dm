@@ -1,12 +1,13 @@
 //%attributes = {}
 //https:// Github.com/vdelachaux/SVG-with-Classes/issues/6#issuecomment-1688479882
 
-var $i; $segment : Integer
+var $i; $margin; $segment : Integer
 var $hsl : Object
 var $chart : cs:C1710.chart
 var $color : cs:C1710.color
 
-$segment:=12
+$segment:=32
+$margin:=5
 
 $hsl:={hue: 0; saturation: 100; lightness: 100}
 $color:=cs:C1710.color.new()
@@ -22,11 +23,11 @@ $chart.pie("dev"; 400; 400; 240).fill(False:C215).stroke(1)
 
 For ($i; 1; $segment; 1)
 	
-	$chart.wedge("dev"; (100/$segment))
+	$chart.wedge("dev"; 100/$segment).fill($i=$segment ? "lightgray" : False:C215)
 	
 End for 
 
-$chart.donut("bug"; 400; 400; 240; 0; 5)
+$chart.donut("bug"; 400; 400; 240; 0; $margin)
 
 For ($i; 1; $segment; 1)
 	

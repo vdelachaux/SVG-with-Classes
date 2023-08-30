@@ -30,8 +30,8 @@ Function abs
 Function acos
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/acos
 	
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -48,13 +48,13 @@ Function acos
 					// Question? Le code dans le if et le else est le meme? je ne comprend pas ce test
 					// Et PI est toujours <4... ???
 					If (This:C1470.PI>4)  // Correction d'un bug 4D sur la valeur de Pi dans certaines conditions.
-						$result:=This:C1470.PI-This:C1470.atan(This:C1470.sqrt(1-This:C1470.pow($value;2))/This:C1470.abs($value))
+						$result:=This:C1470.PI-This:C1470.atan(This:C1470.sqrt(1-This:C1470.pow($value; 2))/This:C1470.abs($value))
 					Else 
-						$result:=This:C1470.PI-This:C1470.atan(This:C1470.sqrt(1-This:C1470.pow($value;2))/This:C1470.abs($value))
+						$result:=This:C1470.PI-This:C1470.atan(This:C1470.sqrt(1-This:C1470.pow($value; 2))/This:C1470.abs($value))
 					End if 
 					
 				: ($value>0)
-					$result:=This:C1470.atan(This:C1470.sqrt(1-This:C1470.pow($value;2))/$value)
+					$result:=This:C1470.atan(This:C1470.sqrt(1-This:C1470.pow($value; 2))/$value)
 			End case 
 			
 		End if 
@@ -69,8 +69,8 @@ Function acos
 Function acosh
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/acosh
 	
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -84,8 +84,8 @@ Function acosh
 	
 Function asin
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/asin
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -95,7 +95,7 @@ Function asin
 			If ($value=1)
 				$result:=This:C1470.PI/2
 			Else 
-				$result:=This:C1470.atan($value/(This:C1470.sqrt(1-This:C1470.pow($value;2))))  // result in radian
+				$result:=This:C1470.atan($value/(This:C1470.sqrt(1-This:C1470.pow($value; 2))))  // result in radian
 			End if 
 		End if 
 	Else 
@@ -107,8 +107,8 @@ Function asin
 	
 Function asinh
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/asinh
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -122,8 +122,8 @@ Function asinh
 	
 Function atan
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/atan
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$result:=Arctan:C20($1)
@@ -137,9 +137,9 @@ Function atan
 Function atan2
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/atan2
 	
-	var $0;$result : Real
-	var $1;$y : Real
-	var $2;$x : Real
+	var $0; $result : Real
+	var $1; $y : Real
+	var $2; $x : Real
 	$y:=$1
 	$x:=$2
 	
@@ -171,8 +171,8 @@ Function atan2
 	
 Function atanh
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/atanh
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -186,8 +186,8 @@ Function atanh
 	
 Function cbrt
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/cbrt
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -207,8 +207,8 @@ Function cbrt
 	
 Function ceil
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/ceil
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -222,12 +222,12 @@ Function ceil
 	
 Function clz32
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/clz32
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
-		$result:=Position:C15("1";LongInt2BinaryString($value);1)-1
+		$result:=Position:C15("1"; LongInt2BinaryString($value); 1)-1
 	Else 
 		$result:=This:C1470.NaN
 	End if 
@@ -237,8 +237,8 @@ Function clz32
 	
 Function cos
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/cos
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -252,8 +252,8 @@ Function cos
 	
 Function cosh
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/cosh
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -267,8 +267,8 @@ Function cosh
 	
 Function exp
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/exp
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -282,8 +282,8 @@ Function exp
 	
 Function expm1
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/expm1
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -297,8 +297,8 @@ Function expm1
 	
 Function floor
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/floor
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -314,12 +314,12 @@ Function hypot
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/hypot
 	//C_REAL($0;$result)
 	//C_REAL(${1})
-	var $0;$result : Real
+	var $0; $result : Real
 	var ${1} : Real  // not sure if 4D is able to handle this kind of declaration... to test
 	
 	If (Count parameters:C259>0)
 		$sum:=0
-		For ($i;1;Count parameters:C259)
+		For ($i; 1; Count parameters:C259)
 			$sum:=$sum+(${$i}^2)
 		End for 
 		$result:=This:C1470.sqrt($sum)
@@ -332,8 +332,8 @@ Function hypot
 	
 Function imul
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/imul
-	var $0;$result : Real
-	var $1;$2 : Integer
+	var $0; $result : Real
+	var $1; $2 : Integer
 	
 	If (Count parameters:C259=1)
 		$result:=$1*$2
@@ -347,8 +347,8 @@ Function imul
 Function log
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/log
 	
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	If (Count parameters:C259=1)
 		$value:=$1
 		$result:=Log:C22($value)
@@ -360,8 +360,8 @@ Function log
 	
 Function log10
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/log
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -375,8 +375,8 @@ Function log10
 	
 Function log1p
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/log1p
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -390,8 +390,8 @@ Function log1p
 	
 Function log2
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/log
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -418,8 +418,8 @@ Function min
 	
 Function pow
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/pow
-	var $0;$result : Real
-	var $1;$2 : Real
+	var $0; $result : Real
+	var $1; $2 : Real
 	
 	If (Count parameters:C259=2)
 		$result:=$1^$2
@@ -438,15 +438,15 @@ Function random
 	
 Function round
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/round
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
 		If ($value<0)
-			$result:=Round:C94($value+0.01;0)
+			$result:=Round:C94($value+0.01; 0)
 		Else 
-			$result:=Round:C94($value;0)
+			$result:=Round:C94($value; 0)
 		End if 
 	Else 
 		$result:=This:C1470.NaN
@@ -458,8 +458,8 @@ Function round
 	
 Function sign
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sign
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -482,8 +482,8 @@ Function sign
 	
 Function sin
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sin
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -497,8 +497,8 @@ Function sin
 	
 Function sinh
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sinh
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -513,8 +513,8 @@ Function sinh
 	
 Function sqrt
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/sqrt
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -528,8 +528,8 @@ Function sqrt
 	
 Function tan
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/tan
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -543,8 +543,8 @@ Function tan
 	
 Function tanh
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/tanh
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
@@ -577,14 +577,14 @@ Function toDegrees
 	
 Function trunc
 	// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/trunc
-	var $0;$result : Real
-	var $1;$value : Real
+	var $0; $result : Real
+	var $1; $value : Real
 	
 	If (Count parameters:C259=1)
 		$value:=$1
 		$str:=String:C10($value)
-		GET SYSTEM FORMAT:C994(Decimal separator:K60:1;$vDecSep)
-		$result:=Num:C11(Substring:C12($str;1;Position:C15($vDecSep;$str)-1))
+		GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $vDecSep)
+		$result:=Num:C11(Substring:C12($str; 1; Position:C15($vDecSep; $str)-1))
 	Else 
 		$result:=This:C1470.NaN
 	End if 
@@ -656,11 +656,11 @@ Function roundDecimal
 		// Copyrights (C) AJAR SA - 2019
 	End if 
 	
-	var $1;$valueToRound : Real
-	var $2;$precision : Real
-	var $3;$roundType : Text
-	var $0;$valueRounded : Real
-	var $roundedDif;$multiple : Real
+	var $1; $valueToRound : Real
+	var $2; $precision : Real
+	var $3; $roundType : Text
+	var $0; $valueRounded : Real
+	var $roundedDif; $multiple : Real
 	
 	If (Count parameters:C259#3)
 		$valueRounded:=This:C1470.NaN
@@ -676,7 +676,7 @@ Function roundDecimal
 			$multiple:=1/$precision
 		End if 
 		
-		$valueRounded:=Round:C94($valueToRound*$multiple;0)/$multiple
+		$valueRounded:=Round:C94($valueToRound*$multiple; 0)/$multiple
 		$roundedDif:=Abs:C99(($valueRounded-$valueToRound)*$multiple)  // Difference between the rounded value and the notRounded value to see if it is in the half (=0.5)
 		
 		// Cast the good rounding type
@@ -781,9 +781,9 @@ Function spherodistance
 	//SAMPLE : 
 	//4D_CalculateDistance (-50,81;10,35;40,98;-80,53{;6371})
 	
-	var $1;$2;$3;$4;$5;$0 : Real
-	var $lat1rad;$Lon1rad;$lat2rad;$lon2rad;$dlon;$Radius;$result : Real
-	var $Distance;$x;$Lat1;$Lat2;$Long1;$Long2 : Real
+	var $1; $2; $3; $4; $5; $0 : Real
+	var $lat1rad; $Lon1rad; $lat2rad; $lon2rad; $dlon; $Radius; $result : Real
+	var $Distance; $x; $Lat1; $Lat2; $Long1; $Long2 : Real
 	
 	If (Count parameters:C259=4) | (Count parameters:C259=5)
 		$lon1:=$1
@@ -801,8 +801,8 @@ Function spherodistance
 		$lat2rad:=This:C1470.toRadians($lat2)
 		$dlat:=This:C1470.toRadians($lat2-$lat1)
 		$dlon:=This:C1470.toRadians($lon2-$lon1)
-		$a:=(This:C1470.pow(This:C1470.sin($dlat/2);2))+(This:C1470.cos($lat1rad)*This:C1470.cos($lat2rad)*This:C1470.pow(This:C1470.sin($dlon/2);2))
-		$c:=2*This:C1470.atan2(This:C1470.sqrt($a);This:C1470.sqrt(1-$a))
+		$a:=(This:C1470.pow(This:C1470.sin($dlat/2); 2))+(This:C1470.cos($lat1rad)*This:C1470.cos($lat2rad)*This:C1470.pow(This:C1470.sin($dlon/2); 2))
+		$c:=2*This:C1470.atan2(This:C1470.sqrt($a); This:C1470.sqrt(1-$a))
 		$result:=$Radius*$c
 	Else 
 		$result:=This:C1470.NaN
