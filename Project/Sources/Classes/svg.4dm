@@ -3094,6 +3094,11 @@ Function font($attributes : Object; $applyTo) : cs:C1710.svg
 		
 		Super:C1706.setAttribute($node; "font-size"; $attributes.size)
 		
+		If (Super:C1706.getAttribute($node; "y")<$attributes.size)
+			
+			Super:C1706.setAttribute($node; "y"; $attributes.size)
+			
+		End if 
 	End if 
 	
 	If ($attributes.color#Null:C1517)
@@ -3826,6 +3831,15 @@ Function setText($text : Text; $applyTo)
 	
 	DOM SET XML ELEMENT VALUE:C868($node; "")
 	$node:=DOM Append XML child node:C1080($node; XML DATA:K45:12; $text)
+	
+	//———————————————————————————————————————————————————————————
+Function TextToPicture($text : Text; $attributes : Object) : Picture
+	
+	This:C1470.text($text)
+	If ($attributes#Null:C1517)
+		This:C1470.font($attributes)
+	End if 
+	return This:C1470.picture()
 	
 	//———————————————————————————————————————————————————————————
 	// Making a point from x & y
