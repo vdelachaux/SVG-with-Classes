@@ -9,7 +9,7 @@ Class constructor($variable)
 	
 	This:C1470.errors:=New collection:C1472
 	
-	If (Count parameters:C259>=1)
+	If ($variable#Null:C1517)
 		
 		This:C1470.load($variable)
 		

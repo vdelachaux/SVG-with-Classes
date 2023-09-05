@@ -23,7 +23,7 @@ $chart.symbol("pie"; "2nd")  // Making it a symbol
 $chart.fivePointStar(125*2; 350; 200).color("red")
 $chart.symbol("star"; $chart.latest)  // Making it a symbol
 
-// Mark:-Place elements where you want them
+// Mark:-Place the elements
 $chart.use("donut"; $chart.root).position(10; 10)
 $chart.use("pie"; $chart.root).position(10; 400)
 $chart.use("star"; $chart.root).position(300; 80).scale(0.5)

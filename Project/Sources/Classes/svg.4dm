@@ -5,28 +5,18 @@ Class extends xml
 
 Class constructor($content)
 	
-	If (Count parameters:C259>=1)
-		
-		Super:C1705($content)
-		
-		This:C1470.latest:=Null:C1517
-		This:C1470.graphic:=Null:C1517
-		This:C1470.store:=New collection:C1472
-		
-	Else 
-		
-		Super:C1705()
-		
-		This:C1470.latest:=Null:C1517
-		This:C1470.graphic:=Null:C1517
-		This:C1470.store:=New collection:C1472
+	Super:C1705($content)
+	
+	This:C1470.latest:=Null:C1517
+	This:C1470.graphic:=Null:C1517
+	This:C1470.store:=New collection:C1472
+	
+	If ($content=Null:C1517)
 		
 		// Create an empty canvas
 		This:C1470.newCanvas()
 		
 	End if 
-	
-	
 	
 	This:C1470[""]:=New object:C1471(\
 		"absolute"; True:C214\
@@ -35,7 +25,7 @@ Class constructor($content)
 	// Elements that can have graphic elements and other container elements as child elements.
 	This:C1470._containers:=New collection:C1472("a"; "defs"; "g"; "marker"; "mask"; "pattern"; "svg"; "switch"; "symbol")
 	
-	//  Graphics element that is defined by some combination of straight lines and curves
+	// Graphics element that is defined by some combination of straight lines and curves
 	This:C1470._shapes:=New collection:C1472("path"; "rect"; "circle"; "ellipse"; "line"; "polyline"; "polygon")
 	
 	// Elements that provide additional descriptive information about their parent.
