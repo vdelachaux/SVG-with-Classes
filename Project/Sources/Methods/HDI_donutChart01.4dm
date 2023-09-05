@@ -3,7 +3,7 @@ var $chart : cs:C1710.chart
 
 $chart:=cs:C1710.chart.new()\
 .title("Example donutChart01 - make a donut chart")\
-.desc("Picture of donut charts with the donut & wedge commands")\
+.desc("Picture of donut charts with the donut & wedge commands")
 
 $chart.group().stroke("blue")
 $chart.rect(1000; 398).position(1; 1)

@@ -33,6 +33,10 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 		This:C1470.create(This:C1470.latest; "vdl:graph")\
 		)
 	
+	This:C1470.store.push(New object:C1471(\
+		"id"; $id; \
+		"dom"; This:C1470.latest))
+	
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————————————————————
@@ -74,6 +78,10 @@ Function donut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real;
 		values: []}; \
 		This:C1470.create(This:C1470.latest; "vdl:graph")\
 		)
+	
+	This:C1470.store.push(New object:C1471(\
+		"id"; $id; \
+		"dom"; This:C1470.latest))
 	
 	return This:C1470
 	
@@ -180,14 +188,14 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————————————————————
 	// Rotates a pie chart or donut chart
 	// ⚠️ overight the super function
-Function rotate($angle : Integer) : cs:C1710.chart
+	//Function rotate($angle : Integer) : cs.chart
 	
-	var $o : Object
+	//var $o : Object
 	
-	$o:=Super:C1706.getAttributes(This:C1470.findById(This:C1470.id))
-	Super:C1706.rotate($angle; Num:C11($o.cx); Num:C11($o.cy); This:C1470.latest)
+	//$o:=Super.getAttributes(This.findById(This.id))
+	//Super.rotate($angle; Num($o.cx); Num($o.cy); This.latest)
 	
-	return This:C1470
+	//return This
 	
 	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Closing the chart

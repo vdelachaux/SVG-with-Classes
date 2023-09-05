@@ -9,18 +9,24 @@ Class constructor($content)
 		
 		Super:C1705($content)
 		
+		This:C1470.latest:=Null:C1517
+		This:C1470.graphic:=Null:C1517
+		This:C1470.store:=New collection:C1472
+		
 	Else 
 		
 		Super:C1705()
+		
+		This:C1470.latest:=Null:C1517
+		This:C1470.graphic:=Null:C1517
+		This:C1470.store:=New collection:C1472
 		
 		// Create an empty canvas
 		This:C1470.newCanvas()
 		
 	End if 
 	
-	This:C1470.latest:=Null:C1517
-	This:C1470.graphic:=Null:C1517
-	This:C1470.store:=New collection:C1472
+	
 	
 	This:C1470[""]:=New object:C1471(\
 		"absolute"; True:C214\
@@ -56,6 +62,10 @@ Function newCanvas($attributes : Object) : cs:C1710.svg
 	Super:C1706.newRef("svg"; "http://www.w3.org/2000/svg")
 	
 	If (This:C1470.success)
+		
+		This:C1470.store.push(New object:C1471(\
+			"id"; "root"; \
+			"dom"; This:C1470.root))
 		
 		Super:C1706.setDeclaration("UTF-8"; True:C214)
 		Super:C1706.setOption(XML indentation:K45:34; Is compiled mode:C492 ? XML no indentation:K45:36 : XML with indentation:K45:35)
@@ -307,8 +317,8 @@ Function symbol($name : Text; $applyTo) : cs:C1710.svg
 		End if 
 	End if 
 	
-	// Restore the target preceding the creation of the symbol
-	This:C1470.latest:=This:C1470._current || This:C1470.root
+	// Restore the root as target
+	This:C1470.latest:=This:C1470.root
 	
 	return This:C1470
 	
@@ -2735,7 +2745,7 @@ Function with($name : Text) : Boolean
 	
 	var $o : Object
 	
-	$o:=This:C1470.store.query("id=:1"; $name).pop()
+	$o:=This:C1470.store.query("id=:1"; $name).first()
 	
 	If ($o#Null:C1517)
 		
