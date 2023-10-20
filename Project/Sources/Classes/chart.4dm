@@ -1,5 +1,7 @@
 Class extends svg
 
+property id : Text
+
 Class constructor
 	
 	Super:C1705()
@@ -9,6 +11,11 @@ Class constructor
 	//———————————————————————————————————————————————————————————————————————————
 	// Start a circular diagram defined by its center `cx` `cy` and radius `r`
 Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) : cs:C1710.svg
+	
+	var $percent; $value : Real
+	var $i; $number; $total : Integer
+	var $hsl; $serie : Object
+	var $color : cs:C1710.color
 	
 	$options:=$options || {}
 	
@@ -36,6 +43,72 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 	This:C1470.store.push(New object:C1471(\
 		"id"; $id; \
 		"dom"; This:C1470.latest))
+	
+	If ($options.data#Null:C1517)
+		
+		//fill the chart
+		$number:=$options.data.length
+		$total:=$options.data.sum("value")
+		
+		If ($options.orderBy#Null:C1517)
+			
+			$options.data:=$options.data.orderBy("value "+$options.orderBy)
+			
+		End if 
+		
+		$color:=cs:C1710.color.new()
+		$hsl:={hue: 0; saturation: 60; lightness: 100}
+		
+		For each ($serie; $options.data)
+			
+			$value:=Num:C11($serie.value)
+			$percent:=$value/$total*100
+			
+			$i+=1
+			
+			This:C1470.wedge($id; $percent)
+			
+			If ($serie.color#Null:C1517)
+				
+				This:C1470.fill($serie.color)
+				
+			Else 
+				
+				$hsl.hue:=(360-$i)*360/$number
+				This:C1470.color($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
+				
+			End if 
+			
+			If ($options.stroke#Null:C1517)
+				
+				This:C1470.stroke($options.stroke)
+				
+			End if 
+			
+			//$label:=String($percent; "###.0%")
+			
+			//$x:=$cx-$r+($r*Cos(2*Pi*$percent))
+			//$y:=$cy-$r+($r*Sin(Cos(2*Pi*$percent)))
+			
+			//This.text(String($percent; "###.0%"); $id).position($x; $y)
+			
+			
+			
+			
+		End for each 
+		
+		This:C1470.closePath()
+		
+		//For each ($serie; $options.data)
+		//$value:=Num($serie.value)
+		//$percent:=$value/$total*100
+		//$x:=$cx-$r+($r*Cos(2*Pi*$percent))
+		//$y:=$cy-$r+($r*Sin(2*Pi*$percent))
+		//This.text(String($percent; "###.0%"); $id).position($x; $y)
+		//break
+		//End for each 
+		
+	End if 
 	
 	return This:C1470
 	
