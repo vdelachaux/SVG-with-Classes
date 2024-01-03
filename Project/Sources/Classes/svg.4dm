@@ -2405,6 +2405,48 @@ Function strokeOpacity($opacity : Real; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+Function dasharray($dash : Real;  ...  : Integer) : cs:C1710.svg
+	
+	var $buffer; $separator; $value : Text
+	var $i; $offset : Integer
+	
+	If ($dash=0)
+		
+		$value:="none"
+		
+	Else 
+		
+		If (Dec:C9($dash)#0)
+			
+			$buffer:=String:C10($dash)
+			GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $separator)
+			$buffer:=Delete string:C232($buffer; 1; Position:C15($separator; $buffer))
+			$offset:=Num:C11($buffer)
+			
+		End if 
+		
+		$value:=String:C10(Int:C8($dash))
+		
+		If (Count parameters:C259=1)
+			
+			$value:=$value+","+$value
+			
+		Else 
+			
+			For ($i; 2; Count parameters:C259; 1)
+				
+				$value:=$value+","+String:C10(${$i})
+				
+			End for 
+		End if 
+	End if 
+	
+	Super:C1706.setAttribute(This:C1470._getTarget(); "stroke-dashoffset"; String:C10($offset))
+	Super:C1706.setAttribute(This:C1470._getTarget(); "stroke-dasharray"; $value)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 Function fontFamily($fonts : Text; $applyTo) : cs:C1710.svg
 	
 	If (Count parameters:C259>=2)

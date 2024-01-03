@@ -130,6 +130,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**strokeColor** ( color : `Text` {; applyTo } ) → `cs.svg` | Sets the stroke color
 |.**strokeWidth** ( width : `Real` {; applyTo } ) → `cs.svg` | Sets the stroke width
 |.**strokeOpacity** ( opacity : `Real` {; applyTo } ) → `cs.svg` | Sets the stroke opacity
+|.**dasharray** ( dash : `Real` {; ... : `Integer` } ) → `cs.svg` | Sets dasharray & dashoffset stroke attribute
 |.**fontFamily** ( fonts : `Text` {; applyTo } ) → `cs.svg` | Sets the font family
 |.**fontSize** ( size : `Integer` {; applyTo } ) → `cs.svg` | Sets the font size
 |.**fontStyle** ( style : `Integer` {; applyTo } ) → `cs.svg` | Sets teh font style
