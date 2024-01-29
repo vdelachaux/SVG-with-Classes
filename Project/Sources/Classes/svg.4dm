@@ -313,6 +313,58 @@ Function symbol($name : Text; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Define a clipPath and apply to the root element
+Function clipPath($id : Text; $applyTo) : cs:C1710.svg
+	
+	var $defs; $mask; $node; $source : Text
+	
+	$id:=Length:C16($id)>0 ? $id : Generate UUID:C1066
+	
+	$defs:=This:C1470._defs()
+	
+	If (This:C1470.success)
+		
+		$mask:=Super:C1706.create($defs; "clipPath")
+		
+		If (This:C1470.success)
+			
+			Super:C1706.setAttribute($mask; "id"; $id)
+			
+			If (This:C1470.success)
+				
+				$source:=Count parameters:C259>=2 ? This:C1470._getTarget($applyTo) : This:C1470._getTarget()
+				
+				This:C1470.store.push(New object:C1471(\
+					"id"; $id; \
+					"dom"; $mask))
+				
+				Super:C1706.setAttribute($mask; "preserveAspectRatio"; "xMidYMid")
+				
+				$node:=Super:C1706.clone($source; $mask)
+				This:C1470.remove($source)
+				
+				Super:C1706.setAttribute(This:C1470.root; "clip-path"; "url(#"+$id+")")
+				
+			End if 
+			
+		Else 
+			
+			This:C1470._pushError("Failed to create the clipPath: "+$id)
+			
+		End if 
+		
+	Else 
+		
+		This:C1470._pushError("Failed to locate/create the \"defs\" element")
+		
+	End if 
+	
+	// Restore the root as target
+	This:C1470.latest:=This:C1470.root
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Place an occurence of the symbol
 Function use($symbol; $attachTo) : cs:C1710.svg
 	

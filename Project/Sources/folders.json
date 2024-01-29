@@ -12,6 +12,8 @@
 	"HDI": {
 		"methods": [
 			"HDI circle01",
+			"HDI ClipPath",
+			"HDI dasharray",
 			"HDI ellipse01",
 			"HDI line01",
 			"HDI polygon01",
@@ -24,6 +26,7 @@
 			"HDI_cubic01",
 			"HDI_donutChart01",
 			"HDI_pieChart01",
+			"HDI_pieChart02",
 			"HDI_quad01",
 			"HDI_symbol",
 			"HDI_TextToPicture",

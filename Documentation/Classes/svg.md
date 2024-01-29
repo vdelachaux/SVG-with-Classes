@@ -23,8 +23,17 @@ This class will be augmented according to my needs but you are strongly encourag
 
 \* 🚨 If `.autoClose` is set to **False** (or if you don't call a function that automatically closes the structure), once you no longer need the structure, remember to call the function `.close()` in order to free up the memory.
 
-
+> 📌 `Point` type is a collection of 2 reals `[ x , y ]`  
+> 
 > 📌 With the exception of functions that return a specific result (getter function), each call returns the original `cs.svg` object, and you can include one call after another.
+
+> 📌 If a function is called, without passing the `applyTo` parameter, the target is the last created path. If the `applyTo` parameter is passed, it must be a DOM reference.  
+
+> 📌 If creation or a setting function is called, without passing the `applyTo` parameter, before the creation of an object in the canvas, the target is canvas itself, otherwise the target is the last created object. If the `applyTo` parameter is passed, it can be: a DOM reference, an id, the name of a reference stored with the `.push()` function or a reserved name (`"root"`, `"latest"`, `"parent"`).    
+
+> 📌 Remember that you can still add unmanaged attributes with the functions `.setAttribute()` or `.setAttributes()`     
+
+> 📌 Remember that you can always use DOM XML commands to manipulate the SVG tree `.root`, object `.latest` or reference retrieved with the `.fetch()` function.
 
 ### Document & structure functions
 
@@ -39,8 +48,9 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**close** () → `cs.svg` | Frees the memory taken up by the SVG tree \*
 |.**save** ( { keepStructure : `Boolean` } ) → `cs.svg` | Saves the content of the SVG tree into the initially loaded file or the last created file by calling `exportText()`
 |.**group** ( { id : `Text` {; attachTo }} ) → `cs.svg` | Defines a `g` element who is a container element for grouping together related graphics elements.
-|.**symbol** ( name : `Text` {; applyTo } ) → `cs.svg` | To define a symbol
-|.**use** ( symbol : `Text` {; attachTo } ) → `cs.svg` | To place an occurence of a symbol
+|.**symbol** ( id : `Text` {; applyTo } ) → `cs.svg` | To define a symbol
+|.**use** ( id : `Text` {; attachTo } ) → `cs.svg` | To place an occurence of a symbol
+|.**clipPath** ( id : `Text` {; applyTo } ) → `cs.svg` | Define a clipPath and apply to the root element
 |.**style** ( style : `Text` {; applyTo } ) → `cs.svg` | Creates an internal CSS style sheet if applied to the root
 |.**styleSheet** ( file : `4D.File` ) → `cs.svg` | Attach a style sheet
 |.**viewbox** ( left : `Real`; top : `Real` ; width : `Real` ; height : `Real` {; attachTo } ) → `cs.svg` | Sets the `viewBox` attribute of a SVG viewport.
@@ -51,7 +61,7 @@ This class will be augmented according to my needs but you are strongly encourag
 
 ### Basic elements
 
-> 📌 When a element creation function is called without passing the `attachTo` parameter, the object is included to the last created structure that can be used to add an object. If the `attachTo` parameter is passed, it can be: a DOM reference, an id, the name of a reference stored with the `.push()` function or a reserved name (`"root"`, `"latest"` or `"parent"`).
+
 
 |Function|Action|
 |--------|------|   
@@ -69,9 +79,9 @@ This class will be augmented according to my needs but you are strongly encourag
 
 ### path
 
-> 📌 If a definition function is called, without passing the `applyTo` parameter, the target is the last created path. If the `applyTo` parameter is passed, it must be a DOM reference.   
 
-> 📌 `Point` type is a collection of 2 reals `[ x , y ]`  
+
+
 
 |Function|Action|
 |--------|------|   
@@ -109,15 +119,15 @@ This class will be augmented according to my needs but you are strongly encourag
 
 ### Setting functions
 
-> 📌 If a setting function is called, without passing the `applyTo` parameter, before the creation of an object in the canvas, the target is canvas itself, otherwise the target is the last created object. If the `applyTo` parameter is passed, it can be: a DOM reference, an id, the name of a reference stored with the `.push()` function or a reserved name (`"root"`, `"latest"`, `"parent"`).    
 
-> 📌 Remember that you can still add unmanaged attributes with the functions `.setAttribute()` or `.setAttributes()`     
 
-> 📌 Remember that you can always use DOM XML commands to manipulate the SVG tree `.root`, object `.latest` or reference retrieved with the `.fetch()` function.
+
+
+
 
 |Function|Action|
 |--------|------|
-|.**id** ( id : `Text` {; applyTo } ) → `cs.svg` | Assigns a unique name to an element (standard XML attribute)
+|.**id** ( id : `Text` {; applyTo } ) → `cs.svg` | Sets the ‘ID’ property of the SVG object(standard XML attribute)<br>If this attribute already exists, its value is replaced by the value passed in the parameter.
 |.**x** ( x : `Real` {; applyTo } ) → `cs.svg` | Sets the x
 |.**y** ( y : `Real` {; applyTo } ) → `cs.svg` | Sets the y
 |.**width** ( width : `Real` {; applyTo } ) → `cs.svg` | Sets the width
@@ -130,7 +140,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**strokeColor** ( color : `Text` {; applyTo } ) → `cs.svg` | Sets the stroke color
 |.**strokeWidth** ( width : `Real` {; applyTo } ) → `cs.svg` | Sets the stroke width
 |.**strokeOpacity** ( opacity : `Real` {; applyTo } ) → `cs.svg` | Sets the stroke opacity
-|.**dasharray** ( dash : `Real` {; ... : `Integer` } ) → `cs.svg` | Sets dasharray & dashoffset stroke attribute
+|.**dasharray** ( dash : Real;  ...  : Integer)  → `cs.svg` | Defines the pattern of dashes and blanks used for the object's outline border<br>The integer value of the dash parameter indicates the length of the first dash of the dotted pattern. If the value parameters are omitted, the dotted line will consists of a series of dashes and gaps of the same length.<br>The decimal value of the dash parameter, if it is not null, indicates the distance into the pattern from which the dashes will start.
 |.**fontFamily** ( fonts : `Text` {; applyTo } ) → `cs.svg` | Sets the font family
 |.**fontSize** ( size : `Integer` {; applyTo } ) → `cs.svg` | Sets the font size
 |.**fontStyle** ( style : `Integer` {; applyTo } ) → `cs.svg` | Sets teh font style
@@ -181,6 +191,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**push** ( name : `Text` ) → `cs.svg` | Keeps the dom reference into the store associated with the given name
 |.**fetch** ( name : `Text` ) → dom : `Text` | Retrieve a stored dom reference associated with the given name
 |.**with** ( name : `Text` ) → `Boolean` | Defines an element for the next operations
+|.**TextToPicture** ( text : Text {; fontAttributes : Object}) → `Picture` | Returns a picture of the given text.
 |.**preview** ( { keepStructure : `Boolean` } ) | Display the SVG image & tree into the SVG Viewer if the component 4D SVG is available.
 
 ## 🔸 cs.svg.new()
@@ -198,8 +209,3 @@ The class constructor also accepts an optional parameter, so you can create a sv
 >`cs.svg.new(4D.file)` Loads & parses the file content    
 >`cs.svg.new(Blob)` Parses the blob variable content     
 >`cs.svg.new(Text)` Parses the text variable content
-
-
-
-
-
