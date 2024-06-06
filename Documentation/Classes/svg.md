@@ -61,8 +61,6 @@ This class will be augmented according to my needs but you are strongly encourag
 
 ### Basic elements
 
-
-
 |Function|Action|
 |--------|------|   
 |.**rect** ( height : `Real` {; width : `Real` } {; attachTo} ) → `cs.svg` | Creates a rectangle<br>Rounded rectangles can be obtained using `.rx()` & `.ry()`
@@ -78,10 +76,6 @@ This class will be augmented according to my needs but you are strongly encourag
 \* The `textArea` elements are well rendered by 4D widgets but may not be supported by some browsers.
 
 ### path
-
-
-
-
 
 |Function|Action|
 |--------|------|   
@@ -118,12 +112,6 @@ This class will be augmented according to my needs but you are strongly encourag
 \** These functions can also be applied to `polyline` and `poligon` elements.
 
 ### Setting functions
-
-
-
-
-
-
 
 |Function|Action|
 |--------|------|
@@ -170,6 +158,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**color** ( color : `Text` {; applyTo } ) → `cs.svg` | Defines the color of both the line and the fill (`stroke` & `fill` attributes)
 |.**opacity** ( opacity : `Real` {; applyTo } ) → `cs.svg` | Sets stroke and fill opacity
 |.**fill** ( value `Text` \| `Boolean` \| `Object` {; applyTo } ) → `cs.svg` |  To define the painting of the inside of a shape (`fill` attributes)
+|.**dropShadow** ({ deviation : `Integer` {; offsetX : `Integer` {; offsetY : `Integer` }}} ) → `cs.svg` |  Set a drop shadow for the current element.<br>• The optional `deviation` parameter sets the intensity of the shadow dispersion. Default value: 4.<br>• The optional `offsetX` and `offsetY` parameters specify, respectively, the horizontal and vertical offset of the shadow with respect to the object. Default value: 4.
 |.**stroke** ( value `Text` \| `Boolean` \| `Real` \| `Object` {; applyTo } ) → `cs.svg` | To define the painting of the outline of a shape (`stroke` attribute)
 |.**font** ( attributes : `Object` {; applyTo } ) → `cs.svg` | Sets the font attributes
 |.**size** ( { width : `Real`; height : `Real` {; unit : `Text` }} ) → `cs.svg` | Sets the dimensions

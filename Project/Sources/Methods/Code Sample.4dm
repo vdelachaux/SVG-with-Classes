@@ -25,7 +25,7 @@ $svg.clone("original").color("red").position(10; 10).size(130; 130)
 If ($svg.with("foreground"))  // All enclosed actions refer to the "foreground" layer
 	
 	// Put the symbol "square", zoom x2, apply a translation of 80 px in both directions and define the ID
-	$svg.use("square").scale(2).translate(80; 80).id("use1")
+	$svg.use("square").scale(2).translate(80; 80).setID("use1")
 	
 	// Draw a polyline by giving points as formatted text
 	$svg.polyline("50,375 150,375 150,325 250,325 250,375 350,375 350,250 450,250 450,375 550,375 550,175 650,175 650,375 750,375 750,100 850,100 850,375 950,375 950,25 1050,25 1050,375 1150,375")\

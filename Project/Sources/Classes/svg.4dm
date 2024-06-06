@@ -1800,7 +1800,7 @@ Function viewbox($left; $top : Real; $width : Real; $height : Real; $applyTo) : 
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-Function id($id : Text; $applyTo) : cs:C1710.svg
+Function setID($id : Text; $applyTo) : cs:C1710.svg
 	
 	var $node : Text
 	
@@ -2742,6 +2742,21 @@ Function preserveAspectRatio($value : Text; $applyTo) : cs:C1710.svg
 		End if 
 	End if 
 	
+	//———————————————————————————————————————————————————————————
+	// Apply a filter
+Function filter($id : Text; $applyTo) : cs:C1710.svg
+	
+	// TODO:Documentation
+	
+	var $node : Text
+	$node:=Count parameters:C259>=2\
+		 ? This:C1470._getTarget($applyTo)\
+		 : This:C1470._getTarget()
+	
+	Super:C1706.setAttribute($node; "filter"; "url(#"+$id+")")
+	
+	return This:C1470
+	
 	//MARK:-SHORTCUTS & UTILITIES
 	//———————————————————————————————————————————————————————————
 	// Adds item to parent item
@@ -2770,7 +2785,7 @@ Function attachTo($parent : Variant) : cs:C1710.svg
 	// Restore id, if any
 	If (Length:C16($id)>0)
 		
-		This:C1470.id($id)
+		This:C1470.setID($id)
 		
 	End if 
 	
@@ -3157,6 +3172,72 @@ Function fill($value; $applyTo) : cs:C1710.svg
 			
 			//______________________________________________________
 	End case 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Set a drop shadow for the current element
+Function dropShadow($stdDeviation : Integer; $dx : Integer; $dy : Integer) : cs:C1710.svg
+	
+	$stdDeviation:=Count parameters:C259>=1 ? $stdDeviation : 4
+	$dx:=Count parameters:C259>=2 ? $dx : 4
+	$dy:=Count parameters:C259>=3 ? $dy : 4
+	
+	var $id : Text
+	
+	If ($stdDeviation=4)\
+		 && ($dx=4)\
+		 && ($dy=4)
+		
+		// Use default definition
+		$id:="dropShadow"
+		
+	Else 
+		
+		$id:="dropShadow"
+		$id+="_"+String:C10($stdDeviation)
+		$id+="_"+String:C10($dx)
+		$id+="_"+String:C10($dy)
+		
+	End if 
+	
+	This:C1470.findById($id)
+	
+	If (Not:C34(This:C1470.success))
+		
+		// Define the filter
+		var $defs : Text
+		$defs:=This:C1470._defs()
+		
+		var $filter : Text
+		$filter:=Super:C1706.create($defs; "filter"; New object:C1471(\
+			"id"; $id; \
+			"filterUnits"; "userSpaceOnUse"\
+			))
+		
+		Super:C1706.create($filter; "feGaussianBlur"; New object:C1471(\
+			"stdDeviation"; $stdDeviation; \
+			"in"; "SourceAlpha"; \
+			"result"; "_Blur"\
+			))
+		
+		Super:C1706.create($filter; "feOffset"; New object:C1471(\
+			"dx"; $dx; \
+			"dy"; $dy; \
+			"in"; "_Blur"; \
+			"result"; "_Offset"\
+			))
+		
+		Super:C1706.create($filter; "feBlend"; New object:C1471(\
+			"in"; "SourceGraphic"; \
+			"in2"; "_Offset"; \
+			"mode"; "normal"\
+			))
+		
+	End if 
+	
+	// Apply the filter
+	This:C1470.filter($id)
 	
 	return This:C1470
 	

@@ -21,7 +21,7 @@ Case of
 			For ($column; 1; 16; 1)
 				
 				$indx:=($row*16)+$column
-				$svg.rect(11; 11).position($x; $y).id(String:C10($indx)).fill($c[$indx-1])
+				$svg.rect(11; 11).position($x; $y).setID(String:C10($indx)).fill($c[$indx-1])
 				$x:=$x+11
 				
 			End for 
