@@ -159,6 +159,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**opacity** ( opacity : `Real` {; applyTo } ) → `cs.svg` | Sets stroke and fill opacity
 |.**fill** ( value `Text` \| `Boolean` \| `Object` {; applyTo } ) → `cs.svg` |  To define the painting of the inside of a shape (`fill` attributes)
 |.**dropShadow** ({ deviation : `Integer` {; offsetX : `Integer` {; offsetY : `Integer` }}} ) → `cs.svg` |  Set a drop shadow for the current element.<br>• The optional `deviation` parameter sets the intensity of the shadow dispersion. Default value: 4.<br>• The optional `offsetX` and `offsetY` parameters specify, respectively, the horizontal and vertical offset of the shadow with respect to the object. Default value: 4.
+|.**convertToGrayScale** ({ value : `Real` {; applyTo } ) → `cs.svg` |  Transform colours into greyscale.<br>• You can pass the gray scale value to be applied in the optional value parameter. If you do not pass this parameter, the transformation is in accordance with the visual perception of the luminance (30% red, 59% green and 11% blue)..
 |.**stroke** ( value `Text` \| `Boolean` \| `Real` \| `Object` {; applyTo } ) → `cs.svg` | To define the painting of the outline of a shape (`stroke` attribute)
 |.**font** ( attributes : `Object` {; applyTo } ) → `cs.svg` | Sets the font attributes
 |.**size** ( { width : `Real`; height : `Real` {; unit : `Text` }} ) → `cs.svg` | Sets the dimensions

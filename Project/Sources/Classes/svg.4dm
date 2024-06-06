@@ -3190,11 +3190,11 @@ Function dropShadow($stdDeviation : Integer; $dx : Integer; $dy : Integer) : cs:
 		 && ($dy=4)
 		
 		// Use default definition
-		$id:="dropShadow"
+		$id:="d4:dropShadow"
 		
 	Else 
 		
-		$id:="dropShadow"
+		$id:="d4:dropShadow"
 		$id+="_"+String:C10($stdDeviation)
 		$id+="_"+String:C10($dx)
 		$id+="_"+String:C10($dy)
@@ -3238,6 +3238,107 @@ Function dropShadow($stdDeviation : Integer; $dx : Integer; $dy : Integer) : cs:
 	
 	// Apply the filter
 	This:C1470.filter($id)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Transform colours into greyscale
+Function convertToGrayScale($grey; $applyTo) : cs:C1710.svg
+	
+	var $node; $matrix : Text
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=2)
+			
+			$node:=This:C1470._getTarget($applyTo)
+			
+			//______________________________________________________
+		: (Count parameters:C259=1)
+			
+			If (Value type:C1509($grey)=Is text:K8:3)
+				
+				$node:=This:C1470._getTarget($grey)
+				$grey:=8858
+				
+			Else 
+				
+				$node:=This:C1470._getTarget()
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			$node:=This:C1470._getTarget()
+			$grey:=8858
+			
+			//______________________________________________________
+	End case 
+	
+	var $element
+	$element:=This:C1470.getName($node)
+	
+	If ($element#"image") && (Not:C34(This:C1470._containers.includes($element)))
+		
+		This:C1470._pushError("can't be applied to "+$element)
+		
+		return 
+		
+	End if 
+	
+	If ($grey=8858)
+		
+		$matrix:=\
+			".299 .587 .114 0 0 "+\
+			".299 .587 .114 0 0 "+\
+			".299 .587 .114 0 0 "+\
+			"0 0 0 1 0"
+		
+	Else 
+		
+		$matrix:=\
+			"{%} {%} {%} 0 0"+\
+			"{%} {%} {%} 0 0"+\
+			"{%} {%} {%} 0 0"+\
+			"0 0 0 1 0"
+		
+		$matrix:=Replace string:C233($matrix; "{%}"; String:C10($grey; "&xml"))
+		
+	End if 
+	
+	var $id : Text
+	$id:="d4:grey"+String:C10($grey; "&xml")
+	
+	This:C1470.findById($id)
+	
+	If (Not:C34(This:C1470.success))
+		
+		// Define the filter
+		var $defs : Text
+		$defs:=This:C1470._defs()
+		
+		var $filter : Text
+		$filter:=Super:C1706.create($defs; "filter"; New object:C1471(\
+			"id"; $id; \
+			"filterUnits"; "objectBoundingBox"; \
+			"x"; "0%"; \
+			"y"; "0%"; \
+			"width"; "100%"; \
+			"height"; "100%"\
+			))
+		
+		Super:C1706.create($filter; "feColorMatrix"; New object:C1471(\
+			"type"; "matrix"; \
+			"in"; "SourceGraphic"; \
+			"values"; $matrix\
+			))
+		
+	End if 
+	
+	// Apply the filter
+	This:C1470.filter($id; $node)
 	
 	return This:C1470
 	
@@ -4169,7 +4270,7 @@ Function _defs()->$reference
 	var $node; $root : Text
 	var $c : Collection
 	
-	$c:=This:C1470.findByName("defs")
+	$c:=This:C1470.findByName(This:C1470.root; "defs")
 	
 	If (This:C1470.success)
 		

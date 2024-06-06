@@ -23,6 +23,7 @@
 			"HDI rect02",
 			"HDI_arcs01",
 			"HDI_colorWheel",
+			"HDI_convertToGreyScale",
 			"HDI_cubic01",
 			"HDI_donutChart01",
 			"HDI_dropShadow",
