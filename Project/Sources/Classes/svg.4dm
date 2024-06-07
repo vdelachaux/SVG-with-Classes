@@ -2082,7 +2082,7 @@ Function cy($cy : Real; $applyTo) : cs:C1710.svg
 	End if 
 	
 	//———————————————————————————————————————————————————————————
-Function width($width : Real; $applyTo) : cs:C1710.svg
+Function width($width; $applyTo) : cs:C1710.svg
 	
 	//FIXME:Target specific treatment (line,…)
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
@@ -2101,7 +2101,7 @@ Function width($width : Real; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-Function height($height : Real; $applyTo) : cs:C1710.svg
+Function height($height; $applyTo) : cs:C1710.svg
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
@@ -3290,20 +3290,21 @@ Function convertToGrayScale($grey; $applyTo) : cs:C1710.svg
 	
 	If ($grey=8858)
 		
-		$matrix:=\
-			".299 .587 .114 0 0 "+\
-			".299 .587 .114 0 0 "+\
-			".299 .587 .114 0 0 "+\
-			"0 0 0 1 0"
+		$matrix:=".299 .587 .114 0 0 "
+		$matrix+=".299 .587 .114 0 0 "
+		$matrix+=".299 .587 .114 0 0 "
+		$matrix+="0 0 0 1 0"
 		
 	Else 
 		
-		$matrix:=\
-			"{%} {%} {%} 0 0"+\
-			"{%} {%} {%} 0 0"+\
-			"{%} {%} {%} 0 0"+\
-			"0 0 0 1 0"
+		$matrix:="{%} {%} {%} 0 0 "
+		$matrix+="{%} {%} {%} 0 0 "
+		$matrix+="{%} {%} {%} 0 0 "
+		$matrix+="0 0 0 1 0"
 		
+		// Allow the value to be passed as a real number between 0 & 1
+		// or as an integer between 0 & 100
+		$grey:=$grey>1 ? $grey/100 : $grey
 		$matrix:=Replace string:C233($matrix; "{%}"; String:C10($grey; "&xml"))
 		
 	End if 
