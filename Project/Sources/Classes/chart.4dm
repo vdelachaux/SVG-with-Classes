@@ -29,7 +29,6 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 	
 	Super:C1706.setAttributes({\
 		id: $id; \
-		type: "donut"; \
 		type: "pie"; \
 		cx: $cx; \
 		cy: $cy; \

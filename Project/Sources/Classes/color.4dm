@@ -1,9 +1,13 @@
+property main : Integer
+property rgb; hsl : Object
+property css : Text
+
 Class constructor($color)
 	
 	This:C1470.main:=0x0000
 	This:C1470.hsl:=Null:C1517
 	This:C1470.rgb:=Null:C1517
-	This:C1470.css:=Null:C1517
+	This:C1470.css:=""
 	
 	Case of 
 			
@@ -82,6 +86,14 @@ Function setColorIndexed($color : Integer) : cs:C1710.color
 	End if 
 	
 	return (This:C1470)
+	
+	// === === === === === === === === === === === === === === === === === === === === === === === === ===
+Function colorPicker() : Integer
+	
+	This:C1470.main:=Select RGB color:C956(This:C1470.main)
+	This:C1470.setColor(This:C1470.main)
+	
+	return This:C1470.main
 	
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 	// RGB Color
