@@ -3,21 +3,13 @@ property root : Variant
 property file : Variant
 property xml : Variant
 
-property success : Boolean
-property autoClose : Boolean
-property errors : Collection
+property _convertMode:=True:C214
 
+property success:=False:C215
+property autoClose:=True:C214
+property errors:=[]
 
 Class constructor($variable)
-	
-	This:C1470.root:=Null:C1517
-	This:C1470.file:=Null:C1517
-	This:C1470.xml:=Null:C1517
-	
-	This:C1470.success:=False:C215
-	This:C1470.autoClose:=True:C214
-	
-	This:C1470.errors:=New collection:C1472
 	
 	If ($variable#Null:C1517)
 		
@@ -492,6 +484,16 @@ Function getContent($keepStructure : Boolean)->$content : Blob
 		This:C1470.errors.push(Current method name:C684+" -  Failed to export XML to BLOB.")
 		
 	End if 
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==/
+Function get convert() : Boolean
+	
+	return This:C1470._convertMode
+	
+	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>/
+Function set convert($on : Boolean)
+	
+	This:C1470._convertMode:=$on
 	
 	//———————————————————————————————————————————————————————————/
 	// 
@@ -1471,6 +1473,11 @@ Function _convert($textValue : Text)->$value
 	Case of 
 			
 			//______________________________________________________
+		: (Not:C34(This:C1470._convertMode))
+			
+			$value:=$textValue
+			
+			//______________________________________________________
 		: (Match regex:C1019("(?mi-s)^\\[.*\\]$"; $textValue; 1; *))
 			
 			$value:=JSON Parse:C1218($textValue)
@@ -1571,6 +1578,11 @@ Function _elementToObject($ref : Text; $withAdresses : Boolean)->$object : Objec
 			: (Length:C16($key)=0)
 				
 				// Skip malformed node
+				
+				//______________________________________________________
+			: (Not:C34(This:C1470._convertMode))
+				
+				$object[$key]:=$tValue
 				
 				//______________________________________________________
 			: (Match regex:C1019("(?m-si)^\\d+\\.*\\d*$"; $tValue; 1))  // Numeric
