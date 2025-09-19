@@ -16,7 +16,8 @@
 			"HDI dasharray",
 			"HDI ellipse01",
 			"HDI line01",
-			"HDI linearGradient",
+			"HDI linearGradient01",
+			"HDI linearGradient02",
 			"HDI polygon01",
 			"HDI polygon02",
 			"HDI polyline01",
@@ -33,7 +34,8 @@
 			"HDI_quad01",
 			"HDI_symbol",
 			"HDI_TextToPicture",
-			"HDI_triangle01"
+			"HDI_triangle01",
+			"Method29"
 		]
 	},
 	"trash": {}

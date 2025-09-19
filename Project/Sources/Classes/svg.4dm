@@ -513,32 +513,56 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 						// …………………………………………………………………………………………
 					: ($rotation=-45)
 						
-						Super:C1706.setAttributes($grad; {x1: 1; y1: 1; x2: 0; y2: 0})
+						Super:C1706.setAttributes($grad; {\
+							x1: 1; \
+							y1: 1; \
+							x2: 0; \
+							y2: 0})
 						
 						// …………………………………………………………………………………………
 					: ($rotation=45)
 						
-						Super:C1706.setAttributes($grad; {x1: 0; y1: 0; x2: 1; y2: 1})
+						Super:C1706.setAttributes($grad; {\
+							x1: 0; \
+							y1: 0; \
+							x2: 1; \
+							y2: 1})
 						
 						// …………………………………………………………………………………………
 					: ($rotation=90)
 						
-						Super:C1706.setAttributes($grad; {x1: 0; y1: 0; x2: 0; y2: 1})
+						Super:C1706.setAttributes($grad; {\
+							x1: 0; \
+							y1: 0; \
+							x2: 0; \
+							y2: 1})
 						
 						// …………………………………………………………………………………………
 					: ($rotation=-90)
 						
-						Super:C1706.setAttributes($grad; {x1: 0; y1: 1; x2: 0; y2: 0})
+						Super:C1706.setAttributes($grad; {\
+							x1: 0; \
+							y1: 1; \
+							x2: 0; \
+							y2: 0})
 						
 						// …………………………………………………………………………………………
 					: ($rotation=180)
 						
-						Super:C1706.setAttributes($grad; {x1: 0; y1: 0; x2: 1; y2: 0})
+						Super:C1706.setAttributes($grad; {\
+							x1: 0; \
+							y1: 0; \
+							x2: 1; \
+							y2: 0})
 						
 						// …………………………………………………………………………………………
 					: ($rotation=-180)
 						
-						Super:C1706.setAttributes($grad; {x1: 1; y1: 0; x2: 0; y2: 0})
+						Super:C1706.setAttributes($grad; {\
+							x1: 1; \
+							y1: 0; \
+							x2: 0; \
+							y2: 0})
 						
 						// …………………………………………………………………………………………
 					Else 
@@ -561,7 +585,8 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 				// • color-interpolation
 				$t:=String:C10($options["color-interpolation"])
 				
-				If (Length:C16($t)>0)
+				If (Length:C16($t)>0)\
+					 && (["auto"; "sRGB"; "linearRGB"].includes($t))
 					
 					Super:C1706.setAttributes($grad; "color-interpolation"; $t)
 					
