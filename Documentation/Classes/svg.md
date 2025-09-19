@@ -48,6 +48,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**close** () → `cs.svg` | Frees the memory taken up by the SVG tree \*
 |.**save** ( { keepStructure : `Boolean` } ) → `cs.svg` | Saves the content of the SVG tree into the initially loaded file or the last created file by calling `exportText()`
 |.**group** ( { id : `Text` {; attachTo }} ) → `cs.svg` | Defines a `g` element who is a container element for grouping together related graphics elements.
+|.**linearGradient** ( id : `Text` {; startColor : `Text` {; stopColor : `Text`{; options : `Object` } }} ) → `cs.svg` | Define a linear gradient
 |.**symbol** ( id : `Text` {; applyTo } ) → `cs.svg` | To define a symbol
 |.**use** ( id : `Text` {; attachTo } ) → `cs.svg` | To place an occurence of a symbol
 |.**clipPath** ( id : `Text` {; applyTo } ) → `cs.svg` | Define a clipPath and apply to the root element
@@ -199,3 +200,59 @@ The class constructor also accepts an optional parameter, so you can create a sv
 >`cs.svg.new(4D.file)` Loads & parses the file content    
 >`cs.svg.new(Blob)` Parses the blob variable content     
 >`cs.svg.new(Text)` Parses the text variable content
+
+
+## <a name="linearGradient">. linearGradient()</a>
+
+.**linearGradient** ( id ) : Object
+.**linearGradient** ( id; startColor ) : Object
+.**linearGradient** ( id; startColor; stopColor ) : Object
+.**linearGradient** ( id; startColor; stopColor; options ) : Object
+
+|Parameter|Type||Description|
+|---|---|---|---|
+| id | Text | → | Name of gradient |
+| startColor | Text | → | Start color |
+| stopColor | Text | → | Stop color |
+| options | Object | → | Gradient options |
+| result | This | ← | This class instance |
+
+### Description
+
+This function defines a new linear gradient in the SVG container.
+
+A gradient consists in a continuous progressive color transition from one color to another along a vector. Once specified, gradients are called on a given graphic element, while indicating whether this element must be filled or edged with the gradient called.
+
+The `id` parameter specifies the name of the gradient. If an element with the same name exists, it will be replaced. This is the name that will be used to call the gradient each time a that a color expression is expected by using the syntax "url(#id)".
+
+The `startColor` (default "white") and `endColor` (default "black") parameters specify the colors used to begin and end the gradient.
+
+The options parameter allow to define some optional values:
+
+|Parameter|Type|Description|
+|---|---|---|
+`rotation` | Integer | sets the position and direction of the gradient vector (see example)
+`spreadMethod` | Text | defines the filling to be used when the gradient begins or ends within the bounds of the parent.\*
+`x1`, `y1`, `x2`, `x2` | Integer | defines the gradient vector. This vector provides the starting and ending points used by the rendering engine. You can pass percentages expressed as ratios (0...1) in these parameters.
+`startColorOffset` | Real | defines the percentage value of the start color\*\*.
+`stopColorOffset` | Real | defines the percentage value of the stop color\*\*.
+
+\* You can pass in `spreadMethod` one of the following strings in this parameter:  
+  
+	* "pad" (default) : use the terminal colors of the gradient to fill the remainder of the area.    
+	* "reflect": reflect the gradient pattern start-to-end, end-to-start, start-to-end, etc. continuously until the object is filled.    
+	* "repeat": repeat the gradient pattern start-to-end, start-to-end, start-to-end, etc. continuously until the object is filled.
+
+\*\* You can pass either a real value < 1, or a value between 0 and 100 to set the percentage, i.e. "0.1" and/or "10" are both interpreted as 10%. Passing a negative value is interpreted as 0% for the startColorOffset parameter and as 100% for the endColorOffset parameter. If you pass a value > 100, it is interpreted as 100%.
+
+
+#### Example
+
+Draw 6 solid squares where each uses a linear gradient paint server while varying the rotation and direction of the gradient vector:
+
+```4D
+var $svg:=cs.svg.new()$svg.linearGradient("demoGradient_1"; "red"; "yellow")$svg.rect(90; 90).position(10; 10).fill("url(#demoGradient_1)")$svg.textArea("rotation = 0\rrotation = 180").position(10; 100).width(90).alignment(Align center)$svg.linearGradient("demoGradient_2"; "red"; "yellow"; {rotation: -180})$svg.rect(90; 90).position(110; 10).fill("url(#demoGradient_2)")$svg.textArea("rotation = -180").position(110; 100).width(100).alignment(Align center)$svg.linearGradient("demoGradient_3"; "red"; "yellow"; {rotation: 45})$svg.rect(90; 90).position(10; 140).fill("url(#demoGradient_3)")$svg.textArea("rotation = 45").position(10; 230).width(90).alignment(Align center)$svg.linearGradient("demoGradient_4"; "red"; "yellow"; {rotation: -45})$svg.rect(90; 90).position(110; 140).fill("url(#demoGradient_4)")$svg.textArea("rotation = -45").position(110; 230).width(90).alignment(Align center)$svg.linearGradient("demoGradient_5"; "red"; "yellow"; {rotation: 90})$svg.rect(90; 90).position(10; 270).fill("url(#demoGradient_5)")$svg.textArea("rotation = 90").position(10; 360).width(90).alignment(Align center)$svg.linearGradient("demoGradient_6"; "red"; "yellow"; {rotation: -90})$svg.rect(90; 90).position(110; 270).fill("url(#demoGradient_6)")$svg.textArea("rotation = -90").position(110; 360).width(90).alignment(Align center)
+
+// This example illustrates the effect of the startColorOffset and endColorOffset parameters:
+$svg.linearGradient("demoGradient_6"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"})$svg.rect(90; 90).position(10; 400).fill("url(#demoGradient_6)")$svg.textArea("offset=0/100").position(10; 490).width(90).alignment(Align center)$svg.linearGradient("demoGradient_7"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"; startOffset: 20; stopOffset: 80})$svg.rect(90; 90).position(110; 400).fill("url(#demoGradient_7)")$svg.textArea("offset=20/80").position(110; 490).width(90).alignment(Align center)$svg.preview()```
+
