@@ -14,6 +14,7 @@
 			"HDI circle01",
 			"HDI ClipPath",
 			"HDI dasharray",
+			"HDI dropShadow",
 			"HDI ellipse01",
 			"HDI line01",
 			"HDI linearGradient01",
@@ -34,8 +35,7 @@
 			"HDI_quad01",
 			"HDI_symbol",
 			"HDI_TextToPicture",
-			"HDI_triangle01",
-			"Method29"
+			"HDI_triangle01"
 		]
 	},
 	"trash": {}
