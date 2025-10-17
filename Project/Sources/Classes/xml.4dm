@@ -1385,9 +1385,9 @@ Function removeAttribute($node : Text; $attribute : Text) : cs:C1710.xml
 			
 		Else 
 			
-			If (OB Entries:C1720(This:C1470.getAttributes(This:C1470.root)).query("key=:1"; $attribute).pop()#Null:C1517)
+			If (OB Entries:C1720(This:C1470.getAttributes(This:C1470.root)).query("key=:1"; $node).pop()#Null:C1517)
 				
-				DOM REMOVE XML ATTRIBUTE:C1084($node; $attribute)
+				DOM REMOVE XML ATTRIBUTE:C1084(This:C1470.root; $node)
 				
 			End if 
 		End if 

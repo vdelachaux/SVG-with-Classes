@@ -2563,6 +2563,52 @@ Function preserveAspectRatio($value : Text; $applyTo) : cs:C1710.svg
 	End if 
 	
 	//———————————————————————————————————————————————————————————
+	// Sets the vector-effect attribute
+Function nonScalingStroke($mode; $applyTo) : cs:C1710.svg
+	
+	// TODO:Documentation
+	
+	var $node:=This:C1470._getTarget($applyTo)
+	var $type:=Value type:C1509($mode)
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($type=Is boolean:K8:9)
+			
+			If ($mode)
+				
+				Super:C1706.setAttribute($node; "vector-effect"; "non-scaling-stroke")
+				
+			Else 
+				
+				Super:C1706.setAttribute($node; "vector-effect"; "none")
+				
+			End if 
+			
+			//______________________________________________________
+		: ($type=Is text:K8:3)
+			
+			If (Length:C16($mode)=0)
+				
+				Super:C1706.removeAttribute($node; "vector-effect")
+				
+			Else 
+				
+				Super:C1706.setAttribute($node; "vector-effect"; $mode)
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError("Bad parameter type")
+			
+			//______________________________________________________
+	End case 
+	
+	//MARK:-FILTERS
+	//———————————————————————————————————————————————————————————
 	// Apply a filter
 Function filter($id : Text; $applyTo) : cs:C1710.svg
 	
@@ -2571,6 +2617,86 @@ Function filter($id : Text; $applyTo) : cs:C1710.svg
 	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "filter"; "url(#"+$id+")")
 	
 	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Sets a Gaussian blur filter
+Function blur($stdDeviation : Integer; $in : Text; $options : Object) : cs:C1710.svg
+	
+	// TODO:Documentation
+	
+	$options:=$options || {}
+	
+/*
+in = "sourceAlpha" | "sourceGraphic" (default)  
+options cf. defineFilter()
+*/
+	
+	var $blur:={}
+	
+	If ($stdDeviation=0)
+		
+		// Use default definition
+		var $id:="blur"
+		$blur.stdDeviation:=2
+		
+	Else 
+		
+		$id:="blur_"+String:C10($stdDeviation)
+		$blur.stdDeviation:=$stdDeviation
+		
+	End if 
+	
+	If (Length:C16($in)>0)
+		
+		$blur.in:=$in
+		
+	End if 
+	
+	If (This:C1470.isNull(This:C1470.findById($id)))
+		
+		// Define the filter
+		var $filter:=This:C1470.defineFilter($id; $options)
+		Super:C1706.create($filter; "feGaussianBlur"; $blur)
+		
+	End if 
+	
+	// Apply the filter
+	This:C1470.filter($id)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Sets a new filter in the SVG container and returns its reference
+	// If the filter already exists, it will be replaced.
+Function defineFilter($id : Text; $options : Object) : Text
+	
+	// TODO:Documentation
+	
+	$options:=$options || {}
+	
+/*
+{    
+  x = Coordinate on X axis
+  y = Coordinate on Y axis
+  wodth = Width of target rectangle
+  height = Height of target rectangle
+  filterUnits = Coordinate system of frame "userSpaceOnUse" | "objectBoundingBox"
+  primitiveUnits = Filter system of values "userSpaceOnUse" | "objectBoundingBox"
+}
+*/
+	
+	$options.id:=$id
+	
+	var $node:=This:C1470.findById($id)
+	
+	If (This:C1470.isNotNull($node))
+		
+		Super:C1706.remove($node)
+		
+	End if 
+	
+	var $defs:=This:C1470._defs()
+	return Super:C1706.create($defs; "filter"; $options)
 	
 	//MARK:-SHORTCUTS & UTILITIES
 	//———————————————————————————————————————————————————————————
@@ -2812,7 +2938,6 @@ Function stroke($value; $applyTo) : cs:C1710.svg
 			//______________________________________________________
 		Else 
 			
-			ALERT:C41(String:C10(Value type:C1509($value)))
 			This:C1470._pushError("Bad parameter type")
 			
 			//______________________________________________________
@@ -2917,8 +3042,22 @@ Function fill($value; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Sets one or more fill attributes with a gradient
+Function gradient($gradient : Text; $applyTo) : cs:C1710.svg
+	
+	// TODO:Documentation
+	
+	var $node:=This:C1470._getTarget($applyTo)
+	
+	Super:C1706.setAttribute($node; "fill"; "url(#"+$gradient+")")
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Set a drop shadow for the current element
 Function dropShadow($stdDeviation : Integer; $dx : Integer; $dy : Integer) : cs:C1710.svg
+	
+	// TODO:Documentation
 	
 	$stdDeviation:=$stdDeviation=0 ? $stdDeviation : 4
 	$dx:=$dx=0 ? $dx : 4
@@ -3616,29 +3755,39 @@ Function setValue($value : Text; $applyTo; $CDATA : Boolean) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Display the SVG image & tree into the SVG Viewer
+	// Display the SVG image & tree into the 4D SVG Viewer
 Function preview($keepStructure : Boolean)
 	
-	// FIXME: Should test if the component is available
-	// FIXME COMPONENT LIST() is now theadsafe
-	Try(EXECUTE METHOD:C1007("SVGTool_SHOW_IN_VIEWER"; *; This:C1470.root))
+	ARRAY TEXT:C222($_names; 0x0000)
+	COMPONENT LIST:C1001($_names)
 	
-	If (Count parameters:C259>=1)
+	If (Find in array:C230($_names; "4D SVG")#-1)
 		
-		If (This:C1470.autoClose)\
-			 & (Not:C34($keepStructure))
+		Formula from string:C1601("SVGTool_SHOW_IN_VIEWER").call(Null:C1517; This:C1470.root)
+		
+		If (Count parameters:C259>=1)
 			
-			Super:C1706.close()
+			If (This:C1470.autoClose)\
+				 && (Not:C34($keepStructure))
+				
+				Super:C1706.close()
+				
+			End if 
 			
+		Else 
+			
+			If (This:C1470.autoClose)
+				
+				Super:C1706.close()
+				
+			End if 
 		End if 
 		
 	Else 
 		
-		If (This:C1470.autoClose)
-			
-			Super:C1706.close()
-			
-		End if 
+		SET PICTURE TO PASTEBOARD:C521(This:C1470.picture($keepStructure))
+		INVOKE ACTION:C1439(ak show clipboard:K76:58)
+		
 	End if 
 	
 	//———————————————————————————————————————————————————————————
