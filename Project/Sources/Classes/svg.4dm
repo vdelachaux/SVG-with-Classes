@@ -954,35 +954,62 @@ Function image($picture; $attachTo) : cs:C1710.svg
 			
 			If (This:C1470.success)
 				
-				// Determines the codec to use (default: .png)
+				// Priority order of the codecs contained in the picture:
+				// svg > png > jpg > first one
 				ARRAY TEXT:C222($codecs; 0x0000)
 				GET PICTURE FORMATS:C1406($picture; $codecs)
 				
-				// Priority order: svg > png > jpg > fisrt | default = png
-				$codecs{0}:=\
-					Find in array:C230($codecs; ".svg")>0 ? ".svg" : \
-					Find in array:C230($codecs; ".png")>0 ? ".png" : \
-					Find in array:C230($codecs; ".jpg")>0 ? ".jpg" : \
-					Size of array:C274($codecs)>0 ? $codecs{1} : \
-					".png"
+				var $codec:=Size of array:C274($codecs)>0 ? $codecs{1} : ""
+				
+				var $t : Text
+				For each ($t; [\
+					".svg"; \
+					".png"; \
+					".jpeg"])
+					
+					var $index:=Find in array:C230($codecs; $t)
+					
+					If ($index>0)
+						
+						$codec:=$codecs{$index}
+						break
+						
+					End if 
+				End for each 
+				
+				Case of 
+						
+						// ………………………………………………………………………………… Some cases requiring special handling
+					: ($codec=\
+						/* Proprietary 4D format (several types of codecs) */".4DMetaPict") || \
+						/* Digital Negative */($codec=".dng") || \
+						/* file.getIcon() on Windows */($codec=".4DMemoryBitmap")
+						
+						CONVERT PICTURE:C1002($picture; ".png")
+						TRANSFORM PICTURE:C988($picture; Transparency:K61:11; 0x00FFFFFF)
+						$codec:=".png"
+						
+						// …………………………………………………………………………………
+				End case 
+				
+				$codec:=$codec || ".png"  // Finally, the default format is PNG
 				
 				// Encode the image
 				var $x : Blob
-				PICTURE TO BLOB:C692($picture; $x; $codecs{0})
+				PICTURE TO BLOB:C692($picture; $x; $codec)
 				This:C1470.success:=Bool:C1537(OK)
 				
 				If (This:C1470.success)
 					
-					var $t : Text
 					BASE64 ENCODE:C895($x; $t)
 					CLEAR VARIABLE:C89($x)
 					
 					var $height; $width : Integer
 					PICTURE PROPERTIES:C457($picture; $width; $height)
-					$codecs{0}:=$codecs{0}=".svg" ? "svg+xml" : Replace string:C233($codecs{0}; "."; "")
+					$codec:=$codec=".svg" ? "svg+xml" : Replace string:C233($codec; "."; "")
 					
 					This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "image"; New object:C1471(\
-						"xlink:href"; "data:image/"+$codecs{0}+";base64,"+$t; \
+						"xlink:href"; "data:image/"+$codec+";base64,"+$t; \
 						"x"; 0; \
 						"y"; 0; \
 						"width"; $width; \
@@ -2609,12 +2636,209 @@ Function nonScalingStroke($mode; $applyTo) : cs:C1710.svg
 	
 	//MARK:-FILTERS
 	//———————————————————————————————————————————————————————————
+	// Sets a new filter in the SVG container and returns its reference
+	// If the filter already exists, it will be replaced.
+Function defineFilter($id : Text; $options : Object) : Text/* Filter reference */
+	
+	// TODO:Documentation
+	
+	$options:=$options || {}
+	
+/*
+{    
+  x = Coordinate on X axis
+  y = Coordinate on Y axis
+  wodth = Width of target rectangle
+  height = Height of target rectangle
+  filterUnits = Coordinate system of frame "userSpaceOnUse" | "objectBoundingBox"
+  primitiveUnits = Filter system of values "userSpaceOnUse" | "objectBoundingBox"
+}
+*/
+	
+	$options.id:=$id
+	
+	var $node:=This:C1470.findById($id)
+	
+	If (This:C1470.isNotNull($node))
+		
+		Super:C1706.remove($node)
+		
+	End if 
+	
+	var $defs:=This:C1470._defs()
+	return Super:C1706.create($defs; "filter"; $options)
+	
+	//———————————————————————————————————————————————————————————
 	// Apply a filter
 Function filter($id : Text; $applyTo) : cs:C1710.svg
 	
 	// TODO:Documentation
 	
 	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "filter"; "url(#"+$id+")")
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Transform colours into greyscale
+Function convertToGrayScale($grey; $applyTo) : cs:C1710.svg
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Count parameters:C259=2)
+			
+			var $node:=This:C1470._getTarget($applyTo)
+			
+			//______________________________________________________
+		: (Count parameters:C259=1)
+			
+			If (Value type:C1509($grey)=Is text:K8:3)
+				
+				$node:=This:C1470._getTarget($grey)
+				$grey:=8858
+				
+			Else 
+				
+				$node:=This:C1470._getTarget()
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			$node:=This:C1470._getTarget()
+			$grey:=8858
+			
+			//______________________________________________________
+	End case 
+	
+	var $element:=This:C1470.getName($node)
+	
+	If ($element#"image") && (Not:C34(This:C1470._containers.includes($element)))
+		
+		This:C1470._pushError("can't be applied to "+$element)
+		
+		return 
+		
+	End if 
+	
+	If ($grey=8858)
+		
+		// Use visual perception of the luminance
+		// (30% red, 59% green and 11% blue)
+		var $matrix:=".299 .587 .114 0 0 "
+		$matrix+=".299 .587 .114 0 0 "
+		$matrix+=".299 .587 .114 0 0 "
+		$matrix+="0 0 0 1 0"
+		
+	Else 
+		
+		$matrix:="{%} {%} {%} 0 0 "
+		$matrix+="{%} {%} {%} 0 0 "
+		$matrix+="{%} {%} {%} 0 0 "
+		$matrix+="0 0 0 1 0"
+		
+		// Allow the value to be passed as a real number between 0 & 1
+		// or as an integer between 0 & 100
+		$grey:=$grey>1 ? $grey/100 : $grey
+		$matrix:=Replace string:C233($matrix; "{%}"; String:C10($grey; "&xml"))
+		
+	End if 
+	
+	var $id:="d4:grey"+String:C10($grey; "&xml")
+	
+	This:C1470.findById($id)
+	
+	If (Not:C34(This:C1470.success))
+		
+		// Define the filter
+		var $defs : Text:=This:C1470._defs()
+		
+		var $filter:=Super:C1706.create($defs; "filter"; New object:C1471(\
+			"id"; $id; \
+			"filterUnits"; "objectBoundingBox"; \
+			"x"; "0%"; \
+			"y"; "0%"; \
+			"width"; "100%"; \
+			"height"; "100%"\
+			))
+		
+		Super:C1706.create($filter; "feColorMatrix"; New object:C1471(\
+			"type"; "matrix"; \
+			"in"; "SourceGraphic"; \
+			"values"; $matrix\
+			))
+		
+	End if 
+	
+	// Apply the filter
+	This:C1470.filter($id; $node)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Set a drop shadow for the current element
+Function dropShadow($stdDeviation : Integer; $dx : Integer; $dy : Integer) : cs:C1710.svg
+	
+	// TODO:Documentation
+	
+	$stdDeviation:=$stdDeviation=0 ? $stdDeviation : 4
+	$dx:=$dx=0 ? $dx : 4
+	$dy:=$dy=0 ? $dy : 4
+	
+	If ($stdDeviation=4)\
+		 && ($dx=4)\
+		 && ($dy=4)
+		
+		// Use default definition
+		var $id:="dropShadow"
+		
+	Else 
+		
+		$id:="dropShadow"
+		$id+="_"+String:C10($stdDeviation)
+		$id+="_"+String:C10($dx)
+		$id+="_"+String:C10($dy)
+		
+	End if 
+	
+	This:C1470.findById($id)
+	
+	If (Not:C34(This:C1470.success))
+		
+		// Define the filter
+		var $defs : Text
+		$defs:=This:C1470._defs()
+		
+		var $filter : Text
+		$filter:=Super:C1706.create($defs; "filter"; New object:C1471(\
+			"id"; $id; \
+			"filterUnits"; "userSpaceOnUse"\
+			))
+		
+		Super:C1706.create($filter; "feGaussianBlur"; New object:C1471(\
+			"stdDeviation"; $stdDeviation; \
+			"in"; "SourceAlpha"; \
+			"result"; "_Blur"\
+			))
+		
+		Super:C1706.create($filter; "feOffset"; New object:C1471(\
+			"dx"; $dx; \
+			"dy"; $dy; \
+			"in"; "_Blur"; \
+			"result"; "_Offset"\
+			))
+		
+		Super:C1706.create($filter; "feBlend"; New object:C1471(\
+			"in"; "SourceGraphic"; \
+			"in2"; "_Offset"; \
+			"mode"; "normal"\
+			))
+		
+	End if 
+	
+	// Apply the filter
+	This:C1470.filter($id)
 	
 	return This:C1470
 	
@@ -2652,13 +2876,28 @@ options cf. defineFilter()
 		
 	End if 
 	
+	If ($options.result#Null:C1517)
+		
+		$blur.result:=$options.result
+		OB REMOVE:C1226($options; "result")
+		
+	End if 
+	
+	If ($options.filter#Null:C1517)
+		
+		$id:=$options.filter
+		OB REMOVE:C1226($options; "filter")
+		
+	End if 
+	
 	If (This:C1470.isNull(This:C1470.findById($id)))
 		
 		// Define the filter
 		var $filter:=This:C1470.defineFilter($id; $options)
-		Super:C1706.create($filter; "feGaussianBlur"; $blur)
 		
 	End if 
+	
+	Super:C1706.create($filter; "feGaussianBlur"; $blur)
 	
 	// Apply the filter
 	This:C1470.filter($id)
@@ -2666,37 +2905,41 @@ options cf. defineFilter()
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Sets a new filter in the SVG container and returns its reference
-	// If the filter already exists, it will be replaced.
-Function defineFilter($id : Text; $options : Object) : Text
+	// Sets an offset filter
+Function offset($dx : Integer; $dy : Integer; $in : Text; $options : Object) : cs:C1710.svg
 	
 	// TODO:Documentation
 	
 	$options:=$options || {}
+	var $offset:={in: $in}
 	
-/*
-{    
-  x = Coordinate on X axis
-  y = Coordinate on Y axis
-  wodth = Width of target rectangle
-  height = Height of target rectangle
-  filterUnits = Coordinate system of frame "userSpaceOnUse" | "objectBoundingBox"
-  primitiveUnits = Filter system of values "userSpaceOnUse" | "objectBoundingBox"
-}
-*/
-	
-	$options.id:=$id
-	
-	var $node:=This:C1470.findById($id)
-	
-	If (This:C1470.isNotNull($node))
+	If ($options.result#Null:C1517)
 		
-		Super:C1706.remove($node)
+		$offset.result:=$options.result
+		OB REMOVE:C1226($options; "result")
 		
 	End if 
 	
-	var $defs:=This:C1470._defs()
-	return Super:C1706.create($defs; "filter"; $options)
+	If ($options.filter#Null:C1517)
+		
+		$id:=$options.filter
+		OB REMOVE:C1226($options; "filter")
+		
+		This:C1470._removeIfExists(This:C1470.findById($id))  // Replace
+		
+	End if 
+	
+	
+	return This:C1470
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+Function _removeIfExists($node : Text)
+	
+	If (This:C1470.isNotNull($node))
+		
+		This:C1470.remove($node)  // Replace
+		
+	End if 
 	
 	//MARK:-SHORTCUTS & UTILITIES
 	//———————————————————————————————————————————————————————————
@@ -3042,176 +3285,12 @@ Function fill($value; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Sets one or more fill attributes with a gradient
+	// Sets fill attributes with a gradient
 Function gradient($gradient : Text; $applyTo) : cs:C1710.svg
 	
 	// TODO:Documentation
 	
-	var $node:=This:C1470._getTarget($applyTo)
-	
-	Super:C1706.setAttribute($node; "fill"; "url(#"+$gradient+")")
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Set a drop shadow for the current element
-Function dropShadow($stdDeviation : Integer; $dx : Integer; $dy : Integer) : cs:C1710.svg
-	
-	// TODO:Documentation
-	
-	$stdDeviation:=$stdDeviation=0 ? $stdDeviation : 4
-	$dx:=$dx=0 ? $dx : 4
-	$dy:=$dy=0 ? $dy : 4
-	
-	If ($stdDeviation=4)\
-		 && ($dx=4)\
-		 && ($dy=4)
-		
-		// Use default definition
-		var $id:="dropShadow"
-		
-	Else 
-		
-		$id:="dropShadow"
-		$id+="_"+String:C10($stdDeviation)
-		$id+="_"+String:C10($dx)
-		$id+="_"+String:C10($dy)
-		
-	End if 
-	
-	This:C1470.findById($id)
-	
-	If (Not:C34(This:C1470.success))
-		
-		// Define the filter
-		var $defs : Text
-		$defs:=This:C1470._defs()
-		
-		var $filter : Text
-		$filter:=Super:C1706.create($defs; "filter"; New object:C1471(\
-			"id"; $id; \
-			"filterUnits"; "userSpaceOnUse"\
-			))
-		
-		Super:C1706.create($filter; "feGaussianBlur"; New object:C1471(\
-			"stdDeviation"; $stdDeviation; \
-			"in"; "SourceAlpha"; \
-			"result"; "_Blur"\
-			))
-		
-		Super:C1706.create($filter; "feOffset"; New object:C1471(\
-			"dx"; $dx; \
-			"dy"; $dy; \
-			"in"; "_Blur"; \
-			"result"; "_Offset"\
-			))
-		
-		Super:C1706.create($filter; "feBlend"; New object:C1471(\
-			"in"; "SourceGraphic"; \
-			"in2"; "_Offset"; \
-			"mode"; "normal"\
-			))
-		
-	End if 
-	
-	// Apply the filter
-	This:C1470.filter($id)
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Transform colours into greyscale
-Function convertToGrayScale($grey; $applyTo) : cs:C1710.svg
-	
-	Case of 
-			
-			//______________________________________________________
-		: (Count parameters:C259=2)
-			
-			var $node:=This:C1470._getTarget($applyTo)
-			
-			//______________________________________________________
-		: (Count parameters:C259=1)
-			
-			If (Value type:C1509($grey)=Is text:K8:3)
-				
-				$node:=This:C1470._getTarget($grey)
-				$grey:=8858
-				
-			Else 
-				
-				$node:=This:C1470._getTarget()
-				
-			End if 
-			
-			//______________________________________________________
-		Else 
-			
-			$node:=This:C1470._getTarget()
-			$grey:=8858
-			
-			//______________________________________________________
-	End case 
-	
-	var $element:=This:C1470.getName($node)
-	
-	If ($element#"image") && (Not:C34(This:C1470._containers.includes($element)))
-		
-		This:C1470._pushError("can't be applied to "+$element)
-		
-		return 
-		
-	End if 
-	
-	If ($grey=8858)
-		
-		var $matrix:=".299 .587 .114 0 0 "
-		$matrix+=".299 .587 .114 0 0 "
-		$matrix+=".299 .587 .114 0 0 "
-		$matrix+="0 0 0 1 0"
-		
-	Else 
-		
-		$matrix:="{%} {%} {%} 0 0 "
-		$matrix+="{%} {%} {%} 0 0 "
-		$matrix+="{%} {%} {%} 0 0 "
-		$matrix+="0 0 0 1 0"
-		
-		// Allow the value to be passed as a real number between 0 & 1
-		// or as an integer between 0 & 100
-		$grey:=$grey>1 ? $grey/100 : $grey
-		$matrix:=Replace string:C233($matrix; "{%}"; String:C10($grey; "&xml"))
-		
-	End if 
-	
-	var $id:="d4:grey"+String:C10($grey; "&xml")
-	
-	This:C1470.findById($id)
-	
-	If (Not:C34(This:C1470.success))
-		
-		// Define the filter
-		var $defs : Text:=This:C1470._defs()
-		
-		var $filter:=Super:C1706.create($defs; "filter"; New object:C1471(\
-			"id"; $id; \
-			"filterUnits"; "objectBoundingBox"; \
-			"x"; "0%"; \
-			"y"; "0%"; \
-			"width"; "100%"; \
-			"height"; "100%"\
-			))
-		
-		Super:C1706.create($filter; "feColorMatrix"; New object:C1471(\
-			"type"; "matrix"; \
-			"in"; "SourceGraphic"; \
-			"values"; $matrix\
-			))
-		
-	End if 
-	
-	// Apply the filter
-	This:C1470.filter($id; $node)
+	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "fill"; "url(#"+$gradient+")")
 	
 	return This:C1470
 	

@@ -12,7 +12,7 @@ $svg.text("SVG")\
 .fontFamily("sans-serif").fontSize(45).color("red")\
 .dropShadow(1; 10; 5)  // User-defined values
 
-$svg.fivePointStar(500; 300; 350).color("tomato").dropShadow()
+$svg.fivePointStar(500; 300; 350).color("tomato").dropShadow()  // NO SHADOW ! Why ?
 
 $svg.square(200)\
 .position(500; 10)\
