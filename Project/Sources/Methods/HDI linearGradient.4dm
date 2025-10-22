@@ -66,7 +66,7 @@ $svg.textArea("rotation = -90").position(110; 360).width(90).alignment(Align cen
 
 $svg.linearGradient("demoGradient_7"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"})
 $svg.rect(90; 90).position(10; 400).fill("url(#demoGradient_7)")
-$svg.textArea("rotation = -180\roffset=0/100").position(10; 490).width(100).alignment(Align center:K42:3)
+$svg.textArea("rotation = -180").position(10; 490).width(100).alignment(Align center:K42:3)
 
 $svg.linearGradient("demoGradient_8"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"; startOffset: 20; stopOffset: 80})
 $svg.rect(90; 90).position(110; 400).fill("url(#demoGradient_8)")

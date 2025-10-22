@@ -70,7 +70,7 @@ property _reservedNames:=[\
 
 property store:=[]
 
-property latest; _current : Text
+property latest; _current; _filterTarget : Text
 property graphic : Picture
 
 Class constructor($content)
@@ -292,7 +292,7 @@ Function group($id : Text; $attachTo) : cs:C1710.svg
 	
 	//———————————————————————————————————————————————————————————
 	// Store the last created element as symbol
-Function symbol($name : Text; $applyTo) : cs:C1710.svg
+Function symbol($id : Text; $applyTo) : cs:C1710.svg
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
@@ -304,23 +304,19 @@ Function symbol($name : Text; $applyTo) : cs:C1710.svg
 			
 			If (This:C1470.success)
 				
-				Super:C1706.setAttribute($symbol; "id"; $name)
+				Super:C1706.setAttribute($symbol; "id"; $id)
 				
 				If (This:C1470.success)
 					
-					This:C1470.store.push({id: $name; dom: $symbol})
+					This:C1470.store.push({id: $id; dom: $symbol})
 					
 					Super:C1706.setAttribute($symbol; "preserveAspectRatio"; "xMidYMid")
-					
-					var $source:=This:C1470._getTarget($applyTo)
-					var $node:=Super:C1706.clone($source; $symbol)
-					This:C1470.remove($source)
 					
 				End if 
 				
 			Else 
 				
-				This:C1470._pushError("Failed to create the symbol: "+$name)
+				This:C1470._pushError("Failed to create the symbol: "+$id)
 				
 			End if 
 			
@@ -331,8 +327,14 @@ Function symbol($name : Text; $applyTo) : cs:C1710.svg
 		End if 
 	End if 
 	
-	// Restore the root as target
-	This:C1470.latest:=This:C1470.root
+	This:C1470.restoreRoot()
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+Function close() : cs:C1710.svg
+	
+	This:C1470.restoreRoot()
 	
 	return This:C1470
 	
@@ -381,7 +383,6 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 		
 	End if 
 	
-	// Restore the root as target
 	This:C1470.restoreRoot()
 	
 	return This:C1470
@@ -664,8 +665,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 		
 	End if 
 	
-	// Restore the root as target
-	This:C1470.latest:=This:C1470.root
+	This:C1470.restoreRoot()
 	
 	return This:C1470
 	
@@ -1055,19 +1055,19 @@ Function image($picture; $attachTo) : cs:C1710.svg
 					
 					If (Not:C34(This:C1470.success))
 						
-						This:C1470._pushError("Failed to create image \""+$picture.path+"\"")
+						This:C1470._pushError("Failed to create image \""+String:C10($picture.path)+"\"")
 						
 					End if 
 					
 				Else 
 					
-					This:C1470._pushError("Failed to read image \""+$picture.path+"\"")
+					This:C1470._pushError("Failed to read image \""+String:C10($picture.path)+"\"")
 					
 				End if 
 				
 			Else 
 				
-				This:C1470._pushError("File not found \""+$picture.path+"\"")
+				This:C1470._pushError("File not found \""+String:C10($picture.path)+"\"")
 				
 			End if 
 			//______________________________________________________
@@ -2636,6 +2636,16 @@ Function nonScalingStroke($mode; $applyTo) : cs:C1710.svg
 	
 	//MARK:-FILTERS
 	//———————————————————————————————————————————————————————————
+	// Apply a filter
+Function filter($id : Text; $applyTo) : cs:C1710.svg
+	
+	// TODO:Documentation
+	
+	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "filter"; "url(#"+$id+")")
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Sets a new filter in the SVG container and returns its reference
 	// If the filter already exists, it will be replaced.
 Function defineFilter($id : Text; $options : Object) : Text/* Filter reference */
@@ -2648,7 +2658,7 @@ Function defineFilter($id : Text; $options : Object) : Text/* Filter reference *
 {    
   x = Coordinate on X axis
   y = Coordinate on Y axis
-  wodth = Width of target rectangle
+  width = Width of target rectangle
   height = Height of target rectangle
   filterUnits = Coordinate system of frame "userSpaceOnUse" | "objectBoundingBox"
   primitiveUnits = Filter system of values "userSpaceOnUse" | "objectBoundingBox"
@@ -2659,7 +2669,7 @@ Function defineFilter($id : Text; $options : Object) : Text/* Filter reference *
 	
 	var $node:=This:C1470.findById($id)
 	
-	If (This:C1470.isNotNull($node))
+	If (This:C1470.isNotNull($node))  // A new definition replaces the old one, where applicable.
 		
 		Super:C1706.remove($node)
 		
@@ -2669,17 +2679,200 @@ Function defineFilter($id : Text; $options : Object) : Text/* Filter reference *
 	return Super:C1706.create($defs; "filter"; $options)
 	
 	//———————————————————————————————————————————————————————————
-	// Apply a filter
-Function filter($id : Text; $applyTo) : cs:C1710.svg
+	// Sets a Gaussian blur for a filter
+Function feGaussianBlur($filter : Text; $stdDeviation : Integer; $in : Text; $result : Text)
 	
 	// TODO:Documentation
 	
-	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "filter"; "url(#"+$id+")")
+	If (This:C1470.isNull($filter))\
+		 || (This:C1470.getName($filter)#"filter")
+		
+		This:C1470._pushError($filter+" is not a filter reference!")
+		return 
+		
+	End if 
 	
-	return This:C1470
+	var $attributes:={\
+		stdDeviation: Count parameters:C259=1 ? 2 : $stdDeviation; \
+		in: $in || "sourceGraphic"; \
+		result: $result || "BLUR"}
+	
+	Super:C1706.create($filter; "feGaussianBlur"; $attributes)
+	
+	This:C1470._filterTarget:=$attributes.result
 	
 	//———————————————————————————————————————————————————————————
-	// Transform colours into greyscale
+	// Sets an offset for a filter
+Function feOffset($filter : Text; $dx : Integer; $dy : Integer; $in : Text; $result : Text)
+	
+	// TODO:Documentation
+	
+	If (This:C1470.isNull($filter))\
+		 || (This:C1470.getName($filter)#"filter")
+		
+		This:C1470._pushError($filter+" is not a filter reference!")
+		return 
+		
+	End if 
+	
+	var $attributes:={}
+	
+	If (Count parameters:C259=1)
+		
+		$attributes.dx:=2
+		$attributes.dy:=2
+		
+	Else 
+		
+		$attributes.dx:=$dx
+		$attributes.dy:=$dy
+		
+	End if 
+	
+	$attributes.in:=$in || This:C1470._filterTarget || "sourceGraphic"
+	$attributes.result:=$result || "OFFSET"
+	
+	Super:C1706.create($filter; "feOffset"; $attributes)
+	
+	This:C1470._filterTarget:=$attributes.result
+	
+	//———————————————————————————————————————————————————————————
+	// Sets a blend filter for a filter
+Function feBlend($filter : Text; $in : Text; $in2 : Text; $mode : Text; $result : Text)
+	
+	// TODO:Documentation
+	
+	If (This:C1470.isNull($filter))\
+		 || (This:C1470.getName($filter)#"filter")
+		
+		This:C1470._pushError($filter+" is not a filter reference!")
+		return 
+		
+	End if 
+	
+	var $attributes:={\
+		in: $in || "SourceGraphic"; \
+		in2: $in2 || This:C1470._filterTarget; \
+		mode: $mode || "normal"; \
+		result: $result || "BLEND"}
+	
+	ASSERT:C1129(["normal"; "multiply"; "screen"; "darken"; "lighten"].includes($attributes.mode))
+	
+	Super:C1706.create($filter; "feBlend"; $attributes)
+	
+	This:C1470._filterTarget:=$attributes.result
+	
+	//———————————————————————————————————————————————————————————
+	// Sets a color matrix transformation for a filter
+Function feColorMatrix($filter : Text; $type : Text; $value; $in : Text; $result : Text)
+	
+	// TODO:Documentation
+	
+	If (This:C1470.isNull($filter))\
+		 || (This:C1470.getName($filter)#"filter")
+		
+		This:C1470._pushError($filter+" is not a filter reference!")
+		return 
+		
+	End if 
+	
+	var $attributes:={\
+		type: $type || "saturate"; \
+		in: $in || "SourceGraphic"}
+	
+	ASSERT:C1129(["saturate"; "hueRotate"; "luminanceToAlpha"; "matrix"].includes($attributes.type))
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($attributes.type="matrix")  // A list of 20 matrix values, separated by whitespace and/or a comma
+			
+			If (Count parameters:C259>=2)
+				
+				
+				If (Value type:C1509($value)=Is collection:K8:32)
+					
+					// Ensure matrix contains 20 values
+					$value.resize(20; 0)
+					$attributes.values:=$value.join(" ")
+					
+				Else 
+					
+					If (Value type:C1509($value)#Is text:K8:3)
+						
+						This:C1470._pushError("For the type \"matrix\", value parameter must be a Collection or a Text")
+						return 
+						
+					End if 
+					
+					var $c:=Split string:C1554($value; " ,")
+					
+					If ($c.length=1)
+						
+						$c:=Split string:C1554($value; " ")
+						
+						If ($c.length=1)
+							
+							$c:=Split string:C1554($value; ",")
+							
+						End if 
+					End if 
+					
+					If ($c.length<20)
+						
+						$c.resize(20; 0)
+						
+					End if 
+					
+					$attributes.values:=$c.join(" ")
+					
+				End if 
+				
+			Else 
+				
+				$attributes.values:=[].resize(20; 0).join(" ")  // identity matrix 
+				
+			End if 
+			
+			$attributes.values:=Replace string:C233($attributes.values; "0."; ".")
+			
+			//______________________________________________________
+		: ($attributes.type="saturate")  // A single real number value (0 to 1)
+			
+			//FIXME: Check 0-1 or 0-100% then convert to 0-1
+			If (Value type:C1509($value)=Is text:K8:3)
+				
+				$attributes.values:=$value
+				
+			Else 
+				
+				$attributes.values:=String:C10(Count parameters:C259>=2 ? Num:C11($value) : 1; "&xml")
+				
+			End if 
+			
+			//______________________________________________________
+		: ($attributes.type="hueRotate")  // A single real number value (to indicate degrees of rotation)
+			
+			$attributes.values:=Count parameters:C259>=2 ? Num:C11($value) : 0
+			
+			//______________________________________________________
+		: ($attributes.type="luminanceToAlpha")
+			
+			// The values parameter is not used with this type
+			
+			//______________________________________________________
+		Else 
+			
+			// FIXME: Error
+			//______________________________________________________
+	End case 
+	
+	Super:C1706.create($filter; "feColorMatrix"; $attributes)
+	
+	This:C1470._filterTarget:=$attributes.result
+	
+	//———————————————————————————————————————————————————————————
+	// Convert colors to grayscale
 Function convertToGrayScale($grey; $applyTo) : cs:C1710.svg
 	
 	Case of 
@@ -2725,7 +2918,7 @@ Function convertToGrayScale($grey; $applyTo) : cs:C1710.svg
 	If ($grey=8858)
 		
 		// Use visual perception of the luminance
-		// (30% red, 59% green and 11% blue)
+		// 30% red, 59% green and 11% blue
 		var $matrix:=".299 .587 .114 0 0 "
 		$matrix+=".299 .587 .114 0 0 "
 		$matrix+=".299 .587 .114 0 0 "
@@ -2745,29 +2938,19 @@ Function convertToGrayScale($grey; $applyTo) : cs:C1710.svg
 		
 	End if 
 	
-	var $id:="d4:grey"+String:C10($grey; "&xml")
+	var $id:="grey_"+String:C10($grey; "&xml")
 	
-	This:C1470.findById($id)
-	
-	If (Not:C34(This:C1470.success))
+	// Define the filter
+	If (This:C1470.isNull(This:C1470.findById($id)))  // No need to redo an existing definition
 		
-		// Define the filter
-		var $defs : Text:=This:C1470._defs()
+		var $filter:=This:C1470.defineFilter($id; {\
+			filterUnits: "objectBoundingBox"; \
+			x: "0%"; \
+			y: "0%"; \
+			width: "100%"; \
+			height: "100%"})
 		
-		var $filter:=Super:C1706.create($defs; "filter"; New object:C1471(\
-			"id"; $id; \
-			"filterUnits"; "objectBoundingBox"; \
-			"x"; "0%"; \
-			"y"; "0%"; \
-			"width"; "100%"; \
-			"height"; "100%"\
-			))
-		
-		Super:C1706.create($filter; "feColorMatrix"; New object:C1471(\
-			"type"; "matrix"; \
-			"in"; "SourceGraphic"; \
-			"values"; $matrix\
-			))
+		This:C1470.feColorMatrix($filter; "matrix"; $matrix)
 		
 	End if 
 	
@@ -2782,13 +2965,14 @@ Function dropShadow($stdDeviation : Integer; $dx : Integer; $dy : Integer) : cs:
 	
 	// TODO:Documentation
 	
-	$stdDeviation:=$stdDeviation=0 ? $stdDeviation : 4
-	$dx:=$dx=0 ? $dx : 4
-	$dy:=$dy=0 ? $dy : 4
+	var $c:=Copy parameters:C1790
+	$stdDeviation:=$c.length>=1 ? $stdDeviation : 2
+	$dx:=$c.length>=2 ? $dx : 2
+	$dy:=$c.length>=3 ? $dy : 2
 	
-	If ($stdDeviation=4)\
-		 && ($dx=4)\
-		 && ($dy=4)
+	If ($stdDeviation=2)\
+		 && ($dx=2)\
+		 && ($dy=2)
 		
 		// Use default definition
 		var $id:="dropShadow"
@@ -2802,38 +2986,13 @@ Function dropShadow($stdDeviation : Integer; $dx : Integer; $dy : Integer) : cs:
 		
 	End if 
 	
-	This:C1470.findById($id)
-	
-	If (Not:C34(This:C1470.success))
+	If (This:C1470.isNull(This:C1470.findById($id)))  // No need to redo an existing definition
 		
 		// Define the filter
-		var $defs : Text
-		$defs:=This:C1470._defs()
-		
-		var $filter : Text
-		$filter:=Super:C1706.create($defs; "filter"; New object:C1471(\
-			"id"; $id; \
-			"filterUnits"; "userSpaceOnUse"\
-			))
-		
-		Super:C1706.create($filter; "feGaussianBlur"; New object:C1471(\
-			"stdDeviation"; $stdDeviation; \
-			"in"; "SourceAlpha"; \
-			"result"; "_Blur"\
-			))
-		
-		Super:C1706.create($filter; "feOffset"; New object:C1471(\
-			"dx"; $dx; \
-			"dy"; $dy; \
-			"in"; "_Blur"; \
-			"result"; "_Offset"\
-			))
-		
-		Super:C1706.create($filter; "feBlend"; New object:C1471(\
-			"in"; "SourceGraphic"; \
-			"in2"; "_Offset"; \
-			"mode"; "normal"\
-			))
+		var $filter:=This:C1470.defineFilter($id)
+		This:C1470.feGaussianBlur($filter; $stdDeviation; "SourceAlpha")
+		This:C1470.feOffset($filter; $dx; $dy)
+		This:C1470.feBlend($filter)
 		
 	End if 
 	
@@ -2843,61 +3002,18 @@ Function dropShadow($stdDeviation : Integer; $dx : Integer; $dy : Integer) : cs:
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Sets a Gaussian blur filter
-Function blur($stdDeviation : Integer; $in : Text; $options : Object) : cs:C1710.svg
+	// Sets a blend filter to the current element
+Function blend($alpha : Boolean) : cs:C1710.svg
 	
 	// TODO:Documentation
 	
-	$options:=$options || {}
+	var $in : Text:=$alpha ? "sourceAlpha" : ""
+	var $id:="blend_"+($in || "SourceGraphic")
 	
-/*
-in = "sourceAlpha" | "sourceGraphic" (default)  
-options cf. defineFilter()
-*/
-	
-	var $blur:={}
-	
-	If ($stdDeviation=0)
-		
-		// Use default definition
-		var $id:="blur"
-		$blur.stdDeviation:=2
-		
-	Else 
-		
-		$id:="blur_"+String:C10($stdDeviation)
-		$blur.stdDeviation:=$stdDeviation
-		
-	End if 
-	
-	If (Length:C16($in)>0)
-		
-		$blur.in:=$in
-		
-	End if 
-	
-	If ($options.result#Null:C1517)
-		
-		$blur.result:=$options.result
-		OB REMOVE:C1226($options; "result")
-		
-	End if 
-	
-	If ($options.filter#Null:C1517)
-		
-		$id:=$options.filter
-		OB REMOVE:C1226($options; "filter")
-		
-	End if 
-	
-	If (This:C1470.isNull(This:C1470.findById($id)))
-		
-		// Define the filter
-		var $filter:=This:C1470.defineFilter($id; $options)
-		
-	End if 
-	
-	Super:C1706.create($filter; "feGaussianBlur"; $blur)
+	var $filter:=This:C1470.defineFilter($id)
+	This:C1470.feGaussianBlur($filter; 2; $in)
+	This:C1470.feOffset($filter; 5; 5)
+	This:C1470.feBlend($filter)
 	
 	// Apply the filter
 	This:C1470.filter($id)
@@ -2905,41 +3021,64 @@ options cf. defineFilter()
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Sets an offset filter
-Function offset($dx : Integer; $dy : Integer; $in : Text; $options : Object) : cs:C1710.svg
+	// Sets a Gaussian blur filter to the current element
+Function blur($stdDeviation : Integer) : cs:C1710.svg
 	
 	// TODO:Documentation
 	
-	$options:=$options || {}
-	var $offset:={in: $in}
+	$stdDeviation:=Count parameters:C259>0 ? $stdDeviation : 2
+	var $id:="blur_"+String:C10($stdDeviation)
 	
-	If ($options.result#Null:C1517)
+	If (This:C1470.isNull(This:C1470.findById($id)))  // No need to redo an existing definition
 		
-		$offset.result:=$options.result
-		OB REMOVE:C1226($options; "result")
+		// Define the filter
+		var $filter:=This:C1470.defineFilter($id)
+		This:C1470.feGaussianBlur($filter; $stdDeviation)  //; $in)
 		
 	End if 
 	
-	If ($options.filter#Null:C1517)
-		
-		$id:=$options.filter
-		OB REMOVE:C1226($options; "filter")
-		
-		This:C1470._removeIfExists(This:C1470.findById($id))  // Replace
-		
-	End if 
-	
+	// Apply the filter
+	This:C1470.filter($id)
 	
 	return This:C1470
 	
-	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
-Function _removeIfExists($node : Text)
+	//———————————————————————————————————————————————————————————
+	// Applies a color matrix transformation to each pixel of the current element
+Function colorMatrix($type : Text; $value) : cs:C1710.svg
 	
-	If (This:C1470.isNotNull($node))
+	// TODO:Documentation
+	
+	var $id : Text:="colorMatrix_"+$type
+	var $filter:=This:C1470.defineFilter($id)
+	This:C1470.feColorMatrix($filter; $type; $value)
+	
+	// Apply the filter
+	This:C1470.filter($id)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Sets an offset filter to the current reference
+Function offset($dx : Integer; $dy : Integer) : cs:C1710.svg
+	
+	// TODO:Documentation
+	
+	$dy:=Count parameters:C259<2 ? $dx : $dy  // By default, the same offset is used on Y as on X
+	
+	var $id:="offset_"+String:C10($dx)+"_"+String:C10($dy)
+	
+	If (This:C1470.isNull(This:C1470.findById($id)))  // No need to redo an existing element
 		
-		This:C1470.remove($node)  // Replace
+		// Define the filter
+		var $filter:=This:C1470.defineFilter($id)
+		This:C1470.feOffset($filter; $dx; $dy)
 		
 	End if 
+	
+	// Apply the filter
+	This:C1470.filter($id)
+	
+	return This:C1470
 	
 	//MARK:-SHORTCUTS & UTILITIES
 	//———————————————————————————————————————————————————————————
@@ -3310,7 +3449,7 @@ Function font($attributes : Object; $applyTo) : cs:C1710.svg
 		
 		Super:C1706.setAttribute($node; "font-size"; $attributes.size)
 		
-		If (Super:C1706.getAttribute($node; "y")<$attributes.size)
+		If (Num:C11(Super:C1706.getAttribute($node; "y"))<Num:C11($attributes.size))
 			
 			Super:C1706.setAttribute($node; "y"; $attributes.size)
 			
@@ -3834,7 +3973,8 @@ Function setValue($value : Text; $applyTo; $CDATA : Boolean) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Display the SVG image & tree into the 4D SVG Viewer
+	// Display the SVG image & tree into the 4D SVG Viewer if available
+	// into the clipboard if not
 Function preview($keepStructure : Boolean)
 	
 	ARRAY TEXT:C222($_names; 0x0000)

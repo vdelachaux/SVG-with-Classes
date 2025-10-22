@@ -1,7 +1,8 @@
 //%attributes = {}
 var $svg:=cs:C1710.svg.new()
 
-// Define the filter
+$svg.offset(50)
+
 $svg.linearGradient("liquidGlass"; "white"; "silver"; {rotation: -90; startOffset: 20})
 
 $svg.image(File:C1566("/RESOURCES/lena.jpg")).convertToGrayScale()
