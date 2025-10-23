@@ -291,6 +291,13 @@ Function group($id : Text; $attachTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+Function closeGroup() : cs:C1710.svg
+	
+	This:C1470.restoreRoot()
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Store the last created element as symbol
 Function symbol($id : Text; $applyTo) : cs:C1710.svg
 	
@@ -300,7 +307,7 @@ Function symbol($id : Text; $applyTo) : cs:C1710.svg
 		
 		If (This:C1470.success)
 			
-			var $symbol:=Super:C1706.create($defs; "symbol")
+			var $symbol : Text:=Super:C1706.create($defs; "symbol")
 			
 			If (This:C1470.success)
 				
@@ -312,27 +319,21 @@ Function symbol($id : Text; $applyTo) : cs:C1710.svg
 					
 					Super:C1706.setAttribute($symbol; "preserveAspectRatio"; "xMidYMid")
 					
+					var $source : Text:=This:C1470._getTarget($applyTo)
+					var $node : Text:=Super:C1706.clone($source; $symbol)
+					This:C1470.remove($source)
+					
+					This:C1470.closeSymbol()
+					
 				End if 
-				
-			Else 
-				
-				This:C1470._pushError("Failed to create the symbol: "+$id)
-				
 			End if 
-			
-		Else 
-			
-			This:C1470._pushError("Failed to locate/create the \"defs\" element")
-			
 		End if 
 	End if 
-	
-	This:C1470.restoreRoot()
 	
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-Function close() : cs:C1710.svg
+Function closeSymbol() : cs:C1710.svg
 	
 	This:C1470.restoreRoot()
 	
@@ -370,16 +371,7 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 				Super:C1706.setAttribute(This:C1470.root; "clip-path"; "url(#"+$id+")")
 				
 			End if 
-			
-		Else 
-			
-			This:C1470._pushError("Failed to create the clipPath: "+$id)
-			
 		End if 
-		
-	Else 
-		
-		This:C1470._pushError("Failed to locate/create the \"defs\" element")
 		
 	End if 
 	
@@ -480,10 +472,13 @@ Function desc($description : Text) : cs:C1710.svg
 Function comment($comment : Text; $attachTo) : cs:C1710.svg
 	
 	Super:C1706.comment(Count parameters:C259>=2 ? This:C1470._getContainer($attachTo) : This:C1470.root; $comment)
+	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
 	// Define a linear gradient
-Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $options : Object) : cs:C1710.svg
+Function defineLinearGradient($id : Text; $startColor : Text; $stopColor : Text; $options : Object) : cs:C1710.svg
+	
+	// TODO:Documentation
 	
 	$startColor:=$startColor || "white"
 	$stopColor:=$stopColor || "black"
@@ -493,11 +488,11 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 	
 	If (This:C1470.success)
 		
-		var $grad:=Super:C1706.create($defs; "linearGradient")
+		var $ref:=Super:C1706.create($defs; "linearGradient")
 		
 		If (This:C1470.success)
 			
-			Super:C1706.setAttribute($grad; "id"; $id)
+			Super:C1706.setAttribute($ref; "id"; $id)
 			
 			If (This:C1470.success)
 				
@@ -514,7 +509,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 						// …………………………………………………………………………………………
 					: ($rotation=-45)
 						
-						Super:C1706.setAttributes($grad; {\
+						Super:C1706.setAttributes($ref; {\
 							x1: 1; \
 							y1: 1; \
 							x2: 0; \
@@ -523,7 +518,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 						// …………………………………………………………………………………………
 					: ($rotation=45)
 						
-						Super:C1706.setAttributes($grad; {\
+						Super:C1706.setAttributes($ref; {\
 							x1: 0; \
 							y1: 0; \
 							x2: 1; \
@@ -532,7 +527,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 						// …………………………………………………………………………………………
 					: ($rotation=90)
 						
-						Super:C1706.setAttributes($grad; {\
+						Super:C1706.setAttributes($ref; {\
 							x1: 0; \
 							y1: 0; \
 							x2: 0; \
@@ -541,7 +536,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 						// …………………………………………………………………………………………
 					: ($rotation=-90)
 						
-						Super:C1706.setAttributes($grad; {\
+						Super:C1706.setAttributes($ref; {\
 							x1: 0; \
 							y1: 1; \
 							x2: 0; \
@@ -550,7 +545,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 						// …………………………………………………………………………………………
 					: ($rotation=180)
 						
-						Super:C1706.setAttributes($grad; {\
+						Super:C1706.setAttributes($ref; {\
 							x1: 0; \
 							y1: 0; \
 							x2: 1; \
@@ -559,7 +554,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 						// …………………………………………………………………………………………
 					: ($rotation=-180)
 						
-						Super:C1706.setAttributes($grad; {\
+						Super:C1706.setAttributes($ref; {\
 							x1: 1; \
 							y1: 0; \
 							x2: 0; \
@@ -568,7 +563,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 						// …………………………………………………………………………………………
 					Else 
 						
-						Super:C1706.setAttributes($grad; "gradientTransform"; "rotate("+String:C10($rotation)+")")
+						Super:C1706.setAttributes($ref; "gradientTransform"; "rotate("+String:C10($rotation)+")")
 						
 						// …………………………………………………………………………………………
 				End case 
@@ -579,7 +574,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 				If (Length:C16($t)>0)\
 					 && (["pad"; "reflect"; "repeat"].includes($t))
 					
-					Super:C1706.setAttributes($grad; "spreadMethod"; $t)
+					Super:C1706.setAttributes($ref; "spreadMethod"; $t)
 					
 				End if 
 				
@@ -589,7 +584,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 				If (Length:C16($t)>0)\
 					 && (["auto"; "sRGB"; "linearRGB"].includes($t))
 					
-					Super:C1706.setAttributes($grad; "color-interpolation"; $t)
+					Super:C1706.setAttributes($ref; "color-interpolation"; $t)
 					
 				End if 
 				
@@ -613,12 +608,12 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 								// ______________________________________________________
 							: ($r<=1)  // Percent
 								
-								Super:C1706.setAttribute($grad; $t; String:C10($r*100)+"%")
+								Super:C1706.setAttribute($ref; $t; String:C10($r*100)+"%")
 								
 								// ______________________________________________________
 							Else 
 								
-								Super:C1706.setAttribute($grad; $t; $r)
+								Super:C1706.setAttribute($ref; $t; $r)
 								
 								// ______________________________________________________
 						End case 
@@ -628,7 +623,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 				// Start color
 				$r:=This:C1470._num2Percent(Num:C11($options.startOffset))
 				
-				var $stop:=Super:C1706.create($grad; "stop")
+				var $stop:=Super:C1706.create($ref; "stop")
 				Super:C1706.setAttribute($stop; "offset"; String:C10(Int:C8($r))+"%")
 				Super:C1706.setAttribute($stop; "stop-color"; $startColor)
 				
@@ -642,7 +637,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 				$r:=This:C1470._num2Percent(Num:C11($options.stopOffset))
 				$r:=$r=0 ? 100 : $r
 				
-				$stop:=Super:C1706.create($grad; "stop")
+				$stop:=Super:C1706.create($ref; "stop")
 				Super:C1706.setAttribute($stop; "offset"; String:C10(Int:C8($r))+"%")
 				Super:C1706.setAttribute($stop; "stop-color"; $stopColor || "none")
 				
@@ -652,22 +647,173 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 					
 				End if 
 			End if 
-			
-		Else 
-			
-			This:C1470._pushError("Failed to create the linearGradient: "+$id)
-			
 		End if 
-		
-	Else 
-		
-		This:C1470._pushError("Failed to locate/create the \"defs\" element")
-		
 	End if 
 	
 	This:C1470.restoreRoot()
 	
 	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Define a linear gradient
+Function defineRadialGradient($id : Text; $startColor : Text; $stopColor : Text; $options : Object) : cs:C1710.svg
+	
+	// TODO:Documentation
+	
+	$startColor:=($startColor#"url(@" ? Lowercase:C14($startColor) : $startColor) || "white"
+	$stopColor:=($stopColor#"url(@" ? Lowercase:C14($stopColor) : $stopColor) || "black"
+	$options:=$options || {}
+	
+	var $defs:=This:C1470._defs()
+	
+	If (Not:C34(This:C1470.success))
+		
+		return This:C1470
+		
+	End if 
+	
+	var $ref:=Super:C1706.create($defs; "radialGradient"; {id: $id})
+	
+	If (This:C1470.success)
+		
+		var $o:={offset: "0%"}
+		$o["stop-color"]:=$startColor
+		
+		If ($options.startOpacity#Null:C1517)
+			
+			$o["stop-opacity"]:=Num:C11($options.startOpacity)
+			
+		End if 
+		
+		Super:C1706.create($ref; "stop"; $o)
+		
+		$o:={offset: "100%"}
+		$o["stop-color"]:=$stopColor
+		
+		If ($options.stopOpacity#Null:C1517)
+			
+			$o["stop-opacity"]:=Num:C11($options.stopOpacity)
+			
+		End if 
+		
+		Super:C1706.create($ref; "stop"; $o)
+		
+		CLEAR VARIABLE:C89($o)
+		
+		var $t : Text
+		For each ($t; ["cx"; "cy"; "r"; "fx"; "fy"; "spreadMethod"])
+			
+			If ($options[$t]=Null:C1517)
+				
+				continue
+				
+			End if 
+			
+			$o:=$o || {}
+			
+			If ($t="r")
+				
+				var $r : Real:=Num:C11($options[$t])
+				$r:=$r>=1 ? $r/100 : $r
+				
+				If ($r<=1)  // Percent
+					
+					$o[$t]:=String:C10($r*100)+"%"
+					
+				Else 
+					
+					$o[$t]:=String:C10($r; "###%")
+					
+				End if 
+				
+			Else 
+				
+				$o[$t]:=String:C10($options[$t]; "###%")
+				
+			End if 
+		End for each 
+		
+		If ($o#Null:C1517)
+			
+			This:C1470.setAttributes($ref; $o)
+			
+		End if 
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Define a pattern container
+Function definePattern($id : Text; $options : Object) : cs:C1710.svg
+	
+	// TODO:Documentation
+	
+	$options:=$options || {}
+	
+	var $defs:=This:C1470._defs()
+	
+	If (Not:C34(This:C1470.success))
+		
+		return This:C1470
+		
+	End if 
+	
+	var $ref:=Super:C1706.create($defs; "pattern"; {\
+		id: $id; \
+		patternUnits: String:C10($options.patternUnits) || "userSpaceOnUse"})
+	
+	If (This:C1470.success)
+		
+		This:C1470.store.push({id: $id; dom: $ref})
+		
+		var $t : Text
+		var $o : Object
+		For each ($t; ["width"; "height"; "x"; "y"; "viewBox"])
+			
+			If ($options[$t]=Null:C1517)
+				
+				continue
+				
+			End if 
+			
+			$o:=$o || {}
+			
+			Case of 
+					//______________________________________________________
+				: ($t="viewBox")
+					
+					If (Value type:C1509($options[$t])=Is collection:K8:32)
+						
+						$o[$t]:=$options[$t].join(" ")
+						
+					Else 
+						
+						$o[$t]:=$options[$t]
+						
+					End if 
+					
+					//______________________________________________________
+				Else 
+					
+					$o[$t]:=String:C10(Num:C11($options[$t]); "&xml")
+					
+					//______________________________________________________
+			End case 
+		End for each 
+		
+		If ($o#Null:C1517)
+			
+			Super:C1706.setAttributes($ref; $o)
+			
+		End if 
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+Function closePattern() : cs:C1710.svg
+	
+	This:C1470.restoreRoot()
 	
 	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Given a real number between >=0 and <=1, return an integer between >=0 and <=100.
@@ -2590,7 +2736,7 @@ Function preserveAspectRatio($value : Text; $applyTo) : cs:C1710.svg
 	End if 
 	
 	//———————————————————————————————————————————————————————————
-	// Sets the vector-effect attribute
+	// Sets the vector-effect attribute to the current (or passed) element
 Function nonScalingStroke($mode; $applyTo) : cs:C1710.svg
 	
 	// TODO:Documentation
@@ -2636,7 +2782,7 @@ Function nonScalingStroke($mode; $applyTo) : cs:C1710.svg
 	
 	//MARK:-FILTERS
 	//———————————————————————————————————————————————————————————
-	// Apply a filter
+	// Apply a filter to the current (or passed) element
 Function filter($id : Text; $applyTo) : cs:C1710.svg
 	
 	// TODO:Documentation
@@ -3424,12 +3570,36 @@ Function fill($value; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Sets fill attributes with a gradient
-Function gradient($gradient : Text; $applyTo) : cs:C1710.svg
+	// Sets fill or stroke attribute with a gradient
+Function gradient($id : Text; $stroke; $applyTo) : cs:C1710.svg
 	
 	// TODO:Documentation
 	
-	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "fill"; "url(#"+$gradient+")")
+	If (Value type:C1509($stroke)=Is text:K8:3)
+		
+		$applyTo:=$stroke
+		$stroke:=False:C215
+		
+	End if 
+	
+	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); $stroke ? "stroke" : "fill"; "url(#"+$id+")")
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Sets fill or stroke attribute with a pattern
+Function pattern($id : Text; $stroke; $applyTo) : cs:C1710.svg
+	
+	// TODO:Documentation
+	
+	If (Value type:C1509($stroke)=Is text:K8:3)
+		
+		$applyTo:=$stroke
+		$stroke:=False:C215
+		
+	End if 
+	
+	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); $stroke ? "stroke" : "fill"; "url(#"+$id+")")
 	
 	return This:C1470
 	
@@ -4338,6 +4508,12 @@ Function _defs()->$reference
 			DOM CLOSE XML:C722($root)
 			
 		End if 
+	End if 
+	
+	If (Not:C34(This:C1470.success))
+		
+		This:C1470._pushError("Failed to locate/create the \"defs\" element")
+		
 	End if 
 	
 	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***

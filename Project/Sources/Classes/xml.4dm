@@ -358,6 +358,30 @@ Function close() : cs:C1710.xml
 	return This:C1470
 	
 /*———————————————————————————————————————————————————————————*/
+Function copy($target : Text) : cs:C1710.xml
+	
+	$target:=$target || This:C1470.root
+	
+	XML SET OPTIONS:C1090($target; XML indentation:K45:34; XML no indentation:K45:36)
+	
+	var $t : Text
+	DOM EXPORT TO VAR:C863($target; $t)
+	
+	If (Bool:C1537(OK))
+		
+		var $root:=DOM Parse XML variable:C720($t)
+		
+		If (Bool:C1537(OK))
+			
+			var $copy:=cs:C1710.xml.new($root)
+			DOM CLOSE XML:C722($root)
+			
+			return $copy
+			
+		End if 
+	End if 
+	
+/*———————————————————————————————————————————————————————————*/
 Function create($target : Text; $XPath; $attributes)->$node : Text
 	
 	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
@@ -388,6 +412,12 @@ Function create($target : Text; $XPath; $attributes)->$node : Text
 	End if 
 	
 	This:C1470.success:=Bool:C1537(OK)
+	
+	If (Not:C34(This:C1470.success))
+		
+		This:C1470._pushError("Failed to create \""+$XPath+"\"")
+		
+	End if 
 	
 	//———————————————————————————————————————————————————————————
 	// Append a source element to the target element

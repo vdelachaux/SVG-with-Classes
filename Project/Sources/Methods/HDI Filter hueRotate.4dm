@@ -1,30 +1,31 @@
 //%attributes = {}
 var $svg:=cs:C1710.svg.new()
 
-// Define hueRotates filters
-$svg.feColorMatrix($svg.defineFilter("hue_360"); "hueRotate"; 360)
-$svg.feColorMatrix($svg.defineFilter("hue_300"); "hueRotate"; 300)
-$svg.feColorMatrix($svg.defineFilter("hue_240"); "hueRotate"; 240)
-$svg.feColorMatrix($svg.defineFilter("hue_180"); "hueRotate"; 180)
-$svg.feColorMatrix($svg.defineFilter("hue_120"); "hueRotate"; 120)
-$svg.feColorMatrix($svg.defineFilter("hue_60"); "hueRotate"; 60)
+$svg.comment(" 🚧 Preparations ")
 
-// Define styles
-$svg.style("#pict_1{filter:url(#hue_360);}")
-$svg.style("#pict_2{filter:url(#hue_300);}")
-$svg.style("#pict_3{filter:url(#hue_240);}")
-$svg.style("#pict_4{filter:url(#hue_180);}")
-$svg.style("#pict_5{filter:url(#hue_120);}")
-$svg.style("#pict_6{filter:url(#hue_60);}")
+var $rotations:=[360; 300; 240; 180; 120; 60]
 
-$svg.symbol("mona")
-$svg.image(File:C1566("/RESOURCES/mona.jpg"); "mona")
-$svg.close()
+var $i; $r : Integer
+For each ($r; $rotations)
+	
+	$i+=1
+	
+/* Define the filter */$svg.feColorMatrix($svg.defineFilter("hue_"+String:C10($r)); "hueRotate"; $r)
+/* Define a style */$svg.style("#pict_"+String:C10($i)+"{filter:url(#hue_"+String:C10($r)+");}")
+	
+End for each 
 
-var $i : Integer
+// Define the source symbol
+$svg.symbol("mona"; $svg.image(File:C1566("/RESOURCES/mona.jpg")))
+
+$svg.comment(" Run the demo 😇 ")
+
+$svg.group().fill("white").fontSize(24)
+
 For ($i; 0; 5; 1)
 	
 	$svg.use("mona").setID("pict_"+String:C10($i+1)).translate(160*$i; 50*$i)
+	$svg.text("hueRotate - "+String:C10($rotations[$i])).translate((160*$i)+20; (50*$i)+20)
 	
 End for 
 
