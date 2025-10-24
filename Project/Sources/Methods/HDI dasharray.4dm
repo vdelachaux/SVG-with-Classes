@@ -47,7 +47,7 @@ $svg.line($x; 300; $x; 100).dasharray(15; 10; 5; 10).color("blue")
 $x+=20
 $svg.line($x; 300; $x; 100).dasharray(15; 10; 5; 10; 5).color("slategray")
 
-$svg.closeGroup()
+$svg.restoreRoot()
 
 //mark:-
 $svg.comment("Draw a grid with 2 lines")

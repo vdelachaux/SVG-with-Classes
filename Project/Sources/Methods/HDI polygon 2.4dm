@@ -20,7 +20,6 @@ $svg.comment("fivePointStar")
 $svg.fivePointStar(125*2; 350; 200).color("red")
 
 $svg.comment("regularPolygon")
-$svg.regularPolygon(125*2; 6; 850; 200).fill("lime").stroke("blue").stroke(5)\
-.rotate(-(360/6)/2; 850; 200)
+$svg.regularPolygon(125*2; 6; 850; 200).fill("lime").stroke("blue").stroke(5).rotate(-(360/6)/2; 850; 200)
 
 $svg.preview()

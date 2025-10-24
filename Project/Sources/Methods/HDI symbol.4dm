@@ -25,8 +25,8 @@ $chart.symbol("star"; $chart.latest)  // Making it a symbol
 
 // Mark:-
 $chart.comment(" Then place elements where you want 😇 ")
-$chart.use("donut"; $chart.root).position(10; 10)
-$chart.use("pie"; $chart.root).position(10; 400)
-$chart.use("star"; $chart.root).position(300; 80).scale(0.5)
+$chart.use("donut").position(10; 10)
+$chart.use("pie").position(10; 400)
+$chart.use("star").position(300; 80).scale(0.5)
 
 $chart.preview()
