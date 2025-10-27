@@ -1,6 +1,5 @@
 //%attributes = {}
-var $svg : cs:C1710.svg
-$svg:=cs:C1710.svg.new().fontSize(40)
+var $svg:=cs:C1710.svg.new().fontSize(40)
 
 $svg.image(File:C1566("/RESOURCES/lena.jpg"))\
 .position(5; 5)

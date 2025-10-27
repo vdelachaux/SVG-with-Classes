@@ -3,10 +3,10 @@ var $ref : Text
 var $chart : cs:C1710.chart
 
 $chart:=cs:C1710.chart.new()\
-.title("Example symbol & use")\
-.desc("Prepare elements then place them where you want")
+.comment(" 🚧 Prepare elements ")\
+.title("Example symbol and use")
 
-// Mark:-Prepare the elements
+// Mark:-
 $chart.donut("1st"; 200; 200; 120).stroke("lightgray")
 $chart.wedge("1st"; 25).fill("lemonchiffon")
 $chart.wedge("1st"; 12).fill("thistle")
@@ -23,9 +23,10 @@ $chart.symbol("pie"; "2nd")  // Making it a symbol
 $chart.fivePointStar(125*2; 350; 200).color("red")
 $chart.symbol("star"; $chart.latest)  // Making it a symbol
 
-// Mark:-Place the elements
-$chart.use("donut"; $chart.root).position(10; 10)
-$chart.use("pie"; $chart.root).position(10; 400)
-$chart.use("star"; $chart.root).position(300; 80).scale(0.5)
+// Mark:-
+$chart.comment(" Then place elements where you want 😇 ")
+$chart.use("donut").position(10; 10)
+$chart.use("pie").position(10; 400)
+$chart.use("star").position(300; 80).scale(0.5)
 
 $chart.preview()

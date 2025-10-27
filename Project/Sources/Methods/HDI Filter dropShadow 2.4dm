@@ -1,6 +1,5 @@
 //%attributes = {}
-var $svg : cs:C1710.svg
-$svg:=cs:C1710.svg.new().fill({color: "papayawhip"; opacity: 0.5})
+var $svg:=cs:C1710.svg.new().fill({color: "papayawhip"; opacity: 0.5})
 
 $svg.rect(200; 100)\
 .position(10; 10)\
@@ -12,7 +11,7 @@ $svg.text("SVG")\
 .fontFamily("sans-serif").fontSize(45).color("red")\
 .dropShadow(1; 10; 5)  // User-defined values
 
-$svg.fivePointStar(500; 300; 350).color("tomato").dropShadow()
+$svg.fivePointStar(500; 300; 350).color("tomato").dropShadow()  // Default
 
 $svg.square(200)\
 .position(500; 10)\

@@ -13,14 +13,14 @@ $svg.layer("background"; "foreground").translate(45; 45)  // Layers are automati
 
 // Create a yellow square and store its reference associated with the label "original"
 // Note: Will be automatically created into the last used/created container (here "foreground")
-$svg.square(20).position(2.5; 2.5).color("yellow").push("original")
+$svg.square(20).position(2.5).color("yellow").push("original")
 
 // Add, into the "background" layer, a blue circle without fill & with a border of 4 pixels
-$svg.circle(50).color("blue").position(130; 130).fill(False:C215).stroke(4).attachTo("background")
+$svg.circle(50).color("blue").position(130).fill(False:C215).stroke(4).attachTo("background")
 
 // Clone the "original" square, colore it red, change its dimensions
 // Note: Will be automatically created into the last used container (here "background")
-$svg.clone("original").color("red").position(10; 10).size(130; 130)
+$svg.clone("original").color("red").position(10).size(130; 130)
 
 If ($svg.with("foreground"))  // All enclosed actions refer to the "foreground" layer
 	
@@ -44,7 +44,7 @@ $svg.polygon()\
 If ($svg.with("foreground"))  // All enclosed actions refer to the "foreground" layer
 	
 	// Draw an ellipse
-	$svg.ellipse(300; 100; 500)
+	$svg.ellipse(300; 100).position(500)
 	
 	// Put a text
 	$svg.textArea("Hello\nworld").translate(3; -3).fontSize(26)

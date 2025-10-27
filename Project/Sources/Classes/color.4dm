@@ -703,15 +703,12 @@ Function getMatchingColors($kind : Integer)->$palette : Collection
 	// === === === === === === === === === === === === === === === === === === === === === === === === ===
 Function fontColor($backgroundColor; $green : Integer; $blue : Integer) : Text
 	
-	var $lightness : Real
-	var $rgb : Object
-	
 	Case of 
 			
 			//______________________________________________________
 		: (Count parameters:C259=0)
 			
-			$rgb:=This:C1470.rgb
+			var $rgb:=This:C1470.rgb
 			
 			//______________________________________________________
 		: (Value type:C1509($backgroundColor)=Is real:K8:4)\
@@ -744,7 +741,7 @@ Function fontColor($backgroundColor; $green : Integer; $blue : Integer) : Text
 	
 	If ($rgb#Null:C1517)
 		
-		$lightness:=1-(((0.299*$rgb.red)+(0.587*$rgb.green)+(0.114*$rgb.blue))/255)
+		var $lightness : Real:=Num:C11(1-(((0.299*$rgb.red)+(0.587*$rgb.green)+(0.114*$rgb.blue))/255))
 		return ($lightness<0.5 ? "black" : "white")
 		
 	End if 
