@@ -48,7 +48,10 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**close** () → `cs.svg` | Frees the memory taken up by the SVG tree \*
 |.**save** ( { keepStructure : `Boolean` } ) → `cs.svg` | Saves the content of the SVG tree into the initially loaded file or the last created file by calling `exportText()`
 |.**group** ( { id : `Text` {; attachTo }} ) → `cs.svg` | Defines a `g` element who is a container element for grouping together related graphics elements.
-|.**linearGradient** ( id : `Text` {; startColor : `Text` {; stopColor : `Text`{; options : `Object` } }} ) → `cs.svg` | Define a linear gradient
+|.**defineFilter** ( id : `Text` {; options: `Object` }) → ref: `Text` | Sets a new filter container in the current canvas
+|.**defineLinearGradient** ( id : `Text` {; startColor : `Text` {; stopColor : `Text` {; options: `Object` }}}) → ref: `Text` | Sets a new linear gradient in the current canvas
+|.**defineRadialGradient** ( id : `Text` {; startColor : `Text` {; stopColor : `Text` {; options: `Object` }}}) → ref: `Text` | Sets a new radial gradient in the current canvas
+|.**definePattern** ( id : `Text` {; options: `Object` }) → ref: `Text` | Sets a new pattern container in the current canvas
 |.**symbol** ( id : `Text` {; applyTo } ) → `cs.svg` | To define a symbol
 |.**use** ( id : `Text` {; attachTo } ) → `cs.svg` | To place an occurence of a symbol
 |.**clipPath** ( id : `Text` {; applyTo } ) → `cs.svg` | Define a clipPath and apply to the root element
@@ -57,6 +60,10 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**viewbox** ( left : `Real`; top : `Real` ; width : `Real` ; height : `Real` {; attachTo } ) → `cs.svg` | Sets the `viewBox` attribute of a SVG viewport.
 |.**relative**() → `cs.svg` | Defines the following coordinates as relative
 |.**absolute**() → `cs.svg` | Defines the following coordinates as absolute
+|.**feGaussianBlur**(filter : Text {; stdDeviation : Integer {; in : Text {; result : Text}}}) |  Sets a Gaussian blur for a filter
+|.**feOffset**(filter : Text {; dx : Integer{; dy : Integer {; in : Text {; result : Text}}}}) |  Sets an offset filter for a filter
+|.**feBlend**(filter : Text {; in : Text {; in2 : Text {; mode : Text {; result : Text}}}}) |  Sets a blend filter for a filter
+|.**feColorMatrix**(filter : Text {; type : Text {; value {; in : Text {; result : Text}}}}) |  Sets a color matrix transformation for a filter
 
 \* After the execution,`.root`is null but `.graphic` & `.xml` are always available
 
@@ -129,6 +136,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**strokeColor** ( color : `Text` {; applyTo } ) → `cs.svg` | Sets the stroke color
 |.**strokeWidth** ( width : `Real` {; applyTo } ) → `cs.svg` | Sets the stroke width
 |.**strokeOpacity** ( opacity : `Real` {; applyTo } ) → `cs.svg` | Sets the stroke opacity
+|.**nonScalingStroke** ( mode : `Boolean | Text` {; applyTo } ) → `cs.svg` | Sets the vector-effect attribute to the current (or passed) element
 |.**dasharray** ( dash : Real;  ...  : Integer)  → `cs.svg` | Defines the pattern of dashes and blanks used for the object's outline border<br>The integer value of the dash parameter indicates the length of the first dash of the dotted pattern. If the value parameters are omitted, the dotted line will consists of a series of dashes and gaps of the same length.<br>The decimal value of the dash parameter, if it is not null, indicates the distance into the pattern from which the dashes will start.
 |.**fontFamily** ( fonts : `Text` {; applyTo } ) → `cs.svg` | Sets the font family
 |.**fontSize** ( size : `Integer` {; applyTo } ) → `cs.svg` | Sets the font size
@@ -159,7 +167,14 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**color** ( color : `Text` {; applyTo } ) → `cs.svg` | Defines the color of both the line and the fill (`stroke` & `fill` attributes)
 |.**opacity** ( opacity : `Real` {; applyTo } ) → `cs.svg` | Sets stroke and fill opacity
 |.**fill** ( value `Text` \| `Boolean` \| `Object` {; applyTo } ) → `cs.svg` |  To define the painting of the inside of a shape (`fill` attributes)
-|.**dropShadow** ({ deviation : `Integer` {; offsetX : `Integer` {; offsetY : `Integer` }}} ) → `cs.svg` |  Set a drop shadow for the current element.<br>• The optional `deviation` parameter sets the intensity of the shadow dispersion. Default value: 4.<br>• The optional `offsetX` and `offsetY` parameters specify, respectively, the horizontal and vertical offset of the shadow with respect to the object. Default value: 4.
+|.**filter** ( id `Text` {; applyTo }} ) → `cs.svg` |  Apply a filter to the current (or passed) element
+|.**blend** ({alpha `Boolean`}) → `cs.svg` |  Apply a blend filter to current element using picture (or background if the `alpha` parameter is true) 
+|.**blur** ({deviation `Integer`}) → `cs.svg` |  Apply a blur filter to current element.<br>Optional `deviation` parameter set the standard deviation for the blur operation.  Default value is `2`. 
+|.**colorMatrix** ({type:`Integer` {; value}}) → `cs.svg` |  Applies a color matrix transformation to each pixel of the current element type & values are defined in .**feColorMatrix**(). 
+|.**offset**(dx:`Integer`{;dy:`Integer`}) → `cs.svg` |  Apply an offset filter to the current reference. `dx` is is the value of the horizontal (& vertical if `dy`is ommitted) offset. 
+|.**gradient** ( id `Text` {; stroke} {; applyTo }} ) → `cs.svg` |  Sets fill or stroke attribute of the current (or passed) element with a gradient
+|.**pattern** ( id `Text` {; stroke} {; applyTo }} ) → `cs.svg` |  Sets fill or stroke attribute of the current (or passed) element  with a pattern
+|.**dropShadow** ({ deviation : `Integer` {; dx : `Integer` {; dy : `Integer` }}} ) → `cs.svg` |  Set a drop shadow for the current element.<br>• The optional `deviation` parameter sets the intensity of the shadow dispersion. Default value: 2.<br>• The optional `dx` and `dy` parameters specify, respectively, the horizontal and vertical offset of the shadow with respect to the object. Default value: 2.
 |.**convertToGrayScale** ({ value : `Real` {; applyTo } ) → `cs.svg` |  Transform colours into greyscale.<br>• You can pass the gray scale value to be applied in the optional value parameter\*. If you do not pass this parameter, the transformation is in accordance with the visual perception of the luminance (30% red, 59% green and 11% blue).<br>\**The value can be given as a real number between 0 and 1 or as an integer between 0 and 100.*
 |.**stroke** ( value `Text` \| `Boolean` \| `Real` \| `Object` {; applyTo } ) → `cs.svg` | To define the painting of the outline of a shape (`stroke` attribute)
 |.**font** ( attributes : `Object` {; applyTo } ) → `cs.svg` | Sets the font attributes
@@ -202,12 +217,12 @@ The class constructor also accepts an optional parameter, so you can create a sv
 >`cs.svg.new(Text)` Parses the text variable content
 
 
-## <a name="linearGradient">. linearGradient()</a>
+## <a name="defineLinearGradient">.defineLinearGradient()</a>
 
-.**linearGradient** ( id ) : Object
-.**linearGradient** ( id; startColor ) : Object
-.**linearGradient** ( id; startColor; stopColor ) : Object
-.**linearGradient** ( id; startColor; stopColor; options ) : Object
+.**defineLinearGradient** ( id ) : Object<br>
+.**defineLinearGradient** ( id; startColor ) : Object<br>
+.**defineLinearGradient** ( id; startColor; stopColor ) : Object<br>
+.**defineLinearGradient** ( id; startColor; stopColor; options ) : Object<br>
 
 |Parameter|Type||Description|
 |---|---|---|---|
@@ -251,8 +266,5 @@ The options parameter allow to define some optional values:
 Draw 6 solid squares where each uses a linear gradient paint server while varying the rotation and direction of the gradient vector:
 
 ```4D
-var $svg:=cs.svg.new()$svg.linearGradient("demoGradient_1"; "red"; "yellow")$svg.rect(90; 90).position(10; 10).fill("url(#demoGradient_1)")$svg.textArea("rotation = 0\rrotation = 180").position(10; 100).width(90).alignment(Align center)$svg.linearGradient("demoGradient_2"; "red"; "yellow"; {rotation: -180})$svg.rect(90; 90).position(110; 10).fill("url(#demoGradient_2)")$svg.textArea("rotation = -180").position(110; 100).width(100).alignment(Align center)$svg.linearGradient("demoGradient_3"; "red"; "yellow"; {rotation: 45})$svg.rect(90; 90).position(10; 140).fill("url(#demoGradient_3)")$svg.textArea("rotation = 45").position(10; 230).width(90).alignment(Align center)$svg.linearGradient("demoGradient_4"; "red"; "yellow"; {rotation: -45})$svg.rect(90; 90).position(110; 140).fill("url(#demoGradient_4)")$svg.textArea("rotation = -45").position(110; 230).width(90).alignment(Align center)$svg.linearGradient("demoGradient_5"; "red"; "yellow"; {rotation: 90})$svg.rect(90; 90).position(10; 270).fill("url(#demoGradient_5)")$svg.textArea("rotation = 90").position(10; 360).width(90).alignment(Align center)$svg.linearGradient("demoGradient_6"; "red"; "yellow"; {rotation: -90})$svg.rect(90; 90).position(110; 270).fill("url(#demoGradient_6)")$svg.textArea("rotation = -90").position(110; 360).width(90).alignment(Align center)
-
-// This example illustrates the effect of the startColorOffset and endColorOffset parameters:
-$svg.linearGradient("demoGradient_6"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"})$svg.rect(90; 90).position(10; 400).fill("url(#demoGradient_6)")$svg.textArea("offset=0/100").position(10; 490).width(90).alignment(Align center)$svg.linearGradient("demoGradient_7"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"; startOffset: 20; stopOffset: 80})$svg.rect(90; 90).position(110; 400).fill("url(#demoGradient_7)")$svg.textArea("offset=20/80").position(110; 490).width(90).alignment(Align center)$svg.preview()```
+var $svg:=cs.svg.new()$svg.defineLinearGradient("demoGradient_1"; "red"; "yellow")$svg.rect(90; 90).position(10; 10).gradient("demoGradient_1")$svg.textArea("rotation = 0\rrotation = 180").position(10; 100).width(90).alignment(Align center)$svg.defineLinearGradient("demoGradient_2"; "red"; "yellow"; {rotation: -180})$svg.rect(90; 90).position(110; 10).gradient("demoGradient_2")$svg.textArea("rotation = -180").position(110; 100).width(100).alignment(Align center)$svg.defineLinearGradient("demoGradient_3"; "red"; "yellow"; {rotation: 45})$svg.rect(90; 90).position(10; 140).gradient("demoGradient_3")$svg.textArea("rotation = 45").position(10; 230).width(90).alignment(Align center)$svg.defineLinearGradient("demoGradient_4"; "red"; "yellow"; {rotation: -45})$svg.rect(90; 90).position(110; 140).gradient("demoGradient_4")$svg.textArea("rotation = -45").position(110; 230).width(90).alignment(Align center)$svg.defineLinearGradient("demoGradient_5"; "red"; "yellow"; {rotation: 90})$svg.rect(90; 90).position(10; 270).gradient("demoGradient_5")$svg.textArea("rotation = 90").position(10; 360).width(90).alignment(Align center)$svg.defineLinearGradient("demoGradient_6"; "red"; "yellow"; {rotation: -90})$svg.rect(90; 90).position(110; 270).gradient("demoGradient_6")$svg.textArea("rotation = -90").position(110; 360).width(90).alignment(Align center)$svg.defineLinearGradient("demoGradient_7"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"})$svg.rect(90; 90).position(10; 400).gradient("demoGradient_7")$svg.textArea("rotation = -180").position(10; 490).width(100).alignment(Align center)$svg.defineLinearGradient("demoGradient_8"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"; startOffset: 20; stopOffset: 80})$svg.rect(90; 90).position(110; 400).gradient("demoGradient_8")$svg.textArea("rotation = -180\roffset=20/80").position(110; 490).width(100).alignment(Align center)$svg.preview()```
 

@@ -23,6 +23,7 @@
 			"HDI dasharray",
 			"HDI ellipse",
 			"HDI Filter blend",
+			"HDI Filter blur",
 			"HDI Filter colorMatrix",
 			"HDI Filter convertToGreyScale",
 			"HDI Filter dropShadow",

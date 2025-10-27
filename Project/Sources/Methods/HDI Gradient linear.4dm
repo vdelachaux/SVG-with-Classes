@@ -1,4 +1,10 @@
 //%attributes = {}
+/*
+
+Draw 6 solid squares where each uses a linear gradient paint server while varying the rotation and direction of the gradient vector.
+
+*/
+
 var $svg:=cs:C1710.svg.new()
 
 $svg.defineLinearGradient("demoGradient_1"; "red"; "yellow")
@@ -24,6 +30,13 @@ $svg.textArea("rotation = 90").position(10; 360).width(90).alignment(Align cente
 $svg.defineLinearGradient("demoGradient_6"; "red"; "yellow"; {rotation: -90})
 $svg.rect(90; 90).position(110; 270).gradient("demoGradient_6")
 $svg.textArea("rotation = -90").position(110; 360).width(90).alignment(Align center:K42:3)
+
+/*
+
+Draw two solid squares, each using a linear gradient paint server with the same gradient vector rotation, 
+but using a start and end offset for the second one.
+
+*/
 
 $svg.defineLinearGradient("demoGradient_7"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"})
 $svg.rect(90; 90).position(10; 400).gradient("demoGradient_7")

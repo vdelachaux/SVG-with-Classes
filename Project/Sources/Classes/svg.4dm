@@ -461,8 +461,6 @@ Function comment($comment : Text; $attachTo) : cs:C1710.svg
 	// Define a linear gradient
 Function defineLinearGradient($id : Text; $startColor : Text; $stopColor : Text; $options : Object) : Text/*  gradient reference */
 	
-	// TODO:Documentation
-	
 	$startColor:=$startColor || "white"
 	$stopColor:=$stopColor || "black"
 	$options:=$options || {}
@@ -571,6 +569,7 @@ Function defineLinearGradient($id : Text; $startColor : Text; $stopColor : Text;
 			
 		End if 
 		
+		// .x1, .y1, .x2, .y2
 		If ($options.x1#Null:C1517)\
 			 && ($options.x2#Null:C1517)\
 			 && ($options.y1#Null:C1517)\
@@ -603,7 +602,7 @@ Function defineLinearGradient($id : Text; $startColor : Text; $stopColor : Text;
 			End for each 
 		End if 
 		
-		// Start color
+		// Start color: .startOffset & .startOpacity
 		$r:=This:C1470._num2Percent(Num:C11($options.startOffset))
 		
 		var $stop:=Super:C1706.create($ref; "stop")
@@ -616,7 +615,7 @@ Function defineLinearGradient($id : Text; $startColor : Text; $stopColor : Text;
 			
 		End if 
 		
-		// Stop color
+		// Stop color: .stopOffset & .stopOpacity
 		$r:=This:C1470._num2Percent(Num:C11($options.stopOffset))
 		$r:=$r=0 ? 100 : $r
 		
@@ -638,8 +637,6 @@ Function defineLinearGradient($id : Text; $startColor : Text; $stopColor : Text;
 	//———————————————————————————————————————————————————————————
 	// Define a linear gradient
 Function defineRadialGradient($id : Text; $startColor : Text; $stopColor : Text; $options : Object) : Text/*  gradient reference */
-	
-	// TODO:Documentation
 	
 	$startColor:=($startColor#"url(@" ? Lowercase:C14($startColor) : $startColor) || "white"
 	$stopColor:=($stopColor#"url(@" ? Lowercase:C14($stopColor) : $stopColor) || "black"
@@ -727,8 +724,6 @@ Function defineRadialGradient($id : Text; $startColor : Text; $stopColor : Text;
 	// Define a pattern container
 Function definePattern($id : Text; $options : Object) : Text/* Pattern reference */
 	
-	// TODO:Documentation
-	
 	$options:=$options || {}
 	
 	var $defs:=This:C1470._defs()
@@ -801,8 +796,6 @@ Function endPattern() : cs:C1710.svg
 	// Sets a new filter in the SVG container and returns its reference
 	// If the filter already exists, it will be replaced.
 Function defineFilter($id : Text; $options : Object) : Text/* Filter reference */
-	
-	// TODO:Documentation
 	
 	$options:=$options || {}
 	
@@ -2951,8 +2944,6 @@ Function preserveAspectRatio($value : Text; $applyTo) : cs:C1710.svg
 	// Sets the vector-effect attribute to the current (or passed) element
 Function nonScalingStroke($mode; $applyTo) : cs:C1710.svg
 	
-	// TODO:Documentation
-	
 	var $node:=This:C1470._getTarget($applyTo)
 	var $type:=Value type:C1509($mode)
 	
@@ -2997,8 +2988,6 @@ Function nonScalingStroke($mode; $applyTo) : cs:C1710.svg
 	// Apply a filter to the current (or passed) element
 Function filter($id : Text; $applyTo) : cs:C1710.svg
 	
-	// TODO:Documentation
-	
 	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "filter"; "url(#"+$id+")")
 	
 	return This:C1470
@@ -3006,8 +2995,6 @@ Function filter($id : Text; $applyTo) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 	// Sets a Gaussian blur for a filter
 Function feGaussianBlur($filter : Text; $stdDeviation : Integer; $in : Text; $result : Text)
-	
-	// TODO:Documentation
 	
 	If (This:C1470.isNull($filter))\
 		 || (This:C1470.getName($filter)#"filter")
@@ -3029,8 +3016,6 @@ Function feGaussianBlur($filter : Text; $stdDeviation : Integer; $in : Text; $re
 	//———————————————————————————————————————————————————————————
 	// Sets an offset for a filter
 Function feOffset($filter : Text; $dx : Integer; $dy : Integer; $in : Text; $result : Text)
-	
-	// TODO:Documentation
 	
 	If (This:C1470.isNull($filter))\
 		 || (This:C1470.getName($filter)#"filter")
@@ -3065,8 +3050,6 @@ Function feOffset($filter : Text; $dx : Integer; $dy : Integer; $in : Text; $res
 	// Sets a blend filter for a filter
 Function feBlend($filter : Text; $in : Text; $in2 : Text; $mode : Text; $result : Text)
 	
-	// TODO:Documentation
-	
 	If (This:C1470.isNull($filter))\
 		 || (This:C1470.getName($filter)#"filter")
 		
@@ -3091,8 +3074,6 @@ Function feBlend($filter : Text; $in : Text; $in2 : Text; $mode : Text; $result 
 	// Sets a color matrix transformation for a filter
 Function feColorMatrix($filter : Text; $type : Text; $value; $in : Text; $result : Text)
 	
-	// TODO:Documentation
-	
 	If (This:C1470.isNull($filter))\
 		 || (This:C1470.getName($filter)#"filter")
 		
@@ -3113,7 +3094,6 @@ Function feColorMatrix($filter : Text; $type : Text; $value; $in : Text; $result
 		: ($attributes.type="matrix")  // A list of 20 matrix values, separated by whitespace and/or a comma
 			
 			If (Count parameters:C259>=2)
-				
 				
 				If (Value type:C1509($value)=Is collection:K8:32)
 					
@@ -3288,8 +3268,6 @@ Function convertToGrayScale($grey; $applyTo) : cs:C1710.svg
 	// Set a drop shadow for the current element
 Function dropShadow($stdDeviation : Integer; $dx : Integer; $dy : Integer) : cs:C1710.svg
 	
-	// TODO:Documentation
-	
 	var $c:=Copy parameters:C1790
 	$stdDeviation:=$c.length>=1 ? $stdDeviation : 2
 	$dx:=$c.length>=2 ? $dx : 2
@@ -3330,8 +3308,6 @@ Function dropShadow($stdDeviation : Integer; $dx : Integer; $dy : Integer) : cs:
 	// Sets a blend filter to the current element
 Function blend($alpha : Boolean) : cs:C1710.svg
 	
-	// TODO:Documentation
-	
 	var $in : Text:=$alpha ? "sourceAlpha" : ""
 	var $id:="blend_"+($in || "SourceGraphic")
 	
@@ -3349,8 +3325,6 @@ Function blend($alpha : Boolean) : cs:C1710.svg
 	// Sets a Gaussian blur filter to the current element
 Function blur($stdDeviation : Integer) : cs:C1710.svg
 	
-	// TODO:Documentation
-	
 	$stdDeviation:=Count parameters:C259>0 ? $stdDeviation : 2
 	var $id:="blur_"+String:C10($stdDeviation)
 	
@@ -3358,7 +3332,7 @@ Function blur($stdDeviation : Integer) : cs:C1710.svg
 		
 		// Define the filter
 		var $filter:=This:C1470.defineFilter($id)
-		This:C1470.feGaussianBlur($filter; $stdDeviation)  //; $in)
+		This:C1470.feGaussianBlur($filter; $stdDeviation)
 		
 	End if 
 	
@@ -3370,8 +3344,6 @@ Function blur($stdDeviation : Integer) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 	// Applies a color matrix transformation to each pixel of the current element
 Function colorMatrix($type : Text; $value) : cs:C1710.svg
-	
-	// TODO:Documentation
 	
 	var $id : Text:="colorMatrix_"+$type
 	var $filter:=This:C1470.defineFilter($id)
@@ -3385,8 +3357,6 @@ Function colorMatrix($type : Text; $value) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 	// Sets an offset filter to the current reference
 Function offset($dx : Integer; $dy : Integer) : cs:C1710.svg
-	
-	// TODO:Documentation
 	
 	$dy:=Count parameters:C259<2 ? $dx : $dy  // By default, the same offset is used on Y as on X
 	
@@ -3713,8 +3683,6 @@ Function fill($value; $applyTo) : cs:C1710.svg
 	// Sets fill or stroke attribute with a gradient
 Function gradient($id : Text; $stroke; $applyTo) : cs:C1710.svg
 	
-	// TODO:Documentation
-	
 	If (Value type:C1509($stroke)=Is text:K8:3)
 		
 		$applyTo:=$stroke
@@ -3729,8 +3697,6 @@ Function gradient($id : Text; $stroke; $applyTo) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 	// Sets fill or stroke attribute with a pattern
 Function pattern($id : Text; $stroke; $applyTo) : cs:C1710.svg
-	
-	// TODO:Documentation
 	
 	If (Value type:C1509($stroke)=Is text:K8:3)
 		
