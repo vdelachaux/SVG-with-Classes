@@ -1,101 +1,80 @@
-# SVG-with-Classes
+<!--BADGES-->
+[repo]: SVG-with-Classes
+[release-shield]: https://img.shields.io/github/v/release/vdelachaux/[repo]?include_prereleases
+[release-url]: https://github.com/vdelachaux/[repo]/releases/latest
+![Static Badge](https://img.shields.io/badge/Dev%20Component-blue?logo=4d&link=https%3A%2F%2Fdeveloper.4d.com)
+![Static Badge](https://img.shields.io/badge/Project%20Dependencies-blue?logo=4d&link=https%3A%2F%2Fdeveloper.4d.com%2Fdocs%2FProject%2Fcomponents%2F%23loading-components)
+<br>
+[![release][release-shield]][release-url]
+<img src="https://img.shields.io/github/downloads/vdelachaux/SVG-with-Classes/total"/>
 
-After creating and using the [4D SVG component](https://doc.4d.com/4Dv19/4D/19/4D-SVG-Component.100-5461938.en.html), I became aware of the need to build a new API much smaller, faster and closer to the SVG format and my use to manage the user interface. 
+# SVG with Classes
 
-The goal of this class is to reduce the complexity of code to create and manipulate svg images/documents.
-<br/>This class will be augmented according to my needs but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/SVG-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com/search?q=4D%20for%20iOS). 
+After creating and using the [4D SVG component](https://doc.4d.com/4Dv19/4D/19/4D-SVG-Component. 100-5461938.en.html), I realized the need to create a more concise, faster, and SVG-like API for managing user interfaces and simplifying SVG image/document manipulation. The main goal was to reduce code complexity for SVG image/document creation and manipulation. 
 
-For more details on properties and functions, see the [documentation for the svg class](Documentation/Classes/svg.md)
+This repository includes:
 
+* The component source code
+* The built and signed component
+* A test project that provides code examples and “How do I” guides
+
+
+The content will be augmented according to my needs but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/SVG-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com/search?q=4D%20for%20iOS). 
+
+* The `svg` class simplifies the creation and manipulation of the SVG elements thanks to a set of simple functions and some automatisms, and decrease the number of variables needed. 
+
+* The `chart` class is a very succinct implementation of the SVG chart types I needed. More could be done ;-)
+
+For more details on properties and functions, see the class documentation:
+
+* [svg class](SVG with Classes/Documentation/Classes/svg.md)
+* [chart class](SVG with Classes/Documentation/Classes/chart.md)
+
+# <a name="installation">Installation</a>
+
+## ![Static Badge](https://img.shields.io/badge/Project%20Dependencies-blue?logo=4d&link=https%3A%2F%2Fdeveloper.4d.com%2Fdocs%2FProject%2Fcomponents%2F%23loading-components)
+
+The component is compatible with the [Project Dependencies](https://developer.4d.com/docs/Project/components#monitoring-project-dependencies) feature. You can easily integrate it into your project by selecting Design > Project Dependencies and adding vdelachaux/SVG-with-Classes as the repository address in the dedicated dialog box. I suggest setting the rule to “Follow 4D version.”  **This way, you can benefit from updates over time.**
+
+## Binary databases
+
+Download the build component corresponding to your version of 4D and 
+
+
+# <a name="improvments">Improvements and bug fixes</a>
+
+* If you encountered a bug or have a feature request, feel free to create an issue.
+However, it is highly appreciated if you [browse and search current issues](https://github.com/vdelachaux/SVG-with-Classes/issues) first.
+Found the issue? Go on and join its discussion thread.
+Not found? Go on and [create one](https://github.com/vdelachaux/SVG-with-Classes/issues/new).
+
+
+* We welcome contributions to this repository! To contribute, please follow these steps:
+
+	1. [Fork the repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository).
+	2. Create a new branch:
+	    ```$
+	    git checkout -b my-feature-branch
+	    ```
+	3. Make your changes and commit them:
+	    ```$
+	    git commit -m "Add my feature"
+	    ```
+	4. Push to the branch:
+	    ```$
+	    git push origin my-feature-branch
+	    ```
+	5. [Create a pull request](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/about-pull-requests).
+	
+	For more details, please refer to our [contributing guidelines](CONTRIBUTING.md).
+
+## License
+
+`SVG with Classes `is licensed under the MIT License See the [LICENSE](./SVG with Classes/LICENSE) file for more details.
+
+## Contact
+For any questions or inquiries, please contact the repository owner [@vdelachaux](https://github.com/vdelachaux).
+
+<hr>
 `Enjoy the 4th dimension`
 
-## Code sample
-Using the 4D SVG component to create and manipulate SVG elements requires knowledge of many commands and becomes difficult to understand and maintain. Creating a simple SVG requires many lines of code:
-
-```4d
-// Create a new canvas
-var $root : Text
-$root:=SVG_New
-	
-// Create a "background" layer at the root level
-var $background : Text 
-$background:=SVG_New_group($root)
-	
-// Create a "foreground" layer, at the root level, and apply a translation
-var $foreground : Text
-$foreground:=SVG_New_group($root)
-SVG_SET_TRANSFORM_TRANSLATE($foreground; 45; 45)
-	
-// Create a yellow square into the "foreground" layer
-var $rect : Text
-$rect:=SVG_New_rect($foreground; 2.5; 2.5; 20; 20)
-SVG_SET_FILL_BRUSH($rect; "yellow")
-SVG_SET_STROKE_BRUSH($rect; "yellow")
-	
-// Add, into the "background" layer, a blue circle without fill & with a border of 4 pixels
-var $circle : Text
-$circle:=SVG_New_circle($background; 100; 100; 50)
-SVG_SET_FILL_BRUSH($circle; "none")
-SVG_SET_STROKE_BRUSH($circle; "blue")
-SVG_SET_STROKE_WIDTH($circle; 4)
-	
-// Create a red square into the "background" layer
-$rect:=SVG_New_rect($background; 10; 10; 100; 100)
-SVG_SET_FILL_BRUSH($rect; "red")
-SVG_SET_STROKE_BRUSH($rect; "red")
-	
-// Show the result into the SVG viewer
-SVGTool_SHOW_IN_VIEWER($root)
-	
-// Do not forget to release the memory !
-SVG_CLEAR($root)
-```
-The `svg` class simplifies the creation and manipulation of the SVG elements thanks to a set of simple functions and some automatisms, and decrease the number of variables needed. Here is the equivalent code to get the same result (<mark>only 8 lines of easily understandable code versus 21 complicated lines with the component</mark>):
-
-```4d
-var $svg : cs.svg
-	
-// Create a new canvas
-$svg:=cs.svg.new()
-	
-// Create a "background" & '"foreground" group & apply a translation to the last one
-// [Layers are automatically created at the root level]
-$svg.layer("background"; "foreground").translate(45; 45)
-	
-// Create a yellow square & memorize its reference as "original"
-// [The object is automatically added to the latest created/used "container" ("foreground")]
-$svg.square(20).position(2.5; 2.5).color("yellow").push("original")
-	
-// Set "background" layer for the next operations
-If ($svg.with("background"))
-	
-	// Add, a blue circle without fill & with a border of 4 pixels
-	$svg.circle(50).color("blue").position(100; 100).fill(False).stroke(4)
-		
-	// Clone the "original" square, colore it red, change its dimensions
-	$svg.clone("original").color("red").position(10; 10).size(100; 100)
-		
-End if 
-	
-// Show the result into the SVG viewer
-// [The memory is automatically freed]
-$svg.preview()
-```
-The svg tree created:
-
-```xml
-<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" font-family="'lucida grande','segoe UI',sans-serif" font-size="12" preserveAspectRatio="none" shape-rendering="crispEdges" stroke="black" text-rendering="geometricPrecision" viewport-fill="none" xmlns:xlink="http://www.w3.org/1999/xlink">
-  <g id="background">
-    <circle cx="0" cy="0" fill="none" r="50" stroke="blue" stroke-width="4" transform="translate(100,100)"/>
-    <rect fill="yellow" height="100" stroke="yellow" width="100" x="10" y="10"/>
-  </g>
-  <g id="foreground" transform="translate(45,45)">
-    <rect fill="blue" height="20" stroke="blue" width="20" x="2.5" y="2.5"/>
-  </g>
-</svg>
-```
-The result image:
-
-<img src="Documentation/svg.png">
- 

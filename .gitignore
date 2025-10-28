@@ -1,12 +1,86 @@
+# Ignore invisible files/folders except .gitignore
 .*
 !.gitignore
-Data
+!.gitattributes
+!.github
+
+#--------------------------------
+# Don't ignore .github workflow
+#--------------------------------
+
+!.github/
+!.github/**/.*
+.github/.DS_Store
+
+#--------------------------------
+# Ignore data file
+#--------------------------------
+[dD][aA][tT][aA]/
+*.4DD
+*.4DIndx
+*.4DIndy
+*.Match
+*.journal
+
+#--------------------------------
+# Ignore derived data
+#--------------------------------
+Project/DerivedData/
+
+#--------------------------------
+# Ignore settings & preferences
+#--------------------------------
+Preferences/
+!4DPop AppMaker.*
+
+Settings/
+!buildApp.4DSettings
+
+userPreferences.*/
+
+#--------------------------------
+# Ignore Trash
+#--------------------------------
+Project/Trash/
+
+#--------------------------------
+# Ignore backup
+#--------------------------------
+*.4BK
+backupHistory.json
+
+#--------------------------------
+# Miscellaneous
+#--------------------------------
+*__Orphan__*
+*symbols.txt
+ehthumbs.db
+Thumbs.db
+
 Resources/php.ini
-Settings/backup.4DSettings
-userPreferences.*
-Project/DerivedData/CompiledCode
-Project/DerivedData
-Preferences
+
+Components/
+!Build/Components
+
 Project/Sources/Methods/Method*.4dm
+Project/Sources/Methods/00_*.4dm
+
 Libraries/lib4d-arm64.dylib
-Project/Trash
+
+DEV/
+
+#--------------------------------
+# [!] Never omit forms
+#--------------------------------
+!**/Forms/*/
+
+#--------------------------------
+# Added by user
+#--------------------------------
+/Components
+*/Project/DerivedData
+*/Libraries/
+!/Content/Libraries/
+SVG with Classes/Components
+*/Project/Sources/Methods/Method[0123456789]*.4dm
+*/Project/Sources/Forms/Form[0123456789]*.4dm
