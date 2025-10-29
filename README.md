@@ -27,8 +27,8 @@ The content will be augmented according to my needs but I strongly encouraged yo
 
 For more details on properties and functions, see the class documentation:
 
-* [svg class](SVG with Classes/Documentation/Classes/svg.md)
-* [chart class](SVG with Classes/Documentation/Classes/chart.md)
+* [svg class](SVG-with-Classes/Documentation/Classes/svg.md)
+* [chart class](SVG-with-Classes/Documentation/Classes/chart.md)
 
 # <a name="installation">Installation</a>
 
