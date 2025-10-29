@@ -18,7 +18,6 @@ This repository includes:
 * The built and signed component
 * A test project that provides code examples and “How do I” guides
 
-
 The content will be augmented according to my needs but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/SVG-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com/search?q=4D%20for%20iOS). 
 
 * The `svg` class simplifies the creation and manipulation of the SVG elements thanks to a set of simple functions and some automatisms, and decrease the number of variables needed. 
@@ -40,14 +39,12 @@ The component is compatible with the [Project Dependencies](https://developer.4d
 
 Download the build component corresponding to your version of 4D and 
 
-
 # <a name="improvments">Improvements and bug fixes</a>
 
 * If you encountered a bug or have a feature request, feel free to create an issue.
 However, it is highly appreciated if you [browse and search current issues](https://github.com/vdelachaux/SVG-with-Classes/issues) first.
 Found the issue? Go on and join its discussion thread.
 Not found? Go on and [create one](https://github.com/vdelachaux/SVG-with-Classes/issues/new).
-
 
 * We welcome contributions to this repository! To contribute, please follow these steps:
 
@@ -70,11 +67,10 @@ Not found? Go on and [create one](https://github.com/vdelachaux/SVG-with-Classes
 
 ## License
 
-`SVG with Classes `is licensed under the MIT License See the [LICENSE](./SVG with Classes/LICENSE) file for more details.
+`SVG with Classes` is licensed under the MIT License See the [LICENSE](./SVG with Classes/LICENSE) file for more details.
 
 ## Contact
 For any questions or inquiries, please contact the repository owner [@vdelachaux](https://github.com/vdelachaux).
 
-<hr>
+----
 `Enjoy the 4th dimension`
-
