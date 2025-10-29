@@ -10,7 +10,7 @@ Class constructor
 	
 	//———————————————————————————————————————————————————————————————————————————
 	// Start a circular diagram defined by its center `cx` `cy` and radius `r`
-Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) : cs:C1710.svg
+Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) : cs:C1710.chart
 	
 	var $percent; $value : Real
 	var $i; $number; $total : Integer
@@ -45,7 +45,7 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 	
 	If ($options.data#Null:C1517)
 		
-		//fill the chart
+		// Fill the chart
 		$number:=$options.data.length
 		$total:=$options.data.sum("value")
 		
@@ -113,7 +113,7 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 	
 	//———————————————————————————————————————————————————————————————————————————
 	// Begin a pie chart fit into a square
-Function pieBounded($id : Text; $x : Real; $y : Real; $width : Real; $options : Object) : cs:C1710.svg
+Function pieBounded($id : Text; $x : Real; $y : Real; $width : Real; $options : Object) : cs:C1710.chart
 	
 	var $r : Real
 	
@@ -122,7 +122,7 @@ Function pieBounded($id : Text; $x : Real; $y : Real; $width : Real; $options : 
 	
 	//———————————————————————————————————————————————————————————————————————————
 	// Starting a donut chart fit into a square
-Function donut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real; $margin : Integer; $options : Object) : cs:C1710.svg
+Function donut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real; $margin : Integer; $options : Object) : cs:C1710.chart
 	
 	$thickness:=$thickness=0 ? 70/100 : $thickness  // Default value is 30% of radius
 	$thickness:=$thickness<1 ? $thickness*100 : $thickness
@@ -159,7 +159,7 @@ Function donut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real;
 	
 	//———————————————————————————————————————————————————————————————————————————
 	// Starting a donut chart
-Function donutBounded($id : Text; $x : Real; $y : Real; $width : Real; $thickness : Real; $margin : Integer; $options : Object) : cs:C1710.svg
+Function donutBounded($id : Text; $x : Real; $y : Real; $width : Real; $thickness : Real; $margin : Integer; $options : Object) : cs:C1710.chart
 	
 	var $r : Real
 	
@@ -168,7 +168,7 @@ Function donutBounded($id : Text; $x : Real; $y : Real; $width : Real; $thicknes
 	
 	//———————————————————————————————————————————————————————————————————————————
 	// Draws a portion of a pie chart/donut chart
-Function wedge($id : Text; $percent : Real) : cs:C1710.svg
+Function wedge($id : Text; $percent : Real) : cs:C1710.chart
 	
 	var $arc; $cx; $cy; $from; $origin; $r : Real
 	var $to : Real
@@ -268,6 +268,142 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.svg
 	//Super.rotate($angle; Num($o.cx); Num($o.cy); This.latest)
 	
 	//return This
+	
+	//———————————————————————————————————————————————————————————————————————————
+	// 
+Function xy($id : Text; $options : Object) : cs:C1710.chart
+	
+	$options:=$options || {}
+	
+	This:C1470._closeChart(This:C1470.id)
+	
+	This:C1470.id:=$id
+	
+	This:C1470.group()
+	
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "line"; \
+		origin: Num:C11($options.origin); \
+		cur: Num:C11($options.origin); \
+		values: []}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+	
+	This:C1470.store.push({\
+		id: $id; \
+		dom: This:C1470.latest})
+	
+	If ($options.data=Null:C1517)
+		
+		return This:C1470
+		
+	End if 
+	
+	// Fill the chart
+	var $number : Integer:=$options.data.length
+	
+	If ($options.orderBy#Null:C1517)
+		
+		$options.data:=$options.data.orderBy("value "+$options.orderBy)
+		
+	End if 
+	
+	var $color:=cs:C1710.color.new()
+	var $hsl:={hue: 0; saturation: 60; lightness: 100}
+	
+	var $Xaxis : Collection:=[]
+	var $Yaxis:=[]
+	
+	var $serie : Object
+	var $i : Integer
+	For each ($serie; $options.data)
+		
+		This:C1470.group().translate(10; 10)
+		
+		$i+=1
+		
+		If ($serie.color#Null:C1517)
+			
+			This:C1470.stroke($serie.color)
+			
+		Else 
+			
+			$hsl.hue:=(360-$i)*360/$number
+			This:C1470.stroke($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
+			
+		End if 
+		
+		If ($options.dash#Null:C1517)
+			
+			//TODO:dash
+			
+		End if 
+		
+		// Get min, max values
+		var $value : Collection
+		For each ($value; $serie.values)
+			
+			$Xaxis.push($value[0])
+			$Yaxis.push($value[1])
+			
+		End for each 
+		
+		$Xaxis:=$Xaxis.distinct()
+		var $Xmin : Integer:=$Xaxis.min()
+		var $Xmax : Integer:=$Xaxis.max()
+		
+		$Yaxis:=$Yaxis.distinct()
+		var $Ymin : Integer:=$Yaxis.min()
+		var $Ymax : Integer:=$Yaxis.max()
+		
+		var $width : Integer:=$Xmax-$Xmin
+		var $height : Integer:=$Ymax-$Ymin
+		
+/*
+Because of the way the Y-axis works different in SVG 
+than in the “Cartesian” coordinates system we must tranlate Y values
+*/
+		For each ($value; $serie.values)
+			
+			$value[1]:=$Ymax-$value[1]
+			
+		End for each 
+		
+		// plot
+		This:C1470.group().stroke(5)
+		
+		This:C1470.polyline().setID(String:C10($i; "serie_###"))
+		This:C1470.plot($serie.values)
+		
+		This:C1470.restoreRoot()
+		
+	End for each 
+	
+	This:C1470.group().setID("axis").stroke(2)
+	
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.vAxis))
+		
+		This:C1470.line(0; $height).translate(10; 10).setID("vAxis")
+		
+	End if 
+	
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.hAxis))
+		
+		This:C1470.line(0; $height; $width; $height).translate(10; 10).setID("hAxis")
+		
+	End if 
+	
+	return This:C1470
+	
+	
+Function setValues($id : Text; $values : Collection) : cs:C1710.chart
+	
+	
+	
+	return This:C1470
 	
 	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Closing the chart

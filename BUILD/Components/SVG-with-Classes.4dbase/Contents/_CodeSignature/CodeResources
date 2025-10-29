@@ -12,18 +12,18 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			tfBiUZAN7dO8IBv6EmkThDfLzPk=
+			JCoadlbH9Ko+Sbi+hAD/oRrztDg=
 			</data>
 			<key>optional</key>
 			<true/>
 		</dict>
 		<key>Resources/logo.png</key>
 		<data>
-		XNPsObyGHlSGAX1grIxEHcIa7OY=
+		7pn3gfAKSlnqjaxsonpbVZUCvUE=
 		</data>
 		<key>Resources/logo.svg</key>
 		<data>
-		GbabgqDw5JnDtyrT3kNkGBatUKg=
+		hMm8NPd+4cPdLaoe/ytcf31NCF8=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -81,7 +81,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			2X+xjgpLPgkGQwQHSkSigjpO//pu9OQFU63Ah8COrGE=
+			stbbfaP444uvOgrC+9xZ9+4cnEKCNNROcTgAaXxCdy4=
 			</data>
 		</dict>
 		<key>Resources/colors.json</key>
@@ -95,7 +95,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			1rDG3sA2DEKqulNnW9KP768XnCEq260/gD/DyyETpDs=
+			JMiOBCkRAt1A0PjIuigciafyXMXQRDapV2zyhEHT8DM=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -104,24 +104,24 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			ObplFOEmHVnpaVxJIcannJPIg2qZZL6QjWBenHLgAP0=
+			fegBJ8odkFaEKQqyloQoOqBRVcBdKGzdu4i2A3Kk24E=
 			</data>
 		</dict>
 		<key>Resources/logo.svg</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			HXYwRPTy94ioRu1MQd35Q44awOLE3OQfRBHyRASxv/I=
+			iRG4xBBrAWOhX7Uxalr6Yjvfcv7CfAILbIzvPz8QSgA=
 			</data>
 		</dict>
 		<key>SVG-with-Classes.4DZ</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			cXkQE9lUw5EmNlC/XNGpdpwG4wA=
+			bDhu6XfDWRSJ/O18lY9OMcVFwvE=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"71791013d954c391263650bf5cd1a9769c06e300"</string>
+			<string>identifier "SVG-with-Classes.4DZ" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = DYRKW64QA9</string>
 		</dict>
 	</dict>
 	<key>rules</key>
