@@ -27,7 +27,7 @@ This class will be augmented according to my needs but you are strongly encourag
 > 
 > 📌 With the exception of functions that return a specific result (getter function), each call returns the original `cs.svg` object, and you can include one call after another.
 
-> 📌 If a function is called, without passing the `applyTo` parameter, the target is the last created path. If the `applyTo` parameter is passed, it must be a DOM reference.  
+> 📌 If a function is called, without passing the `applyTo` parameter, the target is the last created path. If the `applyTo` parameter is passed, it must be a DOM reference or a stored name ("root", "latest", symbol name,…).  
 
 > 📌 If creation or a setting function is called, without passing the `applyTo` parameter, before the creation of an object in the canvas, the target is canvas itself, otherwise the target is the last created object. If the `applyTo` parameter is passed, it can be: a DOM reference, an id, the name of a reference stored with the `.push()` function or a reserved name (`"root"`, `"latest"`, `"parent"`).    
 
@@ -52,6 +52,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**defineLinearGradient** ( id : `Text` {; startColor : `Text` {; stopColor : `Text` {; options: `Object` }}}) → ref: `Text` | Sets a new linear gradient in the current canvas
 |.**defineRadialGradient** ( id : `Text` {; startColor : `Text` {; stopColor : `Text` {; options: `Object` }}}) → ref: `Text` | Sets a new radial gradient in the current canvas
 |.**definePattern** ( id : `Text` {; options: `Object` }) → ref: `Text` | Sets a new pattern container in the current canvas
+|.**endPattern** () → `cs.svg` | Finalizes a pattern definition and restores the current root container (call after `.definePattern()`)
 |.**symbol** ( id : `Text` {; applyTo } ) → `cs.svg` | To define a symbol
 |.**use** ( id : `Text` {; attachTo } ) → `cs.svg` | To place an occurence of a symbol
 |.**clipPath** ( id : `Text` {; applyTo } ) → `cs.svg` | Define a clipPath and apply to the root element
@@ -80,6 +81,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**text** ( text : `Text` {; attachTo } ) → `cs.svg` | Creates a graphics element consisting of text.
 |.**textArea** ( text : `Text` {; attachTo } ) → `cs.svg` | Creates a `textArea` element that allows simplistic wrapping of a text content within a given region.\*
 |.**image** ( picture : `Picture` \| `4D.File` {; attachTo } ) → `cs.svg` | Creates an image element.<br>Can refer to an image file or a picture type variable (embedded picture)
+|.**appendText** ( text : `Text` {; applyTo } ) → `cs.svg` | Appends text to a `textArea` element. Line breaks are preserved using internal `tbreak` nodes.
 
 \* The `textArea` elements are well rendered by 4D widgets but may not be supported by some browsers.
 
@@ -156,6 +158,8 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**setAttribute** ( name : `Text`; value : `Variant` {; applyTo } ) → `cs.svg` | Sets one attribute
 |.**setAttributes** ( attributes : `Text` \| `Collection` \| `Object`; value : `Variant` {; applyTo})  → `cs.svg` | Defines multiple attributes
 
+*Implementation note:* the source implementation exposes `setID()`; the documented short-name `.id()` maps to that functionality.
+
 ### Shortcuts & utilities functions
  
 |Function|Action|
@@ -188,6 +192,10 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**hide** ( { applyTo } ) → `cs.svg` | Make invisible
 |.**setValue** ( value : `Text` {; applyTo }{; CDATA : `Boolean` } ) → `cs.svg` | Sets the element value
 |.**setText** ( text : `Text` {; applyTo } )| To set the text value of a `text` or a `textArea`
+|.**addSVG** ( ref : `Text` {; attachTo } ) → `Text` | Appends an existing SVG node reference into the current container (reference must be a DOM reference or stored name)
+|.**getContainerText** ( { applyTo } ) → `Text` | Returns the textual content of a `text`, `tspan` or `textArea` element; line breaks are returned as CR (\r)
+|.**getTextWidth** ( string : `Text` {; fontAttributes : `Object` } ) → `Integer` | Returns the rendered width (in pixels) of the given text using `textArea` rendering (optional `fontAttributes` applied)
+|.**getTextHeight** ( string : `Text` {; fontAttributes : `Object` } ) → `Integer` | Attempts to return the rendered height of the given text (work in progress; may be approximate). Use with care.
 |.**attachTo** ( parent : `Text` ) → `cs.svg` | Adds item to parent item
 |.**clone** ( source : `Text` {; attachTo} ) → `cs.svg` |To create a copy of a svg object
 |.**addClass** ( class : `Text` {; applyTo} ) → `cs.svg` | Add a value to the node class
@@ -197,6 +205,8 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**push** ( name : `Text` ) → `cs.svg` | Keeps the dom reference into the store associated with the given name
 |.**fetch** ( name : `Text` ) → dom : `Text` | Retrieve a stored dom reference associated with the given name
 |.**with** ( name : `Text` ) → `Boolean` | Defines an element for the next operations
+|.**point** ( x : `Real`; y : `Real` ) → `Point` | Helper to create a point collection `[x, y]` (values rounded to 5 decimals)
+|.**polarToCartesian** ( point : `Point`; r : `Real`; degree : `Integer` ) → `Point` | Transforms polar coordinates (offset) into cartesian coordinates updating the given point
 |.**TextToPicture** ( text : Text {; fontAttributes : Object}) → `Picture` | Returns a picture of the given text.
 |.**preview** ( { keepStructure : `Boolean` } ) | Display the SVG image & tree into the SVG Viewer if the component 4D SVG is available.
 
@@ -266,5 +276,44 @@ The options parameter allow to define some optional values:
 Draw 6 solid squares where each uses a linear gradient paint server while varying the rotation and direction of the gradient vector:
 
 ```4D
-var $svg:=cs.svg.new()$svg.defineLinearGradient("demoGradient_1"; "red"; "yellow")$svg.rect(90; 90).position(10; 10).gradient("demoGradient_1")$svg.textArea("rotation = 0\rrotation = 180").position(10; 100).width(90).alignment(Align center)$svg.defineLinearGradient("demoGradient_2"; "red"; "yellow"; {rotation: -180})$svg.rect(90; 90).position(110; 10).gradient("demoGradient_2")$svg.textArea("rotation = -180").position(110; 100).width(100).alignment(Align center)$svg.defineLinearGradient("demoGradient_3"; "red"; "yellow"; {rotation: 45})$svg.rect(90; 90).position(10; 140).gradient("demoGradient_3")$svg.textArea("rotation = 45").position(10; 230).width(90).alignment(Align center)$svg.defineLinearGradient("demoGradient_4"; "red"; "yellow"; {rotation: -45})$svg.rect(90; 90).position(110; 140).gradient("demoGradient_4")$svg.textArea("rotation = -45").position(110; 230).width(90).alignment(Align center)$svg.defineLinearGradient("demoGradient_5"; "red"; "yellow"; {rotation: 90})$svg.rect(90; 90).position(10; 270).gradient("demoGradient_5")$svg.textArea("rotation = 90").position(10; 360).width(90).alignment(Align center)$svg.defineLinearGradient("demoGradient_6"; "red"; "yellow"; {rotation: -90})$svg.rect(90; 90).position(110; 270).gradient("demoGradient_6")$svg.textArea("rotation = -90").position(110; 360).width(90).alignment(Align center)$svg.defineLinearGradient("demoGradient_7"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"})$svg.rect(90; 90).position(10; 400).gradient("demoGradient_7")$svg.textArea("rotation = -180").position(10; 490).width(100).alignment(Align center)$svg.defineLinearGradient("demoGradient_8"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"; startOffset: 20; stopOffset: 80})$svg.rect(90; 90).position(110; 400).gradient("demoGradient_8")$svg.textArea("rotation = -180\roffset=20/80").position(110; 490).width(100).alignment(Align center)$svg.preview()```
+var $svg:=cs.svg.new()
+
+$svg.defineLinearGradient("demoGradient_1"; "red"; "yellow")
+$svg.rect(90; 90).position(10; 10).gradient("demoGradient_1")
+$svg.textArea("rotation = 0\rrotation = 180").position(10; 100).width(90).alignment(Align center)
+
+$svg.defineLinearGradient("demoGradient_2"; "red"; "yellow"; {rotation: -180})
+$svg.rect(90; 90).position(110; 10).gradient("demoGradient_2")
+$svg.textArea("rotation = -180").position(110; 100).width(100).alignment(Align center)
+
+$svg.defineLinearGradient("demoGradient_3"; "red"; "yellow"; {rotation: 45})
+$svg.rect(90; 90).position(10; 140).gradient("demoGradient_3")
+$svg.textArea("rotation = 45").position(10; 230).width(90).alignment(Align center)
+
+$svg.defineLinearGradient("demoGradient_4"; "red"; "yellow"; {rotation: -45})
+$svg.rect(90; 90).position(110; 140).gradient("demoGradient_4")
+$svg.textArea("rotation = -45").position(110; 230).width(90).alignment(Align center)
+
+$svg.defineLinearGradient("demoGradient_5"; "red"; "yellow"; {rotation: 90})
+$svg.rect(90; 90).position(10; 270).gradient("demoGradient_5")
+$svg.textArea("rotation = 90").position(10; 360).width(90).alignment(Align center)
+
+$svg.defineLinearGradient("demoGradient_6"; "red"; "yellow"; {rotation: -90})
+$svg.rect(90; 90).position(110; 270).gradient("demoGradient_6")
+$svg.textArea("rotation = -90").position(110; 360).width(90).alignment(Align center)
+
+$svg.defineLinearGradient("demoGradient_7"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"})
+$svg.rect(90; 90).position(10; 400).gradient("demoGradient_7")
+$svg.textArea("rotation = -180").position(10; 490).width(100).alignment(Align center)
+
+$svg.defineLinearGradient("demoGradient_8"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"; startOffset: 20; stopOffset: 80})
+$svg.rect(90; 90).position(110; 400).gradient("demoGradient_8")
+$svg.textArea("rotation = -180\roffset=20/80").position(110; 490).width(100).alignment(Align center)
+
+$svg.preview()
+```
+
+See additional examples in <a href="svg_examples.md"> `svg_examples`</a>.
+
+
 

@@ -3,18 +3,18 @@
 <plist version="1.0">
   <dict>
 	  <key>NSHumanReadableCopyright</key>
-	  <string>©2025</string>
+	  <string></string>
 	  <key>CFBundleVersion</key>
-	  <string>21</string>
+	  <string></string>
 	  <key>CFBundleDisplayName</key>
-	  <string>SVG with classes</string>
+	  <string>SVG with Classes</string>
 	  <key>CFBundleShortVersionString</key>
-	  <string>21</string>
+	  <string></string>
 	  <key>CFBundleGetInfoString</key>
 	  <string>21</string>
 	  <key>CFBundleLongVersionString</key>
 	  <string>21 (21)</string>
 	  <key>CFBundleName</key>
-	  <string>SVG-with-Classes</string>
+	  <string>SVG with Classes</string>
 </dict>
 </plist>

@@ -12,7 +12,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			JCoadlbH9Ko+Sbi+hAD/oRrztDg=
+			TueFmy4cnJY0R8i4yWHd4HZ6r/w=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -32,7 +32,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			HbfDCytFZKlFIT6PTxS9esA9QI9q9BYMq+8auVT2ad0=
+			0z493/p+9mDv7egfjagoWYrOUKbllySzhmaRpfW45kI=
 			</data>
 		</dict>
 		<key>Documentation/Classes/chart/donut.png</key>
@@ -60,7 +60,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			sQFL2A8Yehti0RwUADSd8oBb1wZ8OjoZuVB8mPL4hRA=
+			wv984NzqzDUuAksBxWPvZukPIRJVp9UVncV928C/b00=
+			</data>
+		</dict>
+		<key>Documentation/Classes/svg_examples.md</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			xTwsp0ccIIMV2Y+bj40DLfUriQAdlTtqO3YtYTkMS3g=
 			</data>
 		</dict>
 		<key>Documentation/Classes/xml.md</key>
@@ -81,7 +88,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			stbbfaP444uvOgrC+9xZ9+4cnEKCNNROcTgAaXxCdy4=
+			aQQtSUpPVNXRATeJoCgzj0woNWqZiKjAsI2BC0D+ops=
 			</data>
 		</dict>
 		<key>Resources/colors.json</key>
@@ -95,7 +102,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			JMiOBCkRAt1A0PjIuigciafyXMXQRDapV2zyhEHT8DM=
+			+Tz35qolR3a+TwF6wDs2YUB+2aFioI5kF29zfwptZNk=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -114,14 +121,14 @@
 			iRG4xBBrAWOhX7Uxalr6Yjvfcv7CfAILbIzvPz8QSgA=
 			</data>
 		</dict>
-		<key>SVG-with-Classes.4DZ</key>
+		<key>SVG with Classes.4DZ</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			bDhu6XfDWRSJ/O18lY9OMcVFwvE=
+			TQ0kr9jr77tENSE3yV3pZsm+4aE=
 			</data>
 			<key>requirement</key>
-			<string>identifier "SVG-with-Classes.4DZ" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = DYRKW64QA9</string>
+			<string>cdhash H"4d0d24afd8ebefbb44352137c95de966c9bee1a1"</string>
 		</dict>
 	</dict>
 	<key>rules</key>

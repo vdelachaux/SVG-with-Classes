@@ -4548,6 +4548,47 @@
 			],
 			"Summary": ""
 		},
+		"horizontalBar()": {
+			"Syntax": "**.horizontalBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"pie()": {
 			"Syntax": "**.pie**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *options* : Object ) : cs.svgx.chart",
 			"Params": [
