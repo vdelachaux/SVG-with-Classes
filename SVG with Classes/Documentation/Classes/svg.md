@@ -27,7 +27,7 @@ This class will be augmented according to my needs but you are strongly encourag
 > 
 > 📌 With the exception of functions that return a specific result (getter function), each call returns the original `cs.svg` object, and you can include one call after another.
 
-> 📌 If a function is called, without passing the `applyTo` parameter, the target is the last created path. If the `applyTo` parameter is passed, it must be a DOM reference.  
+> 📌 If a function is called, without passing the `applyTo` parameter, the target is the last created path. If the `applyTo` parameter is passed, it must be a DOM reference or a stored name ("root", "latest", symbol name,…).  
 
 > 📌 If creation or a setting function is called, without passing the `applyTo` parameter, before the creation of an object in the canvas, the target is canvas itself, otherwise the target is the last created object. If the `applyTo` parameter is passed, it can be: a DOM reference, an id, the name of a reference stored with the `.push()` function or a reserved name (`"root"`, `"latest"`, `"parent"`).    
 
@@ -310,7 +310,10 @@ $svg.defineLinearGradient("demoGradient_8"; "red"; "yellow"; {rotation: -180; sp
 $svg.rect(90; 90).position(110; 400).gradient("demoGradient_8")
 $svg.textArea("rotation = -180\roffset=20/80").position(110; 490).width(100).alignment(Align center)
 
-$svg.preview()```
+$svg.preview()
+```
 
-See additional examples in `Documentation/Classes/svg_examples.md`.
+See additional examples in <a href="svg_examples.md"> `svg_examples`</a>.
+
+
 

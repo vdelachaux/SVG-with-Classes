@@ -270,6 +270,138 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.chart
 	//return This
 	
 	//———————————————————————————————————————————————————————————————————————————
+	// Horizontal bar chart
+Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
+	
+	$options:=$options || {}
+	This:C1470._closeChart(This:C1470.id)
+	
+	This:C1470.id:=$id
+	
+	This:C1470.group()
+	
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "bar"; \
+		orient: "horizontal"; \
+		x: $x; \
+		y: $y; \
+		width: $width; \
+		height: $height; \
+		values: $options.data || []}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+	
+	// Move to the right to allow labels, if needed
+	// TODO: The x translation must be calculated from the max label width
+	This:C1470.translate($x+(30*Num:C11($options.showLabels)); $y)
+	
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+	
+	If ($options.data=Null:C1517)
+		
+		// Nothing to draw
+		return This:C1470
+		
+	End if 
+	
+	var $values : Collection:=$options.data
+	var $n : Integer:=$values.length
+	
+	// Default gap & padding
+	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.15
+	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
+	
+	// Compute max
+	var $maxValue : Real:=($options.max#Null:C1517) ? Num:C11($options.max) : $values.max("value")
+	
+	If ($maxValue=0)
+		
+		$maxValue:=1
+		
+	End if 
+	
+	var $step : Real:=$height/$n
+	var $barHeight : Real:=Round:C94($step*(1-$gap); 2)
+	
+	var $color:=cs:C1710.color.new()
+	
+	var $i : Integer
+	var $serie : Object
+	
+	For each ($serie; $values)
+		
+		$i+=1
+		var $val : Real:=Num:C11($serie.value)
+		
+		// Position from top
+		var $ypos : Real:=Round:C94(($i-1)*$step+($step-$barHeight); 2)
+		
+		// Width scaled
+		var $w : Real:=Round:C94(($val/$maxValue)*$width; 2)
+		
+		// Draw rect (bars)
+		This:C1470.rect($w; $barHeight).position($pad; $ypos).setID(String:C10($i; "serie_###"))
+		
+		If ($serie.color#Null:C1517)
+			
+			This:C1470.fill($serie.color)
+			
+		Else 
+			
+			// Fallback color palette
+			var $hsl:={\
+				hue: (360-$i)*360/$n; \
+				saturation: 60; \
+				lightness: 50}
+			This:C1470.color($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
+			
+		End if 
+		
+		If ($options.stroke#Null:C1517)
+			
+			This:C1470.stroke($options.stroke)
+			
+		End if 
+		
+		// Label (left)
+		If (Bool:C1537($options.showLabels))
+			
+			This:C1470.text($serie.label).position(-20; $ypos+($barHeight/2)).font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
+			
+		End if 
+		
+		// Value (right end)
+		If (Bool:C1537($options.showValues))
+			
+			This:C1470.text(String:C10($val)).position($w+$pad+4; $ypos+($barHeight/2)).font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
+			
+		End if 
+		
+		This:C1470.setAttribute("indx"; $i)
+		This:C1470.closePath()
+		
+	End for each 
+	
+	// Optional axis
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.hAxis))
+		
+		This:C1470.line(0; $height+$pad; $width+($pad*2); $height+$pad).stroke(2).setID("hAxis")
+		
+	End if 
+	
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.vAxis))
+		
+		This:C1470.line(0; 0; 0; $height+$pad).stroke(2).setID("vAxis")
+		
+	End if 
+	
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————————————————————
 	// 
 Function xy($id : Text; $options : Object) : cs:C1710.chart
 	

@@ -342,12 +342,5 @@ INVOKE ACTION:C1439(ak show clipboard:K76:58)
 Small example showing `point()` and `polarToCartesian()`:
 
 ```4D
-var $svg:=cs.svg.new()
-var $p:=This:C1470.point(100; 100) // or: $svg.point(100;100) in instance usage
-
-// Move point by radius 50 at 45 degrees
-$p:=This:C1470.polarToCartesian($p; 50; 45)
-
-$svg.circle(10; $p{0}; $p{1}).fillColor("blue")
-$svg.preview()
+var $svg:=cs.svg.new()// Defining a point at x = 100 and y = 100var $point:=$svg.point(100; 100)// Move point by radius 50 at 45 degrees$point:=$svg.polarToCartesian($point; 50; 45)// & use it$svg.circle(10; $point[0]; $point[1]).fillColor("blue")$svg.preview()
 ```
