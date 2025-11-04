@@ -292,25 +292,40 @@ Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height 
 		This:C1470.create(This:C1470.latest; "vdl:graph")\
 		)
 	
-	// Move to the right to allow labels, if needed
-	// TODO: The x translation must be calculated from the max label width
-	This:C1470.translate($x+(30*Num:C11($options.showLabels)); $y)
-	
 	This:C1470.store.push({id: $id; dom: This:C1470.latest})
 	
-	If ($options.data=Null:C1517)
+	If ($options.data=Null:C1517)  // Nothing to draw
 		
-		// Nothing to draw
 		return This:C1470
 		
 	End if 
 	
-	var $values : Collection:=$options.data
-	var $n : Integer:=$values.length
-	
 	// Default gap & padding
 	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.15
 	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
+	
+	var $values : Collection:=$options.data
+	
+	If (Bool:C1537($options.showLabels))
+		
+		// Horizontal offset from the max label width
+		var $hOffset; $w; $h : Real
+		var $t : Text
+		For each ($t; $values.extract("label"))
+			
+			var $p:=cs:C1710.svg.new().TextToPicture($t; {size: Num:C11($options.fontSize) || 12})
+			PICTURE PROPERTIES:C457($p; $w; $h)
+			$hOffset:=$w>$hOffset ? $w : $hOffset
+			
+		End for each 
+		
+		This:C1470.translate($x+($hOffset*1*Num:C11($options.showLabels))+$pad; $y)
+		
+	Else 
+		
+		This:C1470.translate($x; $y)
+		
+	End if 
 	
 	// Compute max
 	var $maxValue : Real:=($options.max#Null:C1517) ? Num:C11($options.max) : $values.max("value")
@@ -321,6 +336,7 @@ Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height 
 		
 	End if 
 	
+	var $n : Integer:=$values.length
 	var $step : Real:=$height/$n
 	var $barHeight : Real:=Round:C94($step*(1-$gap); 2)
 	
@@ -335,13 +351,13 @@ Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height 
 		var $val : Real:=Num:C11($serie.value)
 		
 		// Position from top
-		var $ypos : Real:=Round:C94(($i-1)*$step+($step-$barHeight); 2)
+		$y:=Round:C94(($i-1)*$step+($step-$barHeight); 2)
 		
 		// Width scaled
-		var $w : Real:=Round:C94(($val/$maxValue)*$width; 2)
+		$w:=Round:C94(($val/$maxValue)*$width; 2)
 		
 		// Draw rect (bars)
-		This:C1470.rect($w; $barHeight).position($pad; $ypos).setID(String:C10($i; "serie_###"))
+		This:C1470.rect($w; $barHeight).position($pad; $y).setID(String:C10($i; "serie_###"))
 		
 		If ($serie.color#Null:C1517)
 			
@@ -367,14 +383,14 @@ Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height 
 		// Label (left)
 		If (Bool:C1537($options.showLabels))
 			
-			This:C1470.text($serie.label).position(-20; $ypos+($barHeight/2)).font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
+			This:C1470.textArea($serie.label).width($hOffset).font({size: Num:C11($options.fontSize) || 12}).alignment(Align right:K42:4).translate(-$hOffset-$pad; $y+($barHeight/2)-$pad)
 			
 		End if 
 		
 		// Value (right end)
 		If (Bool:C1537($options.showValues))
 			
-			This:C1470.text(String:C10($val)).position($w+$pad+4; $ypos+($barHeight/2)).font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
+			This:C1470.text(String:C10($val)).font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2).translate($w+($pad*2); $y+($barHeight/2)-$pad)
 			
 		End if 
 		

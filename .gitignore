@@ -82,5 +82,6 @@ DEV/
 */Libraries/
 !/Content/Libraries/
 SVG with Classes/Components
+Test SVG/Components
 */Project/Sources/Methods/Method[0123456789]*.4dm
 */Project/Sources/Forms/Form[0123456789]*.4dm
