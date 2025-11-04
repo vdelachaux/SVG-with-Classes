@@ -18,8 +18,8 @@ After creating and using the [4D SVG component](https://doc.4d.com/4Dv19/4D/19/4
 
 For more details on properties and functions, see the class documentation:
 
-* [svg class](SVG-with-Classes/Documentation/Classes/svg.md)
-* [chart class](SVG-with-Classes/Documentation/Classes/chart.md)
+* [svg class](SVG%20with%20Classes/Documentation/Classes/svg.md)
+* [chart class](SVG%20with%20Classes/Documentation/Classes/chart.md)
 
 The content will be augmented according to my needs but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/SVG-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com/search?q=4D%20for%20iOS). 
 
