@@ -33,11 +33,11 @@ For more details on properties and functions, see the class documentation:
 
 ## ![Static Badge](https://img.shields.io/badge/Project%20Dependencies-blue?logo=4d&link=https%3A%2F%2Fdeveloper.4d.com%2Fdocs%2FProject%2Fcomponents%2F%23loading-components)
 
-The component is compatible with the [Project Dependencies](https://developer.4d.com/docs/Project/components#monitoring-project-dependencies) feature. You can easily integrate it into your project by selecting Design > Project Dependencies and adding vdelachaux/SVG-with-Classes as the repository address in the dedicated dialog box. I suggest setting the rule to “Follow 4D version.”  **This way, you can benefit from updates over time.**
+The component is compatible with the [Project Dependencies](https://developer.4d.com/docs/Project/components#monitoring-project-dependencies) feature. You can easily integrate it into your project by selecting Design > Project Dependencies and adding `vdelachaux/SVG-with-Classes` as the repository address in the dedicated dialog box. I suggest setting the rule to “Follow 4D version.”  **This way, you can benefit from updates over time.**
 
 ## Binary databases
 
-Download the build component corresponding to your version of 4D and 
+Download the component to the `BUILD` folder corresponding to your version of 4D and place it in a `Component` folder near your `.4DB`file.
 
 # <a name="improvments">Improvements and bug fixes</a>
 
