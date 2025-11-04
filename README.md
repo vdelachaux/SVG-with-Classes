@@ -12,14 +12,6 @@
 
 After creating and using the [4D SVG component](https://doc.4d.com/4Dv19/4D/19/4D-SVG-Component. 100-5461938.en.html), I realized the need to create a more concise, faster, and SVG-like API for managing user interfaces and simplifying SVG image/document manipulation. The main goal was to reduce code complexity for SVG image/document creation and manipulation. 
 
-This repository includes:
-
-* The component source code
-* The built and signed component
-* A test project that provides code examples and “How do I” guides
-
-The content will be augmented according to my needs but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/SVG-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com/search?q=4D%20for%20iOS). 
-
 * The `svg` class simplifies the creation and manipulation of the SVG elements thanks to a set of simple functions and some automatisms, and decrease the number of variables needed. 
 
 * The `chart` class is a very succinct implementation of the SVG chart types I needed. More could be done ;-)
@@ -28,6 +20,22 @@ For more details on properties and functions, see the class documentation:
 
 * [svg class](SVG-with-Classes/Documentation/Classes/svg.md)
 * [chart class](SVG-with-Classes/Documentation/Classes/chart.md)
+
+The content will be augmented according to my needs but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/SVG-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com/search?q=4D%20for%20iOS). 
+
+## Top-level directories
+
+This repository includes 3 directories:
+
+* `BUILD`  
+  Contains the built and signed distributable artifacts of the component (packaged binaries and embedded docs).
+
+* `SVG with Classes`  
+  Component source project: class sources, resources and project files used to develop and build the component.
+
+* `Test SVG`  
+  Test project and runnable examples demonstrating how to use the component (code samples and "How do I" guides).
+
 
 # <a name="installation">Installation</a>
 
