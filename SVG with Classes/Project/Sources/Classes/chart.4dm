@@ -314,12 +314,7 @@ Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height 
 	
 	// Compute max
 	var $maxValue : Real:=($options.max#Null:C1517) ? Num:C11($options.max) : $values.max("value")
-	
-	If ($maxValue=0)
-		
-		$maxValue:=1
-		
-	End if 
+	$maxValue:=$maxValue+Num:C11($maxValue=0)
 	
 	var $step : Real:=$height/$n
 	var $barHeight : Real:=Round:C94($step*(1-$gap); 2)
@@ -406,16 +401,15 @@ Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height 
 Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
 	
 	var $chartObj : Text
-	var $i : Integer
-	var $n : Integer
-	var $maxValue : Real
+	
+	
+	
 	var $step : Real
 	var $barWidth : Real
-	var $gap : Real
-	var $pad : Real
-	var $color : cs:C1710.color
+	
+	
 	var $serie : Object
-	var $values : Collection
+	
 	
 	$options:=$options || {}
 	This:C1470._closeChart(This:C1470.id)
@@ -435,74 +429,93 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 		This:C1470.create(This:C1470.latest; "vdl:graph")\
 		)
 	
-	This:C1470.store.push(New object:C1711(\
-		"id"; $id; \
-		"dom"; This:C1470.latest))
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
 	
 	If ($options.data=Null:C1517)
-		// nothing to draw
-		return This:C1470
-	End if
+		
+		return This:C1470  // Nothing to draw
+		
+	End if 
 	
-	$values:=$options.data
-	$n:=$values.length
+	var $values : Collection:=$options.data
+	var $n:=$values.length
+	
 	// default gap & padding
-	$gap:=$options.barGap#Null:C1517 ? Num:C11($options.barGap) : 0.15
-	$pad:=$options.barPadding#Null:C1517 ? Num:C11($options.barPadding) : 4
+	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.15
+	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 4
 	
-	// compute max
-	$maxValue:=($options.max#Null:C1517) ? Num:C11($options.max) : $values.max("value")
-	If ($maxValue=0)
-		$maxValue:=1
-	End if
+	// Compute max
+	var $maxValue : Real:=($options.max#Null:C1517) ? Num:C11($options.max) : $values.max("value")
+	$maxValue:=$maxValue+Num:C11($maxValue=0)
 	
 	$step:=$width/$n
 	$barWidth:=Round:C94($step*(1-$gap); 2)
 	
-	$color:=cs:C1710.color.new()
+	var $color:=cs:C1710.color.new()
+	
+	var $i : Integer
 	
 	For each ($serie; $values)
+		
 		$i+=1
 		var $val : Real:=Num:C11($serie.value)
-		// position from left
-		var $xpos : Real:=Round:C94(($i-1)*$step + ($step-$barWidth)/2; 2)
-		// height scaled
+		
+		// Position from left
+		var $xpos : Real:=Round:C94(($i-1)*$step+($step-$barWidth)/2; 2)
+		
+		// Height scaled
 		var $h : Real:=Round:C94(($val/$maxValue)*($height-$pad*2); 2)
 		
-		// draw rect (bars)
+		// Draw rect (bars)
 		This:C1470.rect($barWidth; $h).position($xpos; $height-$h-$pad).setID(String:C10($i; "serie_###"))
+		
 		If ($serie.color#Null:C1517)
+			
 			This:C1470.fill($serie.color)
-		Else
-			// fallback color palette
-			var $hsl:={hue: (360-$i)*360/$n; saturation: 60; lightness: 50}
+			
+		Else 
+			
+			// Fallback color palette
+			var $hsl:={\
+				hue: (360-$i)*360/$n; \
+				saturation: 60; \
+				lightness: 50}
 			This:C1470.color($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
-		End if
+			
+		End if 
+		
 		If ($options.stroke#Null:C1517)
+			
 			This:C1470.stroke($options.stroke)
-		End if
+			
+		End if 
 		
-		// value (top)
+		// Value (top)
 		If (Bool:C1537($options.showValues))
+			
 			This:C1470.text(String:C10($val)).position($xpos+$barWidth/2; $height-$h-$pad-16)\
-				.font({size:Num:C11($options.fontSize)||12}).alignment(Align center:K42:3)
-		End if
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+			
+		End if 
 		
-		// label (bottom)
+		// Label (bottom)
 		If (Bool:C1537($options.showLabels))
+			
 			This:C1470.text($serie.label).position($xpos+$barWidth/2; $height-4)\
-				.font({size:Num:C11($options.fontSize)||12}).alignment(Align center:K42:3)
-		End if
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+			
+		End if 
 		
 		This:C1470.setAttribute("indx"; $i)
 		This:C1470.closePath()
-	End for each
+		
+	End for each 
 	
 	// optional axis
 	If (Bool:C1537($options.axis))
 		This:C1470.line(0; $height-$pad; $width; $height-$pad).stroke(1).setID($id+"_hAxis")  // x-axis
 		This:C1470.line($pad; 0; $pad; $height-$pad).stroke(1).setID($id+"_vAxis")  // y-axis
-	End if
+	End if 
 	
 	return This:C1470
 	
