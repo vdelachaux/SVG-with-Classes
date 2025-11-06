@@ -2800,6 +2800,8 @@ Function strokeOpacity($opacity : Real; $applyTo) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 Function dasharray($dash : Real;  ...  : Integer) : cs:C1710.svg
 	
+	var $offset : Real
+	
 	If ($dash=0)
 		
 		var $value:="none"
@@ -2812,7 +2814,7 @@ Function dasharray($dash : Real;  ...  : Integer) : cs:C1710.svg
 			var $separator : Text
 			GET SYSTEM FORMAT:C994(Decimal separator:K60:1; $separator)
 			$buffer:=Delete string:C232($buffer; 1; Position:C15($separator; $buffer))
-			var $offset:=Num:C11($buffer)
+			$offset:=Num:C11($buffer)
 			
 		End if 
 		
@@ -2833,7 +2835,12 @@ Function dasharray($dash : Real;  ...  : Integer) : cs:C1710.svg
 		End if 
 	End if 
 	
-	Super:C1706.setAttribute(This:C1470._getTarget(); "stroke-dashoffset"; String:C10($offset))
+	If ($offset#0)
+		
+		Super:C1706.setAttribute(This:C1470._getTarget(); "stroke-dashoffset"; String:C10($offset))
+		
+	End if 
+	
 	Super:C1706.setAttribute(This:C1470._getTarget(); "stroke-dasharray"; $value)
 	
 	return This:C1470

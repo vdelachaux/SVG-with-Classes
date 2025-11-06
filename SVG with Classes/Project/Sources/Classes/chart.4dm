@@ -319,65 +319,6 @@ Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height 
 	var $step : Real:=$height/$n
 	var $barHeight : Real:=Round:C94($step*(1-$gap); 2)
 	
-	var $color:=cs:C1710.color.new()
-	
-	var $i : Integer
-	var $serie : Object
-	
-	For each ($serie; $values)
-		
-		$i+=1
-		var $val : Real:=Num:C11($serie.value)
-		
-		// Position from top
-		var $ypos : Real:=Round:C94(($i-1)*$step+($step-$barHeight); 2)
-		
-		// Width scaled
-		var $w : Real:=Round:C94(($val/$maxValue)*$width; 2)
-		
-		// Draw rect (bars)
-		This:C1470.rect($w; $barHeight).position($pad; $ypos).setID(String:C10($i; "serie_###"))
-		
-		If ($serie.color#Null:C1517)
-			
-			This:C1470.fill($serie.color)
-			
-		Else 
-			
-			// Fallback color palette
-			var $hsl:={\
-				hue: (360-$i)*360/$n; \
-				saturation: 60; \
-				lightness: 50}
-			This:C1470.color($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
-			
-		End if 
-		
-		If ($options.stroke#Null:C1517)
-			
-			This:C1470.stroke($options.stroke)
-			
-		End if 
-		
-		// Label (left)
-		If (Bool:C1537($options.showLabels))
-			
-			This:C1470.text($serie.label).position(-20; $ypos+($barHeight/2)).font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
-			
-		End if 
-		
-		// Value (right end)
-		If (Bool:C1537($options.showValues))
-			
-			This:C1470.text(String:C10($val)).position($w+$pad+4; $ypos+($barHeight/2)).font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
-			
-		End if 
-		
-		This:C1470.setAttribute("indx"; $i)
-		This:C1470.closePath()
-		
-	End for each 
-	
 	// Optional axis
 	If (Bool:C1537($options.axis))\
 		 || (Bool:C1537($options.hAxis))
@@ -393,6 +334,65 @@ Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height 
 		
 	End if 
 	
+	var $color : cs:C1710.color
+	var $i : Integer
+	var $serie : Object
+	For each ($serie; $values)
+		
+		$i+=1
+		var $val : Real:=Num:C11($serie.value)
+		
+		// Position from top
+		$y:=Round:C94(($i-1)*$step+($step-$barHeight); 2)
+		
+		// Width scaled
+		var $w : Real:=Round:C94(($val/$maxValue)*$width; 2)
+		
+		// Draw rect (bars)
+		This:C1470.rect($w; $barHeight).position($pad; $y).setID(String:C10($i; "serie_###"))
+		
+		If ($serie.color#Null:C1517)
+			
+			This:C1470.fill($serie.color)
+			
+		Else 
+			
+			// Fallback color palette
+			var $hsl:={\
+				hue: (360-$i)*360/$n; \
+				saturation: 60; \
+				lightness: 50}
+			
+			$color:=$color || cs:C1710.color.new()
+			This:C1470.color($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
+			
+		End if 
+		
+		If ($options.stroke#Null:C1517)
+			
+			This:C1470.stroke($options.stroke)
+			
+		End if 
+		
+		// Label (left)
+		If (Bool:C1537($options.showLabels))
+			
+			This:C1470.text($serie.label).position(-20; $y+($barHeight/2))\
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
+			
+		End if 
+		
+		// Value (right end)
+		If (Bool:C1537($options.showValues))
+			
+			This:C1470.text(String:C10($val)).position($w+$pad+4; $y+($barHeight/2))\
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
+			
+		End if 
+		
+		This:C1470.setAttribute("indx"; $i)
+		
+	End for each 
 	
 	return This:C1470
 	
@@ -400,22 +400,11 @@ Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height 
 	// Vertical bar chart
 Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
 	
-	var $chartObj : Text
-	
-	
-	
-	var $step : Real
-	var $barWidth : Real
-	
-	
-	var $serie : Object
-	
-	
 	$options:=$options || {}
 	This:C1470._closeChart(This:C1470.id)
 	
 	This:C1470.id:=$id
-	This:C1470.group().translate($x; $y)
+	This:C1470.group()
 	
 	Super:C1706.setAttributes({\
 		id: $id; \
@@ -425,7 +414,7 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 		y: $y; \
 		width: $width; \
 		height: $height; \
-		values: []}; \
+		values: $options.data || []}; \
 		This:C1470.create(This:C1470.latest; "vdl:graph")\
 		)
 	
@@ -440,38 +429,128 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 	var $values : Collection:=$options.data
 	var $n:=$values.length
 	
-	// default gap & padding
+	// Default gap & padding
 	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.15
-	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 4
+	
+	var $font : Object:=$options.font || {}
+	$font.size:=$font.size || 12
+	$font.color:=$font.color || "black"
+	
+	$y+=$font.size*Num:C11($options.showValues)
+	
+	// Vertical translation according to values visibility
+	This:C1470.translate($x; $y).scale($options.zoom ? Num:C11($options.zoom) : 1)
 	
 	// Compute max
-	var $maxValue : Real:=($options.max#Null:C1517) ? Num:C11($options.max) : $values.max("value")
+	var $maxValue : Real:=$options.max#Null:C1517 ? Num:C11($options.max) : $values.max("value")
 	$maxValue:=$maxValue+Num:C11($maxValue=0)
 	
+	If ($options.horizontalGridLines#Null:C1517)
+		
+		var $step : Real
+		var $coloring : Text
+		var $dash : Integer
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($options.horizontalGridLines)=Is boolean:K8:9)
+				
+				$step:=$maxValue/10
+				
+				//______________________________________________________
+			: (Value type:C1509($options.horizontalGridLines)=Is object:K8:27)
+				
+				$step:=Num:C11($options.horizontalGridLines.unit)
+				$coloring:=String:C10($options.horizontalGridLines.color)
+				$dash:=Num:C11($options.horizontalGridLines.dash)
+				
+				//______________________________________________________
+			Else 
+				
+				$step:=Num:C11($options.horizontalGridLines)
+				
+				//______________________________________________________
+		End case 
+		
+		$step:=$step#0 ? $step : $maxValue/10
+		$coloring:=$coloring || "gray"
+		$dash:=$dash#0 ? $dash : 2
+		
+		var $line
+		For ($line; 0; $maxValue; $step)
+			
+			var $h : Real:=($line/$maxValue)*$height
+			This:C1470.line(0; $h; $width; $h).stroke($coloring).dasharray($dash)
+			
+		End for 
+	End if 
+	
+	var $showLabels:=Bool:C1537($options.labels#Null:C1517)
+	
+	If ($showLabels)
+		
+		var $angle:=0
+		var $labelColor : Text
+		var $labelFont : Object
+		
+		Case of 
+				
+				//______________________________________________________
+			: (Value type:C1509($options.labels)=Is boolean:K8:9)
+				
+				// <NOTHING MORE TO DO>
+				
+				//______________________________________________________
+			: (Value type:C1509($options.labels)=Is object:K8:27)
+				
+				$angle:=Num:C11($options.labels.angle)
+				$labelFont:=$options.labels.font
+				
+				//______________________________________________________
+			Else 
+				
+				$angle:=Num:C11($options.labels)
+				
+				//______________________________________________________
+		End case 
+	End if 
+	
+	$labelFont:=$labelFont || $font
+	
 	$step:=$width/$n
-	$barWidth:=Round:C94($step*(1-$gap); 2)
+	var $barWidth : Real:=Round:C94($step*(1-$gap); 2)
 	
-	var $color:=cs:C1710.color.new()
-	
+	var $color : cs:C1710.color
 	var $i : Integer
-	
+	var $serie : Object
 	For each ($serie; $values)
 		
 		$i+=1
+		
 		var $val : Real:=Num:C11($serie.value)
 		
-		// Position from left
-		var $xpos : Real:=Round:C94(($i-1)*$step+($step-$barWidth)/2; 2)
-		
 		// Height scaled
-		var $h : Real:=Round:C94(($val/$maxValue)*($height-$pad*2); 2)
+		$h:=($val/$maxValue)*$height
 		
-		// Draw rect (bars)
-		This:C1470.rect($barWidth; $h).position($xpos; $height-$h-$pad).setID(String:C10($i; "serie_###"))
+		// Position from left
+		$x:=(($i-1)*$step)+(($step-$barWidth)/2)
+		$y:=$height-$h
+		
+		// Plot the bar
+		This:C1470.rect($barWidth; $h).position($x; $y).setID(String:C10($i; "serie_###"))
 		
 		If ($serie.color#Null:C1517)
 			
-			This:C1470.fill($serie.color)
+			If ($serie.stroke#Null:C1517)
+				
+				This:C1470.fill($serie.color).stroke($serie.stroke)
+				
+			Else 
+				
+				This:C1470.color($serie.color)
+				
+			End if 
 			
 		Else 
 			
@@ -480,8 +559,18 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 				hue: (360-$i)*360/$n; \
 				saturation: 60; \
 				lightness: 50}
-			This:C1470.color($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
 			
+			$color:=$color || cs:C1710.color.new()
+			
+			If ($serie.stroke#Null:C1517)
+				
+				This:C1470.fill($color.setHSL($hsl).colorToCSS($color.main; "hexLong")).stroke($serie.stroke)
+				
+			Else 
+				
+				This:C1470.color($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
+				
+			End if 
 		End if 
 		
 		If ($options.stroke#Null:C1517)
@@ -490,31 +579,41 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 			
 		End if 
 		
+		$x+=$barWidth/2
+		
 		// Value (top)
 		If (Bool:C1537($options.showValues))
 			
-			This:C1470.text(String:C10($val)).position($xpos+$barWidth/2; $height-$h-$pad-16)\
-				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+			This:C1470.text(String:C10($val)).position($x; $y-($font.size*0.5))\
+				.font($font).alignment(Align center:K42:3)\
+				.setAttribute("indx"; $i)
 			
 		End if 
 		
 		// Label (bottom)
-		If (Bool:C1537($options.showLabels))
+		If ($showLabels)
 			
-			This:C1470.text($serie.label).position($xpos+$barWidth/2; $height-4)\
-				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+			$y:=$height+($font.size*1.5)
+			This:C1470.text($serie.label).position($x; $y)\
+				.font($labelFont).alignment(Align center:K42:3).rotate($angle; $x; $y)\
+				.setAttribute("indx"; $i)
 			
 		End if 
-		
-		This:C1470.setAttribute("indx"; $i)
-		This:C1470.closePath()
-		
 	End for each 
 	
-	// optional axis
-	If (Bool:C1537($options.axis))
-		This:C1470.line(0; $height-$pad; $width; $height-$pad).stroke(1).setID($id+"_hAxis")  // x-axis
-		This:C1470.line($pad; 0; $pad; $height-$pad).stroke(1).setID($id+"_vAxis")  // y-axis
+	// Optional axis
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.hAxis))
+		
+		This:C1470.line(0; $height; $width; $height).stroke(1).setID("hAxis")
+		
+	End if 
+	
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.vAxis))
+		
+		This:C1470.line(0; -5; 0; $height).stroke(1).setID("vAxis")
+		
 	End if 
 	
 	return This:C1470
