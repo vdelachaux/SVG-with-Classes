@@ -433,11 +433,29 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 		y: $y; \
 		width: $width; \
 		height: $height; \
-		values: $values}; \
+		values: $values; \
+		options: $options}; \
 		This:C1470.create(This:C1470.latest; "vdl:graph")\
 		)
 	
 	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+	
+	// Defining the main font for the chart
+	var $font:=This:C1470._graphFont($options.font)
+	
+	// Increased vertical translation if values are visible, where applicable
+	var $showValues:=Bool:C1537($options.showValues) || Bool:C1537($options.showValues#Null:C1517)
+	$y+=$font.size*Num:C11($showValues)
+	
+	// Place the main 
+	This:C1470.translate($x; $y)
+	
+	// Zoom factor if any
+	If (Num:C11($options.zoom)#0)
+		
+		This:C1470.scale(Num:C11($options.zoom))
+		
+	End if 
 	
 	If ($n=0)  // Nothing to draw
 		
@@ -445,20 +463,14 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 		
 	End if 
 	
-	// Default
+	// The distance between the bars. 0 = the bars touch each other
 	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.15
-	var $font : Object:=$options.font || {}
-	$font.size:=$font.size || 12
-	$font.color:=$font.color || "black"
 	
-	// Vertical translation according to values visibility
-	$y+=$font.size*Num:C11($options.showValues)
-	This:C1470.translate($x; $y).scale($options.zoom ? Num:C11($options.zoom) : 1)
-	
-	// Compute max
+	// Compute max value
 	var $maxValue : Real:=$options.max#Null:C1517 ? Num:C11($options.max) : $values.max("value")
 	$maxValue:=$maxValue+Num:C11($maxValue=0)
 	
+	// MARK: Horizontal grid lines
 	If ($options.horizontalGridLines#Null:C1517)
 		
 		var $step : Real
@@ -470,7 +482,7 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 				//______________________________________________________
 			: (Value type:C1509($options.horizontalGridLines)=Is boolean:K8:9)
 				
-				$step:=$maxValue/10
+				$step:=$maxValue/10  // calculate the unit
 				
 				//______________________________________________________
 			: (Value type:C1509($options.horizontalGridLines)=Is object:K8:27)
@@ -487,7 +499,7 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 				//______________________________________________________
 		End case 
 		
-		$step:=$step#0 ? $step : $maxValue/10
+		$step:=$step#0 ? $step : $maxValue/10  // Default is max/10
 		$coloring:=$coloring || "gray"
 		$dash:=$dash#0 ? $dash : 2
 		
@@ -504,36 +516,20 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 	
 	If ($showLabels)
 		
-		var $angle:=0
-		var $labelColor : Text
-		var $labelFont : Object
-		
-		Case of 
-				
-				//______________________________________________________
-			: (Value type:C1509($options.labels)=Is boolean:K8:9)
-				
-				// <NOTHING MORE TO DO>
-				
-				//______________________________________________________
-			: (Value type:C1509($options.labels)=Is object:K8:27)
-				
-				$angle:=Num:C11($options.labels.angle)
-				$labelFont:=$options.labels.font
-				
-				//______________________________________________________
-			Else 
-				
-				$angle:=Num:C11($options.labels)
-				
-				//______________________________________________________
-		End case 
+		If (Value type:C1509($options.labels)=Is object:K8:27)\
+			 && OB Instance of:C1731($options.labels; cs:C1710.font)
+			
+			$labelFont:=$options.labels
+			
+		Else 
+			
+			var $labelFont:=$font  // default font definition
+			
+		End if 
 	End if 
 	
-	$labelFont:=$labelFont || $font
-	
 	$step:=$width/$n
-	var $barWidth : Real:=Round:C94($step*(1-$gap); 2)
+	var $barWidth : Real:=$step*(1-$gap)
 	
 	var $color : cs:C1710.color
 	var $i : Integer
@@ -568,21 +564,16 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 			
 		Else 
 			
-			// Fallback color palette
-			var $hsl:={\
-				hue: (360-$i)*360/$n; \
-				saturation: 60; \
-				lightness: 50}
-			
+			// Use color palette
 			$color:=$color || cs:C1710.color.new()
 			
 			If ($serie.stroke#Null:C1517)
 				
-				This:C1470.fill($color.setHSL($hsl).colorToCSS($color.main; "hexLong")).stroke($serie.stroke)
+				This:C1470.fill($color.setHSL(This:C1470._getColor($i; $n)).colorToCSS($color.main; "hexLong")).stroke($serie.stroke)
 				
 			Else 
 				
-				This:C1470.color($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
+				This:C1470.color($color.setHSL(This:C1470._getColor($i; $n)).colorToCSS($color.main; "hexLong"))
 				
 			End if 
 		End if 
@@ -595,21 +586,27 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 		
 		$x+=$barWidth/2
 		
-		// Value (top)
-		If (Bool:C1537($options.showValues))
+		// Plot value
+		If ($showValues)
 			
-			This:C1470.text(String:C10($val)).position($x; $y-($font.size*0.5))\
+			$y+=15  // Inside the bar
+			This:C1470.text(String:C10($val)).position($x; $y)\
 				.font($font).alignment(Align center:K42:3)\
 				.setAttribute("indx"; $i)
 			
+			If ($serie.color=Null:C1517)
+				
+				This:C1470.color($color.fontColor())  // Choose the appropriate font color
+				
+			End if 
 		End if 
 		
-		// Label (bottom)
+		// Plot label
 		If ($showLabels)
 			
 			$y:=$height+($font.size*1.5)
 			This:C1470.text($serie.label).position($x; $y)\
-				.font($labelFont).alignment(Align center:K42:3).rotate($angle; $x; $y)\
+				.font($labelFont).alignment(Align center:K42:3)\
 				.setAttribute("indx"; $i)
 			
 		End if 
@@ -761,12 +758,39 @@ than in the “Cartesian” coordinates system we must tranlate Y values
 	
 	return This:C1470
 	
-	
+	//———————————————————————————————————————————————————————————————————————————
+	//
 Function setValues($id : Text; $values : Collection) : cs:C1710.chart
 	
-	
+	// TODO: Set values according to the graph type
 	
 	return This:C1470
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// returns an HSL color definition
+Function _getColor($index : Integer; $max : Integer) : Object
+	
+	return {\
+		hue: (360-$index)*360/$max; \
+		saturation: 60; \
+		lightness: 50}
+	
+	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+	// Defining the main font for the chart
+Function _graphFont($options : Object) : cs:C1710.font
+	
+	var $font:=cs:C1710.font.new()
+	
+	For each ($key; $options || {})
+		
+		$font[$key]:=$options[$key]
+		
+	End for each 
+	
+	$font.size:=$font.size || 12
+	$font.color:=$font.color || "black"
+	
+	return $font
 	
 	//*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 	// Closing the chart

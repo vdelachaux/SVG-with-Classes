@@ -415,7 +415,7 @@ Function style($style : Text; $applyTo) : cs:C1710.svg
 	Else 
 		
 		// Assigns a built-in style to an element
-		Super:C1706.setAttribute($node; "style"; $style)
+		Super:C1706.setAttribute(This:C1470.latest; "style"; $style)
 		
 	End if 
 	
@@ -1238,6 +1238,19 @@ Function text($text : Text; $attachTo) : cs:C1710.svg
 	
 	If (This:C1470.success)\
 		 & (Length:C16($text)>0)
+		
+		If (Match regex:C1019("(?i-ms)<span [^>]*>"; $text; 1; *))
+			
+			$text:=Replace string:C233($text; "<SPAN"; "<tspan")
+			$text:=Replace string:C233($text; "</SPAN>"; "</tspan>")
+			$text:=Replace string:C233($text; "STYLE="; "style=")
+			$text:=Replace string:C233($text; "color:"; "fill:")
+			$text:=Replace string:C233($text; "<BR/>"; "\r")
+			
+			var $pattern:="(?mi-s)<tspan[^>]*style=\"font-size:(\\d+)[^>]*>"
+			
+		End if 
+		
 		
 		$text:=Replace string:C233($text; "\r\n"; "\n")
 		$text:=Replace string:C233($text; "\n"; "\r")
@@ -2860,52 +2873,59 @@ Function fontSize($size : Integer; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-Function fontStyle($style : Integer; $applyTo) : cs:C1710.svg
+Function fontStyle($style; $applyTo) : cs:C1710.svg
 	
 	var $node:=This:C1470._getTarget($applyTo)
 	
-	If ($style=Normal:K14:15)
+	If (Value type:C1509($tyle)=Is text:K8:3)
 		
-		Super:C1706.setAttributes($node; New object:C1471(\
-			"text-decoration"; "none"; \
-			"font-style"; "normal"; \
-			"font-weight"; "normal"))
+		This:C1470.style($style; $applyTo)
 		
 	Else 
 		
-		// Mark:font-weight
-		If ($style ?? 0)
+		If ($style=Normal:K14:15)
 			
-			Super:C1706.setAttribute($node; "font-weight"; "bold")
+			Super:C1706.setAttributes($node; New object:C1471(\
+				"text-decoration"; "none"; \
+				"font-style"; "normal"; \
+				"font-weight"; "normal"))
 			
-		End if 
-		
-		// Mark:font-style
-		If ($style ?? 1)
+		Else 
 			
-			Super:C1706.setAttribute($node; "font-style"; "italic")
+			// Mark:font-weight
+			If ($style ?? 0)
+				
+				Super:C1706.setAttribute($node; "font-weight"; "bold")
+				
+			End if 
 			
-		End if 
-		
-		// Mark:text-decoration
-		var $c:=[]
-		
-		If ($style ?? 2)  // Underline
+			// Mark:font-style
+			If ($style ?? 1)
+				
+				Super:C1706.setAttribute($node; "font-style"; "italic")
+				
+			End if 
 			
-			$c.push("underline")
+			// Mark:text-decoration
+			var $c:=[]
 			
-		End if 
-		
-		If ($style ?? 3)  // Line-through
+			If ($style ?? 2)  // Underline
+				
+				$c.push("underline")
+				
+			End if 
 			
-			$c.push("line-through")
+			If ($style ?? 3)  // Line-through
+				
+				$c.push("line-through")
+				
+			End if 
 			
-		End if 
-		
-		If ($c.length>0)
-			
-			Super:C1706.setAttribute($node; "text-decoration"; $c.join(" "))
-			
+			If ($c.length>0)
+				
+				Super:C1706.setAttribute($node; "text-decoration"; $c.join(" "))
+				
+			End if 
 		End if 
 	End if 
 	
@@ -3777,48 +3797,71 @@ Function pattern($id : Text; $stroke; $applyTo) : cs:C1710.svg
 	
 	//———————————————————————————————————————————————————————————
 	// Define font properties
-Function font($attributes : Object; $applyTo) : cs:C1710.svg
+Function font($definition : cs:C1710.font; $applyTo) : cs:C1710.svg
 	
 	var $node:=This:C1470._getTarget($applyTo)
 	
-	If ($attributes.font#Null:C1517)
+	If ($definition.family#Null:C1517)
 		
-		Super:C1706.setAttribute($node; "font-family"; $attributes.font)
+		Super:C1706.setAttribute($node; "font-family"; $definition.family)
 		
 	End if 
 	
-	If ($attributes.size#Null:C1517)
+	If ($definition.size#Null:C1517)
 		
-		Super:C1706.setAttribute($node; "font-size"; $attributes.size)
+		Super:C1706.setAttribute($node; "font-size"; $definition.size)
 		
-		If (Num:C11(Super:C1706.getAttribute($node; "y"))<Num:C11($attributes.size))
+		If (Num:C11(Super:C1706.getAttribute($node; "y"))<Num:C11($definition.size))
 			
-			Super:C1706.setAttribute($node; "y"; $attributes.size)
+			Super:C1706.setAttribute($node; "y"; $definition.size)
 			
 		End if 
 	End if 
 	
-	If ($attributes.color#Null:C1517)
+	If ($definition.color#Null:C1517)
 		
-		This:C1470.fill($attributes.color; $node)
-		
-	End if 
-	
-	If ($attributes.style#Null:C1517)
-		
-		This:C1470.fontStyle($attributes.style; $node)
+		This:C1470.fill($definition.color; $node)
 		
 	End if 
 	
-	If ($attributes.alignment#Null:C1517)
+	If ($definition.style#Null:C1517)
 		
-		This:C1470.alignment($attributes.alignment; $node)
+		This:C1470.fontStyle($definition.style; $node)
 		
 	End if 
 	
-	If ($attributes.rendering#Null:C1517)
+	If ($definition.alignment#Null:C1517)
 		
-		This:C1470.textRendering($attributes.rendering; $node)
+		This:C1470.alignment($definition.alignment; $node)
+		
+	End if 
+	
+	If ($definition.rendering#Null:C1517)
+		
+		This:C1470.textRendering($definition.rendering; $node)
+		
+	End if 
+	
+	If ($definition.stretch#Null:C1517)
+		
+		Try
+			
+			If (Value type:C1509($definition.stretch)=Is collection:K8:32)
+				
+				This:C1470.scale(Num:C11($definition.stretch[0]); Num:C11($definition.stretch[1]); $node)
+				
+			Else 
+				
+				This:C1470.scale(Num:C11($definition.stretch); 1; $node)
+				
+			End if 
+		End try
+	End if 
+	
+	If ($definition.rotation#Null:C1517)\
+		 && (Num:C11($definition.rotation)#0)
+		
+		This:C1470.rotate(Num:C11($definition.rotation); Num:C11(Super:C1706.getAttribute($node; "x")); Num:C11(Super:C1706.getAttribute($node; "y")))
 		
 	End if 
 	
