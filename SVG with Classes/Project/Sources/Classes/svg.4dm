@@ -92,6 +92,13 @@ Class constructor($content)
 		
 		This:C1470.newCanvas()  // Create an empty canvas
 		
+	Else 
+		
+		If (This:C1470.root#Null:C1517)
+			
+			This:C1470.store.push({name: "root"; dom: This:C1470.root})
+			
+		End if 
 	End if 
 	
 	This:C1470[""]:={absolute: True:C214}
@@ -128,7 +135,8 @@ Function newCanvas($attributes : Object) : cs:C1710.svg
 				"font-size"; 12; \
 				"text-rendering"; "geometricPrecision"; \
 				"shape-rendering"; "crispEdges"; \
-				"preserveAspectRatio"; "none"))
+				"preserveAspectRatio"; "none"; \
+				"fill-rule"; "nonzero"))
 			
 			This:C1470.success:=Bool:C1537(OK)
 			
@@ -1239,8 +1247,7 @@ Function text($text : Text; $attachTo) : cs:C1710.svg
 	If (This:C1470.success)\
 		 & (Length:C16($text)>0)
 		
-		If (Match regex:C1019("(?i-ms)<span [^>]*>"; $text; 1; *))
-			
+		If (Match regex:C1019("(?i-ms)<span [^>]*>"; $text; 1; *)) & False:C215
 			$text:=Replace string:C233($text; "<SPAN"; "<tspan")
 			$text:=Replace string:C233($text; "</SPAN>"; "</tspan>")
 			$text:=Replace string:C233($text; "STYLE="; "style=")
@@ -1249,29 +1256,31 @@ Function text($text : Text; $attachTo) : cs:C1710.svg
 			
 			var $pattern:="(?mi-s)<tspan[^>]*style=\"font-size:(\\d+)[^>]*>"
 			
-		End if 
-		
-		
-		$text:=Replace string:C233($text; "\r\n"; "\n")
-		$text:=Replace string:C233($text; "\n"; "\r")
-		
-		var $c:=Split string:C1554($text; "\r")
-		
-		If ($c.length=1)
-			
-			This:C1470.setValue($text)
+			// TODO: Text multi-style
 			
 		Else 
 			
-			// MARK:WIP
-			var $line : Text
-			For each ($line; $c) While (This:C1470.success)
+			$text:=Replace string:C233($text; "\r\n"; "\n")
+			$text:=Replace string:C233($text; "\n"; "\r")
+			
+			var $c:=Split string:C1554($text; "\r")
+			
+			If ($c.length=1)
 				
-				$node:=Super:C1706.create(This:C1470.latest; "tspan"; $o)
-				Super:C1706.setValue($node; $line)
-				$o.y:=$o.y+$DEFAULTFONTSIZE
+				This:C1470.setValue($text)
 				
-			End for each 
+			Else 
+				
+				// TODO: Multilines
+				var $line : Text
+				For each ($line; $c) While (This:C1470.success)
+					
+					$node:=Super:C1706.create(This:C1470.latest; "tspan"; $o)
+					Super:C1706.setValue($node; $line)
+					$o.y:=$o.y+$DEFAULTFONTSIZE
+					
+				End for each 
+			End if 
 		End if 
 	End if 
 	
@@ -1579,6 +1588,38 @@ Function addSVG($ref : Text; $attachTo) : Text
 	End if 
 	
 	return Super:C1706.append(This:C1470._getContainer($attachTo); $ref)
+	
+	//———————————————————————————————————————————————————————————
+	// Import the svg content of a file
+Function import($file : 4D:C1709.file; $applyTo) : cs:C1710.svg
+	
+	var $xml:=cs:C1710.xml.new($file)
+	
+	If (This:C1470.success)
+		
+		var $node:=$xml.findByXPath("/svg")
+		
+		If (This:C1470.success)
+			
+			// The import is performed in a group that automatically takes the file name as its ID.
+			var $group : Text:=This:C1470.group(This:C1470._getContainer($applyTo)).setID($file.name).latest
+			
+			// Define the attributes of the group with those of the original document
+			Super:C1706.setAttributes($group; Super:C1706.getAttributes($node))
+			
+			// Retrieve all elements and clone them in the current canvas
+			For each ($node; $xml.childrens($node))
+				
+				Super:C1706.append($group; $node)
+				
+			End for each 
+		End if 
+		
+		$xml.close()
+		
+	End if 
+	
+	return This:C1470
 	
 	//mark:-
 	//———————————————————————————————————————————————————————————
