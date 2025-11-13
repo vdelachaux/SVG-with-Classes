@@ -135,8 +135,7 @@ Function newCanvas($attributes : Object) : cs:C1710.svg
 				"font-size"; 12; \
 				"text-rendering"; "geometricPrecision"; \
 				"shape-rendering"; "crispEdges"; \
-				"preserveAspectRatio"; "none"; \
-				"fill-rule"; "nonzero"))
+				"preserveAspectRatio"; "none"))
 			
 			This:C1470.success:=Bool:C1537(OK)
 			
@@ -339,10 +338,14 @@ Function symbol($id : Text; $applyTo) : cs:C1710.svg
 		This:C1470.store.push({id: $id; dom: $symbol})
 		
 		var $source : Text:=This:C1470._getTarget($applyTo)
-		var $node : Text:=Super:C1706.clone($source; $symbol)
-		This:C1470.remove($source)
 		
-		This:C1470.restoreRoot()
+		If (This:C1470.isReference($source))
+			
+			var $node : Text:=Super:C1706.clone($source; $symbol)
+			This:C1470.remove($source)
+			
+			This:C1470.restoreRoot()
+		End if 
 		
 	End if 
 	
@@ -3711,7 +3714,26 @@ Function stroke($value; $applyTo) : cs:C1710.svg
 			//______________________________________________________
 		: (Value type:C1509($value)=Is text:K8:3)  // Set color
 			
-			Super:C1706.setAttribute($node; "stroke"; $value)
+			If (["butt"; "round"; "square"].includes($value))  // stroke-linecap
+				
+				var $name:=This:C1470.getName($node)
+				
+				If (This:C1470._shapes.includes($name))\
+					 || (["g"; "line"; "svg"; "use"].includes($name))
+					
+					Super:C1706.setAttribute($node; "stroke-linecap"; $value)
+					
+				Else 
+					
+					This:C1470._pushError("You cannot set the \"fill-rule\" attribute for a "+$name+" element!")
+					
+				End if 
+				
+			Else 
+				
+				Super:C1706.setAttribute($node; "stroke"; $value)
+				
+			End if 
 			
 			//______________________________________________________
 		: (Value type:C1509($value)=Is boolean:K8:9)  // Set visibility
@@ -3784,7 +3806,7 @@ Function fill($value; $applyTo) : cs:C1710.svg
 				var $name:=This:C1470.getName($node)
 				
 				If (This:C1470._shapes.includes($name))\
-					 || (["g"; "svg"].includes($name))
+					 || (["g"; "svg"; "use"].includes($name))
 					
 					Super:C1706.setAttribute($node; "fill-rule"; $value)
 					
@@ -4759,6 +4781,11 @@ Function _getTarget($param) : Text
 				return This:C1470.parent(This:C1470.latest)
 				
 			End if 
+			
+			//_______________________________
+		: ($param="none")
+			
+			return 
 			
 			//_______________________________
 		: (This:C1470._reservedNames.includes($param))

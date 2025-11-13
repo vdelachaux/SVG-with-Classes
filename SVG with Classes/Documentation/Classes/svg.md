@@ -180,7 +180,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**pattern** ( id `Text` {; stroke} {; applyTo }} ) → `cs.svg` |  Sets fill or stroke attribute of the current (or passed) element  with a pattern
 |.**dropShadow** ({ deviation : `Integer` {; dx : `Integer` {; dy : `Integer` }}} ) → `cs.svg` |  Set a drop shadow for the current element.<br>• The optional `deviation` parameter sets the intensity of the shadow dispersion. Default value: 2.<br>• The optional `dx` and `dy` parameters specify, respectively, the horizontal and vertical offset of the shadow with respect to the object. Default value: 2.
 |.**convertToGrayScale** ({ value : `Real` {; applyTo } ) → `cs.svg` |  Transform colours into greyscale.<br>• You can pass the gray scale value to be applied in the optional value parameter\*. If you do not pass this parameter, the transformation is in accordance with the visual perception of the luminance (30% red, 59% green and 11% blue).<br>\**The value can be given as a real number between 0 and 1 or as an integer between 0 and 100.*
-|.**stroke** ( value `Text` \| `Boolean` \| `Real` \| `Object` {; applyTo } ) → `cs.svg` | To define the painting of the outline of a shape (`stroke` attribute)
+|.**stroke** ( value `Text` \| `Boolean` \| `Real` \| `Object` {; applyTo } ) → `cs.svg` | To define the painting of the outline of a shape (`stroke` attribute) or the `stroke-linecap` attribute.
 |.**font** ( attributes : `Object` {; applyTo } ) → `cs.svg` | Sets the font attributes
 |.**size** ( { width : `Real`; height : `Real` {; unit : `Text` }} ) → `cs.svg` | Sets the dimensions
 |.**position** ( x : `Real` {; y : `Real` }{; unit : `Text` } ) → `cs.svg` | Sets the position
