@@ -25,6 +25,7 @@
 			"HDI colorWheel",
 			"HDI dasharray",
 			"HDI ellipse",
+			"HDI fill rule",
 			"HDI Filter blend",
 			"HDI Filter blur",
 			"HDI Filter colorMatrix",

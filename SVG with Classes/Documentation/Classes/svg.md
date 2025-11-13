@@ -170,7 +170,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**boundedEllipse** ( x : `Real` ; y : `Real` ; width : `Real` ; height : `Real`{; attachTo }} ) → `cs.svg` | Draws an ellipse fits into the rectangle set by `x`, `y`, `width` and `height`.
 |.**color** ( color : `Text` {; applyTo } ) → `cs.svg` | Defines the color of both the line and the fill (`stroke` & `fill` attributes)
 |.**opacity** ( opacity : `Real` {; applyTo } ) → `cs.svg` | Sets stroke and fill opacity
-|.**fill** ( value `Text` \| `Boolean` \| `Object` {; applyTo } ) → `cs.svg` |  To define the painting of the inside of a shape (`fill` attributes)
+|.**fill** ( value `Text` \| `Boolean` \| `Object` {; applyTo } ) → `cs.svg` |  To define the painting of the inside of a shape (`fill` attributes) or the winding rule: the `fill-rule` property
 |.**filter** ( id `Text` {; applyTo }} ) → `cs.svg` |  Apply a filter to the current (or passed) element
 |.**blend** ({alpha `Boolean`}) → `cs.svg` |  Apply a blend filter to current element using picture (or background if the `alpha` parameter is true) 
 |.**blur** ({deviation `Integer`}) → `cs.svg` |  Apply a blur filter to current element.<br>Optional `deviation` parameter set the standard deviation for the blur operation.  Default value is `2`. 
@@ -202,13 +202,14 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**removeClass** ( class : `Text` {; applyTo} ) → `cs.svg` | Remove a value to the node class
 |.**isOfClass** ( class : `Text` {; applyTo } ) → `isOfclass` : Boolean | Tests if the node belongs to a class
 |.**layer** ( name : `Text` ) → `cs.svg` | Creates one or more group at the root of the SVG structure
-|.**push** ( name : `Text` ) → `cs.svg` | Keeps the dom reference into the store associated with the given name
-|.**fetch** ( name : `Text` ) → dom : `Text` | Retrieve a stored dom reference associated with the given name
-|.**with** ( name : `Text` ) → `Boolean` | Defines an element for the next operations
-|.**point** ( x : `Real`; y : `Real` ) → `Point` | Helper to create a point collection `[x, y]` (values rounded to 5 decimals)
-|.**polarToCartesian** ( point : `Point`; r : `Real`; degree : `Integer` ) → `Point` | Transforms polar coordinates (offset) into cartesian coordinates updating the given point
-|.**TextToPicture** ( text : Text {; fontAttributes : Object}) → `Picture` | Returns a picture of the given text.
-|.**preview** ( { keepStructure : `Boolean` } ) | Display the SVG image & tree into the SVG Viewer if the component 4D SVG is available.
+|.**push**(name:`Text`) →`cs.svg` | Keeps the dom reference into the store associated with the given name
+|.**fetch**(name:`Text`) →`Text` | Retrieve a stored dom reference associated with the given name
+|.**with**(name:`Text`) →`Boolean` | Defines an element for the next operations
+|.**point**(x:`Real`;y:`Real`) →`Point` | Helper to create a point collection `[x, y]` (values rounded to 5 decimals)
+|.**polarToCartesian**(point:`Point`;r:`Real`;degree:`Integer`) →`Point` | Transforms polar coordinates (offset) into cartesian coordinates updating the given point
+|.**TextToPicture**(text:`Text`{;fontAttributes:`Object`}) →`Picture` | Returns a picture of the given text.
+|.**preview**({keepStructure:`Boolean`}) | Display the SVG image & tree into the SVG Viewer if the component 4D SVG is available.
+|.**goUp**({level:`Integer`}) →`cs.svg` | Move up one (default)  or x level(s) in the XML tree.
 
 ## 🔸 cs.svg.new()
 The class constructor `cs.svg.new()` can be called without parameters to create a default svg structure with these attributes:

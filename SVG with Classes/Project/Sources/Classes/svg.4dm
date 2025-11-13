@@ -27,13 +27,13 @@ property _notContainer:=[\
 
 // Graphics element that is defined by some combination of straight lines and curves.
 property _shapes:=[\
-"path"; \
-"rect"; \
 "circle"; \
 "ellipse"; \
 "line"; \
+"path"; \
+"polygon"; \
 "polyline"; \
-"polygon"]
+"rect"]
 
 // Elements that provide additional descriptive information about their parent.
 property _descriptive:=[\
@@ -1576,7 +1576,7 @@ Function d($data : Text; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Place a SVG object
+	// Place a SVG object 
 	// TODO: Documentation
 Function addSVG($ref : Text; $attachTo) : Text
 	
@@ -1591,7 +1591,7 @@ Function addSVG($ref : Text; $attachTo) : Text
 	
 	//———————————————————————————————————————————————————————————
 	// Import the svg content of a file
-Function import($file : 4D:C1709.file; $applyTo) : cs:C1710.svg
+Function import($file : 4D:C1709.File; $applyTo) : cs:C1710.svg
 	
 	var $xml:=cs:C1710.xml.new($file)
 	
@@ -3655,6 +3655,23 @@ Function restoreRoot()
 	This:C1470.latest:=This:C1470.root
 	
 	//———————————————————————————————————————————————————————————
+	// Move up one (default)  or x level(s) in the XML tree.
+Function goUp($level : Integer) : cs:C1710.svg
+	
+	$level-=1
+	
+	While ($level>0)
+		
+		This:C1470.latest:=This:C1470.parent(This:C1470.latest)
+		$level-=1
+		
+	End while 
+	
+	This:C1470.latest:=This:C1470.parent(This:C1470.latest)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Sets shape color (stroke and fill)
 Function color($color : Text; $applyTo) : cs:C1710.svg
 	
@@ -3762,7 +3779,26 @@ Function fill($value; $applyTo) : cs:C1710.svg
 			//______________________________________________________
 		: (Value type:C1509($value)=Is text:K8:3)  // Set color
 			
-			Super:C1706.setAttribute($node; $fill; $value)
+			If (["nonzero"; "evenodd"].includes($value))  // fill-rule
+				
+				var $name:=This:C1470.getName($node)
+				
+				If (This:C1470._shapes.includes($name))\
+					 || (["g"; "svg"].includes($name))
+					
+					Super:C1706.setAttribute($node; "fill-rule"; $value)
+					
+				Else 
+					
+					This:C1470._pushError("You cannot set the \"fill-rule\" attribute for a "+$name+" element!")
+					
+				End if 
+				
+			Else 
+				
+				Super:C1706.setAttribute($node; $fill; $value)
+				
+			End if 
 			
 			//______________________________________________________
 		: (Value type:C1509($value)=Is boolean:K8:9)  // Set visibility
