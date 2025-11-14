@@ -66,7 +66,10 @@ property _textRenderingValue:=[\
 property _reservedNames:=[\
 "root"; \
 "latest"; \
-"parent"]
+"parent"; \
+"none"; \
+"defs"; \
+"symbol"]
 
 property store:=[]
 
@@ -4748,30 +4751,31 @@ Function _getTarget($param) : Text
 	
 	Case of 
 			
-			//______________________________________________________
+			// ______________________________________________________
 		: (Count parameters:C259=0)
 			
 			// Auto
 			
-			//_______________________________
+			// _______________________________
 		: (Value type:C1509($param)#Is text:K8:3)
 			
 			// #ERROR
 			
-			//_______________________________
+			// _______________________________
 		: ($param="root")
 			
 			return This:C1470.root
 			
-			//_______________________________
+			// _______________________________
 		: ($param="latest")
 			
 			// <NOTHING MORE TO DO>
 			
-			//_______________________________
+			// _______________________________
 		: ($param="parent")
 			
-			If (This:C1470.latest=Null:C1517) || (This:C1470.latest="")
+			If (This:C1470.latest=Null:C1517)\
+				 || (This:C1470.latest="")
 				
 				return This:C1470.root
 				
@@ -4782,22 +4786,28 @@ Function _getTarget($param) : Text
 				
 			End if 
 			
-			//_______________________________
-		: ($param="none")
+			// _______________________________
+		: ($param="symbol")
 			
-			return 
+			return This:C1470.parent(This:C1470.latest || This:C1470.root; "symbol")
 			
-			//_______________________________
+			// _______________________________
+		: ($param="none")\
+			 || ($param="defs")
+			
+			return   // An empty address
+			
+			// _______________________________
 		: (This:C1470._reservedNames.includes($param))
 			
-			//
+			// Should not, because all reserved names are managed at a higher level 😇
 			
-			//_______________________________
+			// _______________________________
 		: (This:C1470.isReference($param))
 			
 			return $param  // The given reference
 			
-			//_______________________________
+			// _______________________________
 		Else 
 			
 			// Find a memorized targets
@@ -4809,7 +4819,7 @@ Function _getTarget($param) : Text
 				
 			End if 
 			
-			//_______________________________
+			// _______________________________
 	End case 
 	
 	return (This:C1470.latest#Null:C1517) && (This:C1470.latest#"") ? This:C1470.latest : This:C1470.root

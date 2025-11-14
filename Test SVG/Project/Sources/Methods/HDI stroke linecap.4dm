@@ -23,15 +23,19 @@ equal to the stroke width, centered at the subpath's point, and oriented such th
 var $svg:=cs:C1710.svgx.svg.new()\
 .size(600; 110).viewbox("0 0 600 110")\
 .fill("white")\
-.fontSize(16).alignment(Align center:K42:3)\
-.style(".thick {stroke:black; stroke-width:35px;}")\
-.style(".thin {stroke:#ccc; stroke-width:2px;}")
+.fontSize(16).alignment(Align center:K42:3)
 
-$svg.symbol("circles"; "none")\
+// Define a 2 circles symbol.
+$svg.symbol("circles"; "defs")\
 .circle(4; -60; 0; "circles").setID("circle1").fill("#ccc").stroke(False:C215)\
 .circle(4; 60; 0; "circles").setID("circle2").fill("#ccc").stroke(False:C215)
 
+// Define a line symbol.
 $svg.line(-60; 0; 60; 0).symbol("line1")
+
+// Define 2 style classes to apply to the line.
+$svg.style(".thick {stroke:black; stroke-width:35px;}")\
+.style(".thin {stroke:#ccc; stroke-width:2px;}")
 
 // MARK:- Butt
 $svg.group().translate(100; 40)\
