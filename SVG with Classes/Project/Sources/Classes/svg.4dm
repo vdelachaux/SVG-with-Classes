@@ -334,22 +334,112 @@ Function symbol($id : Text; $applyTo) : cs:C1710.svg
 		
 	End if 
 	
-	var $symbol : Text:=Super:C1706.create($defs; "symbol"; {id: $id; preserveAspectRatio: "xMidYMid"})
+	var $node : Text:=Super:C1706.create($defs; "symbol"; {id: $id; preserveAspectRatio: "xMidYMid"})
 	
 	If (This:C1470.success)
 		
-		This:C1470.store.push({id: $id; dom: $symbol})
+		This:C1470.store.push({id: $id; dom: $node})
 		
 		var $source : Text:=This:C1470._getTarget($applyTo)
 		
 		If (This:C1470.isReference($source))
 			
-			var $node : Text:=Super:C1706.clone($source; $symbol)
+			$node:=Super:C1706.clone($source; $node)
 			This:C1470.remove($source)
-			
 			This:C1470.restoreRoot()
+			
+		Else 
+			
+			This:C1470.latest:=$node
+			
+		End if 
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Store the last created (or passed) element as symbol
+Function marker($id : Text; $applyTo; $options : Object) : cs:C1710.svg
+	
+	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
+		
+		return 
+		
+	End if 
+	
+	var $defs:=This:C1470._defs()
+	
+	If (Not:C34(This:C1470.success))
+		
+		return This:C1470
+		
+	End if 
+	
+	var $node : Text:=Super:C1706.create($defs; "marker"; {id: $id; markerUnits: "userSpaceOnUse"; orient: "auto"})
+	
+	If (This:C1470.success)
+		
+		This:C1470.store.push({id: $id; dom: $node})
+		
+		If ($options#Null:C1517)
+			
+/* {
+    width:real,
+    height:real,
+    refX:real,
+    refY:real,
+    markerUnits:Text, (default = userSpaceOnUse)
+    viewBox:Text,
+    orient:Text (default = auto)
+}
+*/
+			
+			// The ‘markerWidth’ and ‘markerHeight’ attributes represent the size of the viewport into which the marker is to be fitted
+			// If markerHeight is not provided, we assume it is a square
+			var $width:=Num:C11($options.width)
+			var $heigth : Real:=$options.height#Null:C1517 ? Num:C11($options.height) : $width  // Default is a square
+			
+			If ($heigth#0)
+				
+				Super:C1706.setAttribute($node; "markerHeight"; $heigth)
+				Super:C1706.setAttribute($node; "markerWidth"; $width)
+				
+			End if 
+			
+			// The ‘refX’ and ‘refY’ attributes define the reference point of the marker.
+			// We use the center of the marker by default.
+			var $refX:=Num:C11($options.refX)
+			$refX:=Num:C11($refX#0 ? $refX : Try($width/2))
+			var $refY : Real:=$options.refY#Null:C1517 ? Num:C11($options.refY) : $refX
+			
+			Super:C1706.setAttribute($node; "refX"; $refX)
+			Super:C1706.setAttribute($node; "refY"; $refY)
+			
+			OB REMOVE:C1226($options; "width")
+			OB REMOVE:C1226($options; "height")
+			OB REMOVE:C1226($options; "refX")
+			OB REMOVE:C1226($options; "refY")
+			
+			If (Not:C34(OB Is empty:C1297($options)))
+				
+				Super:C1706.setAttributes($node; $options)
+				
+			End if 
 		End if 
 		
+		var $source : Text:=This:C1470._getTarget($applyTo)
+		
+		If (This:C1470.isReference($source))
+			
+			$node:=Super:C1706.clone($source; $node)
+			This:C1470.remove($source)
+			This:C1470.restoreRoot()
+			
+		Else 
+			
+			This:C1470.latest:=$node
+			
+		End if 
 	End if 
 	
 	return This:C1470
@@ -2571,11 +2661,47 @@ Function cy($cy : Real; $applyTo) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 Function width($width : Real; $applyTo) : cs:C1710.svg
 	
-	//FIXME:Target specific treatment (line,…)
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "width"; $width)
+		// FIXME:Target specific treatment (line,…)
 		
+		var $node:=This:C1470._getTarget($applyTo)
+		var $name:=This:C1470.getName($node)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($name="marker")
+				
+				Super:C1706.setAttribute($node; "markerWidth"; $width)
+				var $height:=Num:C11(Super:C1706.getAttribute($node; "markerHeight"))
+				
+				If ($height=0)
+					
+					Super:C1706.setAttribute($node; "markerHeight"; $width)
+					
+				End if 
+				
+				var $refX:=Num:C11(Super:C1706.getAttribute($node; "refX"))
+				
+				If ($refX=0)
+					
+					$refX:=Try($width/2)
+					var $refY:=Num:C11(Super:C1706.getAttribute($node; "refY"))
+					$refY:=$refY#0 ? $refY : $refX
+					
+					Super:C1706.setAttribute($node; "refX"; $refX)
+					Super:C1706.setAttribute($node; "refY"; $refY)
+					
+				End if 
+				
+				//______________________________________________________
+			Else 
+				
+				Super:C1706.setAttribute($node; "width"; $width)
+				
+				//______________________________________________________
+		End case 
 	End if 
 	
 	return This:C1470
@@ -2585,8 +2711,46 @@ Function height($height : Real; $applyTo) : cs:C1710.svg
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "height"; $height)
+		// FIXME:Target specific treatment (line,…)
 		
+		var $node:=This:C1470._getTarget($applyTo)
+		var $name:=This:C1470.getName($node)
+		
+		Case of 
+				
+				//______________________________________________________
+			: ($name="marker")
+				
+				Super:C1706.setAttribute($node; "markerHeight"; $height)
+				
+				var $width:=Num:C11(Super:C1706.getAttribute($node; "markerWidth"))
+				
+				If ($width=0)
+					
+					Super:C1706.setAttribute($node; "markerWidth"; $height)
+					
+				End if 
+				
+				var $refX:=Num:C11(Super:C1706.getAttribute($node; "refX"))
+				
+				If ($refX=0)
+					
+					$refX:=Try($height/2)
+					var $refY:=Num:C11(Super:C1706.getAttribute($node; "refY"))
+					$refY:=$refY#0 ? $refY : $refX
+					
+					Super:C1706.setAttribute($node; "refX"; $refX)
+					Super:C1706.setAttribute($node; "refY"; $refY)
+					
+				End if 
+				
+				//______________________________________________________
+			Else 
+				
+				Super:C1706.setAttribute($node; "height"; $height)
+				
+				//______________________________________________________
+		End case 
 	End if 
 	
 	return This:C1470
