@@ -9,6 +9,11 @@
 			"COLOR_PALETTE"
 		]
 	},
+	"BUGS": {
+		"methods": [
+			"bugDonut"
+		]
+	},
 	"How Do I": {
 		"methods": [
 			"HDI arcs",
@@ -50,6 +55,7 @@
 			"HDI rect",
 			"HDI rect 2",
 			"HDI stroke linecap",
+			"HDI stroke linejoin",
 			"HDI symbol",
 			"HDI symbol 2",
 			"HDI Text Append to textArea",
@@ -57,6 +63,12 @@
 			"HDI Text stretch ",
 			"HDI Text to Picture",
 			"HDI triangle"
+		]
+	},
+	"TESTS": {
+		"methods": [
+			"test addTo",
+			"test rotateTAU"
 		]
 	},
 	"trash": {}

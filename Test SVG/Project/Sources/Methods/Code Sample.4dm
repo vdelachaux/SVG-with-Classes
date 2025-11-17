@@ -59,17 +59,15 @@ If ($svg.with("foreground"))  // All enclosed actions refer to the "foreground" 
 	End if 
 End if 
 
-If ($svg.with("background"))  // Set "background" layer for the next operations
-	
-	// Draw a green hexagon with a blue border 10 pixels wide, translate & rotate. The plot is defined point by point
-	$svg.polygon()\
-		.moveTo([850; 75])\
-		.lineTo([958; 137.5; 958; 262.5; 850; 325; 742; 262.6; 742; 137.5])\
-		.fill("lime")\
-		.stroke("blue").stroke(10)\
-		.translate(0; -40).rotate(20; 850; 160)
-	
-End if 
+// Draw a green hexagon with a blue border 10 pixels wide into teh "background" layer, translate & rotate.
+// The plot is defined point by point
+$svg.polygon()\
+.moveTo([850; 75])\
+.lineTo([958; 137.5; 958; 262.5; 850; 325; 742; 262.6; 742; 137.5])\
+.fill("lime")\
+.stroke("blue").stroke(10)\
+.translate(0; -40).rotate(20; 850; 160)\
+.addTo("background")
 
 // Show the result into the SVG viewer
 // Note: The memory is automatically freed

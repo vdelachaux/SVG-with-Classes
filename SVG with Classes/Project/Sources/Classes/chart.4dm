@@ -503,7 +503,7 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 		$coloring:=$coloring || "gray"
 		$dash:=$dash#0 ? $dash : 2
 		
-		var $line
+		var $line : Integer
 		For ($line; 0; $maxValue; $step)
 			
 			var $h : Real:=($line/$maxValue)*$height
@@ -780,6 +780,7 @@ Function _getColor($index : Integer; $max : Integer) : Object
 Function _graphFont($options : Object) : cs:C1710.font
 	
 	var $font:=cs:C1710.font.new()
+	var $key : Text
 	
 	For each ($key; $options || {})
 		

@@ -76,6 +76,9 @@ property store:=[]
 property latest; _current; _filterTarget : Text
 property graphic : Picture
 
+property TAU:=Pi:K30:1*2  // Angle of a complete circle
+property stackTransformation:=True:C214  // Stacks text-to-text transformations
+
 //*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 // ⚠️ Overrides the method of the inherited class
 Function _reset
@@ -342,7 +345,8 @@ Function symbol($id : Text; $applyTo) : cs:C1710.svg
 		
 		var $source : Text:=This:C1470._getTarget($applyTo)
 		
-		If (This:C1470.isReference($source))
+		If (This:C1470.isReference($source))\
+			 && ($source#This:C1470.root)
 			
 			$node:=Super:C1706.clone($source; $node)
 			This:C1470.remove($source)
@@ -358,7 +362,7 @@ Function symbol($id : Text; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Store the last created (or passed) element as symbol
+	// Define or set a marker
 Function marker($id : Text; $applyTo; $options : Object) : cs:C1710.svg
 	
 	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
@@ -367,6 +371,41 @@ Function marker($id : Text; $applyTo; $options : Object) : cs:C1710.svg
 		
 	End if 
 	
+	If (Count parameters:C259=1)\
+		 || (["start"; "mid"; "end"].includes($applyTo))\
+		 || (This:C1470.store.query("id = :1"; $id).first()#Null:C1517)
+		
+		// MARK: Set a marker to an element
+		Case of 
+				
+				//______________________________________________________
+			: ($applyTo="start")
+				
+				Super:C1706.setAttribute(This:C1470.latest; "marker-start"; "url(#"+$id+")")
+				
+				//______________________________________________________
+			: ($applyTo="mid")
+				
+				Super:C1706.setAttribute(This:C1470.latest; "marker-mid"; "url(#"+$id+")")
+				
+				//______________________________________________________
+			: ($applyTo="end")
+				
+				Super:C1706.setAttribute(This:C1470.latest; "marker-end"; "url(#"+$id+")")
+				
+				//______________________________________________________
+			Else 
+				
+				Super:C1706.setAttribute(This:C1470.latest; "marker"; "url(#"+$id+")")
+				
+				//______________________________________________________
+		End case 
+		
+		return This:C1470
+		
+	End if 
+	
+	// MARK: Store the last created (or passed) element as marker
 	var $defs:=This:C1470._defs()
 	
 	If (Not:C34(This:C1470.success))
@@ -477,6 +516,42 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Adds an element to container item
+Function addTo($tgt : Text; $applyTo : Text) : cs:C1710.svg
+	
+	$tgt:=This:C1470._getTarget($tgt)
+	
+	var $name : Text
+	DOM GET XML ELEMENT NAME:C730($tgt; $name)
+	
+	If (This:C1470._containers.includes($name))
+		
+		var $src:=This:C1470._getTarget($applyTo)
+		
+		// Keeps id and removes it, if any, to avoid duplicate one
+		var $id:=String:C10(This:C1470.popAttribute($src; "id"))
+		
+		This:C1470.latest:=Super:C1706.append($tgt; $src)
+		
+		// Restore id, if any
+		If (Length:C16($id)>0)
+			
+			This:C1470.setID($id)
+			
+		End if 
+		
+		Super:C1706.remove($src)
+		This:C1470.restoreRoot()
+		
+	Else 
+		
+		This:C1470._pushError("\""+$name+"\" used as target is not a container")
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Place an occurence of the symbol
 Function use($symbol; $attachTo) : cs:C1710.svg
 	
@@ -499,6 +574,38 @@ Function use($symbol; $attachTo) : cs:C1710.svg
 	Else 
 		
 		This:C1470._pushError("The id \""+$symbol+"\" doesn't exist!")
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Import the svg content of a file
+Function import($file : 4D:C1709.File; $applyTo) : cs:C1710.svg
+	
+	var $xml:=cs:C1710.xml.new($file)
+	
+	If (This:C1470.success)
+		
+		var $node:=$xml.findByXPath("/svg")
+		
+		If (This:C1470.success)
+			
+			// The import is performed in a group that automatically takes the file name as its ID.
+			var $group : Text:=This:C1470.group(This:C1470._getContainer($applyTo)).setID($file.name).latest
+			
+			// Define the attributes of the group with those of the original document
+			Super:C1706.setAttributes($group; Super:C1706.getAttributes($node))
+			
+			// Retrieve all elements and clone them in the current canvas
+			For each ($node; $xml.childrens($node))
+				
+				Super:C1706.append($group; $node)
+				
+			End for each 
+		End if 
+		
+		$xml.close()
 		
 	End if 
 	
@@ -1526,7 +1633,7 @@ Function regularPolygon($diameter : Real; $sides : Integer; $cx : Real; $cy : Re
 	var $i : Integer
 	For ($i; 1; $sides; 1)
 		
-		$angle:=((2*Pi:K30:1)/$sides)*$i
+		$angle:=(This:C1470.TAU/$sides)*$i
 		$c.push([Round:C94($cx+($r*Cos:C18($angle)); 2); Round:C94($cy+($r*Sin:C17($angle)); 2)])
 		
 	End for 
@@ -1555,7 +1662,7 @@ Function fivePointStar($diameter : Real; $cx : Real; $cy : Real) : cs:C1710.svg
 	var $i : Integer
 	For ($i; 1; 5; 1)
 		
-		var $angle : Real:=((2*Pi:K30:1)/5)*$i
+		var $angle : Real:=(This:C1470.TAU/5)*$i
 		var $x:=Round:C94($cx+($r*Cos:C18($angle)); 2)
 		var $y:=Round:C94($cy+($r*Sin:C17($angle)); 2)
 		
@@ -1661,59 +1768,13 @@ Function d($data : Text; $applyTo) : cs:C1710.svg
 	
 	If ($name#"path")
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \"points\" property")
+		This:C1470._pushError("The element \""+$name+"\" is not compatible with \"points\" property")
 		
 		return 
 		
 	End if 
 	
 	Super:C1706.setAttribute($node; "d"; $data)
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Place a SVG object 
-	// TODO: Documentation
-Function addSVG($ref : Text; $attachTo) : Text
-	
-	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))\
-		 || (Not:C34(This:C1470.isReference($ref)))
-		
-		return 
-		
-	End if 
-	
-	return Super:C1706.append(This:C1470._getContainer($attachTo); $ref)
-	
-	//———————————————————————————————————————————————————————————
-	// Import the svg content of a file
-Function import($file : 4D:C1709.File; $applyTo) : cs:C1710.svg
-	
-	var $xml:=cs:C1710.xml.new($file)
-	
-	If (This:C1470.success)
-		
-		var $node:=$xml.findByXPath("/svg")
-		
-		If (This:C1470.success)
-			
-			// The import is performed in a group that automatically takes the file name as its ID.
-			var $group : Text:=This:C1470.group(This:C1470._getContainer($applyTo)).setID($file.name).latest
-			
-			// Define the attributes of the group with those of the original document
-			Super:C1706.setAttributes($group; Super:C1706.getAttributes($node))
-			
-			// Retrieve all elements and clone them in the current canvas
-			For each ($node; $xml.childrens($node))
-				
-				Super:C1706.append($group; $node)
-				
-			End for each 
-		End if 
-		
-		$xml.close()
-		
-	End if 
 	
 	return This:C1470
 	
@@ -1771,7 +1832,7 @@ Function _moveTo($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
 			//______________________________________________________
 		Else 
 			
-			This:C1470._pushError(Current method name:C684+" Points must be passed as string or collection")
+			This:C1470._pushError("Points must be passed as string or collection")
 			return This:C1470
 			
 			//______________________________________________________
@@ -1796,7 +1857,7 @@ Function _moveTo($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
 			//…………………………………………………………………………………………………
 		Else 
 			
-			This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? " M" : " m")+"\" property")
+			This:C1470._pushError("The element \""+$name+"\" is not compatible with \""+($absolute ? " M" : " m")+"\" property")
 			
 			//…………………………………………………………………………………………………
 	End case 
@@ -1847,7 +1908,7 @@ Function L($points; $applyTo) : cs:C1710.svg
 				
 			Else 
 				
-				This:C1470._pushError(Current method name:C684+" The length of the point collection must be a multiple of 2")
+				This:C1470._pushError("The length of the point collection must be a multiple of 2")
 				return This:C1470
 				
 			End if 
@@ -1860,7 +1921,7 @@ Function L($points; $applyTo) : cs:C1710.svg
 			//______________________________________________________
 		Else 
 			
-			This:C1470._pushError(Current method name:C684+" Points must be passed as string or collection")
+			This:C1470._pushError("Points must be passed as string or collection")
 			return This:C1470
 			
 			//______________________________________________________
@@ -1886,7 +1947,7 @@ Function L($points; $applyTo) : cs:C1710.svg
 			//…………………………………………………………………………………………………
 		Else 
 			
-			This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \"points\" property")
+			This:C1470._pushError("The element \""+$name+"\" is not compatible with \"points\" property")
 			
 			//…………………………………………………………………………………………………
 	End case 
@@ -1921,7 +1982,7 @@ Function l($points; $applyTo) : cs:C1710.svg
 				
 			Else 
 				
-				This:C1470._pushError(Current method name:C684+" The length of the point collection must be a multiple of 2")
+				This:C1470._pushError("The length of the point collection must be a multiple of 2")
 				return This:C1470
 				
 			End if 
@@ -1934,7 +1995,7 @@ Function l($points; $applyTo) : cs:C1710.svg
 			//______________________________________________________
 		Else 
 			
-			This:C1470._pushError(Current method name:C684+" Points must be passed as string or collection")
+			This:C1470._pushError("Points must be passed as string or collection")
 			return This:C1470
 			
 			//______________________________________________________
@@ -1960,7 +2021,7 @@ Function l($points; $applyTo) : cs:C1710.svg
 			//…………………………………………………………………………………………………
 		Else 
 			
-			This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \"points\" property")
+			This:C1470._pushError("The element \""+$name+"\" is not compatible with \"points\" property")
 			
 			//…………………………………………………………………………………………………
 	End case 
@@ -2030,7 +2091,7 @@ Function _lineTo($vertical : Boolean; $parameters : Collection; $absolute : Bool
 	
 	If ($name#"path")
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "V" : "v")+"\" property")
+		This:C1470._pushError("The element \""+$name+"\" is not compatible with \""+($absolute ? "V" : "v")+"\" property")
 		return This:C1470
 		
 	End if 
@@ -2092,7 +2153,7 @@ Function _ellipticalArc($parameters : Collection; $absolute : Boolean) : cs:C171
 	
 	If ($name#"path")
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "A" : "a")+"\" property")
+		This:C1470._pushError("The element \""+$name+"\" is not compatible with \""+($absolute ? "A" : "a")+"\" property")
 		return This:C1470
 		
 	End if 
@@ -2149,7 +2210,7 @@ Function _curveTo($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
 	
 	If ($name#"path")
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "C" : "c")+"\" property")
+		This:C1470._pushError("The element \""+$name+"\" is not compatible with \""+($absolute ? "C" : "c")+"\" property")
 		return This:C1470
 		
 	End if 
@@ -2168,7 +2229,7 @@ Function _curveTo($parameters : Collection; $absolute : Boolean) : cs:C1710.svg
 	
 	return This:C1470
 	
-	//mark:-
+	// MARK:-
 	//———————————————————————————————————————————————————————————
 	// Draws a cubic Bézier curve from the current point to [x,y]
 Function smoothCubicBezierCurveto($to : Collection; $endCtrlPoint : Collection; $applyTo) : cs:C1710.svg
@@ -2204,7 +2265,7 @@ Function _smoothCurveTo($parameters : Collection; $absolute : Boolean) : cs:C171
 	
 	If ($name#"path")
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "S" : "s")+"\" property")
+		This:C1470._pushError("The element \""+$name+"\" is not compatible with \""+($absolute ? "S" : "s")+"\" property")
 		return This:C1470
 		
 	End if 
@@ -2222,7 +2283,7 @@ Function _smoothCurveTo($parameters : Collection; $absolute : Boolean) : cs:C171
 	
 	return This:C1470
 	
-	//mark:-
+	// MARK:-
 	//———————————————————————————————————————————————————————————
 	// Draws a quadratic Bézier curve from the current point to [x,y] using controlPoint [x1,y1] as the control point
 Function quadraticBezierCurveto($to : Collection; $controlPoint : Collection; $applyTo) : cs:C1710.svg
@@ -2258,7 +2319,7 @@ Function _quadraticCurveto($parameters : Collection; $absolute : Boolean) : cs:C
 	
 	If ($name#"path")
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "Q" : "q")+"\" property")
+		This:C1470._pushError("The element \""+$name+"\" is not compatible with \""+($absolute ? "Q" : "q")+"\" property")
 		return This:C1470
 		
 	End if 
@@ -2276,7 +2337,7 @@ Function _quadraticCurveto($parameters : Collection; $absolute : Boolean) : cs:C
 	
 	return This:C1470
 	
-	//mark:-
+	// MARK:-
 	//———————————————————————————————————————————————————————————
 	// Draws a quadratic Bézier curve from the current point to [x,y]
 Function smoothQuadraticBezierCurveto($to : Collection; $applyTo) : cs:C1710.svg
@@ -2312,7 +2373,7 @@ Function _smoothQuadraticCurveto($parameters : Collection; $absolute : Boolean) 
 	
 	If ($name#"path")
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \""+($absolute ? "T" : "t")+"\" property")
+		This:C1470._pushError("The element \""+$name+"\" is not compatible with \""+($absolute ? "T" : "t")+"\" property")
 		return This:C1470
 		
 	End if 
@@ -2329,7 +2390,7 @@ Function _smoothQuadraticCurveto($parameters : Collection; $absolute : Boolean) 
 	
 	return This:C1470
 	
-	//mark:-
+	// MARK:-
 	//———————————————————————————————————————————————————————————
 	// Close the current subpath by drawing a straight line from the current point to current subpath's initial point
 Function closePath($applyTo) : cs:C1710.svg
@@ -2350,13 +2411,13 @@ Function Z($applyTo) : cs:C1710.svg
 		
 	Else 
 		
-		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" is not compatible with \"points\" property")
+		This:C1470._pushError("The element \""+$name+"\" is not compatible with \"points\" property")
 		
 	End if 
 	
 	return This:C1470
 	
-	//MARK:-ATTRIBUTES
+	// MARK:- ATTRIBUTES
 	//———————————————————————————————————————————————————————————
 	// ⚠️ Overrides the method of the inherited class
 Function setAttribute($name : Text; $value : Variant; $applyTo) : cs:C1710.svg
@@ -2755,6 +2816,7 @@ Function height($height : Real; $applyTo) : cs:C1710.svg
 	
 	return This:C1470
 	
+	// MARK:- TRANSLATE, ROTATE, & SCALE
 	//———————————————————————————————————————————————————————————
 Function translate($tx : Real; $ty; $applyTo) : cs:C1710.svg
 	
@@ -2787,37 +2849,12 @@ Function translate($tx : Real; $ty; $applyTo) : cs:C1710.svg
 		
 	End if 
 	
-	var $t : Text:=This:C1470.getAttribute($node; "transform")
-	
-	If (Length:C16($t)>0)
-		
-		var $c:=Split string:C1554($t; " ")
-		var $indx:=$c.indexOf("translate(@")
-		
-		If ($indx#-1)
-			
-			$c[$indx]:=$transform
-			
-		Else 
-			
-			$c.push($transform)
-			
-		End if 
-		
-		$transform:=$c.join(" ")
-		
-	Else 
-		
-		This:C1470.errors.remove(This:C1470.errors.length-1)
-		
-	End if 
-	
-	Super:C1706.setAttribute($node; "transform"; $transform)
+	This:C1470.transform($node; $transform)
 	
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-Function rotate($angle : Integer; $cx : Variant; $cy : Real; $applyTo) : cs:C1710.svg
+Function rotate($deg : Integer; $cx : Variant; $cy : Real; $applyTo) : cs:C1710.svg
 	
 	var $paramNumber:=Count parameters:C259
 	
@@ -2832,8 +2869,7 @@ Function rotate($angle : Integer; $cx : Variant; $cy : Real; $applyTo) : cs:C171
 			//…………………………………………………………………………………………
 		: ($paramNumber=1)  // Angle
 			
-			var $node:=This:C1470._getTarget()
-			var $transform:="rotate("+String:C10($angle)+")"
+			This:C1470.transform(This:C1470._getTarget(); This:C1470._rotate($deg))
 			
 			//…………………………………………………………………………………………
 		: ($paramNumber=2)  // Angle + cx | ref
@@ -2841,13 +2877,11 @@ Function rotate($angle : Integer; $cx : Variant; $cy : Real; $applyTo) : cs:C171
 			If (Value type:C1509($cx)=Is real:K8:4)\
 				 | (Value type:C1509($cx)=Is longint:K8:6)
 				
-				$node:=This:C1470._getTarget()
-				$transform:="rotate("+String:C10($angle)+" "+String:C10($cx; "&xml")+" "+String:C10($cx; "&xml")+")"
+				This:C1470.transform(This:C1470._getTarget(); This:C1470._rotate($deg; $cx))
 				
 			Else 
 				
-				$node:=This:C1470._getTarget($cx)
-				$transform:="rotate("+String:C10($angle)+")"
+				This:C1470.transform(This:C1470._getTarget($cx); This:C1470._rotate($deg))
 				
 			End if 
 			
@@ -2857,53 +2891,167 @@ Function rotate($angle : Integer; $cx : Variant; $cy : Real; $applyTo) : cs:C171
 			If (Value type:C1509($cy)=Is real:K8:4)\
 				 | (Value type:C1509($cy)=Is longint:K8:6)
 				
-				$node:=This:C1470._getTarget()
-				$transform:="rotate("+String:C10($angle)+" "+String:C10($cx; "&xml")+" "+String:C10($cy; "&xml")+")"
+				This:C1470.transform(This:C1470._getTarget(); This:C1470._rotate($deg; $cx; $cy))
 				
 			Else 
 				
-				$node:=This:C1470._getTarget($cy)
-				$transform:="rotate("+String:C10($angle)+" "+String:C10($cx; "&xml")+" "+String:C10($cx; "&xml")+")"
+				This:C1470.transform(This:C1470._getTarget($cy); This:C1470._rotate($deg; $cx))
 				
 			End if 
 			
 			//…………………………………………………………………………………………
 		: ($paramNumber=4)  // Angle + cx + cy + ref
 			
-			$node:=This:C1470._getTarget($applyTo)
-			$transform:="rotate("+String:C10($angle)+" "+String:C10($cx; "&xml")+" "+String:C10($cy; "&xml")+")"
+			This:C1470.transform(This:C1470._getTarget($applyTo); This:C1470._rotate($deg; $cx; $cy))
 			
 			//…………………………………………………………………………………………
 	End case 
 	
-	var $t : Text:=This:C1470.getAttribute($node; "transform")
+	return This:C1470
 	
-	If (Length:C16($t)>0)
+	//———————————————————————————————————————————————————————————
+Function rotateTAU($fraction : Real; $cx : Variant; $cy : Real; $applyTo) : cs:C1710.svg
+	
+	var $paramNumber:=Count parameters:C259
+	
+	If (Not:C34(This:C1470._requiredParams($paramNumber; 1)))
 		
-		var $c:=Split string:C1554($t; " ")
-		var $indx:=$c.indexOf("rotate(@")
-		
-		If ($indx#-1)
-			
-			$c[$indx]:=$transform
-			
-		Else 
-			
-			$c.push($transform)
-			
-		End if 
-		
-		$transform:=$c.join(" ")
-		
-	Else 
-		
-		This:C1470.errors.remove(This:C1470.errors.length-1)
+		return This:C1470
 		
 	End if 
 	
-	Super:C1706.setAttribute($node; "transform"; $transform)
+	var $deg:=$fraction*360
+	
+	Case of 
+			
+			//…………………………………………………………………………………………
+		: ($paramNumber=1)  // Fraction
+			
+			This:C1470.transform(This:C1470._getTarget(); This:C1470._rotate($deg))
+			
+			//…………………………………………………………………………………………
+		: ($paramNumber=2)  // Fraction + cx | ref
+			
+			If (Value type:C1509($cx)=Is real:K8:4)\
+				 | (Value type:C1509($cx)=Is longint:K8:6)
+				
+				This:C1470.transform(This:C1470._getTarget(); This:C1470._rotate($deg; $cx))
+				
+			Else 
+				
+				This:C1470.transform(This:C1470._getTarget($cx); This:C1470._rotate($deg))
+				
+			End if 
+			
+			//…………………………………………………………………………………………
+		: ($paramNumber=3)  // Fraction + cx + cy | ref
+			
+			If (Value type:C1509($cy)=Is real:K8:4)\
+				 | (Value type:C1509($cy)=Is longint:K8:6)
+				
+				This:C1470.transform(This:C1470._getTarget(); This:C1470._rotate($deg; $cx; $cy))
+				
+			Else 
+				
+				This:C1470.transform(This:C1470._getTarget($cy); This:C1470._rotate($deg; $cx))
+				
+			End if 
+			
+			//…………………………………………………………………………………………
+		: ($paramNumber=4)  // Fraction + cx + cy + ref
+			
+			This:C1470.transform(This:C1470._getTarget($applyTo); This:C1470._rotate($deg; $cx; $cy))
+			
+			//…………………………………………………………………………………………
+	End case 
 	
 	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+Function rotateRad($rad : Real; $cx : Variant; $cy : Real; $applyTo) : cs:C1710.svg
+	
+	var $paramNumber:=Count parameters:C259
+	
+	If (Not:C34(This:C1470._requiredParams($paramNumber; 1)))
+		
+		return This:C1470
+		
+	End if 
+	
+	// Conversion radians → degrees
+	var $deg:=$rad*(180/Pi:K30:1)
+	
+	Case of 
+			
+			//…………………………………………………………………………………………
+		: ($paramNumber=1)  // Angle
+			
+			This:C1470.transform(This:C1470._getTarget(); This:C1470._rotate($deg))
+			
+			//…………………………………………………………………………………………
+		: ($paramNumber=2)  // Angle + cx | ref
+			
+			If (Value type:C1509($cx)=Is real:K8:4)\
+				 | (Value type:C1509($cx)=Is longint:K8:6)
+				
+				This:C1470.transform(This:C1470._getTarget(); This:C1470._rotate($deg; $cx))
+				
+			Else 
+				
+				This:C1470.transform(This:C1470._getTarget($cx); This:C1470._rotate($deg))
+				
+			End if 
+			
+			//…………………………………………………………………………………………
+		: ($paramNumber=3)  // Angle + cx + cy | ref
+			
+			If (Value type:C1509($cy)=Is real:K8:4)\
+				 | (Value type:C1509($cy)=Is longint:K8:6)
+				
+				This:C1470.transform(This:C1470._getTarget(); This:C1470._rotate($deg; $cx; $cy))
+				
+			Else 
+				
+				This:C1470.transform(This:C1470._getTarget($cy); This:C1470._rotate($deg; $cx))
+				
+			End if 
+			
+			//…………………………………………………………………………………………
+		: ($paramNumber=4)  // Angle + cx + cy + ref
+			
+			This:C1470.transform(This:C1470._getTarget($applyTo); This:C1470._rotate($deg; $cx; $cy))
+			
+			//…………………………………………………………………………………………
+	End case 
+	
+	return This:C1470
+	
+	// *** *** *** *** *** *** *** *** *** *** *** *** *** *** 
+Function _rotate($deg : Real; $cx : Real; $cy : Real; $applyTo : Text) : Text
+	
+	var $paramNumber:=Count parameters:C259
+	
+	Case of 
+			
+			//…………………………………………………………………………………………
+		: ($paramNumber=1)  // Angle
+			
+			var $node:=This:C1470._getTarget()
+			return "rotate("+String:C10($deg)+")"
+			
+			//…………………………………………………………………………………………
+		: ($paramNumber=2)  // Angle + cx
+			
+			$node:=This:C1470._getTarget()
+			return "rotate("+String:C10($deg)+" "+String:C10($cx; "&xml")+" "+String:C10($cx; "&xml")+")"
+			
+			//…………………………………………………………………………………………
+		: ($paramNumber=3)  // Angle + cx + cy
+			
+			return "rotate("+String:C10($deg)+" "+String:C10($cx; "&xml")+" "+String:C10($cy; "&xml")+")"
+			
+			//…………………………………………………………………………………………
+	End case 
 	
 	//———————————————————————————————————————————————————————————
 Function scale($sx : Real; $sy; $applyTo) : cs:C1710.svg
@@ -2937,35 +3085,52 @@ Function scale($sx : Real; $sy; $applyTo) : cs:C1710.svg
 		
 	End if 
 	
+	This:C1470.transform($node; $transform)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+Function transform($node : Text; $transform : Text; $stack : Boolean)
+	
+	$stack:=Count parameters:C259>=3 ? $stack : This:C1470.stackTransformation
+	
 	var $t : Text:=This:C1470.getAttribute($node; "transform")
 	
-	If (Length:C16($t)>0)
+	If (Length:C16($t)=0)
 		
-		var $c:=Split string:C1554($t; " ")
-		var $indx:=$c.indexOf("scale(@")
-		
-		If ($indx#-1)
-			
-			$c[$indx]:=$transform
-			
-		Else 
-			
-			$c.push($transform)
-			
-		End if 
-		
-		$transform:=$c.join(" ")
+		This:C1470.errors.remove(This:C1470.errors.length-1)  // Ignore the last error
 		
 	Else 
 		
-		This:C1470.errors.remove(This:C1470.errors.length-1)
+		var $c:=Split string:C1554($t; " ")
+		
+		If ($stack)
+			
+			$c.push($transform)
+			
+		Else 
+			
+			var $target : Text:=Split string:C1554($transform; "("; sk ignore empty strings:K86:1+sk trim spaces:K86:2)[0]+"(@"
+			var $indx:=$c.indexOf($target)
+			
+			If ($indx#-1) & Not:C34($stack)
+				
+				$c[$indx]:=$transform
+				
+			Else 
+				
+				$c.push($transform)
+				
+			End if 
+		End if 
+		
+		$transform:=$c.join(" ")
 		
 	End if 
 	
 	Super:C1706.setAttribute($node; "transform"; $transform)
 	
-	return This:C1470
-	
+	// MARK:- FILL & STROKE
 	//———————————————————————————————————————————————————————————
 Function fillColor($color : Text; $applyTo) : cs:C1710.svg
 	
@@ -3070,6 +3235,50 @@ Function dasharray($dash : Real;  ...  : Integer) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Sets the vector-effect attribute to the current (or passed) element
+Function nonScalingStroke($mode; $applyTo) : cs:C1710.svg
+	
+	var $node:=This:C1470._getTarget($applyTo)
+	var $type:=Value type:C1509($mode)
+	
+	Case of 
+			
+			//______________________________________________________
+		: ($type=Is boolean:K8:9)
+			
+			If ($mode)
+				
+				Super:C1706.setAttribute($node; "vector-effect"; "non-scaling-stroke")
+				
+			Else 
+				
+				Super:C1706.setAttribute($node; "vector-effect"; "none")
+				
+			End if 
+			
+			//______________________________________________________
+		: ($type=Is text:K8:3)
+			
+			If (Length:C16($mode)=0)
+				
+				Super:C1706.removeAttribute($node; "vector-effect")
+				
+			Else 
+				
+				Super:C1706.setAttribute($node; "vector-effect"; $mode)
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError("Bad parameter type")
+			
+			//______________________________________________________
+	End case 
+	
+	// MARK:- FONT
+	//———————————————————————————————————————————————————————————
 Function fontFamily($fonts : Text; $applyTo) : cs:C1710.svg
 	
 	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "font-family"; $fonts)
@@ -3088,7 +3297,7 @@ Function fontStyle($style; $applyTo) : cs:C1710.svg
 	
 	var $node:=This:C1470._getTarget($applyTo)
 	
-	If (Value type:C1509($tyle)=Is text:K8:3)
+	If (Value type:C1509($style)=Is text:K8:3)
 		
 		This:C1470.style($style; $applyTo)
 		
@@ -3206,6 +3415,7 @@ Function textRendering($rendering : Text; $applyTo) : cs:C1710.svg
 	
 	return This:C1470
 	
+	// MARK:-
 	//———————————————————————————————————————————————————————————
 Function visible($visible : Boolean; $applyTo) : cs:C1710.svg
 	
@@ -3237,50 +3447,7 @@ Function preserveAspectRatio($value : Text; $applyTo) : cs:C1710.svg
 		End if 
 	End if 
 	
-	//———————————————————————————————————————————————————————————
-	// Sets the vector-effect attribute to the current (or passed) element
-Function nonScalingStroke($mode; $applyTo) : cs:C1710.svg
-	
-	var $node:=This:C1470._getTarget($applyTo)
-	var $type:=Value type:C1509($mode)
-	
-	Case of 
-			
-			//______________________________________________________
-		: ($type=Is boolean:K8:9)
-			
-			If ($mode)
-				
-				Super:C1706.setAttribute($node; "vector-effect"; "non-scaling-stroke")
-				
-			Else 
-				
-				Super:C1706.setAttribute($node; "vector-effect"; "none")
-				
-			End if 
-			
-			//______________________________________________________
-		: ($type=Is text:K8:3)
-			
-			If (Length:C16($mode)=0)
-				
-				Super:C1706.removeAttribute($node; "vector-effect")
-				
-			Else 
-				
-				Super:C1706.setAttribute($node; "vector-effect"; $mode)
-				
-			End if 
-			
-			//______________________________________________________
-		Else 
-			
-			This:C1470._pushError("Bad parameter type")
-			
-			//______________________________________________________
-	End case 
-	
-	//MARK:-FILTERS
+	// MARK:- FILTERS
 	//———————————————————————————————————————————————————————————
 	// Apply a filter to the current (or passed) element
 Function filter($id : Text; $applyTo) : cs:C1710.svg
@@ -3705,7 +3872,7 @@ Function clone($source : Text; $attachTo) : cs:C1710.svg
 		
 		If (This:C1470.getAttributes($target).id#Null:C1517)
 			
-			This:C1470.errors.push(Current method name:C684+" - As the id must be unique, it has been removed.")
+			This:C1470.errors.push("As the id must be unique, it has been removed.")
 			
 		End if 
 		
@@ -3881,6 +4048,7 @@ Function stroke($value; $applyTo) : cs:C1710.svg
 			//______________________________________________________
 		: (Value type:C1509($value)=Is text:K8:3)  // Set color
 			
+			
 			If (["butt"; "round"; "square"].includes($value))  // stroke-linecap
 				
 				var $name:=This:C1470.getName($node)
@@ -3953,6 +4121,42 @@ Function stroke($value; $applyTo) : cs:C1710.svg
 			
 			//______________________________________________________
 	End case 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Sets linecap attributes
+Function linecap($value; $applyTo) : cs:C1710.svg
+	
+	var $node:=This:C1470._getTarget($applyTo)
+	
+	If (["butt"; "round"; "square"].includes($value))
+		
+		Super:C1706.setAttribute($node; "stroke-linecap"; $value)
+		
+	Else 
+		
+		This:C1470._pushError($value+"is not a valid value for the \"linejoin\" attribute")
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Sets linejoin attributes
+Function linejoin($value; $applyTo) : cs:C1710.svg
+	
+	var $node:=This:C1470._getTarget($applyTo)
+	
+	If (["miter"; "round"; "bevel"; "arcs"].includes($value))
+		
+		Super:C1706.setAttribute($node; "stroke-linejoin"; $value)
+		
+	Else 
+		
+		This:C1470._pushError($value+"is not a valid value for the \"linejoin\" attribute")
+		
+	End if 
 	
 	return This:C1470
 	
@@ -5038,7 +5242,7 @@ Function _data($node : Text) : Collection
 		
 		var $name : Text
 		DOM GET XML ELEMENT NAME:C730($node; $name)
-		This:C1470._pushError(Current method name:C684+" The element \""+$name+"\" has no \"d\" property")
+		This:C1470._pushError("The element \""+$name+"\" has no \"d\" property")
 		
 	End if 
 	

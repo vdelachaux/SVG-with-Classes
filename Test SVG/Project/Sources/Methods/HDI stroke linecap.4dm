@@ -1,5 +1,6 @@
 //%attributes = {}
-/*
+/* https://www.w3.org/TR/SVG2/painting.html#LineCaps
+
 stroke-linecap specifies the shape to be used at the end of open subpaths when they are stroked, 
 and the shape to be drawn for zero length subpaths whether they are open or closed. 
 
@@ -37,23 +38,23 @@ $svg.line(-60; 0; 60; 0).symbol("line1")
 $svg.style(".thick {stroke:black; stroke-width:35px;}")\
 .style(".thin {stroke:#ccc; stroke-width:2px;}")
 
-// MARK:- Butt
+// MARK:- Butt 
 $svg.group().translate(100; 40)\
-.use("line1").class("thick").stroke("butt")\
+.use("line1").class("thick").linecap("butt")\
 .use("line1").class("thin")\
 .use("circles")\
 .text("‘butt’ cap").y(50)
 
 // MARK:- Round
 $svg.group("root").translate(300; 40)\
-.use("line1").class("thick").stroke("round")\
+.use("line1").class("thick").linecap("round")\
 .use("line1").class("thin")\
 .use("circles")\
 .text("‘round’ cap").y(50)
 
-// MARK:- Square
+// MARK:- Square 
 $svg.group("root").translate(500; 40)\
-.use("line1").class("thick").stroke("square")\
+.use("line1").class("thick").linecap("square")\
 .use("line1").class("thin")\
 .use("circles")\
 .text("‘square’ cap").y(50)
