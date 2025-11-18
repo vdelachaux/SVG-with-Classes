@@ -128,7 +128,7 @@ Function newCanvas($attributes : Object) : cs:C1710.svg
 		Super:C1706.setDeclaration("UTF-8"; True:C214)
 		Super:C1706.setOption(XML indentation:K45:34; Is compiled mode:C492 ? XML no indentation:K45:36 : XML with indentation:K45:35)
 		Super:C1706.setAttribute(This:C1470.root; "xmlns:xlink"; "http://www.w3.org/1999/xlink")
-		Super:C1706.setAttribute(This:C1470.root; "xmlns:vdl"; "https://github.com/vdelachaux")
+		Super:C1706.setAttribute(This:C1470.root; "xmlns:vdl"; "https://github.com/vdelachaux/SVG-with-Classes")
 		
 		If (This:C1470.success)
 			
@@ -3166,6 +3166,106 @@ Function fillOpacity($opacity : Real; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Sets one or more fill attributes
+Function fill($value; $applyTo) : cs:C1710.svg
+	
+	var $node:=This:C1470._getTarget($applyTo)
+	var $fill : Text:=$node=This:C1470.root ? "viewport-fill" : "fill"
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($value)=Is text:K8:3)  // Set color
+			
+			Case of 
+					
+					// ______________________________________________________
+				: (["nonzero"; "evenodd"].includes($value))  // fill-rule
+					
+					var $name:=This:C1470.getName($node)
+					
+					If (This:C1470._shapes.includes($name))\
+						 || (["g"; "svg"; "use"].includes($name))
+						
+						Super:C1706.setAttribute($node; "fill-rule"; $value)
+						
+					Else 
+						
+						This:C1470._pushError("You cannot set the \"fill-rule\" attribute for a "+$name+" element!")
+						
+					End if 
+					
+					// ______________________________________________________
+				: (This:C1470.store.query("id = :1"; $value).first()#Null:C1517)  // Sets with a pattern
+					
+					Super:C1706.setAttribute($node; $fill; "url(#"+$value+")")
+					
+					// ______________________________________________________
+				Else 
+					
+					Super:C1706.setAttribute($node; $fill; $value)
+					
+					// ______________________________________________________
+			End case 
+			
+			//______________________________________________________
+		: (Value type:C1509($value)=Is boolean:K8:9)  // Set visibility
+			
+			If ($value)
+				
+				If (String:C10(This:C1470.getAttribute($node; $fill))="none")
+					
+					This:C1470.removeAttribute($node; $fill)
+					
+				End if 
+				
+			Else 
+				
+				Super:C1706.setAttribute($node; $fill; "none")
+				
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($value)=Is object:K8:27)  // Multiple attributes
+			
+			If ($value.color#Null:C1517)
+				
+				Super:C1706.setAttribute($node; $fill; $value.color)
+				
+			End if 
+			
+			If ($value.opacity#Null:C1517)
+				
+				Super:C1706.setAttribute($node; $fill+"-opacity"; $value)
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError("Bad parameter type")
+			
+			//______________________________________________________
+	End case 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Sets fill or stroke attribute with a gradient
+Function gradient($id : Text; $stroke; $applyTo) : cs:C1710.svg
+	
+	If (Value type:C1509($stroke)=Is text:K8:3)
+		
+		$applyTo:=$stroke
+		$stroke:=False:C215
+		
+	End if 
+	
+	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); $stroke ? "stroke" : "fill"; "url(#"+$id+")")
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 Function strokeColor($color : Text; $applyTo) : cs:C1710.svg
 	
 	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "stroke"; $color)
@@ -3276,6 +3376,144 @@ Function nonScalingStroke($mode; $applyTo) : cs:C1710.svg
 			
 			//______________________________________________________
 	End case 
+	
+	//———————————————————————————————————————————————————————————
+	// Sets one or more stroke attributes
+Function stroke($value; $applyTo) : cs:C1710.svg
+	
+	var $node:=This:C1470._getTarget($applyTo)
+	
+	Case of 
+			
+			//______________________________________________________
+		: (Value type:C1509($value)=Is real:K8:4)\
+			 | (Value type:C1509($value)=Is longint:K8:6)  // Set width
+			
+			Super:C1706.setAttribute($node; "stroke-width"; $value)
+			
+			//______________________________________________________
+		: (Value type:C1509($value)=Is text:K8:3)  // Set color
+			
+			Case of 
+					
+					// ______________________________________________________
+				: (["butt"; "round"; "square"].includes($value))  // Stroke-linecap
+					
+					var $name:=This:C1470.getName($node)
+					
+					If (This:C1470._shapes.includes($name))\
+						 || (["g"; "line"; "svg"; "use"].includes($name))
+						
+						Super:C1706.setAttribute($node; "stroke-linecap"; $value)
+						
+					Else 
+						
+						This:C1470._pushError("You cannot set the \"fill-rule\" attribute for a "+$name+" element!")
+						
+					End if 
+					
+					// ______________________________________________________
+				: (This:C1470.store.query("id = :1"; $value).first()#Null:C1517)  // Sets with a pattern
+					
+					Super:C1706.setAttribute($node; "stroke"; "url(#"+$value+")")
+					
+					// ______________________________________________________
+				Else 
+					
+					Super:C1706.setAttribute($node; "stroke"; $value)
+					
+					// ______________________________________________________
+			End case 
+			
+			//______________________________________________________
+		: (Value type:C1509($value)=Is boolean:K8:9)  // Set visibility
+			
+			If ($value)
+				
+				If (String:C10(This:C1470.getAttribute($node; "stroke"))="none")
+					
+					This:C1470.removeAttribute($node; "stroke")
+					
+				End if 
+				
+				If (Num:C11(This:C1470.getAttribute($node; "stroke-width"))=0)
+					
+					This:C1470.removeAttribute($node; "stroke-width")
+					
+				End if 
+				
+			Else 
+				
+				Super:C1706.setAttribute($node; "stroke"; "none")
+				
+			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($value)=Is object:K8:27)  // Multiple attributes
+			
+			If ($value.color#Null:C1517)
+				
+				Super:C1706.setAttribute($node; "stroke"; $value.color)
+				
+			End if 
+			
+			If ($value.width#Null:C1517)
+				
+				Super:C1706.setAttribute($node; "stroke-width"; $value.width)
+				
+			End if 
+			
+			If ($value.opacity#Null:C1517)
+				
+				Super:C1706.setAttribute($node; "stroke-opacity"; $value.opacity)
+				
+			End if 
+			
+			//______________________________________________________
+		Else 
+			
+			This:C1470._pushError("Bad parameter type")
+			
+			//______________________________________________________
+	End case 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Sets linecap attributes
+Function linecap($value; $applyTo) : cs:C1710.svg
+	
+	var $node:=This:C1470._getTarget($applyTo)
+	
+	If (["butt"; "round"; "square"].includes($value))
+		
+		Super:C1706.setAttribute($node; "stroke-linecap"; $value)
+		
+	Else 
+		
+		This:C1470._pushError($value+"is not a valid value for the \"linejoin\" attribute")
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Sets linejoin attributes
+Function linejoin($value; $applyTo) : cs:C1710.svg
+	
+	var $node:=This:C1470._getTarget($applyTo)
+	
+	If (["miter"; "round"; "bevel"; "arcs"].includes($value))
+		
+		Super:C1706.setAttribute($node; "stroke-linejoin"; $value)
+		
+	Else 
+		
+		This:C1470._pushError($value+"is not a valid value for the \"linejoin\" attribute")
+		
+	End if 
+	
+	return This:C1470
 	
 	// MARK:- FONT
 	//———————————————————————————————————————————————————————————
@@ -4028,240 +4266,6 @@ Function opacity($opacity : Real; $applyTo) : cs:C1710.svg
 	$opacity:=This:C1470._num2Percent($opacity)/100
 	This:C1470.fillOpacity($opacity; $node)
 	This:C1470.strokeOpacity($opacity; $node)
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Sets one or more stroke attributes
-Function stroke($value; $applyTo) : cs:C1710.svg
-	
-	var $node:=This:C1470._getTarget($applyTo)
-	
-	Case of 
-			
-			//______________________________________________________
-		: (Value type:C1509($value)=Is real:K8:4)\
-			 | (Value type:C1509($value)=Is longint:K8:6)  // Set width
-			
-			Super:C1706.setAttribute($node; "stroke-width"; $value)
-			
-			//______________________________________________________
-		: (Value type:C1509($value)=Is text:K8:3)  // Set color
-			
-			
-			If (["butt"; "round"; "square"].includes($value))  // stroke-linecap
-				
-				var $name:=This:C1470.getName($node)
-				
-				If (This:C1470._shapes.includes($name))\
-					 || (["g"; "line"; "svg"; "use"].includes($name))
-					
-					Super:C1706.setAttribute($node; "stroke-linecap"; $value)
-					
-				Else 
-					
-					This:C1470._pushError("You cannot set the \"fill-rule\" attribute for a "+$name+" element!")
-					
-				End if 
-				
-			Else 
-				
-				Super:C1706.setAttribute($node; "stroke"; $value)
-				
-			End if 
-			
-			//______________________________________________________
-		: (Value type:C1509($value)=Is boolean:K8:9)  // Set visibility
-			
-			If ($value)
-				
-				If (String:C10(This:C1470.getAttribute($node; "stroke"))="none")
-					
-					This:C1470.removeAttribute($node; "stroke")
-					
-				End if 
-				
-				If (Num:C11(This:C1470.getAttribute($node; "stroke-width"))=0)
-					
-					This:C1470.removeAttribute($node; "stroke-width")
-					
-				End if 
-				
-			Else 
-				
-				Super:C1706.setAttribute($node; "stroke"; "none")
-				
-			End if 
-			
-			//______________________________________________________
-		: (Value type:C1509($value)=Is object:K8:27)  // Multiple attributes
-			
-			If ($value.color#Null:C1517)
-				
-				Super:C1706.setAttribute($node; "stroke"; $value.color)
-				
-			End if 
-			
-			If ($value.width#Null:C1517)
-				
-				Super:C1706.setAttribute($node; "stroke-width"; $value.width)
-				
-			End if 
-			
-			If ($value.opacity#Null:C1517)
-				
-				Super:C1706.setAttribute($node; "stroke-opacity"; $value.opacity)
-				
-			End if 
-			
-			//______________________________________________________
-		Else 
-			
-			This:C1470._pushError("Bad parameter type")
-			
-			//______________________________________________________
-	End case 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Sets linecap attributes
-Function linecap($value; $applyTo) : cs:C1710.svg
-	
-	var $node:=This:C1470._getTarget($applyTo)
-	
-	If (["butt"; "round"; "square"].includes($value))
-		
-		Super:C1706.setAttribute($node; "stroke-linecap"; $value)
-		
-	Else 
-		
-		This:C1470._pushError($value+"is not a valid value for the \"linejoin\" attribute")
-		
-	End if 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Sets linejoin attributes
-Function linejoin($value; $applyTo) : cs:C1710.svg
-	
-	var $node:=This:C1470._getTarget($applyTo)
-	
-	If (["miter"; "round"; "bevel"; "arcs"].includes($value))
-		
-		Super:C1706.setAttribute($node; "stroke-linejoin"; $value)
-		
-	Else 
-		
-		This:C1470._pushError($value+"is not a valid value for the \"linejoin\" attribute")
-		
-	End if 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Sets one or more fill attributes
-Function fill($value; $applyTo) : cs:C1710.svg
-	
-	var $node:=This:C1470._getTarget($applyTo)
-	var $fill : Text:=$node=This:C1470.root ? "viewport-fill" : "fill"
-	
-	Case of 
-			
-			//______________________________________________________
-		: (Value type:C1509($value)=Is text:K8:3)  // Set color
-			
-			If (["nonzero"; "evenodd"].includes($value))  // fill-rule
-				
-				var $name:=This:C1470.getName($node)
-				
-				If (This:C1470._shapes.includes($name))\
-					 || (["g"; "svg"; "use"].includes($name))
-					
-					Super:C1706.setAttribute($node; "fill-rule"; $value)
-					
-				Else 
-					
-					This:C1470._pushError("You cannot set the \"fill-rule\" attribute for a "+$name+" element!")
-					
-				End if 
-				
-			Else 
-				
-				Super:C1706.setAttribute($node; $fill; $value)
-				
-			End if 
-			
-			//______________________________________________________
-		: (Value type:C1509($value)=Is boolean:K8:9)  // Set visibility
-			
-			If ($value)
-				
-				If (String:C10(This:C1470.getAttribute($node; $fill))="none")
-					
-					This:C1470.removeAttribute($node; $fill)
-					
-				End if 
-				
-			Else 
-				
-				Super:C1706.setAttribute($node; $fill; "none")
-				
-			End if 
-			
-			//______________________________________________________
-		: (Value type:C1509($value)=Is object:K8:27)  // Multiple attributes
-			
-			If ($value.color#Null:C1517)
-				
-				Super:C1706.setAttribute($node; $fill; $value.color)
-				
-			End if 
-			
-			If ($value.opacity#Null:C1517)
-				
-				Super:C1706.setAttribute($node; $fill+"-opacity"; $value)
-				
-			End if 
-			
-			//______________________________________________________
-		Else 
-			
-			This:C1470._pushError("Bad parameter type")
-			
-			//______________________________________________________
-	End case 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Sets fill or stroke attribute with a gradient
-Function gradient($id : Text; $stroke; $applyTo) : cs:C1710.svg
-	
-	If (Value type:C1509($stroke)=Is text:K8:3)
-		
-		$applyTo:=$stroke
-		$stroke:=False:C215
-		
-	End if 
-	
-	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); $stroke ? "stroke" : "fill"; "url(#"+$id+")")
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Sets fill or stroke attribute with a pattern
-Function pattern($id : Text; $stroke; $applyTo) : cs:C1710.svg
-	
-	If (Value type:C1509($stroke)=Is text:K8:3)
-		
-		$applyTo:=$stroke
-		$stroke:=False:C215
-		
-	End if 
-	
-	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); $stroke ? "stroke" : "fill"; "url(#"+$id+")")
 	
 	return This:C1470
 	

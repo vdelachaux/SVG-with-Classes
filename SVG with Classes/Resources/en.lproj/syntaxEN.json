@@ -1770,12 +1770,12 @@
 			],
 			"Summary": ""
 		},
-		"lineTo()": {
-			"Syntax": "**.lineTo**( *point* : Collection; *applyTo* : Variant ) : cs.svgx.svg",
+		"points()": {
+			"Syntax": "**.points**( *points* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
 			"Params": [
 				[
-					"point",
-					"Collection",
+					"points",
+					"Variant",
 					"->"
 				],
 				[
@@ -1791,12 +1791,12 @@
 			],
 			"Summary": ""
 		},
-		"points()": {
-			"Syntax": "**.points**( *points* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
+		"lineTo()": {
+			"Syntax": "**.lineTo**( *point* : Collection; *applyTo* : Variant ) : cs.svgx.svg",
 			"Params": [
 				[
-					"points",
-					"Variant",
+					"point",
+					"Collection",
 					"->"
 				],
 				[
@@ -2647,6 +2647,43 @@
 			],
 			"Summary": ""
 		},
+		"setAttributes()": {
+			"Syntax": "**.setAttributes**( *attributes* : Variant; *value* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"attributes",
+					"Variant",
+					"->"
+				],
+				[
+					"value",
+					"Variant",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"absolute()": {
+			"Syntax": "**.absolute**() : cs.svgx.svg",
+			"Params": [
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"d()": {
 			"Syntax": "**.d**( *data* : Text; *applyTo* : Variant ) : cs.svgx.svg",
 			"Params": [
@@ -2877,79 +2914,6 @@
 			],
 			"Summary": ""
 		},
-		"convertToGrayScale()": {
-			"Syntax": "**.convertToGrayScale**( *grey* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"grey",
-					"Variant",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"regularPolygon()": {
-			"Syntax": "**.regularPolygon**( *diameter* : Real; *sides* : Integer; *cx* : Real; *cy* : Real ) : cs.svgx.svg",
-			"Params": [
-				[
-					"diameter",
-					"Real",
-					"->"
-				],
-				[
-					"sides",
-					"Integer",
-					"->"
-				],
-				[
-					"cx",
-					"Real",
-					"->"
-				],
-				[
-					"cy",
-					"Real",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"import()": {
-			"Syntax": "**.import**( *file* : 4D.File; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"file",
-					"4D.File",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"x()": {
 			"Syntax": "**.x**( *x* : Real; *applyTo* : Variant ) : cs.svgx.svg",
 			"Params": [
@@ -3075,6 +3039,79 @@
 				[
 					"",
 					"Picture",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"import()": {
+			"Syntax": "**.import**( *file* : 4D.File; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"file",
+					"4D.File",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"convertToGrayScale()": {
+			"Syntax": "**.convertToGrayScale**( *grey* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"grey",
+					"Variant",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"regularPolygon()": {
+			"Syntax": "**.regularPolygon**( *diameter* : Real; *sides* : Integer; *cx* : Real; *cy* : Real ) : cs.svgx.svg",
+			"Params": [
+				[
+					"diameter",
+					"Real",
+					"->"
+				],
+				[
+					"sides",
+					"Integer",
+					"->"
+				],
+				[
+					"cx",
+					"Real",
+					"->"
+				],
+				[
+					"cy",
+					"Real",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
 					"<-"
 				]
 			],
@@ -3484,43 +3521,6 @@
 					"Variant",
 					"->"
 				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setAttributes()": {
-			"Syntax": "**.setAttributes**( *attributes* : Variant; *value* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"attributes",
-					"Variant",
-					"->"
-				],
-				[
-					"value",
-					"Variant",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"absolute()": {
-			"Syntax": "**.absolute**() : cs.svgx.svg",
-			"Params": [
 				[
 					"",
 					"cs.svgx.svg",

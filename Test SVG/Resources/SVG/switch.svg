@@ -1,0 +1,10 @@
+<svg viewBox="0 -20 100 50">
+  <switch>
+    <text systemLanguage="ja">こんにちは</text>
+    <text systemLanguage="fr">Bonjour!</text>
+    <text systemLanguage="es">Hola!</text>
+    <text systemLanguage="en">Hello!</text>
+    <text systemLanguage="ar">مرحبا</text>
+    <text systemLanguage="ru">Привет!</text>
+  </switch>
+</svg>
