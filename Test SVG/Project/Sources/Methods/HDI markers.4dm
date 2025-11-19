@@ -31,7 +31,7 @@ $svg.group("root").stroke("round").strokeWidth(4).scale(4).translate(100; 100)
 
 // Create parth and assign it strat, middle & end markers
 // Note that only the third path displays the “start” marker, because for the other two, the “end” marker is displayed on top of it.
-$svg.path().d("M10,10 h20 v20 z m40,0 h20 v20 z m40,0 h20 v20").fill(False:C215)\
+$svg.path().d("M10,10 h20 v20 z m40,0 h20 v20 z m40,0 h20 v20").fill(False:C215).linejoin("round")\
 .marker("start"; "start")\
 .marker("mid"; "mid")\
 .marker("end"; "end")

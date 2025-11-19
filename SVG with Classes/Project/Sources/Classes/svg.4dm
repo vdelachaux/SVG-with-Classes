@@ -1,8 +1,75 @@
 Class extends xml
 
-// Elements that can have graphic elements and other container elements as child elements.
-property _containers:=[\
+/* Structural element
+The structural elements are those which define the primary structure of an SVG document. S
+pecifically, the following elements are structural elements: 
+*/
+property _structural:=[\
+"defs"; \
+"g"; \
+"svg"; \
+"symbol"; \
+"use"\
+]
+
+/* Structurally external element
+Elements that define its structure by reference to an external resource. 
+Specifically, the following elements are structurally external elements when they have an ‘href’ attribute:
+*/
+property _structurallyExternal:=[\
+"audio"; \
+"foreignObject"; \
+"iframe"; \
+"image"; \
+"script"; \
+"use"; \
+"video"\
+]
+
+/* Graphics element
+One of the element types that can cause graphics to be drawn onto the target canvas. 
+Specifically:
+*/
+property _graphic:=[\
+"audio"; \
+"canvas"; \
+"circle"; \
+"ellipse"; \
+"foreignObject"; \
+"iframe"; \
+"image"; \
+"line"; \
+"path"; \
+"polygon"; \
+"polyline"; \
+"rect"; \
+"text"; \
+"textArea"; \
+"textPath"; \
+"tspan"; \
+"video"\
+]
+
+/* Graphics referencing element
+A graphics element which uses a reference to a different document or element as the source of its graphical content.
+Specifically:
+*/
+property _graphicReferencing:=[\
+"audio"; \
+"iframe"; \
+"image"; \
+"line"; \
+"use"; \
+"video"\
+]
+
+/* Container element
+An element which can have graphics elements and other container elements as child elements.
+Specifically:
+*/
+property _container:=[\
 "a"; \
+"clipPath"; \
 "defs"; \
 "g"; \
 "marker"; \
@@ -14,16 +81,17 @@ property _containers:=[\
 
 // Elements that should not be considered as containers, and for which we need to move up one level.
 property _notContainer:=[\
-"rect"; \
-"line"; \
-"image"; \
 "circle"; \
 "ellipse"; \
+"image"; \
+"line"; \
+"path"; \
 "polygon"; \
 "polyline"; \
+"rect"; \
 "use"; \
-"textArea"; \
-"path"]
+"textArea"]
+
 
 // Graphics element that is defined by some combination of straight lines and curves.
 property _shapes:=[\
@@ -40,6 +108,49 @@ property _descriptive:=[\
 "desc"; \
 "metadata"; \
 "title"]
+
+// Note: renderable also includes a ‘symbol’ if used
+property _renderable:=[\
+"a"; \
+"audio"; \
+"canvas"; \
+"circle"; \
+"ellipse"; \
+"foreignObject"; \
+"g"; \
+"iframe"; \
+"image"; \
+"line"; \
+"path"; \
+"polygon"; \
+"polyline"; \
+"rect"; \
+"svg"; \
+"switch"; \
+"text"; \
+"textArea"; \
+"textPath"; \
+"tspan"; \
+"unknown"; \
+"use"; \
+"video"\
+]
+
+// Note: neverRendered also includes a ‘symbol’ if not used
+property _neverRendered:=[\
+"clipPath"; \
+"defs"; \
+"desc"; \
+"linearGardient"; \
+"marker"; \
+"mask"; \
+"metadata"; \
+"pattern"; \
+"radialGradient"; \
+"script"; \
+"style"; \
+"title"\
+]
 
 // Valid aspect-ratio values
 property _aspectRatioValues:=[\
@@ -489,6 +600,19 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 	
 	$id:=Length:C16($id)>0 ? $id : Generate UUID:C1066
 	
+	If (Count parameters:C259=1)\
+		 || (This:C1470.store.query("id = :1"; $id).first()#Null:C1517)
+		
+		// MARK: Set a clipPath to an element
+		
+		Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "clip-path"; "url(#"+$id+")")
+		
+		return This:C1470
+		
+	End if 
+	
+	// MARK: Store the last created (or passed) element as a clipPath
+	
 	var $defs:=This:C1470._defs()
 	
 	If (Not:C34(This:C1470.success))
@@ -497,17 +621,37 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 		
 	End if 
 	
-	var $mask:=Super:C1706.create($defs; "clipPath"; {id: $id; preserveAspectRatio: "xMidYMid"})
+	var $node:=Super:C1706.create($defs; "clipPath"; {id: $id; preserveAspectRatio: "xMidYMid"})
 	
 	If (This:C1470.success)
 		
-		This:C1470.store.push({id: $id; dom: $mask})
+		This:C1470.store.push({id: $id; dom: $node})
 		
-		var $source:=This:C1470._getTarget($applyTo)
-		var $node:=Super:C1706.clone($source; $mask)
-		This:C1470.remove($source)
+		var $source : Text:=This:C1470._getTarget($applyTo)
 		
-		Super:C1706.setAttribute(This:C1470.root; "clip-path"; "url(#"+$id+")")
+		If (This:C1470.isReference($source))  // && ($source#This.root)
+			
+			$node:=Super:C1706.clone($source; $node)
+			This:C1470.remove($source)
+			This:C1470.restoreRoot()
+			
+			If (Count parameters:C259=2)
+				
+				Super:C1706.setAttribute($node; "clip-path"; "url(#"+$id+")")
+				
+			End if 
+			
+		Else 
+			
+			This:C1470.latest:=$node
+			
+		End if 
+		
+		//var $source:=This._getTarget($applyTo)
+		//var $node:=Super.clone($source; $mask)
+		//This.remove($source)
+		
+		//Super.setAttribute(This.root; "clip-path"; "url(#"+$id+")")
 		
 	End if 
 	
@@ -524,7 +668,7 @@ Function addTo($tgt : Text; $applyTo : Text) : cs:C1710.svg
 	var $name : Text
 	DOM GET XML ELEMENT NAME:C730($tgt; $name)
 	
-	If (This:C1470._containers.includes($name))
+	If (This:C1470._container.includes($name))
 		
 		var $src:=This:C1470._getTarget($applyTo)
 		
@@ -3404,7 +3548,30 @@ Function stroke($value; $applyTo) : cs:C1710.svg
 					If (This:C1470._shapes.includes($name))\
 						 || (["g"; "line"; "svg"; "use"].includes($name))
 						
-						Super:C1706.setAttribute($node; "stroke-linecap"; $value)
+						return This:C1470.linecap($value; $applyTo)
+						
+					Else 
+						
+						This:C1470._pushError("You cannot set the \"Stroke-linecap\" attribute for a "+$name+" element!")
+						
+					End if 
+					
+					// ______________________________________________________
+				: (["miter"; "round"; "bevel"; "arcs"].includes($value))  // Stroke-linejoin
+					
+/* ⚠️ 
+					
+"round" value will be treated above as a value for "stroke-linecap" 
+It is therefore preferable to use the function.linejoin() to set this value for "stroke-linejoin"
+					
+*/
+					
+					$name:=This:C1470.getName($node)
+					
+					If (This:C1470._shapes.includes($name))\
+						 || (["g"; "line"; "svg"; "use"].includes($name))
+						
+						return This:C1470.linejoin($value; $applyTo)
 						
 					Else 
 						
@@ -3466,6 +3633,18 @@ Function stroke($value; $applyTo) : cs:C1710.svg
 			If ($value.opacity#Null:C1517)
 				
 				Super:C1706.setAttribute($node; "stroke-opacity"; $value.opacity)
+				
+			End if 
+			
+			If ($value.linecap#Null:C1517)
+				
+				Super:C1706.setAttribute($node; "stroke-linecap"; $value.linecap)
+				
+			End if 
+			
+			If ($value.linejoin#Null:C1517)
+				
+				Super:C1706.setAttribute($node; "stroke-linejoin"; $value.linejoin)
 				
 			End if 
 			
@@ -3914,7 +4093,7 @@ Function convertToGrayScale($grey; $applyTo) : cs:C1710.svg
 	
 	var $element:=This:C1470.getName($node)
 	
-	If ($element#"image") && (Not:C34(This:C1470._containers.includes($element)))
+	If ($element#"image") && (Not:C34(This:C1470._container.includes($element)))
 		
 		This:C1470._pushError("can't be applied to "+$element)
 		
@@ -5074,7 +5253,7 @@ Function _getContainer($param) : Text
 	var $name : Text
 	DOM GET XML ELEMENT NAME:C730($container; $name)
 	
-	If (This:C1470._containers.includes($name))
+	If (This:C1470._container.includes($name))
 		
 		return $container
 		
