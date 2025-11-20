@@ -6,7 +6,7 @@ $svg.style("path {fill:none}")
 // Define a circle as marker
 // Just setting the width,
 // So by default, it will be a square and the reference point will be the center.
-$svg.marker("diamond"; "none").width(12)
+$svg.marker("diamond"; "defs").width(12)
 $svg.circle(3; 6; 6; "diamond").fill("white").stroke(2)
 
 // Create a group and assign it the marker
@@ -18,13 +18,13 @@ $svg.path().M([50; 90]).v(-20).h(40).v(-20).stroke("blue")
 
 // MARK:- Start/mid/end
 // Define 3 different circles as marker
-$svg.marker("start"; "none"; {width: 8; refX: 5})
+$svg.marker("start"; "defs"; {width: 8; refX: 5})
 $svg.circle(5; 5; 5; "m1").fill("green").opacity(0.5)
 
-$svg.marker("mid"; "none"; {width: 6.5; refX: 5})
+$svg.marker("mid"; "defs"; {width: 6.5; refX: 5})
 $svg.circle(5; 5; 5; "m2").fill("skyblue").opacity(0.7)
 
-$svg.marker("end"; "none"; {width: 5; refX: 5})
+$svg.marker("end"; "defs"; {width: 5; refX: 5})
 $svg.circle(5; 5; 5; "m3").fill("maroon").opacity(0.7)
 
 $svg.group("root").stroke("round").strokeWidth(4).scale(4).translate(100; 100)

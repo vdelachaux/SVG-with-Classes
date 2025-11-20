@@ -2,11 +2,13 @@
 	"00_ SAMPLES": {
 		"methods": [
 			"Code Sample",
+			"Color Wheel",
 			"Component versus Class",
 			"Inspired by Piet Mondrian"
 		],
 		"forms": [
-			"COLOR_PALETTE"
+			"COLOR_PALETTE",
+			"COLOR_WHEEL"
 		]
 	},
 	"BUGS": {
@@ -27,7 +29,6 @@
 			"HDI Chart XY Line",
 			"HDI circle",
 			"HDI ClipPath",
-			"HDI colorWheel",
 			"HDI dasharray",
 			"HDI ellipse",
 			"HDI fill rule",

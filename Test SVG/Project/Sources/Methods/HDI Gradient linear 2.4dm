@@ -1,13 +1,13 @@
 //%attributes = {}
 var $svg : cs:C1710.svgx.svg
 
-$svg:=cs:C1710.svgx.svg.new()\
-.desc("Example liquid-glass")
+$svg:=cs:C1710.svgx.svg.new()
 
-$svg.square(96).radius(30).clipPath("mask")
-$svg.image(File:C1566("/RESOURCES/lena.jpg")).width(96).height(96)
+$svg.linearGradient("gradient"; "gold"; "magenta"; {rotation: 90; startOffset: 20})
 
-$svg.defineLinearGradient("liquidGlass"; "yellow"; "blue"; {rotation: 45; startOffset: 10})
-$svg.square(96).radius(30).fill("url(#liquidGlass)").fillOpacity(0.3).stroke("white").strokeWidth(2).strokeOpacity(0.5)
+$svg.group().scale(4)
+$svg.image(File:C1566("/RESOURCES/lena.jpg")).width(100).height(100)
+
+$svg.square(90).position(5; 5).fill("gradient").fillOpacity(0.3)
 
 $svg.preview()
