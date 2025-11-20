@@ -1,8 +1,75 @@
 Class extends xml
 
-// Elements that can have graphic elements and other container elements as child elements.
-property _containers:=[\
+/* Structural element
+The structural elements are those which define the primary structure of an SVG document. S
+pecifically, the following elements are structural elements: 
+*/
+property _structural:=[\
+"defs"; \
+"g"; \
+"svg"; \
+"symbol"; \
+"use"\
+]
+
+/* Structurally external element
+Elements that define its structure by reference to an external resource. 
+Specifically, the following elements are structurally external elements when they have an ‘href’ attribute:
+*/
+property _structurallyExternal:=[\
+"audio"; \
+"foreignObject"; \
+"iframe"; \
+"image"; \
+"script"; \
+"use"; \
+"video"\
+]
+
+/* Graphics element
+One of the element types that can cause graphics to be drawn onto the target canvas. 
+Specifically:
+*/
+property _graphic:=[\
+"audio"; \
+"canvas"; \
+"circle"; \
+"ellipse"; \
+"foreignObject"; \
+"iframe"; \
+"image"; \
+"line"; \
+"path"; \
+"polygon"; \
+"polyline"; \
+"rect"; \
+"text"; \
+"textArea"; \
+"textPath"; \
+"tspan"; \
+"video"\
+]
+
+/* Graphics referencing element
+A graphics element which uses a reference to a different document or element as the source of its graphical content.
+Specifically:
+*/
+property _graphicReferencing:=[\
+"audio"; \
+"iframe"; \
+"image"; \
+"line"; \
+"use"; \
+"video"\
+]
+
+/* Container element
+An element which can have graphics elements and other container elements as child elements.
+Specifically:
+*/
+property _container:=[\
 "a"; \
+"clipPath"; \
 "defs"; \
 "g"; \
 "marker"; \
@@ -14,16 +81,17 @@ property _containers:=[\
 
 // Elements that should not be considered as containers, and for which we need to move up one level.
 property _notContainer:=[\
-"rect"; \
-"line"; \
-"image"; \
 "circle"; \
 "ellipse"; \
+"image"; \
+"line"; \
+"path"; \
 "polygon"; \
 "polyline"; \
+"rect"; \
 "use"; \
-"textArea"; \
-"path"]
+"textArea"]
+
 
 // Graphics element that is defined by some combination of straight lines and curves.
 property _shapes:=[\
@@ -40,6 +108,49 @@ property _descriptive:=[\
 "desc"; \
 "metadata"; \
 "title"]
+
+// Note: renderable also includes a ‘symbol’ if used
+property _renderable:=[\
+"a"; \
+"audio"; \
+"canvas"; \
+"circle"; \
+"ellipse"; \
+"foreignObject"; \
+"g"; \
+"iframe"; \
+"image"; \
+"line"; \
+"path"; \
+"polygon"; \
+"polyline"; \
+"rect"; \
+"svg"; \
+"switch"; \
+"text"; \
+"textArea"; \
+"textPath"; \
+"tspan"; \
+"unknown"; \
+"use"; \
+"video"\
+]
+
+// Note: neverRendered also includes a ‘symbol’ if not used
+property _neverRendered:=[\
+"clipPath"; \
+"defs"; \
+"desc"; \
+"linearGardient"; \
+"marker"; \
+"mask"; \
+"metadata"; \
+"pattern"; \
+"radialGradient"; \
+"script"; \
+"style"; \
+"title"\
+]
 
 // Valid aspect-ratio values
 property _aspectRatioValues:=[\
@@ -489,6 +600,16 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 	
 	$id:=Length:C16($id)>0 ? $id : Generate UUID:C1066
 	
+	If (This:C1470.store.query("id = :1"; $id).first()#Null:C1517)
+		
+		// MARK: Set a clipPath to an element
+		Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "clip-path"; "url(#"+$id+")")
+		
+		return This:C1470
+		
+	End if 
+	
+	// MARK: Store the last created (or passed) element as a clipPath
 	var $defs:=This:C1470._defs()
 	
 	If (Not:C34(This:C1470.success))
@@ -497,18 +618,31 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 		
 	End if 
 	
-	var $mask:=Super:C1706.create($defs; "clipPath"; {id: $id; preserveAspectRatio: "xMidYMid"})
+	var $node:=Super:C1706.create($defs; "clipPath"; {id: $id; preserveAspectRatio: "xMidYMid"})
 	
 	If (This:C1470.success)
 		
-		This:C1470.store.push({id: $id; dom: $mask})
+		This:C1470.store.push({id: $id; dom: $node})
 		
-		var $source:=This:C1470._getTarget($applyTo)
-		var $node:=Super:C1706.clone($source; $mask)
-		This:C1470.remove($source)
+		var $source : Text:=This:C1470._getTarget($applyTo)
 		
-		Super:C1706.setAttribute(This:C1470.root; "clip-path"; "url(#"+$id+")")
-		
+		If (This:C1470.isReference($source))  // && ($source#This.root)
+			
+			$node:=Super:C1706.clone($source; $node)
+			This:C1470.remove($source)
+			This:C1470.restoreRoot()
+			
+			If (Count parameters:C259=2)
+				
+				Super:C1706.setAttribute($node; "clip-path"; "url(#"+$id+")")
+				
+			End if 
+			
+		Else 
+			
+			This:C1470.latest:=$node
+			
+		End if 
 	End if 
 	
 	This:C1470.restoreRoot()
@@ -516,161 +650,8 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Adds an element to container item
-Function addTo($tgt : Text; $applyTo : Text) : cs:C1710.svg
-	
-	$tgt:=This:C1470._getTarget($tgt)
-	
-	var $name : Text
-	DOM GET XML ELEMENT NAME:C730($tgt; $name)
-	
-	If (This:C1470._containers.includes($name))
-		
-		var $src:=This:C1470._getTarget($applyTo)
-		
-		// Keeps id and removes it, if any, to avoid duplicate one
-		var $id:=String:C10(This:C1470.popAttribute($src; "id"))
-		
-		This:C1470.latest:=Super:C1706.append($tgt; $src)
-		
-		// Restore id, if any
-		If (Length:C16($id)>0)
-			
-			This:C1470.setID($id)
-			
-		End if 
-		
-		Super:C1706.remove($src)
-		This:C1470.restoreRoot()
-		
-	Else 
-		
-		This:C1470._pushError("\""+$name+"\" used as target is not a container")
-		
-	End if 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Place an occurence of the symbol
-Function use($symbol; $attachTo) : cs:C1710.svg
-	
-	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
-		
-		return 
-		
-	End if 
-	
-	If (This:C1470.isNotNull(This:C1470.findById($symbol)))
-		
-		This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "use")
-		
-		If (This:C1470.success)
-			
-			Super:C1706.setAttribute(This:C1470.latest; "xlink:href"; $symbol)
-			
-		End if 
-		
-	Else 
-		
-		This:C1470._pushError("The id \""+$symbol+"\" doesn't exist!")
-		
-	End if 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Import the svg content of a file
-Function import($file : 4D:C1709.File; $applyTo) : cs:C1710.svg
-	
-	var $xml:=cs:C1710.xml.new($file)
-	
-	If (This:C1470.success)
-		
-		var $node:=$xml.findByXPath("/svg")
-		
-		If (This:C1470.success)
-			
-			// The import is performed in a group that automatically takes the file name as its ID.
-			var $group : Text:=This:C1470.group(This:C1470._getContainer($applyTo)).setID($file.name).latest
-			
-			// Define the attributes of the group with those of the original document
-			Super:C1706.setAttributes($group; Super:C1706.getAttributes($node))
-			
-			// Retrieve all elements and clone them in the current canvas
-			For each ($node; $xml.childrens($node))
-				
-				Super:C1706.append($group; $node)
-				
-			End for each 
-		End if 
-		
-		$xml.close()
-		
-	End if 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Assigns a built-in style to an element or creates a root style element 
-Function style($style : Text; $applyTo) : cs:C1710.svg
-	
-	var $node:=This:C1470._getContainer($applyTo)
-	
-	If ($node=This:C1470.root)
-		
-		// Create an internal CSS style sheet
-		$node:=Super:C1706.create(This:C1470.root; "style"; {type: "text/css"})
-		Super:C1706.setValue($node; $style; True:C214)
-		
-	Else 
-		
-		// Assigns a built-in style to an element
-		Super:C1706.setAttribute(This:C1470.latest; "style"; $style)
-		
-	End if 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Attach a style sheet
-Function styleSheet($file : 4D:C1709.File) : cs:C1710.svg
-	
-	If (Not:C34($file.exists))
-		
-		This:C1470._pushError("File not found: "+$file.path)
-		return 
-		
-	End if 
-	
-	var $t:="xml-stylesheet href=\"file:///"+Convert path system to POSIX:C1106($file.platformPath; *)+"\" type=\"text/css\""
-	$t:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088(This:C1470.root); XML processing instruction:K45:9; $t)
-	This:C1470.success:=Bool:C1537(OK)
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Create, if any, & set the document 'title' element
-Function title($title : Text) : cs:C1710.svg
-	
-	return Super:C1706.setValue(This:C1470.findOrCreate(This:C1470.root; "title"); $title)
-	
-	//———————————————————————————————————————————————————————————
-	// Create, if any, & set the document 'desc' element
-Function desc($description : Text) : cs:C1710.svg
-	
-	return Super:C1706.setValue(This:C1470.findOrCreate(This:C1470.root; "desc"); $description)
-	
-	//———————————————————————————————————————————————————————————
-	// Append a comment element
-Function comment($comment : Text; $attachTo) : cs:C1710.svg
-	
-	Super:C1706.comment(Count parameters:C259>=2 ? This:C1470._getContainer($attachTo) : This:C1470.root; $comment)
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
 	// Define a linear gradient
-Function defineLinearGradient($id : Text; $startColor : Text; $stopColor : Text; $options : Object) : Text/*  gradient reference */
+Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $options : Object) : Text/*  gradient reference */
 	
 	$startColor:=$startColor || "white"
 	$stopColor:=$stopColor || "black"
@@ -847,7 +828,7 @@ Function defineLinearGradient($id : Text; $startColor : Text; $stopColor : Text;
 	
 	//———————————————————————————————————————————————————————————
 	// Define a linear gradient
-Function defineRadialGradient($id : Text; $startColor : Text; $stopColor : Text; $options : Object) : Text/*  gradient reference */
+Function radialGradient($id : Text; $startColor : Text; $stopColor : Text; $options : Object) : Text/*  gradient reference */
 	
 	$startColor:=($startColor#"url(@" ? Lowercase:C14($startColor) : $startColor) || "white"
 	$stopColor:=($stopColor#"url(@" ? Lowercase:C14($stopColor) : $stopColor) || "black"
@@ -932,8 +913,161 @@ Function defineRadialGradient($id : Text; $startColor : Text; $stopColor : Text;
 	return $ref
 	
 	//———————————————————————————————————————————————————————————
+	// Adds an element to container item
+Function addTo($tgt : Text; $applyTo : Text) : cs:C1710.svg
+	
+	$tgt:=This:C1470._getTarget($tgt)
+	
+	var $name : Text
+	DOM GET XML ELEMENT NAME:C730($tgt; $name)
+	
+	If (This:C1470._container.includes($name))
+		
+		var $src:=This:C1470._getTarget($applyTo)
+		
+		// Keeps id and removes it, if any, to avoid duplicate one
+		var $id:=String:C10(This:C1470.popAttribute($src; "id"))
+		
+		This:C1470.latest:=Super:C1706.append($tgt; $src)
+		
+		// Restore id, if any
+		If (Length:C16($id)>0)
+			
+			This:C1470.setID($id)
+			
+		End if 
+		
+		Super:C1706.remove($src)
+		This:C1470.restoreRoot()
+		
+	Else 
+		
+		This:C1470._pushError("\""+$name+"\" used as target is not a container")
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Place an occurence of the symbol
+Function use($symbol; $attachTo) : cs:C1710.svg
+	
+	If (Not:C34(This:C1470._requiredParams(Count parameters:C259; 1)))
+		
+		return 
+		
+	End if 
+	
+	If (This:C1470.isNotNull(This:C1470.findById($symbol)))
+		
+		This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "use")
+		
+		If (This:C1470.success)
+			
+			Super:C1706.setAttribute(This:C1470.latest; "xlink:href"; $symbol)
+			
+		End if 
+		
+	Else 
+		
+		This:C1470._pushError("The id \""+$symbol+"\" doesn't exist!")
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Import the svg content of a file
+Function import($file : 4D:C1709.File; $applyTo) : cs:C1710.svg
+	
+	var $xml:=cs:C1710.xml.new($file)
+	
+	If (This:C1470.success)
+		
+		var $node:=$xml.findByXPath("/svg")
+		
+		If (This:C1470.success)
+			
+			// The import is performed in a group that automatically takes the file name as its ID.
+			var $group : Text:=This:C1470.group(This:C1470._getContainer($applyTo)).setID($file.name).latest
+			
+			// Define the attributes of the group with those of the original document
+			Super:C1706.setAttributes($group; Super:C1706.getAttributes($node))
+			
+			// Retrieve all elements and clone them in the current canvas
+			For each ($node; $xml.childrens($node))
+				
+				Super:C1706.append($group; $node)
+				
+			End for each 
+		End if 
+		
+		$xml.close()
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Assigns a built-in style to an element or creates a root style element 
+Function style($style : Text; $applyTo) : cs:C1710.svg
+	
+	var $node:=This:C1470._getContainer($applyTo)
+	
+	If ($node=This:C1470.root)
+		
+		// Create an internal CSS style sheet
+		$node:=Super:C1706.create(This:C1470.root; "style"; {type: "text/css"})
+		Super:C1706.setValue($node; $style; True:C214)
+		
+	Else 
+		
+		// Assigns a built-in style to an element
+		Super:C1706.setAttribute(This:C1470.latest; "style"; $style)
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Attach a style sheet
+Function styleSheet($file : 4D:C1709.File) : cs:C1710.svg
+	
+	If (Not:C34($file.exists))
+		
+		This:C1470._pushError("File not found: "+$file.path)
+		return 
+		
+	End if 
+	
+	var $t:="xml-stylesheet href=\"file:///"+Convert path system to POSIX:C1106($file.platformPath; *)+"\" type=\"text/css\""
+	$t:=DOM Append XML child node:C1080(DOM Get XML document ref:C1088(This:C1470.root); XML processing instruction:K45:9; $t)
+	This:C1470.success:=Bool:C1537(OK)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Create, if any, & set the document 'title' element
+Function title($title : Text) : cs:C1710.svg
+	
+	return Super:C1706.setValue(This:C1470.findOrCreate(This:C1470.root; "title"); $title)
+	
+	//———————————————————————————————————————————————————————————
+	// Create, if any, & set the document 'desc' element
+Function desc($description : Text) : cs:C1710.svg
+	
+	return Super:C1706.setValue(This:C1470.findOrCreate(This:C1470.root; "desc"); $description)
+	
+	//———————————————————————————————————————————————————————————
+	// Append a comment element
+Function comment($comment : Text; $attachTo) : cs:C1710.svg
+	
+	Super:C1706.comment(Count parameters:C259>=2 ? This:C1470._getContainer($attachTo) : This:C1470.root; $comment)
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Define a pattern container
-Function definePattern($id : Text; $options : Object) : Text/* Pattern reference */
+Function pattern($id : Text; $options : Object) : Text/* Pattern reference */
 	
 	$options:=$options || {}
 	
@@ -997,11 +1131,6 @@ Function definePattern($id : Text; $options : Object) : Text/* Pattern reference
 	End if 
 	
 	return $ref
-	
-	//———————————————————————————————————————————————————————————
-Function endPattern() : cs:C1710.svg
-	
-	This:C1470.restoreRoot()
 	
 	//———————————————————————————————————————————————————————————
 	// Sets a new filter in the SVG container and returns its reference
@@ -3404,7 +3533,30 @@ Function stroke($value; $applyTo) : cs:C1710.svg
 					If (This:C1470._shapes.includes($name))\
 						 || (["g"; "line"; "svg"; "use"].includes($name))
 						
-						Super:C1706.setAttribute($node; "stroke-linecap"; $value)
+						return This:C1470.linecap($value; $applyTo)
+						
+					Else 
+						
+						This:C1470._pushError("You cannot set the \"Stroke-linecap\" attribute for a "+$name+" element!")
+						
+					End if 
+					
+					// ______________________________________________________
+				: (["miter"; "round"; "bevel"; "arcs"].includes($value))  // Stroke-linejoin
+					
+/* ⚠️ 
+					
+"round" value will be treated above as a value for "stroke-linecap" 
+It is therefore preferable to use the function.linejoin() to set this value for "stroke-linejoin"
+					
+*/
+					
+					$name:=This:C1470.getName($node)
+					
+					If (This:C1470._shapes.includes($name))\
+						 || (["g"; "line"; "svg"; "use"].includes($name))
+						
+						return This:C1470.linejoin($value; $applyTo)
 						
 					Else 
 						
@@ -3466,6 +3618,18 @@ Function stroke($value; $applyTo) : cs:C1710.svg
 			If ($value.opacity#Null:C1517)
 				
 				Super:C1706.setAttribute($node; "stroke-opacity"; $value.opacity)
+				
+			End if 
+			
+			If ($value.linecap#Null:C1517)
+				
+				Super:C1706.setAttribute($node; "stroke-linecap"; $value.linecap)
+				
+			End if 
+			
+			If ($value.linejoin#Null:C1517)
+				
+				Super:C1706.setAttribute($node; "stroke-linejoin"; $value.linejoin)
 				
 			End if 
 			
@@ -3914,7 +4078,7 @@ Function convertToGrayScale($grey; $applyTo) : cs:C1710.svg
 	
 	var $element:=This:C1470.getName($node)
 	
-	If ($element#"image") && (Not:C34(This:C1470._containers.includes($element)))
+	If ($element#"image") && (Not:C34(This:C1470._container.includes($element)))
 		
 		This:C1470._pushError("can't be applied to "+$element)
 		
@@ -5074,7 +5238,7 @@ Function _getContainer($param) : Text
 	var $name : Text
 	DOM GET XML ELEMENT NAME:C730($container; $name)
 	
-	If (This:C1470._containers.includes($name))
+	If (This:C1470._container.includes($name))
 		
 		return $container
 		

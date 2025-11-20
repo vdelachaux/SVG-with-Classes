@@ -3,49 +3,48 @@ var $svg:=cs:C1710.svgx.svg.new()
 
 // MARK:- Using pattern for filling
 $svg.comment(" 📌 Setting a pattern and using it to fill an ellipse")
+$svg.comment(" 🛈 Note: The “defs” element is created automatically.")
 
-// Setting the pattern
-$svg.definePattern("myPattern1"; {\
+// Defining "myPattern1"
+$svg.pattern("myPattern1"; {\
 width: 100; \
 height: 100; \
 x: 0; \
 y: 0; \
 viewBox: [0; 0; 10; 10]})
 
-$svg.path("myPattern1")\
-.moveTo([0; 0])\
-.lineTo([7; 0])\
-.lineTo([3.5; 7])\
-.closePath()\
+$svg.path().moveTo([0; 0]).lineTo([7; 0]).lineTo([3.5; 7]).closePath()\
 .fill("lightgreen")\
 .stroke("olivedrab")\
-.endPattern()
+.addTo("myPattern1")
 
-// Draw the ellipse
+// Draw the ellipse & fiil it with "myPattern1"
 $svg.ellipse(350; 150).cx(400).cy(200).stroke(5).stroke("olive").fill("myPattern1")
 
 // MARK:- Using pattern for filling and outline
-$svg.comment(" 📌 Define a pattern and use it to fill and outline an ellipse\r"\
-+" 🛈 Note: that the pattern was defined into the \"defs\" element ")
+$svg.comment(" 📌 Define a pattern and use it to fill and outline an ellipse")
+$svg.comment(" 🛈 Note: The definition is moved up to the “defs” element.")
 
-// Setting the pattern
-$svg.definePattern("myPattern2"; {\
+// Defining "myPattern2"
+$svg.pattern("myPattern2"; {\
 width: 80; \
 height: 80; \
 x: 0; \
 y: 0; \
 viewBox: [0; 0; 20; 20]})
 
-$svg.rect(20; "myPattern2").stroke("white").fill("sandybrown").endPattern()
+$svg.square(20).stroke("white").fill("sandybrown").addTo("myPattern2")
 
-// Draw the ellipse
+// Draw the ellipse & fiil it with "myPattern2"
 $svg.ellipse(350; 150).cx(400).cy(200).fill("myPattern2").stroke("myPattern2").translate(100; 200)
 
 
 // MARK:- star pattern
-$svg.comment(" 📌 Define a pattern and use it to fill and stroke of circles\r"\
-+" 🛈 Note: that the pattern was defined into the \"defs\" element ")
-var $pattern:=$svg.definePattern("star"; {\
+$svg.comment(" 📌 Define a pattern and use it to fill and stroke of circles")
+$svg.comment(" 🛈 Note: The definition is moved up to the “defs” element.")
+
+// Defining the pattern "star"
+var $pattern:=$svg.pattern("star"; {\
 width: 10; \
 height: 10; \
 viewBox: [0; 0; 10; 10]})
@@ -58,15 +57,14 @@ $svg.polygon([\
 [10; 10]; \
 [8; 5]; \
 [10; 0]; \
-[5; 2]]).fill("black")\
-.addTo("star")
+[5; 2]]).fill("black").addTo("star")
 
 $svg.group().translate(390; 220)
 
-// - fill with pattern
+// Draw a circle filled with the pattern.
 $svg.circle(50; 50; 50).fill("star")
 
-// - ouline use pattern
+// Draw a circle whose outline uses the pattern.
 $svg.circle(40; 180; 50).fill(False:C215).stroke(20).stroke("star")
 
 

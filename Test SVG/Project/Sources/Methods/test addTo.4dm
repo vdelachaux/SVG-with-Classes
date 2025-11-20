@@ -7,7 +7,7 @@ Adds element to parent item
 
 var $svg:=cs:C1710.svgx.svg.new()
 
-// Define a red square as a symbol
+// Define a lightcoral square as a symbol
 $svg.square(20).position(40).fill("lightcoral").symbol("mySymbol")
 
 // Draw a line at the first level
@@ -28,8 +28,7 @@ $svg.square(40).position(200; 100).fill("yellow").addTo("line1")
 $svg.line(140; 140; 205; 205).stroke("green").stroke(4).addTo("mySymbol")
 $svg.square(60).position(200).fill("palegreen").setID("test").addTo("mySymbol")
 
-// If the target is unknown, the element is not moved.
-// & renderd at the root level
+// If the target is unknown, the element is not moved & rendered at the root level
 var $latest : Text:=$svg.square(40).fill("navajowhite").position(10; 100).addTo("unknown").latest
 $svg.square(20).position(30; 120).fill("burlywood").addTo($latest)
 

@@ -211,148 +211,12 @@
 			],
 			"Summary": ""
 		},
-		"pattern()": {
-			"Syntax": "**.pattern**( *id* : Text; *stroke* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"stroke",
-					"Variant",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"gradient()": {
-			"Syntax": "**.gradient**( *id* : Text; *stroke* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"stroke",
-					"Variant",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"fill()": {
-			"Syntax": "**.fill**( *value* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"value",
-					"Variant",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"linejoin()": {
-			"Syntax": "**.linejoin**( *value* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"value",
-					"Variant",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"stroke()": {
-			"Syntax": "**.stroke**( *value* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"value",
-					"Variant",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"opacity()": {
 			"Syntax": "**.opacity**( *opacity* : Real; *applyTo* : Variant ) : cs.svgx.svg",
 			"Params": [
 				[
 					"opacity",
 					"Real",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"color()": {
-			"Syntax": "**.color**( *color* : Text; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"color",
-					"Text",
 					"->"
 				],
 				[
@@ -747,6 +611,48 @@
 			],
 			"Summary": ""
 		},
+		"linejoin()": {
+			"Syntax": "**.linejoin**( *value* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"value",
+					"Variant",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"stroke()": {
+			"Syntax": "**.stroke**( *value* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"value",
+					"Variant",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"dasharray()": {
 			"Syntax": "**.dasharray**( *dash* : Real; *...* : Integer ) : cs.svgx.svg",
 			"Params": [
@@ -842,6 +748,53 @@
 				[
 					"width",
 					"Real",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"gradient()": {
+			"Syntax": "**.gradient**( *id* : Text; *stroke* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"stroke",
+					"Variant",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"fill()": {
+			"Syntax": "**.fill**( *value* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"value",
+					"Variant",
 					"->"
 				],
 				[
@@ -1177,37 +1130,6 @@
 				[
 					"to",
 					"Collection",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"rotateRad()": {
-			"Syntax": "**.rotateRad**( *rad* : Real; *cx* : Variant; *cy* : Real; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"rad",
-					"Real",
-					"->"
-				],
-				[
-					"cx",
-					"Variant",
-					"->"
-				],
-				[
-					"cy",
-					"Real",
 					"->"
 				],
 				[
@@ -1650,33 +1572,12 @@
 			],
 			"Summary": ""
 		},
-		"polyline()": {
-			"Syntax": "**.polyline**( *points* : Variant; *attachTo* : Variant ) : cs.svgx.svg",
+		"d()": {
+			"Syntax": "**.d**( *data* : Text; *applyTo* : Variant ) : cs.svgx.svg",
 			"Params": [
 				[
-					"points",
-					"Variant",
-					"->"
-				],
-				[
-					"attachTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"cx()": {
-			"Syntax": "**.cx**( *cx* : Real; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"cx",
-					"Real",
+					"data",
+					"Text",
 					"->"
 				],
 				[
@@ -1692,8 +1593,24 @@
 			],
 			"Summary": ""
 		},
-		"arc()": {
-			"Syntax": "**.arc**( *to* : Collection; *radii* : Variant; *axis* : Real; *flags* : Collection; *applyTo* : Variant ) : cs.svgx.svg",
+		"Z()": {
+			"Syntax": "**.Z**( *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"smoothCubicBezierCurveto()": {
+			"Syntax": "**.smoothCubicBezierCurveto**( *to* : Collection; *endCtrlPoint* : Collection; *applyTo* : Variant ) : cs.svgx.svg",
 			"Params": [
 				[
 					"to",
@@ -1701,18 +1618,59 @@
 					"->"
 				],
 				[
-					"radii",
+					"endCtrlPoint",
+					"Collection",
+					"->"
+				],
+				[
+					"applyTo",
 					"Variant",
 					"->"
 				],
 				[
-					"axis",
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"A()": {
+			"Syntax": "**.A**( *rx* : Real; *ry* : Real; *rotation* : Real; *largeArcFlag* : Integer; *sweepFlag* : Integer; *x* : Real; *y* : Real; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"rx",
 					"Real",
 					"->"
 				],
 				[
-					"flags",
-					"Collection",
+					"ry",
+					"Real",
+					"->"
+				],
+				[
+					"rotation",
+					"Real",
+					"->"
+				],
+				[
+					"largeArcFlag",
+					"Integer",
+					"->"
+				],
+				[
+					"sweepFlag",
+					"Integer",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
 					"->"
 				],
 				[
@@ -1854,6 +1812,37 @@
 			],
 			"Summary": ""
 		},
+		"rotateRad()": {
+			"Syntax": "**.rotateRad**( *rad* : Real; *cx* : Variant; *cy* : Real; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"rad",
+					"Real",
+					"->"
+				],
+				[
+					"cx",
+					"Variant",
+					"->"
+				],
+				[
+					"cy",
+					"Real",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"verticalLineto()": {
 			"Syntax": "**.verticalLineto**( *y* : Real; *applyTo* : Variant ) : cs.svgx.svg",
 			"Params": [
@@ -1928,63 +1917,6 @@
 				[
 					"x",
 					"Real",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"line()": {
-			"Syntax": "**.line**( *x1* : Real; *y1* : Real; *x2* : Real; *y2* : Real; *attachTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"x1",
-					"Real",
-					"->"
-				],
-				[
-					"y1",
-					"Real",
-					"->"
-				],
-				[
-					"x2",
-					"Real",
-					"->"
-				],
-				[
-					"y2",
-					"Real",
-					"->"
-				],
-				[
-					"attachTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"L()": {
-			"Syntax": "**.L**( *points* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"points",
-					"Variant",
 					"->"
 				],
 				[
@@ -2438,32 +2370,100 @@
 			],
 			"Summary": ""
 		},
-		"defineRadialGradient()": {
-			"Syntax": "**.defineRadialGradient**( *id* : Text; *startColor* : Text; *stopColor* : Text; *options* : Object ) : Text",
+		"line()": {
+			"Syntax": "**.line**( *x1* : Real; *y1* : Real; *x2* : Real; *y2* : Real; *attachTo* : Variant ) : cs.svgx.svg",
 			"Params": [
 				[
-					"id",
-					"Text",
+					"x1",
+					"Real",
 					"->"
 				],
 				[
-					"startColor",
-					"Text",
+					"y1",
+					"Real",
 					"->"
 				],
 				[
-					"stopColor",
-					"Text",
+					"x2",
+					"Real",
 					"->"
 				],
 				[
-					"options",
-					"Object",
+					"y2",
+					"Real",
+					"->"
+				],
+				[
+					"attachTo",
+					"Variant",
 					"->"
 				],
 				[
 					"",
-					"Text",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"L()": {
+			"Syntax": "**.L**( *points* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"points",
+					"Variant",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"cx()": {
+			"Syntax": "**.cx**( *cx* : Real; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"cx",
+					"Real",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"polyline()": {
+			"Syntax": "**.polyline**( *points* : Variant; *attachTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"points",
+					"Variant",
+					"->"
+				],
+				[
+					"attachTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
 					"<-"
 				]
 			],
@@ -2475,6 +2475,105 @@
 				[
 					"text",
 					"Text",
+					"->"
+				],
+				[
+					"attachTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"strokeOpacity()": {
+			"Syntax": "**.strokeOpacity**( *opacity* : Real; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"opacity",
+					"Real",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"V()": {
+			"Syntax": "**.V**( *x* : Real; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"size()": {
+			"Syntax": "**.size**( *width* : Real; *height* : Real; *unit* : Text ) : cs.svgx.svg",
+			"Params": [
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"unit",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"circle()": {
+			"Syntax": "**.circle**( *r* : Real; *cx* : Variant; *cy* : Variant; *attachTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"r",
+					"Real",
+					"->"
+				],
+				[
+					"cx",
+					"Variant",
+					"->"
+				],
+				[
+					"cy",
+					"Variant",
 					"->"
 				],
 				[
@@ -2647,231 +2746,6 @@
 			],
 			"Summary": ""
 		},
-		"setAttributes()": {
-			"Syntax": "**.setAttributes**( *attributes* : Variant; *value* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"attributes",
-					"Variant",
-					"->"
-				],
-				[
-					"value",
-					"Variant",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"absolute()": {
-			"Syntax": "**.absolute**() : cs.svgx.svg",
-			"Params": [
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"d()": {
-			"Syntax": "**.d**( *data* : Text; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"data",
-					"Text",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"Z()": {
-			"Syntax": "**.Z**( *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"smoothCubicBezierCurveto()": {
-			"Syntax": "**.smoothCubicBezierCurveto**( *to* : Collection; *endCtrlPoint* : Collection; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"to",
-					"Collection",
-					"->"
-				],
-				[
-					"endCtrlPoint",
-					"Collection",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"A()": {
-			"Syntax": "**.A**( *rx* : Real; *ry* : Real; *rotation* : Real; *largeArcFlag* : Integer; *sweepFlag* : Integer; *x* : Real; *y* : Real; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"rx",
-					"Real",
-					"->"
-				],
-				[
-					"ry",
-					"Real",
-					"->"
-				],
-				[
-					"rotation",
-					"Real",
-					"->"
-				],
-				[
-					"largeArcFlag",
-					"Integer",
-					"->"
-				],
-				[
-					"sweepFlag",
-					"Integer",
-					"->"
-				],
-				[
-					"x",
-					"Real",
-					"->"
-				],
-				[
-					"y",
-					"Real",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"endPattern()": {
-			"Syntax": "**.endPattern**() : cs.svgx.svg",
-			"Params": [
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"colorMatrix()": {
-			"Syntax": "**.colorMatrix**( *type* : Text; *value* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"type",
-					"Text",
-					"->"
-				],
-				[
-					"value",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"addTo()": {
-			"Syntax": "**.addTo**( *tgt* : Text; *applyTo* : Text ) : cs.svgx.svg",
-			"Params": [
-				[
-					"tgt",
-					"Text",
-					"->"
-				],
-				[
-					"applyTo",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"definePattern()": {
-			"Syntax": "**.definePattern**( *id* : Text; *options* : Object ) : Text",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"use()": {
 			"Syntax": "**.use**( *symbol* : Variant; *attachTo* : Variant ) : cs.svgx.svg",
 			"Params": [
@@ -2909,6 +2783,53 @@
 				[
 					"",
 					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"setAttributes()": {
+			"Syntax": "**.setAttributes**( *attributes* : Variant; *value* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"attributes",
+					"Variant",
+					"->"
+				],
+				[
+					"value",
+					"Variant",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"pattern()": {
+			"Syntax": "**.pattern**( *id* : Text; *options* : Object ) : Text",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Text",
 					"<-"
 				]
 			],
@@ -3117,27 +3038,54 @@
 			],
 			"Summary": ""
 		},
-		"S()": {
-			"Syntax": "**.S**( *x2* : Real; *y2* : Real; *x* : Real; *y* : Real; *applyTo* : Variant ) : cs.svgx.svg",
+		"colorMatrix()": {
+			"Syntax": "**.colorMatrix**( *type* : Text; *value* : Variant ) : cs.svgx.svg",
 			"Params": [
 				[
-					"x2",
-					"Real",
+					"type",
+					"Text",
 					"->"
 				],
 				[
-					"y2",
-					"Real",
+					"value",
+					"Variant",
 					"->"
 				],
 				[
-					"x",
-					"Real",
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"addTo()": {
+			"Syntax": "**.addTo**( *tgt* : Text; *applyTo* : Text ) : cs.svgx.svg",
+			"Params": [
+				[
+					"tgt",
+					"Text",
 					"->"
 				],
 				[
-					"y",
-					"Real",
+					"applyTo",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"color()": {
+			"Syntax": "**.color**( *color* : Text; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"color",
+					"Text",
 					"->"
 				],
 				[
@@ -3153,8 +3101,8 @@
 			],
 			"Summary": ""
 		},
-		"group()": {
-			"Syntax": "**.group**( *id* : Text; *attachTo* : Variant ) : cs.svgx.svg",
+		"linearGradient()": {
+			"Syntax": "**.linearGradient**( *id* : Text; *startColor* : Text; *stopColor* : Text; *options* : Object ) : Text",
 			"Params": [
 				[
 					"id",
@@ -3162,13 +3110,90 @@
 					"->"
 				],
 				[
-					"attachTo",
+					"startColor",
+					"Text",
+					"->"
+				],
+				[
+					"stopColor",
+					"Text",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"arc()": {
+			"Syntax": "**.arc**( *to* : Collection; *radii* : Variant; *axis* : Real; *flags* : Collection; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"to",
+					"Collection",
+					"->"
+				],
+				[
+					"radii",
+					"Variant",
+					"->"
+				],
+				[
+					"axis",
+					"Real",
+					"->"
+				],
+				[
+					"flags",
+					"Collection",
+					"->"
+				],
+				[
+					"applyTo",
 					"Variant",
 					"->"
 				],
 				[
 					"",
 					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"radialGradient()": {
+			"Syntax": "**.radialGradient**( *id* : Text; *startColor* : Text; *stopColor* : Text; *options* : Object ) : Text",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"startColor",
+					"Text",
+					"->"
+				],
+				[
+					"stopColor",
+					"Text",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"Text",
 					"<-"
 				]
 			],
@@ -3242,6 +3267,63 @@
 			],
 			"Summary": ""
 		},
+		"S()": {
+			"Syntax": "**.S**( *x2* : Real; *y2* : Real; *x* : Real; *y* : Real; *applyTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"x2",
+					"Real",
+					"->"
+				],
+				[
+					"y2",
+					"Real",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"applyTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"group()": {
+			"Syntax": "**.group**( *id* : Text; *attachTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"attachTo",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"l()": {
 			"Syntax": "**.l**( *points* : Variant; *applyTo* : Variant ) : cs.svgx.svg",
 			"Params": [
@@ -3279,136 +3361,6 @@
 				[
 					"",
 					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"strokeOpacity()": {
-			"Syntax": "**.strokeOpacity**( *opacity* : Real; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"opacity",
-					"Real",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"V()": {
-			"Syntax": "**.V**( *x* : Real; *applyTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"x",
-					"Real",
-					"->"
-				],
-				[
-					"applyTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"size()": {
-			"Syntax": "**.size**( *width* : Real; *height* : Real; *unit* : Text ) : cs.svgx.svg",
-			"Params": [
-				[
-					"width",
-					"Real",
-					"->"
-				],
-				[
-					"height",
-					"Real",
-					"->"
-				],
-				[
-					"unit",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"circle()": {
-			"Syntax": "**.circle**( *r* : Real; *cx* : Variant; *cy* : Variant; *attachTo* : Variant ) : cs.svgx.svg",
-			"Params": [
-				[
-					"r",
-					"Real",
-					"->"
-				],
-				[
-					"cx",
-					"Variant",
-					"->"
-				],
-				[
-					"cy",
-					"Variant",
-					"->"
-				],
-				[
-					"attachTo",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"defineLinearGradient()": {
-			"Syntax": "**.defineLinearGradient**( *id* : Text; *startColor* : Text; *stopColor* : Text; *options* : Object ) : Text",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"startColor",
-					"Text",
-					"->"
-				],
-				[
-					"stopColor",
-					"Text",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Text",
 					"<-"
 				]
 			],
@@ -3529,6 +3481,17 @@
 			],
 			"Summary": ""
 		},
+		"absolute()": {
+			"Syntax": "**.absolute**() : cs.svgx.svg",
+			"Params": [
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"stackTransformation": {
 			"Syntax": "stackTransformation : Boolean"
 		},
@@ -3538,11 +3501,11 @@
 		"TAU": {
 			"Syntax": "TAU : Real"
 		},
-		"store": {
-			"Syntax": "store : Collection"
-		},
 		"latest": {
 			"Syntax": "latest : Text"
+		},
+		"store": {
+			"Syntax": "store : Collection"
 		},
 		"_inheritedFrom_": "xml"
 	},
