@@ -6,11 +6,13 @@ $svg.style("path {fill:none}")
 // Define a circle as marker
 // Just setting the width,
 // So by default, it will be a square and the reference point will be the center.
-$svg.marker("diamond"; "defs").width(12)
-$svg.circle(3; 6; 6; "diamond").fill("white").stroke(2)
+$svg.marker("circle"; "defs").width(12)
+$svg.circle(3; 6; 6).fill("white").stroke(2)
 
 // Create a group and assign it the marker
-$svg.group("root").stroke(4).scale(4).marker("diamond")
+$svg.group("root").stroke(4).scale(4).marker("circle")
+
+// Draw 3 paths, all will use markers
 $svg.path().M([10; 50]).v(-20).h(40).v(-20).stroke("red")
 $svg.path().M([30; 70]).v(-20).h(40).v(-20).stroke("green")
 $svg.path().M([50; 90]).v(-20).h(40).v(-20).stroke("blue")
@@ -19,18 +21,18 @@ $svg.path().M([50; 90]).v(-20).h(40).v(-20).stroke("blue")
 // MARK:- Start/mid/end
 // Define 3 different circles as marker
 $svg.marker("start"; "defs"; {width: 8; refX: 5})
-$svg.circle(5; 5; 5; "m1").fill("green").opacity(0.5)
+$svg.circle(5; 5; 5).fill("green").opacity(0.5)
 
 $svg.marker("mid"; "defs"; {width: 6.5; refX: 5})
-$svg.circle(5; 5; 5; "m2").fill("skyblue").opacity(0.7)
+$svg.circle(5; 5; 5).fill("skyblue").opacity(0.7)
 
 $svg.marker("end"; "defs"; {width: 5; refX: 5})
-$svg.circle(5; 5; 5; "m3").fill("maroon").opacity(0.7)
+$svg.circle(5; 5; 5).fill("maroon").opacity(0.7)
 
 $svg.group("root").stroke("round").strokeWidth(4).scale(4).translate(100; 100)
 
-// Create parth and assign it strat, middle & end markers
-// Note that only the third path displays the “start” marker, because for the other two, the “end” marker is displayed on top of it.
+// Create parth and assign it start, middle & end markers
+// Note that only the third path displays the “start” marker, because for the other two, the last vertex is the same as the first vertex.
 $svg.path().d("M10,10 h20 v20 z m40,0 h20 v20 z m40,0 h20 v20").fill(False:C215).linejoin("round")\
 .marker("start"; "start")\
 .marker("mid"; "mid")\
@@ -38,7 +40,8 @@ $svg.path().d("M10,10 h20 v20 z m40,0 h20 v20 z m40,0 h20 v20").fill(False:C215)
 
 // MARK:- Arrows
 // Create a triangle as a symbol
-$svg.path().d("M 0 0 L 10 5 L 0 10 z").symbol("_triangle")
+// $svg.path().d("M 0 0 L 10 5 L 0 10 z").symbol("_triangle")
+$svg.Triangle(5; 5; 5).symbol("_triangle")
 
 // Use the symbol to create 2 markers with a different color
 $svg.marker("_crimson"; "none"; {width: 4; height: 4; refX: 1; refY: 5; markerUnits: "strokeWidth"; viewBox: "0 0 10 10"})

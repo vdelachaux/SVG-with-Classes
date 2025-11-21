@@ -1,32 +1,30 @@
 //%attributes = {}
-var $ref : Text
-var $chart : cs:C1710.svgx.chart
+var $svg:=cs:C1710.svgx.svg.new()\
+.desc("ℹ️ Create a complex symbol once and use it as many times as you want.")
 
-$chart:=cs:C1710.svgx.chart.new()\
-.comment(" 🚧 Prepare elements ")\
-.title("Example symbol and use")
+// ✍️ Define a symbol consisting of 2 squares and 2 circles
+var $group : Text:=$svg.group().latest
+$svg.circle(25; 30; 30).stroke("red").fill("palevioletred")
+$svg.rect(40).position(10; 60).stroke("blue").fill("cornflowerblue")
+$svg.rect(40).position(60; 10).stroke("blue").fill("cornflowerblue")
+$svg.circle(25; 80; 80).stroke("red").fill("palevioletred")
+$svg.symbol("mySymbol"; $group)
 
-// Mark:-
-$chart.donut("1st"; 200; 200; 120).stroke("lightgray")
-$chart.wedge("1st"; 25).fill("lemonchiffon")
-$chart.wedge("1st"; 12).fill("thistle")
-$chart.wedge("1st"; 25).fill("palegreen")
-$chart.wedge("1st"; 40).fill("lightcyan")
-$chart.symbol("donut"; "1st")  // Making it a symbol
+// 🎨 Draw a background
+$svg.rect(650; 650).stroke("gray").fill("lemonchiffon").translate(20; 20)
 
-$chart.pie("2nd"; 200; 200; 120)
-$chart.wedge("2nd"; 15).fill("mediumaquamarine")
-$chart.wedge("2nd"; 35).fill("yellow")
-$chart.wedge("2nd"; 50).fill("royalblue")
-$chart.symbol("pie"; "2nd")  // Making it a symbol
+// 📐 Place the pattern 36 times, varying their position, opacity, and rotation
+$svg.group().translate(20; 20)
 
-$chart.fivePointStar(125*2; 350; 200).color("red")
-$chart.symbol("star"; $chart.latest)  // Making it a symbol
+var $x; $y : Integer
 
-// Mark:-
-$chart.comment(" Then place elements where you want 😇 ")
-$chart.use("donut").position(10; 10)
-$chart.use("pie").position(10; 400)
-$chart.use("star").position(300; 80).scale(0.5)
+For ($x; 0; 540; 90)  // 6 columns
+	
+	For ($y; 0; 540; 90)  // 6 rows
+		
+		$svg.use("mySymbol").width(110).height(110).position($x; $y).opacity(100-($y/6)+($x/6)).rotate(($x*(18/50))+($y*(18/50)); ($x+55); ($y+55))
+		
+	End for 
+End for 
 
-$chart.preview()
+$svg.preview()

@@ -30,7 +30,7 @@ if the result is zero then the point is outside the path. Otherwise, it is insid
 The following drawing illustrates the nonzero rule:
 */
 
-$svg.path().d("M 16,0 L -8,9 v-18 z").fill("black").stroke(False:C215).symbol("triangle")
+$svg.path().d("M 16,0 L -8,9 v-18 z").fill("blue").stroke(False:C215).symbol("triangle")
 
 var $g:=$svg.group().fill("red").fill("nonzero").stroke("black").strokeWidth(3).translate(-100; 100).latest
 
@@ -62,7 +62,7 @@ $svg.group($g).translate(950; 188)\
 $svg.goUp(2).text("The effect of a \"nonzero\" fill rule on paths with self-intersections and enclosed subpaths.").position(110; 340).fontSize(24).color("black")
 
 
-// MARK:- evenodd
+// MARK: evenodd
 /*
 This rule determines the "insideness" of a point on the canvas by drawing a ray from that point to infinity in any direction 
 and counting the number of path segments from the given shape that the ray crosses. 

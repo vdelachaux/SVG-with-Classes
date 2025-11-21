@@ -484,9 +484,18 @@ Function marker($id : Text; $applyTo; $options : Object) : cs:C1710.svg
 	
 	If (Count parameters:C259=1)\
 		 || (["start"; "mid"; "end"].includes($applyTo))\
-		 || (This:C1470.store.query("id = :1"; $id).first()#Null:C1517)
+		 || (This:C1470.store.query("id = :1"; $id).first()#Null:C1517)\
+		 || ($id="none")
 		
 		// MARK: Set a marker to an element
+/*
+The marker-start and marker-end properties are used to specify the marker that will be drawn 
+at the first and last vertices of the given shape, respectively. 
+marker-mid is used to specify the marker that will be drawn at all other vertices
+		
+The value "none" indicates that no marker symbol will be drawn at the given vertex or vertices.
+*/
+		
 		Case of 
 				
 				//______________________________________________________
@@ -506,6 +515,11 @@ Function marker($id : Text; $applyTo; $options : Object) : cs:C1710.svg
 				
 				//______________________________________________________
 			Else 
+				
+/*
+The marker property sets values for the marker-start, marker-mid and marker-end properties. 
+The value of the marker is used directly for all three of the corresponding longhand properties.
+*/
 				
 				Super:C1706.setAttribute(This:C1470.latest; "marker"; "url(#"+$id+")")
 				
@@ -534,8 +548,8 @@ Function marker($id : Text; $applyTo; $options : Object) : cs:C1710.svg
 		If ($options#Null:C1517)
 			
 /* {
-    width:real,
-    height:real,
+    width:real (markerWidth),
+    height:real (markerHeight),
     refX:real,
     refY:real,
     markerUnits:Text, (default = userSpaceOnUse)
@@ -1750,13 +1764,13 @@ Function polygon($points : Variant; $attachTo) : cs:C1710.svg
 	
 	//———————————————————————————————————————————————————————————
 	// Draws a regular polygon with number of sides fit into a circle
-Function regularPolygon($diameter : Real; $sides : Integer; $cx : Real; $cy : Real) : cs:C1710.svg
+Function Polygon($diameter : Real; $sides : Integer; $cx : Real; $cy : Real) : cs:C1710.svg
 	
 	var $angle : Real
 	
 	var $r:=$diameter/2
-	$cx:=$cx=0 ? $r+1 : $cx
-	$cy:=$cy=0 ? $r+1 : $cy
+	$cx:=Count parameters:C259>=3 ? $cx : $r+1
+	$cy:=Count parameters:C259>=4 ? $cy : $cx
 	
 	var $c:=[]
 	var $i : Integer
@@ -1778,39 +1792,55 @@ Function regularPolygon($diameter : Real; $sides : Integer; $cx : Real; $cy : Re
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Draws a five pointed star fit into a circle
-Function fivePointStar($diameter : Real; $cx : Real; $cy : Real) : cs:C1710.svg
+/*
+Draws a N pointed star fit into a circle (outerR; cx; cy)
+If you want a more “pointed” star, decrease the ratio (Default is 0.5).
+For a more “round” star, increase the ratio.
+*/
+Function Star($nBranches : Integer; $outerR : Real; $cx : Real; $cy : Real; $ratio : Real) : cs:C1710.svg
 	
-	var $r:=$diameter/2
-	$cx:=$cx=0 ? $r+1 : $cx
-	$cy:=$cy=0 ? $r+1 : $cy
+	$ratio:=$ratio#0 ? $ratio : 0.5
+	var $innerR:=$outerR*$ratio
 	
-	This:C1470.absolute()
+	var $nPoints:=2*$nBranches
+	var $points:=[].resize($nPoints)
 	
-	var $c:=[]
+	// ---- Construction of the n points (n/2 exterior + n/2 interior) ----
 	var $i : Integer
-	For ($i; 1; 5; 1)
+	For ($i; 0; $nPoints-1)
 		
-		var $angle : Real:=(This:C1470.TAU/5)*$i
-		var $x:=Round:C94($cx+($r*Cos:C18($angle)); 2)
-		var $y:=Round:C94($cy+($r*Sin:C17($angle)); 2)
-		
-		$c.push([$x; $y])
+		var $angle:=This:C1470.TAU+($i*(This:C1470.TAU/$nPoints))-(Pi:K30:1/2)
+		var $r : Real:=$i%2=0 ? $outerR : $innerR
+		$points[$i]:=[Round:C94($cx+($r*Cos:C18($angle)); 2); Round:C94($cy+($r*Sin:C17($angle)); 2)]
 		
 	End for 
 	
-	This:C1470.path()\
-		.moveTo($c[0])\
-		.lineTo($c[2])\
-		.lineTo($c[4])\
-		.lineTo($c[1])\
-		.lineTo($c[3])\
-		.closePath()
+	return This:C1470.polygon($points)
 	
-	This:C1470.rotate(-(360/5)/4; $cx; $cy)\
-		.setAttribute("fill-rule"; "nonzero"; This:C1470.latest)
+	//———————————————————————————————————————————————————————————
+	// Draws a five pointed star fit into a circle
+Function FivePointStar($diameter : Real; $cx : Real; $cy : Real) : cs:C1710.svg
+	
+	This:C1470.Star(5; $diameter/2; $cx; $cy)
 	
 	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Draws a triangle
+Function Triangle($cx : Real; $cy : Real; $r : Real; $rotation : Real) : cs:C1710.svg
+	
+	
+	// Calculate the 3 points
+	var $points:=[].resize(3)
+	var $i : Integer
+	For ($i; 0; 2)
+		
+		var $angle:=($rotation*This:C1470.TAU)+($i*(This:C1470.TAU/3))
+		$points[$i]:=[$cx+($r*Cos:C18($angle)); $cy+($r*Sin:C17($angle))]
+		
+	End for 
+	
+	return This:C1470.polygon($points)
 	
 	//———————————————————————————————————————————————————————————
 	// Populate the "points" property of a polyline, polygon
