@@ -1,6 +1,36 @@
 {
 	"_method_": {},
 	"cs.svgx": {
+		"point": {
+			"new()": {
+				"Syntax": "**.new**( *x* : Real; *y* : Real; *polar* : Boolean )",
+				"Params": [
+					[
+						"x",
+						"Real",
+						"->"
+					],
+					[
+						"y",
+						"Real",
+						"->"
+					],
+					[
+						"polar",
+						"Boolean",
+						"->"
+					]
+				],
+				"Summary": ""
+			}
+		},
+		"chart": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
 		"svg": {
 			"new()": {
 				"Syntax": "**.new**( *content* : Variant )",
@@ -27,13 +57,6 @@
 				"Summary": ""
 			}
 		},
-		"chart": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
-				"Summary": ""
-			}
-		},
 		"color": {
 			"new()": {
 				"Syntax": "**.new**( *color* : Variant )",
@@ -47,6 +70,394 @@
 				"Summary": ""
 			}
 		}
+	},
+	"point": {
+		"polarToCartesian()": {
+			"Syntax": "**.polarToCartesian**( *r* : Real; *degree* : Integer ) : cs.svgx.point",
+			"Params": [
+				[
+					"r",
+					"Real",
+					"->"
+				],
+				[
+					"degree",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.point",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get y()": {
+			"Syntax": "**.get y**() : Real",
+			"Params": [
+				[
+					"",
+					"Real",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set x()": {
+			"Syntax": "**.set x**( *x* : Real )",
+			"Params": [
+				[
+					"x",
+					"Real",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"set y()": {
+			"Syntax": "**.set y**( *y* : Real )",
+			"Params": [
+				[
+					"y",
+					"Real",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get x()": {
+			"Syntax": "**.get x**() : Real",
+			"Params": [
+				[
+					"",
+					"Real",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"polar": {
+			"Syntax": "polar : Boolean"
+		},
+		"value": {
+			"Syntax": "value : Collection"
+		}
+	},
+	"chart": {
+		"setValues()": {
+			"Syntax": "**.setValues**( *id* : Text; *values* : Collection ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"values",
+					"Collection",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"xy()": {
+			"Syntax": "**.xy**( *id* : Text; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"donutBounded()": {
+			"Syntax": "**.donutBounded**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *thickness* : Real; *margin* : Integer; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"thickness",
+					"Real",
+					"->"
+				],
+				[
+					"margin",
+					"Integer",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"verticalBar()": {
+			"Syntax": "**.verticalBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"donut()": {
+			"Syntax": "**.donut**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *thickness* : Real; *margin* : Integer; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"cx",
+					"Real",
+					"->"
+				],
+				[
+					"cy",
+					"Real",
+					"->"
+				],
+				[
+					"r",
+					"Real",
+					"->"
+				],
+				[
+					"thickness",
+					"Real",
+					"->"
+				],
+				[
+					"margin",
+					"Integer",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"wedge()": {
+			"Syntax": "**.wedge**( *id* : Text; *percent* : Real ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"percent",
+					"Real",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"pie()": {
+			"Syntax": "**.pie**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"cx",
+					"Real",
+					"->"
+				],
+				[
+					"cy",
+					"Real",
+					"->"
+				],
+				[
+					"r",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"pieBounded()": {
+			"Syntax": "**.pieBounded**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"horizontalBar()": {
+			"Syntax": "**.horizontalBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"id": {
+			"Syntax": "id : Text"
+		},
+		"_inheritedFrom_": "svg"
 	},
 	"svg": {
 		"setValue()": {
@@ -4579,321 +4990,6 @@
 		"root": {
 			"Syntax": "root : Variant"
 		}
-	},
-	"chart": {
-		"setValues()": {
-			"Syntax": "**.setValues**( *id* : Text; *values* : Collection ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"values",
-					"Collection",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"xy()": {
-			"Syntax": "**.xy**( *id* : Text; *options* : Object ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"donutBounded()": {
-			"Syntax": "**.donutBounded**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *thickness* : Real; *margin* : Integer; *options* : Object ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"x",
-					"Real",
-					"->"
-				],
-				[
-					"y",
-					"Real",
-					"->"
-				],
-				[
-					"width",
-					"Real",
-					"->"
-				],
-				[
-					"thickness",
-					"Real",
-					"->"
-				],
-				[
-					"margin",
-					"Integer",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"verticalBar()": {
-			"Syntax": "**.verticalBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"x",
-					"Real",
-					"->"
-				],
-				[
-					"y",
-					"Real",
-					"->"
-				],
-				[
-					"width",
-					"Real",
-					"->"
-				],
-				[
-					"height",
-					"Real",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"donut()": {
-			"Syntax": "**.donut**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *thickness* : Real; *margin* : Integer; *options* : Object ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"cx",
-					"Real",
-					"->"
-				],
-				[
-					"cy",
-					"Real",
-					"->"
-				],
-				[
-					"r",
-					"Real",
-					"->"
-				],
-				[
-					"thickness",
-					"Real",
-					"->"
-				],
-				[
-					"margin",
-					"Integer",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"wedge()": {
-			"Syntax": "**.wedge**( *id* : Text; *percent* : Real ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"percent",
-					"Real",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"pie()": {
-			"Syntax": "**.pie**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *options* : Object ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"cx",
-					"Real",
-					"->"
-				],
-				[
-					"cy",
-					"Real",
-					"->"
-				],
-				[
-					"r",
-					"Real",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"pieBounded()": {
-			"Syntax": "**.pieBounded**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *options* : Object ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"x",
-					"Real",
-					"->"
-				],
-				[
-					"y",
-					"Real",
-					"->"
-				],
-				[
-					"width",
-					"Real",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"horizontalBar()": {
-			"Syntax": "**.horizontalBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"x",
-					"Real",
-					"->"
-				],
-				[
-					"y",
-					"Real",
-					"->"
-				],
-				[
-					"width",
-					"Real",
-					"->"
-				],
-				[
-					"height",
-					"Real",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"id": {
-			"Syntax": "id : Text"
-		},
-		"_inheritedFrom_": "svg"
 	},
 	"font": {
 		"default()": {

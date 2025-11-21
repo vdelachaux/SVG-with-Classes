@@ -1593,16 +1593,79 @@ Function text($text : Text; $attachTo) : cs:C1710.svg
 	If (This:C1470.success)\
 		 & (Length:C16($text)>0)
 		
-		If (Match regex:C1019("(?i-ms)<span [^>]*>"; $text; 1; *)) & False:C215
+		If (Match regex:C1019("(?mi-s)<span[^>]*>"; $text; 1)) & False:C215
+			
 			$text:=Replace string:C233($text; "<SPAN"; "<tspan")
 			$text:=Replace string:C233($text; "</SPAN>"; "</tspan>")
 			$text:=Replace string:C233($text; "STYLE="; "style=")
 			$text:=Replace string:C233($text; "color:"; "fill:")
 			$text:=Replace string:C233($text; "<BR/>"; "\r")
 			
-			var $pattern:="(?mi-s)<tspan[^>]*style=\"font-size:(\\d+)[^>]*>"
+			var $pattern:="(?m-is)<tspan[^>]*style=\"font-size:(\\d+)[^>]*>"
 			
-			// TODO: Text multi-style
+			// TODO: 🚧 Text multi-style
+			
+			//Repeat 
+			//$Lon_x:=Position("\r"; $Txt_text)
+			//If ($Lon_x>0)
+			//$Txt_Buffer:=Substring($Txt_text; 1; $Lon_x-1)
+			//$Txt_text:=Delete string($Txt_text; 1; Length($Txt_Buffer)+1)
+			////#ACI0093774
+			////$Txt_Span:=DOM Create XML element($Dom_svgReference;"tspan";"x";$Num_x)
+			//If (OK=1)
+			//ARRAY TEXT($tTxt_results; 0x0000)
+			//$Lon_lineFontSize:=$Lon_Font_Size  //default
+			//If (Rgx_ExtractText($Txt_pattern; $Txt_Buffer; ""; ->$tTxt_results; 0)=0)
+			//For ($Lon_i; 1; Size of array($tTxt_results); 1)
+			//If (Num($tTxt_results{$Lon_i})>$Lon_lineFontSize)
+			//$Lon_lineFontSize:=Num($tTxt_results{$Lon_i})
+			//End if 
+			//End for 
+			//End if 
+			//$Num_y:=$Num_y+$Lon_lineFontSize+Choose($Lon_count>0; $Num_interlining*8; 0)
+			////#ACI0093774
+			////DOM SET XML ATTRIBUTE($Txt_Span;"y";$Num_y)
+			////DOM SET XML ELEMENT VALUE($Txt_Span;$Txt_Buffer)
+			////#ACI0096676 {
+			////$Lon_error:=Rgx_SubstituteText ("(?mi-s)^<tspan ([^>]*>)";"<tspan x=\""+String($Num_x)+"\" y=\""+String($Num_y)+"\" \\1";->$Txt_Buffer)
+			//If ($Txt_Buffer#"<tspan@")
+			//$Txt_Buffer:="<tspan>"+$Txt_Buffer+"</tspan>"
+			//End if 
+			//$Lon_error:=Rgx_SubstituteText("(?mi-s)^<tspan([^>]*>)"; "<tspan x=\""+String($Num_x)+"\" y=\""+String($Num_y)+"\" \\1"; ->$Txt_Buffer)
+			////}
+			//$Dom_buffer:=DOM Append XML child node($Dom_svgReference; XML ELEMENT; $Txt_Buffer)
+			//End if 
+			//$Lon_Count:=$Lon_Count+1
+			//Else 
+			//If ($Lon_Count=0)
+			//DOM SET XML ELEMENT VALUE($Dom_svgReference; $Txt_text)
+			//Else 
+			//ARRAY TEXT($tTxt_results; 0x0000)
+			//$Lon_lineFontSize:=$Lon_Font_Size  //default
+			//If (Rgx_ExtractText($Txt_pattern; $Txt_text; ""; ->$tTxt_results; 0)=0)
+			//For ($Lon_i; 1; Size of array($tTxt_results); 1)
+			//If (Num($tTxt_results{$Lon_i})>$Lon_lineFontSize)
+			//$Lon_lineFontSize:=Num($tTxt_results{$Lon_i})
+			//End if 
+			//End for 
+			//End if 
+			//$Num_y:=$Num_y+$Lon_lineFontSize+Choose($Lon_count>0; $Num_interlining*8; 0)
+			////#ACI0093774
+			////$Txt_Span:=DOM Create XML element($Dom_svgReference;"tspan";"x";$Num_x;"y";$Num_y)
+			////If (OK=1)
+			////DOM SET XML ELEMENT VALUE($Txt_Span;$Txt_text)
+			////End if
+			////#ACI0096676 {
+			////$Lon_error:=Rgx_SubstituteText ("(?mi-s)^<tspan ([^>]*>)";"<tspan x=\""+String($Num_x)+"\" y=\""+String($Num_y)+"\" \\1";->$Txt_text)
+			//If ($Txt_Buffer#"<tspan@")
+			//$Txt_Buffer:="<tspan>"+$Txt_Buffer+"</tspan>"
+			//End if 
+			//$Lon_error:=Rgx_SubstituteText("(?mi-s)^<tspan([^>]*>)"; "<tspan x=\""+String($Num_x)+"\" y=\""+String($Num_y)+"\" \\1"; ->$Txt_Buffer)
+			////}
+			//$Dom_buffer:=DOM Append XML child node($Dom_svgReference; XML ELEMENT; $Txt_text)
+			//End if 
+			//End if 
+			//Until ($Lon_x=0) | (OK=0)
 			
 		Else 
 			
@@ -5234,10 +5297,10 @@ Function TextToPicture($text : Text; $attributes : Object) : Picture
 	// Making a point from x & y
 Function point($x : Real; $y : Real) : Collection
 	
-	return [Round:C94($x; 5); Round:C94($y; 5)]
+	return cs:C1710.point.new($x; $y).value
 	
 	//———————————————————————————————————————————————————————————
-	// Transforms a point's polar coordinates into cartesian coordinate
+	// Transforms the polar coordinates into cartesian coordinate
 Function polarToCartesian($point : Collection; $r : Real; $degree : Integer) : Collection
 	
 	var $radian : Real:=$degree*Pi:K30:1/180

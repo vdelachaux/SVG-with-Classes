@@ -220,7 +220,7 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.chart
 			//______________________________________________________
 		: ($o.type="pie")
 			
-			This:C1470.moveTo(This:C1470.point($cx; $cy))
+			This:C1470.moveTo(cs:C1710.point.new($cx; $cy).value)
 			This:C1470.lineTo(This:C1470._getPoint($from; $r; $cx; $cy))
 			This:C1470.arc(This:C1470._getPoint($to; $r; $cx; $cy); $r; 0; [$arc; 1])
 			

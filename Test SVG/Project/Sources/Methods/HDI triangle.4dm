@@ -1,8 +1,7 @@
 //%attributes = {}
 /*
 
-Specifies a path in the shape of a triangle. (The M indicates a moveto, the Ls 
-indicate linetos, and the Z indicates a closepath)
+Specifies a path in the shape of a triangle.
 
 https://www.w3.org/TR/SVG11/paths.html#PathDataGeneralInformation
 */
@@ -34,9 +33,8 @@ $svg.comment("📌 high-level Triangle() command")
 $svg.group().opacity(0.5).translate(400; 20).scale(1.5)
 
 $svg.Triangle(100; 100; 100).color("red")  // No rotation
-$svg.Triangle(100; 100; 100; 1/2).color("green")
-$svg.Triangle(100; 100; 100; 1/4).color("blue")
-$svg.Triangle(100; 100; 100; -1/2).color("green")
-$svg.Triangle(100; 100; 100; -1/4).color("blue")
+$svg.Triangle(100; 100; 100; 1/4).color("green")
+$svg.Triangle(100; 100; 100; 1/2).color("blue")
+$svg.Triangle(100; 100; 100; -1/4).color("green")
 
 $svg.preview()
