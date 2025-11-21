@@ -1564,10 +1564,98 @@ Function image($picture; $attachTo) : cs:C1710.svg
 				This:C1470._pushError("File not found \""+String:C10($picture.path)+"\"")
 				
 			End if 
+			
+			//______________________________________________________
+		: (Value type:C1509($picture)=Is text:K8:3)  // Relative URLs
+			
+			var $url:=String:C10($picture)
+			
+			Case of 
+					
+					// ______________________________________________________
+				: ($url="http@")  // A non-local URL
+					
+					// <NOTHING MORE TO DO>
+					
+					// ______________________________________________________
+				: ($url="../@")  // base is the database's folder
+					
+					$url:=Delete string:C232($url; 1; 3)
+					var $path:=Folder:C1567("/PACKAGE"; *).platformPath+Replace string:C233($url; "/"; Folder separator:K24:12)
+					$url:="../../"+$url
+					
+					// ______________________________________________________
+				: ($url="/@")  // base is the "Resources/SVG" folder
+					
+					// Be sure the folder SVG is present in the folder Resources
+					var $folder:=Folder:C1567("/RESOURCES/SVG"; *)
+					$folder.create()
+					
+					$url:=Delete string:C232($url; 1; 1)
+					$path:=$folder.platformPath+Replace string:C233($url; "/"; Folder separator:K24:12)
+					
+					// ______________________________________________________
+				: ($url="./@")  // base is the "Resources" folder
+					
+					$url:=Delete string:C232($url; 1; 2)
+					$path:=Folder:C1567("/RESOURCES"; *).platformPath+Replace string:C233($url; "/"; Folder separator:K24:12)
+					$url:="../"+$url
+					
+					// ______________________________________________________
+				Else   // fallback : "Resources/SVG" folder
+					
+					Folder:C1567("/RESOURCES/SVG"; *).create()
+					$path:=Folder:C1567("/RESOURCES/SVG"; *).platformPath+Replace string:C233($url; "/"; Folder separator:K24:12)
+					
+					// ______________________________________________________
+			End case 
+			
+			
+			If ($url#"http@")
+				
+				If (Not:C34(File:C1566($path; fk platform path:K87:2).exists))
+					
+					This:C1470._pushError("File not found :"+$path)
+					return 
+					
+				End if 
+				
+				// Get width & height of the picture
+				READ PICTURE FILE:C678($path; $picture)
+				
+				If (Bool:C1537(OK))
+					
+					PICTURE PROPERTIES:C457($picture; $width; $height)
+					$picture:=$picture*0
+					
+				End if 
+				
+				
+				This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "image"; New object:C1471(\
+					"xlink:href"; Replace string:C233($url; " "; "%20"); \
+					"x"; 0; \
+					"y"; 0; \
+					"width"; $width; \
+					"height"; $height))
+			Else 
+				
+				This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "image"; New object:C1471(\
+					"xlink:href"; Replace string:C233($url; " "; "%20"); \
+					"x"; 0; \
+					"y"; 0))
+				
+			End if 
+			
+			If (Not:C34(This:C1470.success))
+				
+				This:C1470._pushError("Failed to create image \""+$url+"\"")
+				
+			End if 
+			
 			//______________________________________________________
 		Else 
 			
-			This:C1470._pushError("Picture must be a picture variable ou a picture file.")
+			This:C1470._pushError("Picture must be a picture variable, a picture file or a relative URL")
 			
 			//______________________________________________________
 	End case 
