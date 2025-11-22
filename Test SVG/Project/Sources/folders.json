@@ -84,7 +84,8 @@
 	"TESTS": {
 		"methods": [
 			"test addTo",
-			"test rotateTAU"
+			"test rotateTAU",
+			"Test_symbol"
 		]
 	},
 	"Text": {

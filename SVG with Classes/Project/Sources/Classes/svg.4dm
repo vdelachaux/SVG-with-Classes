@@ -1181,7 +1181,7 @@ Function defineFilter($id : Text; $options : Object) : Text/* Filter reference *
 Function _num2Percent($value : Real) : Integer
 	
 	$value:=$value<0 ? 0 : $value
-	$value:=$value<0.9999999999999 ? $value*100 : $value
+	$value:=$value<=1 ? $value*100 : $value
 	
 	return $value>100 ? 100 : $value
 	
@@ -3506,6 +3506,7 @@ Function fillColor($color : Text; $applyTo) : cs:C1710.svg
 Function fillOpacity($opacity : Real; $applyTo) : cs:C1710.svg
 	
 	var $node:=This:C1470._getTarget($applyTo)
+	$opacity:=This:C1470._num2Percent($opacity)/100
 	
 	If ($node=This:C1470.root)
 		
@@ -3636,7 +3637,7 @@ Function strokeWidth($width : Real; $applyTo) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 Function strokeOpacity($opacity : Real; $applyTo) : cs:C1710.svg
 	
-	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "stroke-opacity"; $opacity)
+	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "stroke-opacity"; This:C1470._num2Percent($opacity)/100)
 	
 	return This:C1470
 	
@@ -4619,20 +4620,20 @@ Function restoreParentContainer($element : Text) : cs:C1710.svg
 	var $node:=This:C1470.latest
 	var $name:=This:C1470.getName($node)
 	
-	If (Count parameters:C259=0)
+	If ($element="root")
 		
-		While (Not:C34(This:C1470._container.includes($name)))
-			
-			$node:=This:C1470.parent($node)
-			$name:=This:C1470.getName($node)
-			
-		End while 
+		$node:=This:C1470.root
 		
 	Else 
 		
-		If ($element="root")
+		If (Count parameters:C259=0)
 			
-			$node:=This:C1470.root
+			While (Not:C34(This:C1470._container.includes($name)))
+				
+				$node:=This:C1470.parent($node)
+				$name:=This:C1470.getName($node)
+				
+			End while 
 			
 		Else 
 			
