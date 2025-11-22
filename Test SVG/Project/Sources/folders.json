@@ -92,7 +92,8 @@
 			"HDI Text Append to textArea",
 			"HDI Text css style",
 			"HDI Text stretch ",
-			"HDI Text to Picture"
+			"HDI Text to Picture",
+			"HDI Text tspan"
 		]
 	},
 	"trash": {}

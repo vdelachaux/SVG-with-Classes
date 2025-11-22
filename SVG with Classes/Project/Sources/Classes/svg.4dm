@@ -1671,10 +1671,8 @@ Function text($text : Text; $attachTo) : cs:C1710.svg
 		
 	End if 
 	
-	var $DEFAULTFONTSIZE:=12
 	var $node:=This:C1470._getContainer($attachTo)
-	var $y:=$DEFAULTFONTSIZE
-	var $o:={x: 0; y: $y}
+	var $o:={x: 0; y: "1em"}
 	
 	This:C1470.latest:=Super:C1706.create($node; "text"; $o)
 	
@@ -1768,17 +1766,63 @@ Function text($text : Text; $attachTo) : cs:C1710.svg
 				
 			Else 
 				
-				// TODO: Multilines
 				var $line : Text
 				For each ($line; $c) While (This:C1470.success)
 					
+					If ($line#$c[0])
+						
+						// Keep x, remove y
+						OB REMOVE:C1226($o; "y")
+						
+						// Set dy
+						$o.dy:="1em"
+						
+					End if 
+					
 					$node:=Super:C1706.create(This:C1470.latest; "tspan"; $o)
 					Super:C1706.setValue($node; $line)
-					$o.y:=$o.y+$DEFAULTFONTSIZE
 					
 				End for each 
 			End if 
 		End if 
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+Function dx($value; $applyTo) : cs:C1710.svg
+	
+	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "dx"; $value)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+Function dy($value; $applyTo) : cs:C1710.svg
+	
+	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "dy"; $value)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+Function tspan($text : Text; $attachTo) : cs:C1710.svg
+	
+	var $node:=This:C1470._getTarget($attachTo)
+	
+	If (This:C1470.getName($node)#"text")
+		
+		$node:=This:C1470.parent($node; "text")
+		
+	End if 
+	
+	If (This:C1470.success)
+		
+		This:C1470.latest:=Super:C1706.create($node; "tspan")
+		Super:C1706.setValue(This:C1470.latest; $text)
+		
+	Else 
+		
+		This:C1470._pushError("“tspan” requires a parent “text” element to be displayed.")
+		
 	End if 
 	
 	return This:C1470
@@ -4569,10 +4613,47 @@ Function fetch($name : Text) : Text
 	End if 
 	
 	//———————————————————————————————————————————————————————————
+	// Restore the first parent container (with name is passed)
+Function restoreParentContainer($element : Text) : cs:C1710.svg
+	
+	var $node:=This:C1470.latest
+	var $name:=This:C1470.getName($node)
+	
+	If (Count parameters:C259=0)
+		
+		While (Not:C34(This:C1470._container.includes($name)))
+			
+			$node:=This:C1470.parent($node)
+			$name:=This:C1470.getName($node)
+			
+		End while 
+		
+	Else 
+		
+		If ($element="root")
+			
+			$node:=This:C1470.root
+			
+		Else 
+			
+			While ($name#$element)
+				
+				$node:=This:C1470.parent($node)
+				$name:=This:C1470.getName($node)
+				
+			End while 
+		End if 
+	End if 
+	
+	This:C1470.latest:=$node
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Restore the root as the latest container
 Function restoreRoot()
 	
-	This:C1470.latest:=This:C1470.root
+	This:C1470.restoreParentContainer("root")
 	
 	//———————————————————————————————————————————————————————————
 	// Move up one (default)  or x level(s) in the XML tree.
