@@ -74,6 +74,7 @@
 			"HDI fill rule",
 			"HDI import",
 			"HDI markers",
+			"HDI opacity",
 			"HDI Pattern",
 			"HDI point and polarToCartesian",
 			"HDI stroke linecap",
@@ -92,6 +93,7 @@
 		"methods": [
 			"HDI Text Append to textArea",
 			"HDI Text css style",
+			"HDI Text multiline",
 			"HDI Text stretch ",
 			"HDI Text to Picture",
 			"HDI Text tspan"

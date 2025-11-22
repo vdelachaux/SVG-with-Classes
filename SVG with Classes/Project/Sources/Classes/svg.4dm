@@ -4651,6 +4651,31 @@ Function restoreParentContainer($element : Text) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Close the parent container
+Function closeParent() : cs:C1710.svg
+	
+	var $node:=This:C1470.latest
+	var $name:=This:C1470.getName($node)
+	
+	If ($name="root")
+		
+		$node:=This:C1470.root
+		
+	Else 
+		
+		While (Not:C34(This:C1470._container.includes($name)))
+			
+			$node:=This:C1470.parent(This:C1470.parent($node))
+			$name:=This:C1470.getName($node)
+			
+		End while 
+	End if 
+	
+	This:C1470.latest:=$node
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Restore the root as the latest container
 Function restoreRoot()
 	
@@ -4688,11 +4713,20 @@ Function color($color : Text; $applyTo) : cs:C1710.svg
 	// Sets opacity of stroke and fill.
 Function opacity($opacity : Real; $applyTo) : cs:C1710.svg
 	
+	$opacity:=This:C1470._num2Percent($opacity)/100
 	var $node:=This:C1470._getTarget($applyTo)
 	
-	$opacity:=This:C1470._num2Percent($opacity)/100
-	This:C1470.fillOpacity($opacity; $node)
-	This:C1470.strokeOpacity($opacity; $node)
+	If (This:C1470.getName($node)="g")
+		
+		Super:C1706.setAttribute($node; "opacity"; $opacity)
+		
+	Else 
+		
+		// Apply opacity to fill and stroke
+		This:C1470.fillOpacity($opacity; $node)
+		This:C1470.strokeOpacity($opacity; $node)
+		
+	End if 
 	
 	return This:C1470
 	
