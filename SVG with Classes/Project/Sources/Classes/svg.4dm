@@ -1067,7 +1067,7 @@ Function pattern($id : Text; $options : Object) : Text/* Pattern reference */
 		
 		var $t : Text
 		var $o : Object
-		For each ($t; ["width"; "height"; "x"; "y"; "viewBox"])
+		For each ($t; ["width"; "height"; "x"; "y"; "viewBox"; "patternTransform"])
 			
 			If ($options[$t]=Null:C1517)
 				
@@ -1091,6 +1091,11 @@ Function pattern($id : Text; $options : Object) : Text/* Pattern reference */
 						$o[$t]:=$options[$t]
 						
 					End if 
+					
+					//______________________________________________________
+				: ($t="patternTransform")
+					
+					$o[$t]:=String:C10($options[$t])
 					
 					//______________________________________________________
 				Else 

@@ -76,6 +76,7 @@
 			"HDI markers",
 			"HDI opacity",
 			"HDI Pattern",
+			"HDI patternTransform",
 			"HDI point and polarToCartesian",
 			"HDI stroke linecap",
 			"HDI stroke linejoin",
