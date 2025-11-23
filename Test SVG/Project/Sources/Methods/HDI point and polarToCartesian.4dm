@@ -1,7 +1,7 @@
 //%attributes = {}
 var $svg:=cs:C1710.svgx.svg.new()
 
-$svg.square(400).fill("white")
+$svg.Square(400).fill("white")
 
 $svg.group().scale(2)
 

@@ -7,7 +7,7 @@ $svg:=cs:C1710.svgx.svg.new()
 
 
 // Create a symbol
-$svg.square(20).color("orange").symbol("square")
+$svg.Square(20).color("orange").symbol("square")
 
 
 // Create a "background" & "foreground" group & apply a translation to the last one
@@ -15,7 +15,7 @@ $svg.layer("background"; "foreground").translate(45; 45)  // Layers are automati
 
 // Create a yellow square and store its reference associated with the label "original"
 // Note: Will be automatically created into the last used/created container (here "foreground")
-$svg.square(20).position(2.5).color("yellow").push("original")
+$svg.Square(20).position(2.5).color("yellow").push("original")
 
 // Add, into the "background" layer, a blue circle without fill & with a border of 4 pixels
 $svg.circle(50).color("blue").position(130).fill(False:C215).stroke(4).attachTo("background")
@@ -41,8 +41,7 @@ $svg.polygon()\
 .fill("red")\
 .stroke("blue").stroke(10)\
 .translate(0; -40)\
-.attachTo("background")
-
+.addTo("background")
 If ($svg.with("foreground"))  // All enclosed actions refer to the "foreground" layer
 	
 	// Draw an ellipse

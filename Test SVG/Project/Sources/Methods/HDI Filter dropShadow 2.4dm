@@ -16,7 +16,7 @@ $svg.text("SVG")\
 // User-defined Dispersion value: Dispersion = 8
 $svg.FivePointStar(500; 300; 350).color("tomato").dropShadow(8)
 
-$svg.square(200)\
+$svg.Square(200)\
 .position(500; 10)\
 .fillColor("white")\
 .stroke("blue")

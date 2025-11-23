@@ -1,7 +1,7 @@
 //%attributes = {}
 var $svg:=cs:C1710.svgx.svg.new()
 
-$svg.square(40).symbol("square")
+$svg.Square(40).symbol("square")
 
 $svg.use("square").position(80)\
 .fill("blue").rotateTAU(-1/8; 100; 100)

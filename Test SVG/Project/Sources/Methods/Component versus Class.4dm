@@ -52,7 +52,7 @@ Else   // Use svg class
 	
 	// Create a yellow square & memorize its reference as "original"
 	// [The object is automatically added to the latest created/used "container" ("foreground")]
-	$svg.square(20).position(2.5; 2.5).color("yellow").push("original")
+	$svg.Square(20).position(2.5; 2.5).color("yellow").push("original")
 	
 	// Set "background" layer for the next operations
 	If ($svg.with("background"))

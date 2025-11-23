@@ -2,7 +2,7 @@
 var $svg:=cs:C1710.svgx.svg.new()\
 .desc("Example clip-path")
 
-$svg.square(96).fill("red").stroke(False:C215)
+$svg.Square(96).fill("red").stroke(False:C215)
 
 If (Shift down:C543)
 	

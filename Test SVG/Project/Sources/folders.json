@@ -79,14 +79,14 @@
 			"HDI point and polarToCartesian",
 			"HDI stroke linecap",
 			"HDI stroke linejoin",
-			"HDI symbol"
+			"HDI symbol",
+			"HDI symbol 2"
 		]
 	},
 	"TESTS": {
 		"methods": [
 			"test addTo",
-			"test rotateTAU",
-			"Test_symbol"
+			"test rotateTAU"
 		]
 	},
 	"Text": {

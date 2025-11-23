@@ -927,42 +927,6 @@ Function radialGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 	return $ref
 	
 	//———————————————————————————————————————————————————————————
-	// Adds an element to container item
-Function addTo($tgt : Text; $applyTo : Text) : cs:C1710.svg
-	
-	$tgt:=This:C1470._getTarget($tgt)
-	
-	var $name : Text
-	DOM GET XML ELEMENT NAME:C730($tgt; $name)
-	
-	If (This:C1470._container.includes($name))
-		
-		var $src:=This:C1470._getTarget($applyTo)
-		
-		// Keeps id and removes it, if any, to avoid duplicate one
-		var $id:=String:C10(This:C1470.popAttribute($src; "id"))
-		
-		This:C1470.latest:=Super:C1706.append($tgt; $src)
-		
-		// Restore id, if any
-		If (Length:C16($id)>0)
-			
-			This:C1470.setID($id)
-			
-		End if 
-		
-		Super:C1706.remove($src)
-		This:C1470.restoreRoot()
-		
-	Else 
-		
-		This:C1470._pushError("\""+$name+"\" used as target is not a container")
-		
-	End if 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
 	// Place an occurence of the symbol
 Function use($symbol; $attachTo) : cs:C1710.svg
 	
@@ -1147,6 +1111,30 @@ Function pattern($id : Text; $options : Object) : Text/* Pattern reference */
 	return $ref
 	
 	//———————————————————————————————————————————————————————————
+	// Define a 'solidColor' element that provides a single color with opacity.
+	// It can be referenced like the other paint servers (i.e. gradients).
+Function solidColor($id : Text; $color : Text; $opacity : Real) : cs:C1710.svg
+	
+	var $defs:=This:C1470._defs()
+	
+	If (Not:C34(This:C1470.success))
+		
+		return 
+		
+	End if 
+	
+	var $ref:=Super:C1706.create($defs; "solidColor"; {id: $id})
+	Super:C1706.setAttribute($ref; "solid-color"; $color)
+	
+	If (Count parameters:C259>=3)
+		
+		Super:C1706.setAttribute($ref; "solid-opacity"; This:C1470._num2Percent($opacity)/100)
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Sets a new filter in the SVG container and returns its reference
 	// If the filter already exists, it will be replaced.
 Function defineFilter($id : Text; $options : Object) : Text/* Filter reference */
@@ -1245,13 +1233,6 @@ Function rect($width; $height; $attachTo) : cs:C1710.svg
 	End case 
 	
 	This:C1470.latest:=Super:C1706.create($node; "rect"; {width: $width; height: $breadth})
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-Function square($side : Real; $attachTo) : cs:C1710.svg
-	
-	This:C1470.rect($side; $side; This:C1470._getContainer($attachTo))
 	
 	return This:C1470
 	
@@ -1956,86 +1937,6 @@ Function polygon($points : Variant; $attachTo) : cs:C1710.svg
 	End if 
 	
 	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Draws a regular polygon with number of sides fit into a circle
-Function Polygon($diameter : Real; $sides : Integer; $cx : Real; $cy : Real) : cs:C1710.svg
-	
-	var $angle : Real
-	
-	var $r:=$diameter/2
-	$cx:=Count parameters:C259>=3 ? $cx : $r+1
-	$cy:=Count parameters:C259>=4 ? $cy : $cx
-	
-	var $c:=[]
-	var $i : Integer
-	For ($i; 1; $sides; 1)
-		
-		$angle:=(This:C1470.TAU/$sides)*$i
-		$c.push([Round:C94($cx+($r*Cos:C18($angle)); 2); Round:C94($cy+($r*Sin:C17($angle)); 2)])
-		
-	End for 
-	
-	This:C1470.polygon($c)
-	
-	If (($sides%2)#0)
-		
-		This:C1470.rotate(-(360/$sides)/4; $cx; $cy; This:C1470.latest)
-		
-	End if 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-/*
-Draws a N pointed star fit into a circle (outerR; cx; cy)
-If you want a more “pointed” star, decrease the ratio (Default is 0.5).
-For a more “round” star, increase the ratio.
-*/
-Function Star($nBranches : Integer; $outerR : Real; $cx : Real; $cy : Real; $ratio : Real) : cs:C1710.svg
-	
-	$ratio:=$ratio#0 ? $ratio : 0.5
-	var $innerR:=$outerR*$ratio
-	
-	var $nPoints:=2*$nBranches
-	var $points:=[].resize($nPoints)
-	
-	// ---- Construction of the n points (n/2 exterior + n/2 interior) ----
-	var $i : Integer
-	For ($i; 0; $nPoints-1)
-		
-		var $angle:=This:C1470.TAU+($i*(This:C1470.TAU/$nPoints))-(Pi:K30:1/2)
-		var $r : Real:=$i%2=0 ? $outerR : $innerR
-		$points[$i]:=[Round:C94($cx+($r*Cos:C18($angle)); 2); Round:C94($cy+($r*Sin:C17($angle)); 2)]
-		
-	End for 
-	
-	return This:C1470.polygon($points)
-	
-	//———————————————————————————————————————————————————————————
-	// Draws a five pointed star fit into a circle
-Function FivePointStar($diameter : Real; $cx : Real; $cy : Real) : cs:C1710.svg
-	
-	This:C1470.Star(5; $diameter/2; $cx; $cy)
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Draws a triangle
-Function Triangle($cx : Real; $cy : Real; $r : Real; $rotation : Real) : cs:C1710.svg
-	
-	
-	// Calculate the 3 points
-	var $points:=[].resize(3)
-	var $i : Integer
-	For ($i; 0; 2)
-		
-		var $angle:=($rotation*This:C1470.TAU)+($i*(This:C1470.TAU/3))
-		$points[$i]:=[$cx+($r*Cos:C18($angle)); $cy+($r*Sin:C17($angle))]
-		
-	End for 
-	
-	return This:C1470.polygon($points)
 	
 	//———————————————————————————————————————————————————————————
 	// Populate the "points" property of a polyline, polygon
@@ -2771,6 +2672,93 @@ Function Z($applyTo) : cs:C1710.svg
 	
 	return This:C1470
 	
+	// MARK:- HIGH-LEVEL 
+	//———————————————————————————————————————————————————————————
+Function Square($side : Real; $attachTo) : cs:C1710.svg
+	
+	This:C1470.rect($side; $side; This:C1470._getContainer($attachTo))
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Draws a regular polygon with number of sides fit into a circle
+Function RegularPolygon($diameter : Real; $sides : Integer; $cx : Real; $cy : Real) : cs:C1710.svg
+	
+	var $angle : Real
+	
+	var $r:=$diameter/2
+	$cx:=Count parameters:C259>=3 ? $cx : $r+1
+	$cy:=Count parameters:C259>=4 ? $cy : $cx
+	
+	var $c:=[]
+	var $i : Integer
+	For ($i; 1; $sides; 1)
+		
+		$angle:=(This:C1470.TAU/$sides)*$i
+		$c.push([Round:C94($cx+($r*Cos:C18($angle)); 2); Round:C94($cy+($r*Sin:C17($angle)); 2)])
+		
+	End for 
+	
+	This:C1470.polygon($c)
+	
+	If (($sides%2)#0)
+		
+		This:C1470.rotate(-(360/$sides)/4; $cx; $cy; This:C1470.latest)
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+/*
+Draws a N pointed star fit into a circle (outerR; cx; cy)
+If you want a more “pointed” star, decrease the ratio (Default is 0.5).
+For a more “round” star, increase the ratio.
+*/
+Function Star($nBranches : Integer; $outerR : Real; $cx : Real; $cy : Real; $ratio : Real) : cs:C1710.svg
+	
+	$ratio:=$ratio#0 ? $ratio : 0.5
+	var $innerR:=$outerR*$ratio
+	
+	var $nPoints:=2*$nBranches
+	var $points:=[].resize($nPoints)
+	
+	// ---- Construction of the n points (n/2 exterior + n/2 interior) ----
+	var $i : Integer
+	For ($i; 0; $nPoints-1)
+		
+		var $angle:=This:C1470.TAU+($i*(This:C1470.TAU/$nPoints))-(Pi:K30:1/2)
+		var $r : Real:=$i%2=0 ? $outerR : $innerR
+		$points[$i]:=[Round:C94($cx+($r*Cos:C18($angle)); 2); Round:C94($cy+($r*Sin:C17($angle)); 2)]
+		
+	End for 
+	
+	return This:C1470.polygon($points)
+	
+	//———————————————————————————————————————————————————————————
+	// Draws a five pointed star fit into a circle
+Function FivePointStar($diameter : Real; $cx : Real; $cy : Real) : cs:C1710.svg
+	
+	This:C1470.Star(5; $diameter/2; $cx; $cy)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Draw an equilateral triangle inscribed in a circle defined by cx, cy, and r.
+Function Triangle($cx : Real; $cy : Real; $r : Real; $rotation : Real) : cs:C1710.svg
+	
+	// Calculate the 3 vertices
+	var $points:=[].resize(3)
+	var $i : Integer
+	For ($i; 0; 2)
+		
+		var $angle:=($rotation*This:C1470.TAU)+($i*(This:C1470.TAU/3))
+		$points[$i]:=[$cx+($r*Cos:C18($angle)); $cy+($r*Sin:C17($angle))]
+		
+	End for 
+	
+	return This:C1470.polygon($points)
+	
 	// MARK:- ATTRIBUTES
 	//———————————————————————————————————————————————————————————
 	// ⚠️ Overrides the method of the inherited class
@@ -2865,6 +2853,12 @@ Function viewbox($left; $top : Real; $width : Real; $height : Real; $applyTo) : 
 	
 	//———————————————————————————————————————————————————————————
 Function setID($id : Text; $applyTo) : cs:C1710.svg
+	
+	If (Length:C16($id)=0)
+		
+		return 
+		
+	End if 
 	
 	var $node:=DOM Find XML element by ID:C1010(This:C1470.root; $id)
 	
@@ -4469,34 +4463,62 @@ Function offset($dx : Integer; $dy : Integer) : cs:C1710.svg
 	
 	//MARK:-SHORTCUTS & UTILITIES
 	//———————————————————————————————————————————————————————————
-	// Adds item to parent item
-Function attachTo($parent : Variant) : cs:C1710.svg
+	// Attaches an element to a container, the root becomes the last element.
+Function addTo($tgt : Text; $applyTo : Text) : cs:C1710.svg
 	
-	var $source:=This:C1470.latest
+	$tgt:=This:C1470._getTarget($tgt)
 	
-	// Keeps id and removes it, if any, to avoid duplicate one
-	var $id:=String:C10(This:C1470.popAttribute($source; "id"))
+	var $name : Text
+	DOM GET XML ELEMENT NAME:C730($tgt; $name)
 	
-	This:C1470.latest:=Super:C1706.clone($source; This:C1470._getContainer($parent))
-	
-	This:C1470.remove($source)
-	
-	// Restore id, if any
-	If (Length:C16($id)>0)
+	If (This:C1470._container.includes($name))
 		
+		var $src:=This:C1470._getTarget($applyTo)
+		
+		// As the ID must be unique, keeps id and removes it
+		var $id:=String:C10(This:C1470.popAttribute($src; "id"))
+		
+		This:C1470.latest:=Super:C1706.append($tgt; $src)
+		
+		// Restore ID, if any
 		This:C1470.setID($id)
+		
+		Super:C1706.remove($src)
+		This:C1470.restoreRoot()  // The root becomes the last element.
+		
+	Else 
+		
+		This:C1470._pushError("\""+$name+"\" used as target is not a container")
 		
 	End if 
 	
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Moves the latest element to a parent container.
+Function attachTo($parent : Variant) : cs:C1710.svg
+	
+	var $src:=This:C1470.latest
+	
+	// As the ID must be unique, keeps id and removes it
+	var $id:=String:C10(This:C1470.popAttribute($src; "id"))
+	
+	This:C1470.latest:=Super:C1706.clone($src; This:C1470._getContainer($parent))
+	
+	This:C1470.remove($src)
+	
+	/// Restore ID, if any
+	This:C1470.setID($id)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// ⚠️ Overrides the method of the inherited class
-Function clone($source : Text; $attachTo) : cs:C1710.svg
+Function clone($src : Text; $attachTo) : cs:C1710.svg
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		var $target:=This:C1470._getTarget($source)
+		var $target:=This:C1470._getTarget($src)
 		
 		If (This:C1470.getAttributes($target).id#Null:C1517)
 			
@@ -4618,13 +4640,14 @@ Function fetch($name : Text) : Text
 Function restoreParentContainer($element : Text) : cs:C1710.svg
 	
 	var $node:=This:C1470.latest
-	var $name:=This:C1470.getName($node)
 	
 	If ($element="root")
 		
 		$node:=This:C1470.root
 		
 	Else 
+		
+		var $name:=This:C1470.getName($node)
 		
 		If (Count parameters:C259=0)
 			
@@ -4713,10 +4736,22 @@ Function color($color : Text; $applyTo) : cs:C1710.svg
 	// Sets opacity of stroke and fill.
 Function opacity($opacity : Real; $applyTo) : cs:C1710.svg
 	
-	$opacity:=This:C1470._num2Percent($opacity)/100
-	var $node:=This:C1470._getTarget($applyTo)
+	var $force : Boolean
 	
-	If (This:C1470.getName($node)="g")
+	If (Value type:C1509($applyTo)=Is boolean:K8:9)
+		
+		$force:=$applyTo
+		var $node:=This:C1470._getTarget()
+		
+	Else 
+		
+		$node:=This:C1470._getTarget($applyTo)
+		
+	End if 
+	
+	$opacity:=This:C1470._num2Percent($opacity)/100
+	
+	If (This:C1470.getName($node)="g") && Not:C34($force)
 		
 		Super:C1706.setAttribute($node; "opacity"; $opacity)
 		

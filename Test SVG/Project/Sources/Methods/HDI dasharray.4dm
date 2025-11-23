@@ -54,7 +54,7 @@ $svg.comment("Draw a grid with 2 lines")
 $svg.group().stroke("violet").stroke(198).dasharray(1; 10)
 $svg.line(400; 200; 599; 200)
 $svg.line(500; 100; 500; 300)
-$svg.square(198; "root").position(400.5; 100.5).stroke(1).stroke("purple")
+$svg.Square(198; "root").position(400.5; 100.5).stroke(1).stroke("purple")
 
 //mark:-
 $svg.comment("Rectangle with dashed line")

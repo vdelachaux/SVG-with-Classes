@@ -1,13 +1,13 @@
 //%attributes = {}
 var $svg:=cs:C1710.svgx.svg.new()\
-.desc("Example unsing the high-level Star(), Polygon() & FivePointStar() commands")
+.desc("Example using the high-level commands Star(), RegularPolygon() & FivePointStar()")
 
-$svg.comment("📌 fivePointStar")
+$svg.comment("📌 FivePointStar")
 $svg.FivePointStar(125*2; 150; 200)\
 .fill("darksalmon").stroke("darkred").stroke(2)
 
-$svg.comment("📌 Polygon() Draws a regular polygon with number of sides fit into a circle")
-$svg.Polygon(125*2; 6; 550; 200)\
+$svg.comment("📌 RegularPolygon() Draws a regular polygon with number of sides fit into a circle")
+$svg.RegularPolygon(125*2; 6; 550; 200)\
 .fill("plum").stroke("purple").stroke(2).rotate(-(360/6)/2; 550; 200)
 
 

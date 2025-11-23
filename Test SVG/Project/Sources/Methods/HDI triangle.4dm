@@ -15,9 +15,12 @@ $svg:=cs:C1710.svgx.svg.new()\
 $svg.rect(800; 380).position(1; 1)\
 .stroke("blue")
 
+$svg.solidColor("myFill"; "lightsalmon"; 80)
+$svg.solidColor("myStroke"; "tomato"; 0.5)
+
 $svg.path()\
-.fill("red")\
-.stroke("blue")\
+.fill("myFill")\
+.stroke("myStroke")\
 .stroke(3)\
 .moveTo([100; 100])\
 .lineTo([300; 100; 200; 300])\
@@ -30,11 +33,11 @@ Using the high-level Triangle() command
 */
 
 $svg.comment("📌 high-level Triangle() command")
-$svg.group().opacity(0.5).translate(400; 20).scale(1.5)
+$svg.group().fillOpacity(0.5).translate(400; 20).scale(1.5)
 
 $svg.Triangle(100; 100; 100).color("red")  // No rotation
-$svg.Triangle(100; 100; 100; 1/4).color("green")
-$svg.Triangle(100; 100; 100; 1/2).color("blue")
-$svg.Triangle(100; 100; 100; -1/4).color("green")
+$svg.Triangle(100; 100; 100; 0.25).color("green")  // 1/4 turn
+$svg.Triangle(100; 100; 100; 0.5).color("blue")  // 1/2 turn
+$svg.Triangle(100; 100; 100; 3/4).color("green")  // 3/4 turn
 
 $svg.preview()

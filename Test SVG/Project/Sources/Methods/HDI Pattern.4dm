@@ -33,7 +33,7 @@ x: 0; \
 y: 0; \
 viewBox: [0; 0; 20; 20]})
 
-$svg.square(20).stroke("white").fill("sandybrown").addTo("myPattern2")
+$svg.Square(20).stroke("white").fill("sandybrown").addTo("myPattern2")
 
 // Draw the ellipse & fiil it with "myPattern2"
 $svg.ellipse(350; 150).cx(400).cy(200).fill("myPattern2").stroke("myPattern2").translate(100; 200)
