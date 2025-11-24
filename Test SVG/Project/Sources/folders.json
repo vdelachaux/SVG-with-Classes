@@ -18,7 +18,7 @@
 	},
 	"Chart": {
 		"methods": [
-			"HDI chart as symbols",
+			"HDI Chart as symbols",
 			"HDI Chart donut",
 			"HDI Chart horizontalBar",
 			"HDI Chart pie",
@@ -40,8 +40,8 @@
 			"HDI polyline",
 			"HDI rect",
 			"HDI rect 2",
-			"HDI stars and regularPolygon",
-			"HDI triangle"
+			"HDI Stars and RegularPolygon",
+			"HDI Triangle"
 		]
 	},
 	"Gradients and Filters": {
@@ -75,7 +75,7 @@
 			"HDI import",
 			"HDI markers",
 			"HDI opacity",
-			"HDI Pattern",
+			"HDI pattern",
 			"HDI patternTransform",
 			"HDI point and polarToCartesian",
 			"HDI stroke linecap",
@@ -87,6 +87,7 @@
 	"TESTS": {
 		"methods": [
 			"test addTo",
+			"Test linearGradient",
 			"test rotateTAU"
 		]
 	},

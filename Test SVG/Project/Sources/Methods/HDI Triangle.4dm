@@ -6,9 +6,7 @@ Specifies a path in the shape of a triangle.
 https://www.w3.org/TR/SVG11/paths.html#PathDataGeneralInformation
 */
 
-var $svg : cs:C1710.svgx.svg
-
-$svg:=cs:C1710.svgx.svg.new()\
+var $svg:=cs:C1710.svgx.svg.new()\
 .title("ℹ️ Example triangle01- simple example of a 'path'")\
 .desc("📐 A path that draws a triangle")
 

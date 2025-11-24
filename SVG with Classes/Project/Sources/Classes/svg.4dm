@@ -90,8 +90,8 @@ property _notContainer:=[\
 "polyline"; \
 "rect"; \
 "use"; \
+"text"; \
 "textArea"]
-
 
 // Graphics element that is defined by some combination of straight lines and curves.
 property _shapes:=[\
@@ -609,7 +609,7 @@ The value of the marker is used directly for all three of the corresponding long
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Define a clipPath and apply to the root element
+	//Define or set a clipPath
 Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 	
 	$id:=Length:C16($id)>0 ? $id : Generate UUID:C1066
@@ -638,9 +638,15 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 		
 		This:C1470.store.push({id: $id; dom: $node})
 		
-		var $source : Text:=This:C1470._getTarget($applyTo)
+		var $source : Text
 		
-		If (This:C1470.isReference($source))  // && ($source#This.root)
+		If ($applyTo#"root")
+			
+			$source:=This:C1470._getTarget($applyTo)
+			
+		End if 
+		
+		If (This:C1470.isReference($source))
 			
 			$node:=Super:C1706.clone($source; $node)
 			This:C1470.remove($source)
@@ -653,6 +659,12 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 			End if 
 			
 		Else 
+			
+			If ($applyTo="root")
+				
+				Super:C1706.setAttribute(This:C1470.root; "clip-path"; "url(#"+$id+")")
+				
+			End if 
 			
 			This:C1470.latest:=$node
 			
@@ -696,56 +708,32 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 				// …………………………………………………………………………………………
 			: ($rotation=-45)
 				
-				Super:C1706.setAttributes($ref; {\
-					x1: 1; \
-					y1: 1; \
-					x2: 0; \
-					y2: 0})
+				Super:C1706.setAttributes($ref; {x1: 1; y1: 1; x2: 0; y2: 0})
 				
 				// …………………………………………………………………………………………
 			: ($rotation=45)
 				
-				Super:C1706.setAttributes($ref; {\
-					x1: 0; \
-					y1: 0; \
-					x2: 1; \
-					y2: 1})
+				Super:C1706.setAttributes($ref; {x1: 0; y1: 0; x2: 1; y2: 1})
 				
 				// …………………………………………………………………………………………
 			: ($rotation=90)
 				
-				Super:C1706.setAttributes($ref; {\
-					x1: 0; \
-					y1: 0; \
-					x2: 0; \
-					y2: 1})
+				Super:C1706.setAttributes($ref; {x1: 0; y1: 0; x2: 0; y2: 1})
 				
 				// …………………………………………………………………………………………
 			: ($rotation=-90)
 				
-				Super:C1706.setAttributes($ref; {\
-					x1: 0; \
-					y1: 1; \
-					x2: 0; \
-					y2: 0})
+				Super:C1706.setAttributes($ref; {x1: 0; y1: 1; x2: 0; y2: 0})
 				
 				// …………………………………………………………………………………………
 			: ($rotation=180)
 				
-				Super:C1706.setAttributes($ref; {\
-					x1: 0; \
-					y1: 0; \
-					x2: 1; \
-					y2: 0})
+				Super:C1706.setAttributes($ref; {x1: 0; y1: 0; x2: 1; y2: 0})
 				
 				// …………………………………………………………………………………………
 			: ($rotation=-180)
 				
-				Super:C1706.setAttributes($ref; {\
-					x1: 1; \
-					y1: 0; \
-					x2: 0; \
-					y2: 0})
+				Super:C1706.setAttributes($ref; {x1: 1; y1: 0; x2: 0; y2: 0})
 				
 				// …………………………………………………………………………………………
 			Else 
@@ -761,7 +749,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 		If (Length:C16($t)>0)\
 			 && (["pad"; "reflect"; "repeat"].includes($t))
 			
-			Super:C1706.setAttributes($ref; "spreadMethod"; $t)
+			Super:C1706.setAttribute($ref; "spreadMethod"; $t)
 			
 		End if 
 		
@@ -777,9 +765,9 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 		
 		// .x1, .y1, .x2, .y2
 		If ($options.x1#Null:C1517)\
-			 && ($options.x2#Null:C1517)\
-			 && ($options.y1#Null:C1517)\
-			 && ($options.y2#Null:C1517)
+			 || ($options.x2#Null:C1517)\
+			 || ($options.y1#Null:C1517)\
+			 || ($options.y2#Null:C1517)
 			
 			For each ($t; ["x1"; "x2"; "y1"; "y2"])
 				
@@ -4641,40 +4629,54 @@ Function fetch($name : Text) : Text
 	End if 
 	
 	//———————————————————————————————————————————————————————————
-	// Restore the first parent container (with name is passed)
-Function restoreParentContainer($element : Text) : cs:C1710.svg
+	// ⚠️ Overrides the method of the inherited class
+Function close($keepOpened : Boolean) : cs:C1710.svg
 	
-	var $node:=This:C1470.latest
+	var $name:=This:C1470.getName(This:C1470.latest)
 	
-	If ($element="root")
+	// FIXME: List other structures to manage
+	If (["g"; "path"; "text"; "textArea"; "tspan"].includes($name))
 		
-		$node:=This:C1470.root
+		var $node:=This:C1470.parent(This:C1470.latest)
+		$name:=This:C1470.getName($node)
+		
+		While (This:C1470._notContainer.includes($name))
+			
+			$node:=This:C1470.parent($node)
+			$name:=This:C1470.getName($node)
+			
+		End while 
+		
+		This:C1470.latest:=$node
 		
 	Else 
 		
-		var $name:=This:C1470.getName($node)
-		
-		If (Count parameters:C259=0)
+		If (This:C1470.autoClose)
 			
-			While (Not:C34(This:C1470._container.includes($name)))
+			If (Count parameters:C259>=1)
 				
-				$node:=This:C1470.parent($node)
-				$name:=This:C1470.getName($node)
+				If (Not:C34($keepOpened))
+					
+					return Super:C1706.close()
+					
+				Else 
+					
+					// ⚠️ XML tree is not closed
+					
+				End if 
 				
-			End while 
+			Else 
+				
+				return Super:C1706.close()
+				
+			End if 
 			
 		Else 
 			
-			While ($name#$element)
-				
-				$node:=This:C1470.parent($node)
-				$name:=This:C1470.getName($node)
-				
-			End while 
+			// ⚠️ XML tree is not closed
+			
 		End if 
 	End if 
-	
-	This:C1470.latest:=$node
 	
 	return This:C1470
 	
@@ -4707,7 +4709,7 @@ Function closeParent() : cs:C1710.svg
 	// Restore the root as the latest container
 Function restoreRoot()
 	
-	This:C1470.restoreParentContainer("root")
+	This:C1470.latest:=This:C1470.root
 	
 	//———————————————————————————————————————————————————————————
 	// Move up one (default)  or x level(s) in the XML tree.

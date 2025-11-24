@@ -675,6 +675,22 @@
 			],
 			"Summary": ""
 		},
+		"close()": {
+			"Syntax": "**.close**( *keepOpened* : Boolean ) : cs.svgx.svg",
+			"Params": [
+				[
+					"keepOpened",
+					"Boolean",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"fetch()": {
 			"Syntax": "**.fetch**( *name* : Text ) : Text",
 			"Params": [
@@ -1770,22 +1786,6 @@
 				[
 					"rotation",
 					"Real",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"restoreParentContainer()": {
-			"Syntax": "**.restoreParentContainer**( *element* : Text ) : cs.svgx.svg",
-			"Params": [
-				[
-					"element",
-					"Text",
 					"->"
 				],
 				[

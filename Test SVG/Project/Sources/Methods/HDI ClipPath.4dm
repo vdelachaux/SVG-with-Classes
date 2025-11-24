@@ -10,17 +10,19 @@ If (Shift down:C543)
 	$svg.circle(96).clipPath("mask")
 	
 	$svg.comment("📌 Let's apply the clipPath to the image -> The red square is visible in the background.")
+	
+	// Place image & apply it the clipPath
 	$svg.image(File:C1566("/RESOURCES/vdl.jpg")).clipPath("mask")
 	
 Else 
 	
-	// Define the clipPath
-	$svg.clipPath("mask"; "defs")
+	$svg.comment("📌 If the clipPath is applied to the canvas -> The red square is no longer visible.")
+	
+	// Define a clipPath and apply it to the root.
+	$svg.clipPath("mask"; "root")
 	$svg.circle(96).stroke(False:C215).addTo("mask")
 	
-	$svg.comment("📌 If the clipPath is applied to the canvas -> The red square is no longer visible.")
-	$svg.clipPath("mask"; "root")
-	
+	// Place image
 	$svg.image(File:C1566("/RESOURCES/vdl.jpg"))
 	
 End if 
