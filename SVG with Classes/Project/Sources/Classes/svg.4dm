@@ -386,6 +386,38 @@ Function exportPicture($file : 4D:C1709.File; $keepStructure : Boolean) : cs:C17
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
+	// Returns the SVG picture encoded in Base64 (useful for Data URLs).
+	// ⚠️ Does not free the XML tree from memory
+Function exportToBase64($withDataPrefix : Boolean) : Text
+	
+	var $base64 : Text
+	var $picture : Picture:=This:C1470.picture(True:C214)
+	
+	If (This:C1470.success)
+		
+		var $x : Blob
+		PICTURE TO BLOB:C692($picture; $x; ".svg")
+		This:C1470.success:=Bool:C1537(OK)
+		
+	End if 
+	
+	If (This:C1470.success)
+		
+		BASE64 ENCODE:C895($x; $base64; *)
+		
+	End if 
+	
+	CLEAR VARIABLE:C89($x)
+	
+	If ($withDataPrefix)
+		
+		$base64:="data:image/svg+xml;base64,"+$base64
+		
+	End if 
+	
+	return $base64
+	
+	//———————————————————————————————————————————————————————————
 Function group($id : Text; $attachTo) : cs:C1710.svg
 	
 	If (Count parameters:C259=1)\
@@ -1469,7 +1501,7 @@ Function image($picture; $attachTo) : cs:C1710.svg
 				
 				If (This:C1470.success)
 					
-					BASE64 ENCODE:C895($x; $t)
+					BASE64 ENCODE:C895($x; $t; *)
 					CLEAR VARIABLE:C89($x)
 					
 					var $height; $width : Integer
@@ -4630,13 +4662,11 @@ Function fetch($name : Text) : Text
 		
 	End if 
 	
-	//———————————————————————————————————————————————————————————
-	// ⚠️ Overrides the method of the inherited class
-Function close($keepOpened : Boolean) : cs:C1710.svg
+	
+Function closeCurrent() : cs:C1710.svg
 	
 	var $name:=This:C1470.getName(This:C1470.latest)
 	
-	// FIXME: List other structures to manage
 	If (["g"; "path"; "text"; "textArea"; "tspan"].includes($name))
 		
 		var $node:=This:C1470.parent(This:C1470.latest)
@@ -4651,36 +4681,62 @@ Function close($keepOpened : Boolean) : cs:C1710.svg
 		
 		This:C1470.latest:=$node
 		
-	Else 
-		
-		If (This:C1470.autoClose)
-			
-			If (Count parameters:C259>=1)
-				
-				If (Not:C34($keepOpened))
-					
-					return Super:C1706.close()
-					
-				Else 
-					
-					// ⚠️ XML tree is not closed
-					
-				End if 
-				
-			Else 
-				
-				return Super:C1706.close()
-				
-			End if 
-			
-		Else 
-			
-			// ⚠️ XML tree is not closed
-			
-		End if 
 	End if 
 	
 	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// ⚠️ Overrides the method of the inherited class
+	//Function close($keepOpened : Boolean) : cs.svg
+	
+	//var $name:=This.getName(This.latest)
+	
+	//// FIXME: List other structures to manage
+	//If (Count parameters=0)\
+		&& (["g"; "path"; "text"; "textArea"; "tspan"].includes($name))
+	
+	//var $node:=This.parent(This.latest)
+	//$name:=This.getName($node)
+	
+	//While (This._notContainer.includes($name))
+	
+	//$node:=This.parent($node)
+	//$name:=This.getName($node)
+	
+	//End while 
+	
+	//This.latest:=$node
+	
+	//Else 
+	
+	//If (This.autoClose)
+	
+	//If (Count parameters>=1)
+	
+	//If (Not($keepOpened))
+	
+	//return Super.close()
+	
+	//Else 
+	
+	//// ⚠️ XML tree is not closed
+	
+	//End if 
+	
+	//Else 
+	
+	//return Super.close()
+	
+	//End if 
+	
+	//Else 
+	
+	//// ⚠️ XML tree is not closed
+	
+	//End if 
+	//End if 
+	
+	//return This
 	
 	//———————————————————————————————————————————————————————————
 	// Close the parent container

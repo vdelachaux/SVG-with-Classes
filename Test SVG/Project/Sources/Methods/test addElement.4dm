@@ -13,4 +13,5 @@ $svg.rotate(45; "rect2").translate(40; "rect2")
 $svg.stroke(2; "circle1").stroke("red"; "circle1")
 $svg.fill("yellow"; "rect2")
 
+
 $svg.preview()

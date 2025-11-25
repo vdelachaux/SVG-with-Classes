@@ -45,7 +45,6 @@ $svg.Square(150).fill("MyGradient5")
 $svg.circle(60; 225; 75).fill("none").stroke(10).stroke("MyGradient5")
 $svg.path().d("M320 20l 70 0 0 60 20 50 -100 0z").style("stroke:black;fill:url(#MyGradient5)").closeCurrent()
 
-// ⚠️  With 4D, gradients are not rendered for text.
-$svg.text("SVG").x(450).fontFamily("sans-serif").fontSize(100).color("url(#MyGradient5)")
+var $data:=$svg.exportToBase64(True:C214)
 
-$svg.preview()
+$svg.close()  // ⚠️ Don't forget to free the XML tree from memory.
