@@ -12,6 +12,7 @@
 	"events": [
 		"onLoad"
 	],
+	"windowTitle": "window title",
 	"destination": "detailScreen",
 	"pages": [
 		{
@@ -19,12 +20,12 @@
 		},
 		{
 			"objects": {
-				"wheel": {
+				"patterns": {
 					"type": "input",
 					"top": 0,
 					"left": 0,
-					"width": 480,
-					"height": 480,
+					"width": 250,
+					"height": 200,
 					"sizingX": "grow",
 					"sizingY": "grow",
 					"dataSourceTypeHint": "picture",
@@ -32,7 +33,7 @@
 					"scrollbarVertical": "hidden",
 					"scrollbarHorizontal": "hidden",
 					"dragging": "none",
-					"method": "ObjectMethods/wheel.4dm",
+					"method": "ObjectMethods/patterns.4dm",
 					"events": [
 						"onClick"
 					],
@@ -45,7 +46,7 @@
 			}
 		}
 	],
-	"geometryStamp": 19,
+	"geometryStamp": 18,
 	"method": "method.4dm",
 	"editor": {
 		"activeView": "View 1",

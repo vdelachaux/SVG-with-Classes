@@ -996,7 +996,7 @@ Function style($style : Text; $applyTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Attach a style sheet
+	// Attach a style sheet file
 Function styleSheet($file : 4D:C1709.File) : cs:C1710.svg
 	
 	If (Not:C34($file.exists))
@@ -4456,6 +4456,16 @@ Function offset($dx : Integer; $dy : Integer) : cs:C1710.svg
 	
 	//MARK:-SHORTCUTS & UTILITIES
 	//———————————————————————————————————————————————————————————
+	// Lets you create any element type
+Function addElement($name : Text; $attributes; $attachTo) : cs:C1710.svg
+	
+	This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); $name)
+	Super:C1706.setAttributes(This:C1470.latest; $attributes)
+	This:C1470.push()
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
 	// Attaches an element to a container, the root becomes the last element.
 Function addTo($tgt : Text; $applyTo : Text) : cs:C1710.svg
 	
@@ -4559,44 +4569,36 @@ Function with($name : Text) : Boolean
 	
 	//———————————————————————————————————————————————————————————
 	// Keep the dom reference for future use
-Function push($name : Text) : cs:C1710.svg
+Function push($id : Text) : cs:C1710.svg
 	
 	If (Count parameters:C259>=1)
 		
-		If (This:C1470.store.query("id=:1"; $name).first()=Null:C1517)
+		If (This:C1470.store.query("id=:1"; $id).first()=Null:C1517)
 			
-			This:C1470.store.push({id: $name; dom: This:C1470.latest})
+			This:C1470.store.push({id: $id; dom: This:C1470.latest})
 			
 		Else 
 			
-			This:C1470._pushError("The element \""+$name+"\" already exists")
+			This:C1470._pushError("The element \""+$id+"\" already exists")
 			
 		End if 
 		
 	Else 
 		
-		// Use the id, if available
-		var $id:=String:C10(This:C1470.getAttribute(This:C1470.latest; "id"))
+		// Use the ID, if available, or assign a UUID.
+		$id:=String:C10(This:C1470.getAttribute(This:C1470.latest; "id")) || Generate UUID:C1066
 		
-		If (Length:C16($id)>0)
+		var $o : Object:=This:C1470.store.query("id = :1"; $id).first()
+		
+		If ($o=Null:C1517)
 			
-			var $o : Object:=This:C1470.store.query("id = :1"; $id).first()
-			
-			If ($o=Null:C1517)
-				
-				// Create
-				This:C1470.store.push({id: $id; dom: This:C1470.latest})
-				
-			Else 
-				
-				// Update
-				$o.dom:=This:C1470.latest
-				
-			End if 
+			// Create
+			This:C1470.store.push({id: $id; dom: This:C1470.latest})
 			
 		Else 
 			
-			This:C1470.store.push({id: Generate UUID:C1066; dom: This:C1470.latest})
+			// Update
+			$o.dom:=This:C1470.latest
 			
 		End if 
 	End if 

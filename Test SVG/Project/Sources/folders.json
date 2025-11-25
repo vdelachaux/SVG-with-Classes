@@ -5,10 +5,6 @@
 			"Color Wheel",
 			"Component versus Class",
 			"Inspired by Piet Mondrian"
-		],
-		"forms": [
-			"COLOR_PALETTE",
-			"COLOR_WHEEL"
 		]
 	},
 	"BUGS": {
@@ -99,6 +95,13 @@
 			"HDI Text stretch ",
 			"HDI Text to Picture",
 			"HDI Text tspan"
+		]
+	},
+	"WIDGETS": {
+		"forms": [
+			"COLOR_PALETTE",
+			"COLOR_WHEEL",
+			"PATTERNS"
 		]
 	},
 	"trash": {}

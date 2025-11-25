@@ -708,10 +708,10 @@
 			"Summary": ""
 		},
 		"push()": {
-			"Syntax": "**.push**( *name* : Text ) : cs.svgx.svg",
+			"Syntax": "**.push**( *id* : Text ) : cs.svgx.svg",
 			"Params": [
 				[
-					"name",
+					"id",
 					"Text",
 					"->"
 				],
@@ -765,6 +765,32 @@
 			"Params": [
 				[
 					"parent",
+					"Variant",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"addElement()": {
+			"Syntax": "**.addElement**( *name* : Text; *attributes* : Variant; *attachTo* : Variant ) : cs.svgx.svg",
+			"Params": [
+				[
+					"name",
+					"Text",
+					"->"
+				],
+				[
+					"attributes",
+					"Variant",
+					"->"
+				],
+				[
+					"attachTo",
 					"Variant",
 					"->"
 				],

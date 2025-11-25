@@ -38,7 +38,6 @@
 						"onLoad",
 						"onClick"
 					],
-					"pictureFormat": "truncatedTopLeft",
 					"enterable": false,
 					"focusable": false,
 					"contextMenu": "none",
@@ -48,9 +47,7 @@
 			}
 		}
 	],
-	"geometryStamp": 6,
-	"width": 165,
-	"height": 176,
+	"geometryStamp": 9,
 	"method": "method.4dm",
 	"editor": {
 		"activeView": "View 1",
@@ -58,5 +55,7 @@
 		"views": {
 			"View 1": {}
 		}
-	}
+	},
+	"rightMargin": 0,
+	"bottomMargin": 0
 }

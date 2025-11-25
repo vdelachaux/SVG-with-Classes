@@ -1,0 +1,94 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20000802//EN" "http://www.w3.org/TR/2000/CR-SVG-20000802/DTD/svg-20000802.dtd">
+<svg id="body" width="500" height="400" viewBox="0 0 500 400">
+  <title>Pattern Tests</title>
+  <defs>
+    <pattern id="pattern1" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M0 10 l10 -10" style="stroke:black;stroke-width:1"/>
+    </pattern>
+    <pattern id="pattern2" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M10 1 1 10 0 10 0 9 9 0 10 0z M0 0 0 1 1 0z M9 10 10 10 10 9z" style="fill:black;stroke:black;stroke-width:1;stroke-linejoin:miter"/>
+    </pattern>
+    <pattern id="pattern3" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M0 0 l10 10" style="stroke:black;stroke-width:1"/>
+    </pattern>
+    <pattern id="pattern4" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M0 1 9 10 10 10 10 9 1 0 0 0z M0 9 0 10 1 10z M9 0 10 0 10 1z" style="fill:black;stroke:black;stroke-width:1;stroke-linejoin:miter"/>
+    </pattern>
+    <pattern id="pattern5" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M5 0 l0 10" style="stroke:black;stroke-width:1;stroke-linejoin:bevel"/>
+    </pattern>
+    <pattern id="pattern6" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M4 0 l2 0 0 10 -2 0 0 -10z" style="fill:black;stroke:black;stroke-width:1;stroke-linejoin:miter"/>
+    </pattern>
+    <pattern id="pattern7" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M0 5 l10 0" style="stroke:black;stroke-width:1;stroke-linejoin:bevel"/>
+    </pattern>
+    <pattern id="pattern8" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M0 4 l10 0 0 2 -10 0z" style="fill:black;stroke:black;stroke-width:1;stroke-linejoin:miter"/>
+    </pattern>
+    <pattern id="pattern9" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M5 0 l0 10 M0 5 l10 0" style="stroke:black;stroke-width:1"/>
+    </pattern>
+    <pattern id="pattern10" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M0 0 l10 10 M10 0 l-10 10" style="stroke:black;stroke-width:1"/>
+    </pattern>
+    <pattern id="pattern11" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="1" style="fill:black;stroke:black"/>
+    </pattern>
+    <pattern id="pattern12" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="2" style="fill:black;stroke:black"/>
+    </pattern>
+    <pattern id="pattern13" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="3" r="2" style="fill:black;stroke:none"/>
+      <circle cx="5" cy="13" r="2" style="fill:black;stroke:none"/>
+      <circle cx="15" cy="8" r="2" style="fill:black;stroke:none"/>
+      <circle cx="15" cy="18" r="2" style="fill:black;stroke:none"/>
+    </pattern>
+    <pattern id="pattern14" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="12" height="12" style="stroke:black;fill:none"/>
+      <circle cx="6" cy="6" r="1" style="fill:black;stroke:black"/>
+    </pattern>
+    <pattern id="pattern15" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="12" height="12" style="stroke:black;fill:none"/>
+      <circle cx="6" cy="6" r="2" style="fill:black;stroke:black"/>
+    </pattern>
+    <pattern id="pattern16" x="0" y="0" width="12" height="12" patternUnits="userSpaceOnUse">
+      <path d="M0 9 l3 3 9 -9 -3 -3z" style="stroke:black;fill:DarkGrey;stroke-width:1;stroke-linejoin:bevel"/>
+      <path d="M0 0 l0 3 3 3 3 -3 -3 -3 -3 0z M6 9 l3 3 3 0 0 -3 -3 -3z M0 12 l3 0 -3 -3z M12 0 l0 3 -3 -3z" style="stroke:none;fill:DarkGrey;stroke-width:1;stroke-linejoin:bevel"/>
+    </pattern>
+    <pattern id="pattern17" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M0 0 l10 0 l-10 10z" style="fill:black;stroke:black;stroke-width:1"/>
+    </pattern>
+    <pattern id="pattern18" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <rect x="0" y="0" width="5" height="5" style="fill:black;stroke:black;stroke-width:1"/>
+      <rect x="5" y="5" width="5" height="5" style="fill:black;stroke:black;stroke-width:1"/>
+    </pattern>
+    <pattern id="pattern19" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <path d="M0 5 l5 5 5 -5 -5 -5z" style="fill:black;stroke:black;stroke-width:1"/>
+    </pattern>
+    <pattern id="pattern20" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
+      <circle cx="5" cy="5" r="4" style="fill:black;stroke:black;stroke-width:1"/>
+    </pattern>
+  </defs>
+  <rect x="0" y="0" width="100" height="100" style="fill:url(#pattern1); stroke:black;"/>
+  <rect x="100" y="0" width="100" height="100" style="fill:url(#pattern2); stroke:black;"/>
+  <rect x="200" y="0" width="100" height="100" style="fill:url(#pattern3); stroke:black;"/>
+  <rect x="300" y="0" width="100" height="100" style="fill:url(#pattern4); stroke:black;"/>
+  <rect x="400" y="0" width="100" height="100" style="fill:url(#pattern5); stroke:black;"/>
+  <rect x="0" y="100" width="100" height="100" style="fill:url(#pattern6); stroke:black;"/>
+  <rect x="100" y="100" width="100" height="100" style="fill:url(#pattern7); stroke:black;"/>
+  <rect x="200" y="100" width="100" height="100" style="fill:url(#pattern8); stroke:black;"/>
+  <rect x="300" y="100" width="100" height="100" style="fill:url(#pattern9); stroke:black;"/>
+  <rect x="400" y="100" width="100" height="100" style="fill:url(#pattern10); stroke:black;"/>
+  <rect x="0" y="200" width="100" height="100" style="fill:url(#pattern11); stroke:black;"/>
+  <rect x="100" y="200" width="100" height="100" style="fill:url(#pattern12); stroke:black;"/>
+  <rect x="200" y="200" width="100" height="100" style="fill:url(#pattern13); stroke:black;"/>
+  <rect x="300" y="200" width="100" height="100" style="fill:url(#pattern14); stroke:black;"/>
+  <rect x="400" y="200" width="100" height="100" style="fill:url(#pattern15); stroke:black;"/>
+  <rect x="0" y="300" width="100" height="100" style="fill:url(#pattern16); stroke:black;"/>
+  <rect x="100" y="300" width="100" height="100" style="fill:url(#pattern17); stroke:black;"/>
+  <rect x="200" y="300" width="100" height="100" style="fill:url(#pattern18); stroke:black;"/>
+  <rect x="300" y="300" width="100" height="100" style="fill:url(#pattern19); stroke:black;"/>
+  <rect x="400" y="300" width="100" height="100" style="fill:url(#pattern20); stroke:black;"/>
+</svg>
