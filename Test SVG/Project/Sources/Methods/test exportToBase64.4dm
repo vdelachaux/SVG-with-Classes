@@ -30,7 +30,7 @@ $svg.group().translate(0; 175).alignment(Align center:K42:3)
 $svg.text("default").x(75)
 $svg.text("pad").x(225)
 $svg.text("reflect").x(375)
-$svg.text("repeat").x(525).closeCurrent()
+$svg.text("repeat").x(525)
 
 $o:={\
 x2: 5; \
@@ -43,7 +43,11 @@ $svg.linearGradient("MyGradient5"; "red"; "yellow"; $o)
 $svg.group().translate(10; 220)
 $svg.Square(150).fill("MyGradient5")
 $svg.circle(60; 225; 75).fill("none").stroke(10).stroke("MyGradient5")
-$svg.path().d("M320 20l 70 0 0 60 20 50 -100 0z").style("stroke:black;fill:url(#MyGradient5)").closeCurrent()
+$svg.path().d("M320 20l 70 0 0 60 20 50 -100 0z").style("stroke:black;fill:url(#MyGradient5)")
+
+// ⚠️  With 4D, gradients are not rendered for text.
+$svg.text("SVG").x(450).fontFamily("sans-serif").fontSize(100).color("url(#MyGradient5)")
+
 
 var $data:=$svg.exportToBase64(True:C214)
 

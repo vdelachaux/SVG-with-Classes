@@ -47,18 +47,16 @@ $svg.line($x; 300; $x; 100).dasharray(15; 10; 5; 10).color("blue")
 $x+=20
 $svg.line($x; 300; $x; 100).dasharray(15; 10; 5; 10; 5).color("slategray")
 
-$svg.restoreRoot()
-
 //mark:-
 $svg.comment("Draw a grid with 2 lines")
-$svg.group().stroke("violet").stroke(198).dasharray(1; 10)
+$svg.group("root").stroke("violet").stroke(198).dasharray(1; 10)
 $svg.line(400; 200; 599; 200)
 $svg.line(500; 100; 500; 300)
 $svg.Square(198; "root").position(400.5; 100.5).stroke(1).stroke("purple")
 
 //mark:-
 $svg.comment("Rectangle with dashed line")
-$svg.group().translate(700; 210).rotate(-30)
+$svg.group("root").translate(700; 210).rotate(-30)
 $svg.rect(400; 200).radius(50)\
 .fill(False:C215).stroke("olivedrab").stroke(5).dasharray(10.5; 5)
 

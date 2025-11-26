@@ -529,7 +529,7 @@ Function symbol($id : Text; $applyTo) : cs:C1710.svg
 			
 			$node:=Super:C1706.clone($source; $node)
 			This:C1470.remove($source)
-			This:C1470.restoreRoot()
+			This:C1470.latest:=This:C1470.root
 			
 		Else 
 			
@@ -665,7 +665,7 @@ The value of the marker is used directly for all three of the corresponding long
 			
 			$node:=Super:C1706.clone($source; $node)
 			This:C1470.remove($source)
-			This:C1470.restoreRoot()
+			This:C1470.latest:=This:C1470.root
 			
 		Else 
 			
@@ -718,7 +718,6 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 			
 			$node:=Super:C1706.clone($source; $node)
 			This:C1470.remove($source)
-			This:C1470.restoreRoot()
 			
 			If (Count parameters:C259=2)
 				
@@ -739,7 +738,7 @@ Function clipPath($id : Text; $applyTo) : cs:C1710.svg
 		End if 
 	End if 
 	
-	This:C1470.restoreRoot()
+	This:C1470.latest:=This:C1470.root
 	
 	return This:C1470
 	
@@ -892,7 +891,7 @@ Function linearGradient($id : Text; $startColor : Text; $stopColor : Text; $opti
 		End if 
 	End if 
 	
-	This:C1470.restoreRoot()
+	This:C1470.latest:=This:C1470.root
 	
 	return $ref
 	
@@ -4534,13 +4533,12 @@ Function addElement($name : Text; $attributes; $attachTo) : cs:C1710.svg
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
-	// Attaches an element to a container, the root becomes the last element.
+	// Attaches an element to a container and resets the cursor to the root.
 Function addTo($tgt : Text; $applyTo : Text) : cs:C1710.svg
 	
 	$tgt:=This:C1470._getTarget($tgt)
 	
-	var $name : Text
-	DOM GET XML ELEMENT NAME:C730($tgt; $name)
+	var $name:=This:C1470.getName($tgt)
 	
 	If (This:C1470._container.includes($name))
 		
@@ -4555,7 +4553,7 @@ Function addTo($tgt : Text; $applyTo : Text) : cs:C1710.svg
 		This:C1470.setID($id)
 		
 		Super:C1706.remove($src)
-		This:C1470.restoreRoot()  // The root becomes the last element.
+		This:C1470.latest:=This:C1470.root
 		
 	Else 
 		
@@ -4580,6 +4578,23 @@ Function attachTo($parent : Variant) : cs:C1710.svg
 	
 	/// Restore ID, if any
 	This:C1470.setID($id)
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————
+	// Move up one (default)  or x level(s) in the XML tree.
+Function goUp($level : Integer) : cs:C1710.svg
+	
+	$level-=1
+	
+	While ($level>0)
+		
+		This:C1470.latest:=This:C1470.parent(This:C1470.latest)
+		$level-=1
+		
+	End while 
+	
+	This:C1470.latest:=This:C1470.parent(This:C1470.latest)
 	
 	return This:C1470
 	
@@ -4697,130 +4712,6 @@ Function fetch($name : Text) : Text
 		This:C1470._pushError("The element \""+$name+"\" doesn't exists")
 		
 	End if 
-	
-	
-Function closeCurrent() : cs:C1710.svg
-	
-	var $name:=This:C1470.getName(This:C1470.latest)
-	
-	If (["g"; "path"; "text"; "textArea"; "tspan"].includes($name))
-		
-		var $node:=This:C1470.parent(This:C1470.latest)
-		$name:=This:C1470.getName($node)
-		
-		While (This:C1470._notContainer.includes($name))
-			
-			$node:=This:C1470.parent($node)
-			$name:=This:C1470.getName($node)
-			
-		End while 
-		
-		This:C1470.latest:=$node
-		
-	End if 
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// ⚠️ Overrides the method of the inherited class
-	//Function close($keepOpened : Boolean) : cs.svg
-	
-	//var $name:=This.getName(This.latest)
-	
-	//// FIXME: List other structures to manage
-	//If (Count parameters=0)\
-		&& (["g"; "path"; "text"; "textArea"; "tspan"].includes($name))
-	
-	//var $node:=This.parent(This.latest)
-	//$name:=This.getName($node)
-	
-	//While (This._notContainer.includes($name))
-	
-	//$node:=This.parent($node)
-	//$name:=This.getName($node)
-	
-	//End while 
-	
-	//This.latest:=$node
-	
-	//Else 
-	
-	//If (This.autoClose)
-	
-	//If (Count parameters>=1)
-	
-	//If (Not($keepOpened))
-	
-	//return Super.close()
-	
-	//Else 
-	
-	//// ⚠️ XML tree is not closed
-	
-	//End if 
-	
-	//Else 
-	
-	//return Super.close()
-	
-	//End if 
-	
-	//Else 
-	
-	//// ⚠️ XML tree is not closed
-	
-	//End if 
-	//End if 
-	
-	//return This
-	
-	//———————————————————————————————————————————————————————————
-	// Close the parent container
-Function closeParent() : cs:C1710.svg
-	
-	var $node:=This:C1470.latest
-	var $name:=This:C1470.getName($node)
-	
-	If ($name="root")
-		
-		$node:=This:C1470.root
-		
-	Else 
-		
-		While (Not:C34(This:C1470._container.includes($name)))
-			
-			$node:=This:C1470.parent(This:C1470.parent($node))
-			$name:=This:C1470.getName($node)
-			
-		End while 
-	End if 
-	
-	This:C1470.latest:=$node
-	
-	return This:C1470
-	
-	//———————————————————————————————————————————————————————————
-	// Restore the root as the latest container
-Function restoreRoot()
-	
-	This:C1470.latest:=This:C1470.root
-	
-	//———————————————————————————————————————————————————————————
-	// Move up one (default)  or x level(s) in the XML tree.
-Function goUp($level : Integer) : cs:C1710.svg
-	
-	$level-=1
-	
-	While ($level>0)
-		
-		This:C1470.latest:=This:C1470.parent(This:C1470.latest)
-		$level-=1
-		
-	End while 
-	
-	This:C1470.latest:=This:C1470.parent(This:C1470.latest)
-	
-	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
 	// Sets shape color (stroke and fill)

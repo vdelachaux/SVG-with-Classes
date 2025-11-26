@@ -13,7 +13,6 @@ $svg.text("My").fontFamily("sans-serif").fontSize(13).fontStyle(Italic:K14:3).po
 $svg.tspan("cat").y(35).fontStyle(Plain:K14:1).font({style: Bold:K14:2; size: 30; family: "sans-serif"})
 $svg.tspan("is").y(55).dx(-30).font({style: Italic:K14:3; size: 13; family: "sans-serif"})
 $svg.tspan("Grumpy!").y(55).font({style: Italic:K14:3; size: 40; family: "serif"; color: "darksalmon"})
-$svg.closeCurrent()  // Close the text element & restore parent container (here the first group)
 
 $svg.group().stroke("silver")
 $svg.line(10; 60; 160; 60)
@@ -27,7 +26,6 @@ $svg.text("My").fontFamily("sans-serif").fontSize(13).fontStyle(Italic:K14:3).po
 $svg.tspan("dog").y(100).dx(0).fontStyle(Plain:K14:1).font({style: Bold:K14:2; size: 30; family: "sans-serif"})
 $svg.tspan("is").y(120).dx(-30).font({style: Italic:K14:3; size: 13; family: "sans-serif"})
 $svg.tspan("Grouchy!").y(120).font({style: Italic:K14:3; size: 40; family: "serif"; color: "mediumseagreen"})  // .rotate(5)
-$svg.closeCurrent()  // Close the text element & restore parent container (here the first group)
 
 $svg.group().stroke("silver").rotate(-10)
 $svg.line(10; 125; 200; 125)

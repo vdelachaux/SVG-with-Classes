@@ -679,7 +679,7 @@ Function xy($id : Text; $options : Object) : cs:C1710.chart
 	var $i : Integer
 	For each ($serie; $options.data)
 		
-		This:C1470.group().translate(10; 10)
+		This:C1470.group("root").translate(10; 10)
 		
 		$i+=1
 		
@@ -735,8 +735,6 @@ than in the “Cartesian” coordinates system we must tranlate Y values
 		
 		This:C1470.polyline().setID(String:C10($i; "serie_###"))
 		This:C1470.plot($serie.values)
-		
-		This:C1470.restoreRoot()
 		
 	End for each 
 	
