@@ -59,7 +59,7 @@ $svg.Square(198; "root").position(400.5; 100.5).stroke(1).stroke("purple")
 //mark:-
 $svg.comment("Rectangle with dashed line")
 $svg.group().translate(700; 210).rotate(-30)
-$svg.rect(400; 200).position(0; 0).radius(50)\
+$svg.rect(400; 200).radius(50)\
 .fill(False:C215).stroke("olivedrab").stroke(5).dasharray(10.5; 5)
 
 $svg.preview()

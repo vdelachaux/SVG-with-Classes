@@ -42,6 +42,7 @@ $svg.polygon()\
 .stroke("blue").stroke(10)\
 .translate(0; -40)\
 .addTo("background")
+
 If ($svg.with("foreground"))  // All enclosed actions refer to the "foreground" layer
 	
 	// Draw an ellipse

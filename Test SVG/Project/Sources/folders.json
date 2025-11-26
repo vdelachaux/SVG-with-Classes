@@ -82,7 +82,9 @@
 	},
 	"TESTS": {
 		"methods": [
+			"test addElement",
 			"test addTo",
+			"test exportToBase64",
 			"Test linearGradient",
 			"test rotateTAU"
 		]

@@ -91,6 +91,7 @@ property _notContainer:=[\
 "rect"; \
 "use"; \
 "text"; \
+"tspan"; \
 "textArea"]
 
 // Graphics element that is defined by some combination of straight lines and curves.
@@ -199,6 +200,41 @@ Function _reset
 	This:C1470.latest:=""
 	This:C1470.graphic:=Null:C1517
 	This:C1470.store:=[]
+	
+	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
+	// Returns the cursor position
+	// (the ID or reference of the current target element)
+Function get cursor() : Text
+	
+	var $current:=This:C1470._getTarget()
+	
+	var $o : Object:=This:C1470.store.query("dom=:1"; $current).first()
+	
+	return $o#Null:C1517 ? $o.id : $current
+	
+	// ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==> ==>
+	// Sets the cursor position using its ID or reference
+	// (this will be the target element for subsequent function calls)
+Function set cursor($current : Text)
+	
+	var $o : Object:=This:C1470.store.query("id=:1"; $current).first()
+	
+	If ($o#Null:C1517)
+		
+		This:C1470.latest:=$o.dom
+		
+	Else 
+		
+		If (This:C1470.isReference($current))
+			
+			This:C1470.latest:=$current
+			
+		Else 
+			
+			// ERROR 
+			
+		End if 
+	End if 
 	
 	//MARK:-
 Class constructor($content)
@@ -420,14 +456,18 @@ Function exportToBase64($withDataPrefix : Boolean) : Text
 	//———————————————————————————————————————————————————————————
 Function group($id : Text; $attachTo) : cs:C1710.svg
 	
-	If (Count parameters:C259=1)\
-		 && (This:C1470._isReference($id))  // .group(attachTo)
+	If (Count parameters:C259=1)
 		
-		$id:=""
-		
+		If (This:C1470.isReference($id))\
+			 || (This:C1470.store.query("id = :1"; $id).first()#Null:C1517)  // .group(attachTo)
+			
+			$attachTo:=$id
+			$id:=""
+			
+		End if 
 	End if 
 	
-	If (Count parameters:C259>=2)
+	If (Length:C16($attachTo)>0)
 		
 		This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "g")
 		
@@ -435,30 +475,26 @@ Function group($id : Text; $attachTo) : cs:C1710.svg
 		
 		If (This:C1470.latest=Null:C1517) || (This:C1470.latest="")
 			
-			This:C1470.latest:=This:C1470.root
+			var $node:=This:C1470.root
 			
 		Else 
 			
-			var $name : Text
-			DOM GET XML ELEMENT NAME:C730(This:C1470.latest; $name)
+			$node:=This:C1470.latest
+			var $name:=This:C1470.getName($node)
 			
-			If (This:C1470._notContainer.includes($name))
+			While (This:C1470._notContainer.includes($name))
 				
-				This:C1470.latest:=This:C1470.parent(This:C1470.latest)
+				$node:=This:C1470.parent($node)
+				$name:=This:C1470.getName($node)
 				
-			End if 
+			End while 
 		End if 
 		
-		This:C1470.latest:=Super:C1706.create(This:C1470.latest; "g")
+		This:C1470.latest:=Super:C1706.create($node; "g")
 		
 	End if 
 	
-	If (Length:C16($id)>0)
-		
-		Super:C1706.setAttribute(This:C1470.latest; "id"; $id)
-		This:C1470.push($id)
-		
-	End if 
+	This:C1470.setID($id)
 	
 	return This:C1470
 	
@@ -4591,7 +4627,7 @@ Function with($name : Text) : Boolean
 	If ($o#Null:C1517)
 		
 		This:C1470.latest:=$o.dom
-		return (True:C214)
+		return True:C214
 		
 	Else 
 		
