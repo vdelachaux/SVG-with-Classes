@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><preferences stamp="12">
+<?xml version="1.0" encoding="UTF-8"?><preferences stamp="13">
 	<com.4d>
 		<general execute_host_database_event="true"/>
 		<compiler>
@@ -8,7 +8,8 @@
 		</compiler>
 		<server>
 			<network>
-				<options publication_name="SVG-with-Classes" publish_at_startup="false" use_legacy_network_layer="false"/>
+				<options/>
+				<client_server/>
 			</network>
 		</server>
 		<web>
@@ -23,9 +24,9 @@
 			</standalone_server>
 		</web>
 		<sql>
-			<publication port_number="19812"/>
+			<publication/>
 		</sql>
-		<php ip_address="127.0.0.1"/>
+		<php/>
 		<interface>
 			<shortcuts>
 				<accept_input_form alt="false" command="false" ctrl="false" key_code="0" shift="false"/>

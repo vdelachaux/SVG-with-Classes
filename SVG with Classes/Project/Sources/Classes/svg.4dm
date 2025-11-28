@@ -467,7 +467,7 @@ Function group($id : Text; $attachTo) : cs:C1710.svg
 		End if 
 	End if 
 	
-	If (Length:C16($attachTo)>0)
+	If (Length:C16(String:C10($attachTo))>0)
 		
 		This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "g")
 		
@@ -1569,10 +1569,16 @@ Function image($picture; $attachTo) : cs:C1710.svg
 			If (This:C1470.success)
 				
 				// Unsandboxed, if any
-				$picture:=File:C1566(File:C1566($picture.path; *).platformPath; fk platform path:K87:2)
+				var $src:=File:C1566(File:C1566($picture.path).platformPath; fk platform path:K87:2)
+				
+				If (Not:C34($src.exists))
+					
+					$src:=File:C1566(File:C1566($picture.path; *).platformPath; fk platform path:K87:2)
+					
+				End if 
 				
 				var $p : Picture
-				READ PICTURE FILE:C678($picture.platformPath; $p)
+				READ PICTURE FILE:C678($src.platformPath; $p)
 				
 				This:C1470.success:=Bool:C1537(OK)
 				
@@ -1582,7 +1588,7 @@ Function image($picture; $attachTo) : cs:C1710.svg
 					CLEAR VARIABLE:C89($p)
 					
 					This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "image"; New object:C1471(\
-						"xlink:href"; (Is Windows:C1573 ? "file:///" : "file://")+Replace string:C233($picture.path; " "; "%20"); \
+						"xlink:href"; (Is Windows:C1573 ? "file:///" : "file://")+Replace string:C233($src.path; " "; "%20"); \
 						"x"; 0; \
 						"y"; 0; \
 						"width"; $width; \

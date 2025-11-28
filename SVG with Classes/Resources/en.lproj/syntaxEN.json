@@ -643,49 +643,6 @@
 			],
 			"Summary": ""
 		},
-		"goUp()": {
-			"Syntax": "**.goUp**( *level* : Integer ) : cs.svgx.svg",
-			"Params": [
-				[
-					"level",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"restoreRoot()": {
-			"Syntax": "**.restoreRoot**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"closeParent()": {
-			"Syntax": "**.closeParent**() : cs.svgx.svg",
-			"Params": [
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"closeCurrent()": {
-			"Syntax": "**.closeCurrent**() : cs.svgx.svg",
-			"Params": [
-				[
-					"",
-					"cs.svgx.svg",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"fetch()": {
 			"Syntax": "**.fetch**( *name* : Text ) : Text",
 			"Params": [
@@ -745,6 +702,22 @@
 				[
 					"",
 					"Text",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.svg",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"goUp()": {
+			"Syntax": "**.goUp**( *level* : Integer ) : cs.svgx.svg",
+			"Params": [
+				[
+					"level",
+					"Integer",
 					"->"
 				],
 				[
