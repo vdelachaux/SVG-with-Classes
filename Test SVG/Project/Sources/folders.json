@@ -84,6 +84,7 @@
 		"methods": [
 			"test addElement",
 			"test addTo",
+			"test bug group",
 			"test exportToBase64",
 			"Test linearGradient",
 			"test rotateTAU"

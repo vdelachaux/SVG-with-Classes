@@ -3,12 +3,6 @@
 		"version": "1",
 		"kind": "form"
 	},
-	"windowSizingX": "variable",
-	"windowSizingY": "variable",
-	"windowMinWidth": 0,
-	"windowMinHeight": 0,
-	"windowMaxWidth": 32767,
-	"windowMaxHeight": 32767,
 	"events": [
 		"onLoad"
 	],
@@ -45,7 +39,7 @@
 			}
 		}
 	],
-	"geometryStamp": 19,
+	"geometryStamp": 27,
 	"method": "method.4dm",
 	"editor": {
 		"activeView": "View 1",
@@ -55,5 +49,7 @@
 		}
 	},
 	"rightMargin": 0,
-	"bottomMargin": 0
+	"bottomMargin": 0,
+	"windowSizingX": "fixed",
+	"windowSizingY": "fixed"
 }
