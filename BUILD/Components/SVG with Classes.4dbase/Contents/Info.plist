@@ -2,19 +2,21 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
   <dict>
-	  <key>NSHumanReadableCopyright</key>
-	  <string></string>
-	  <key>CFBundleVersion</key>
-	  <string></string>
-	  <key>CFBundleDisplayName</key>
-	  <string>SVG with Classes</string>
-	  <key>CFBundleShortVersionString</key>
-	  <string></string>
-	  <key>CFBundleGetInfoString</key>
-	  <string>21</string>
-	  <key>CFBundleLongVersionString</key>
-	  <string>21 (21)</string>
-	  <key>CFBundleName</key>
-	  <string>SVG with Classes</string>
-</dict>
+    <key>NSHumanReadableCopyright</key>
+    <string/>
+    <key>CFBundleVersion</key>
+    <string/>
+    <key>CFBundleDisplayName</key>
+    <string>SVG with Classes</string>
+    <key>CFBundleShortVersionString</key>
+    <string/>
+    <key>CFBundleGetInfoString</key>
+    <string>21</string>
+    <key>CFBundleLongVersionString</key>
+    <string>21 (21)</string>
+    <key>CFBundleName</key>
+    <string>SVG with Classes</string>
+    <key>CFBundlePackageType</key>
+    <string>BNDL</string>
+  </dict>
 </plist>

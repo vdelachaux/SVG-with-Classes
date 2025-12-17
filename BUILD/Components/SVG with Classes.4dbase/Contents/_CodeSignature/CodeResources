@@ -12,7 +12,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			TueFmy4cnJY0R8i4yWHd4HZ6r/w=
+			FK8RmBRHMTAin+oIoJyW5sOE0O0=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -32,7 +32,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			0z493/p+9mDv7egfjagoWYrOUKbllySzhmaRpfW45kI=
+			dLRElmAk1zA77xIDQfzZemjOc6wcDKvs18MALTb45+k=
 			</data>
 		</dict>
 		<key>Documentation/Classes/chart/donut.png</key>
@@ -42,11 +42,25 @@
 			nXvvSqzgPYYCG45r1Bn1t6LaNjk7iXUvV0+6ut0/52g=
 			</data>
 		</dict>
+		<key>Documentation/Classes/chart/horizontalBar.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			Y6WmPifiBvC8iKRMWQJGixVInGtHeXWLTz29SBCfnFI=
+			</data>
+		</dict>
 		<key>Documentation/Classes/chart/pie.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			oY2WqaOfVakj3EqLq0Fd9qfA/kh6CxsmQohzVX348B0=
+			</data>
+		</dict>
+		<key>Documentation/Classes/chart/verticalBar.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			kxBU8qPrWPwTjK//dRY1aySxvax/MijR98LBOz22TyM=
 			</data>
 		</dict>
 		<key>Documentation/Classes/color.md</key>
@@ -60,7 +74,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			wv984NzqzDUuAksBxWPvZukPIRJVp9UVncV928C/b00=
+			bjtLyeiZ+1Xbzl/RxkL3EBqd7MfpVGr2k2t5s59NQnw=
 			</data>
 		</dict>
 		<key>Documentation/Classes/svg_examples.md</key>
@@ -88,7 +102,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			aQQtSUpPVNXRATeJoCgzj0woNWqZiKjAsI2BC0D+ops=
+			2QFSzKknOeKlyT7wrK7sPhRzy71xDY9L6hFQL5LmreM=
 			</data>
 		</dict>
 		<key>Resources/colors.json</key>
@@ -102,7 +116,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			+Tz35qolR3a+TwF6wDs2YUB+2aFioI5kF29zfwptZNk=
+			p3jAwy7yUXsoV2KG6hVv7/bp42PENVqOBHY6xt7aufI=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -125,10 +139,10 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			TQ0kr9jr77tENSE3yV3pZsm+4aE=
+			JjYrljQkyz5LvJ4WH49/DJ5m9YU=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"4d0d24afd8ebefbb44352137c95de966c9bee1a1"</string>
+			<string>cdhash H"26362b963424cb3e4bbc9e161f8f7f0c9e66f585"</string>
 		</dict>
 	</dict>
 	<key>rules</key>
