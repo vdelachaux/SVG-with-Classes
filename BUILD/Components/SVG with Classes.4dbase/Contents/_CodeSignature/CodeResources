@@ -4,6 +4,14 @@
 <dict>
 	<key>files</key>
 	<dict>
+		<key>Resources/Logos/logo.png</key>
+		<data>
+		7pn3gfAKSlnqjaxsonpbVZUCvUE=
+		</data>
+		<key>Resources/Logos/logo.svg</key>
+		<data>
+		hMm8NPd+4cPdLaoe/ytcf31NCF8=
+		</data>
 		<key>Resources/colors.json</key>
 		<data>
 		OAArGCnRstL0szUgSN4eQ2VMjOY=
@@ -17,13 +25,9 @@
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>Resources/logo.png</key>
-		<data>
-		7pn3gfAKSlnqjaxsonpbVZUCvUE=
-		</data>
 		<key>Resources/logo.svg</key>
 		<data>
-		hMm8NPd+4cPdLaoe/ytcf31NCF8=
+		rI30d8CCODLMmyhxpZo4yz9zwSc=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -102,7 +106,21 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			2QFSzKknOeKlyT7wrK7sPhRzy71xDY9L6hFQL5LmreM=
+			A3daWjm23ej5+kGHLvDeEJc0Py/+a1vAqeFsTqEsFJU=
+			</data>
+		</dict>
+		<key>Resources/Logos/logo.png</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			fegBJ8odkFaEKQqyloQoOqBRVcBdKGzdu4i2A3Kk24E=
+			</data>
+		</dict>
+		<key>Resources/Logos/logo.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			iRG4xBBrAWOhX7Uxalr6Yjvfcv7CfAILbIzvPz8QSgA=
 			</data>
 		</dict>
 		<key>Resources/colors.json</key>
@@ -121,28 +139,21 @@
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>Resources/logo.png</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			fegBJ8odkFaEKQqyloQoOqBRVcBdKGzdu4i2A3Kk24E=
-			</data>
-		</dict>
 		<key>Resources/logo.svg</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			iRG4xBBrAWOhX7Uxalr6Yjvfcv7CfAILbIzvPz8QSgA=
+			s+0y04CEkeH1x8+ygc2+z5Aahb6Cc/4RoGhGKMaYmUM=
 			</data>
 		</dict>
 		<key>SVG with Classes.4DZ</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			JjYrljQkyz5LvJ4WH49/DJ5m9YU=
+			gBpp0CEzDwLU7eerfr32g/2/CG8=
 			</data>
 			<key>requirement</key>
-			<string>cdhash H"26362b963424cb3e4bbc9e161f8f7f0c9e66f585"</string>
+			<string>identifier "SVG with Classes.4DZ" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = DYRKW64QA9</string>
 		</dict>
 	</dict>
 	<key>rules</key>

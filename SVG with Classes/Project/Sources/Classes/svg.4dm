@@ -1536,7 +1536,7 @@ Function image($picture; $attachTo) : cs:C1710.svg
 				
 				If (This:C1470.success)
 					
-					BASE64 ENCODE:C895($x; $t; *)
+					BASE64 ENCODE:C895($x; $t)  //; *)
 					CLEAR VARIABLE:C89($x)
 					
 					var $height; $width : Integer

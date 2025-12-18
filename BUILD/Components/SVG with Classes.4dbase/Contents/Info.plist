@@ -13,10 +13,11 @@
     <key>CFBundleGetInfoString</key>
     <string>21</string>
     <key>CFBundleLongVersionString</key>
-    <string>21 (21)</string>
+    <string>21</string>
     <key>CFBundleName</key>
     <string>SVG with Classes</string>
     <key>CFBundlePackageType</key>
     <string>BNDL</string>
   </dict>
+
 </plist>
