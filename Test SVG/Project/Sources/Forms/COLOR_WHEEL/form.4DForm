@@ -51,5 +51,6 @@
 	"rightMargin": 0,
 	"bottomMargin": 0,
 	"windowSizingX": "fixed",
-	"windowSizingY": "fixed"
+	"windowSizingY": "fixed",
+	"shared": true
 }
