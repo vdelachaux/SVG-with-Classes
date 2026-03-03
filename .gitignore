@@ -25,7 +25,7 @@
 #--------------------------------
 # Ignore derived data
 #--------------------------------
-Project/DerivedData/
+**/Project/DerivedData/
 
 #--------------------------------
 # Ignore settings & preferences
@@ -62,10 +62,10 @@ Resources/php.ini
 Components/
 !Build/Components
 
-Project/Sources/Methods/Method*.4dm
-Project/Sources/Methods/00_*.4dm
+**/Sources/Methods/00_*.4dm
 
-Libraries/lib4d-arm64.dylib
+Libraries/
+!/Content/Libraries/
 
 DEV/
 
@@ -78,10 +78,12 @@ DEV/
 # Added by user
 #--------------------------------
 /Components
-*/Project/DerivedData
-*/Libraries/
-!/Content/Libraries/
-SVG with Classes/Components
+
 Test SVG/Components
-*/Project/Sources/Methods/Method[0123456789]*.4dm
-*/Project/Sources/Forms/Form[0123456789]*.4dm
+
+# Default form & method names - usually for local tests
+**/Sources/Methods/Method[0-9]*.4dm
+**/Sources/Methods/Methode[0-9]*.4dm
+**/Sources/Forms/Form[0-9]*
+**/Sources/Forms/Formulaire[0-9]*
+Project/Sources/filters.json
