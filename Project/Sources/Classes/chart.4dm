@@ -181,6 +181,57 @@ Function donutBounded($id : Text; $x : Real; $y : Real; $width : Real; $thicknes
 	return This:C1470.donut($id; $x+$r; $y+$r; $r; $thickness; $margin; $options)
 	
 	//———————————————————————————————————————————————————————————————————————————
+	// Draw a progress ring (single-value donut)
+Function progressRing($id : Text; $cx : Real; $cy : Real; $r : Real; $value : Real; $max : Real; $options : Object) : cs:C1710.chart
+	
+	var $ratio; $percent : Real
+	var $label : Text
+	
+	$options:=$options || {}
+	
+	If ($max<=0)
+		This:C1470._pushError("progressRing(): max must be greater than 0")
+		return This:C1470
+	End if 
+	
+	$ratio:=$value/$max
+	$ratio:=$ratio<0 ? 0 : $ratio
+	$ratio:=$ratio>1 ? 1 : $ratio
+	$percent:=$ratio*100
+	
+	var $origin : Real:=$options.origin#Null:C1517 ? Num:C11($options.origin) : -90
+	var $thickness : Real:=$options.thickness#Null:C1517 ? Num:C11($options.thickness) : 0.7
+	var $margin : Integer:=$options.margin#Null:C1517 ? Num:C11($options.margin) : 0
+	
+	This:C1470.donut($id; $cx; $cy; $r; $thickness; $margin; {origin: $origin})
+	
+	// Track arc
+	This:C1470.wedge($id; 100)
+	This:C1470.fill($options.trackColor || "#E6E6E6")
+	
+	// Value arc
+	If ($percent>0)
+		This:C1470.wedge($id; $percent)
+		This:C1470.fill($options.color || "dodgerblue")
+	End if 
+	
+	If ($options.stroke#Null:C1517)
+		This:C1470.stroke($options.stroke)
+	End if 
+	
+	If (Not:C34(Bool:C1537($options.showValue#Null:C1517 ? $options.showValue : True:C214)))
+		$label:=$options.label#Null:C1517 ? String:C10($options.label) : String:C10(Round:C94($percent; 1))+"%"
+		This:C1470.text($label; $id).position($cx; $cy).alignment(Align center:K42:3)
+		This:C1470.setAttribute("dominant-baseline"; "middle")
+		
+		If ($options.valueFont#Null:C1517)
+			This:C1470.font($options.valueFont)
+		End if 
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————————————————————
 	// Draws a portion of a pie chart/donut chart
 Function wedge($id : Text; $percent : Real) : cs:C1710.chart
 	
@@ -227,7 +278,7 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.chart
 	
 	$arc:=Num:C11(Abs:C99($to-$from)>180)
 	
-	This:C1470.path()
+	This:C1470.path("")
 	
 	Case of 
 			

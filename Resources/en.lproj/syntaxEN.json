@@ -187,6 +187,52 @@
 			],
 			"Summary": ""
 		},
+		"progressRing()": {
+			"Syntax": "**.progressRing**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *value* : Real; *max* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"cx",
+					"Real",
+					"->"
+				],
+				[
+					"cy",
+					"Real",
+					"->"
+				],
+				[
+					"r",
+					"Real",
+					"->"
+				],
+				[
+					"value",
+					"Real",
+					"->"
+				],
+				[
+					"max",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"donutBounded()": {
 			"Syntax": "**.donutBounded**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *thickness* : Real; *margin* : Integer; *options* : Object ) : cs.svgx.chart",
 			"Params": [
@@ -274,6 +320,27 @@
 			],
 			"Summary": ""
 		},
+		"wedge()": {
+			"Syntax": "**.wedge**( *id* : Text; *percent* : Real ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"percent",
+					"Real",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"donut()": {
 			"Syntax": "**.donut**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *thickness* : Real; *margin* : Integer; *options* : Object ) : cs.svgx.chart",
 			"Params": [
@@ -310,27 +377,6 @@
 				[
 					"options",
 					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"wedge()": {
-			"Syntax": "**.wedge**( *id* : Text; *percent* : Real ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"percent",
-					"Real",
 					"->"
 				],
 				[
