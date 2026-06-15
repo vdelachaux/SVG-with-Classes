@@ -11,7 +11,8 @@ Class constructor
 Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) : cs:C1710.chart
 	
 	var $percent; $value : Real
-	var $i; $number; $total : Integer
+	var $i; $number : Integer
+	var $total : Real
 	var $hsl; $serie : Object
 	var $color : cs:C1710.color
 	
@@ -45,7 +46,18 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 		
 		// Fill the chart
 		$number:=$options.data.length
+		
+		If ($number=0)
+			This:C1470._pushError("pie(): options.data is empty")
+			return This:C1470
+		End if 
+		
 		$total:=$options.data.sum("value")
+		
+		If ($total<=0)
+			This:C1470._pushError("pie(): total value must be greater than 0")
+			return This:C1470
+		End if 
 		
 		If ($options.orderBy#Null:C1517)
 			
@@ -59,6 +71,10 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 		For each ($serie; $options.data)
 			
 			$value:=Num:C11($serie.value)
+			If ($value<=0)
+				Continue 
+			End if 
+			
 			$percent:=$value/$total*100
 			
 			$i+=1
@@ -122,7 +138,7 @@ Function pieBounded($id : Text; $x : Real; $y : Real; $width : Real; $options : 
 	// Starting a donut chart fit into a square
 Function donut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real; $margin : Integer; $options : Object) : cs:C1710.chart
 	
-	$thickness:=$thickness=0 ? 70/100 : $thickness  // Default value is 30% of radius
+	$thickness:=$thickness=0 ? 70/100 : $thickness  // Default inner radius is 70% of radius (ring thickness is 30%)
 	$thickness:=$thickness<1 ? $thickness*100 : $thickness
 	
 	$options:=$options || {}
@@ -181,7 +197,7 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.chart
 	
 	If (Not:C34(This:C1470.success))
 		
-		TRACE:C157
+		This:C1470._pushError("wedge(): chart id not found: "+$id)
 		return 
 		
 	End if 

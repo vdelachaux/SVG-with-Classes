@@ -10,14 +10,19 @@ This class extends the <a href="svg.md">`svg`</a>class
 
 |Function|Action|
 |--------|------|
-|.**pie** ( id :`Text` ; cx : `Real` ; cy : `Real` ; r : `Real` {; options : `Object`}) → `cs.chart` | Start a pie chart defined by its center `cx` `cy` and radius `r`.|
+|.**pie** ( id :`Text` ; cx : `Real` ; cy : `Real` ; r : `Real` {; options : `Object`}) → `cs.chart` | Start a pie chart defined by its center `cx` `cy` and radius `r`. If `options.data` is empty or its total is `<= 0`, the function sets an explicit error and returns without drawing.|
 |.**pieBounded** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` {; options : `Object`}) → `cs.chart` | Start a pie chart that fits into a square defined by the upper left corner `x` `y` and the side length `width`.|
-|.**donut** ( id :`Text` ; cx : `Real` ; cy : `Real` ; r : `Real` {; thickness : `Real` {; margin : `Real` {; options : `Object`}}}) → `cs.chart` |  Start a donut chart defined by its center `cx` `cy`, radius `r`. `tickness` define from 0 to 100 the height of te segments relative to the radius, `margin` their spacing.|
-|.**donutBounded** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; options : `Object` ) → `cs.chart` |  Start a donut chart that fits into a square defined by the upper left corner `x` `y` and the side length `width`. `tickness` define from 0 to 100 the height of te segments relative to the radius, `margin` their spacing.|
-|.**wedge**( id :`Text` ; percent : `Real`) → `cs.chart`|Draws a segment of the 360° percentage in a pie or donut chart.|
+|.**donut** ( id :`Text` ; cx : `Real` ; cy : `Real` ; r : `Real` {; thickness : `Real` {; margin : `Real` {; options : `Object`}}}) → `cs.chart` |  Start a donut chart defined by its center `cx` `cy`, radius `r`. `thickness` is stored as an inner radius percentage (0..100). If `<1`, it is interpreted as a ratio and converted to percent. Default is `0.7` (inner radius = 70% of radius, ring thickness = 30%). `margin` defines segment spacing.|
+|.**donutBounded** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; options : `Object` ) → `cs.chart` |  Start a donut chart that fits into a square defined by the upper left corner `x` `y` and the side length `width`. Same `thickness`/`margin` behavior as `.donut()`.|
+|.**wedge**( id :`Text` ; percent : `Real`) → `cs.chart`|Draws a segment of the 360° percentage in a pie or donut chart. If the chart id is not found, an explicit error is pushed (`wedge(): chart id not found: ...`).|
 |.**horizontlBar** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Start a vertical bar chart. `options.data` must be a collection of objects `{label, value, [color]}`.|
 |.**verticalBar** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Start a vertical bar chart. `options.data` must be a collection of objects `{label, value, [color]}`.|
 |.**closeChart**({id :`Text`})| Closing the chart `id` or the current chart|
+
+### Notes
+
+- In `.pie()`, non-positive values are ignored while filling slices.
+- Error reporting favors explicit `_pushError(...)` messages instead of debug traces.
 
 ## Examples
 
@@ -48,7 +53,24 @@ $chart.preview()
 ### Vertical bar
 
 ```4D
-var $chart:=cs.svgx.chart.new()$chart.verticalBar("demo_vertical_bar"; 10; 10; 400; 300; {\data: [\{label: "Jan"; value: 120; color: "yellow"; stroke: True}; \{label: "Feb"; value: 80; color: "tomato"}; \{label: "Mar"; value: 200}; \{label: "Apr"; value: 150}; \{label: "May"; value: 180; stroke: "darkgreen"}; \{label: "Jun"; value: 40}\]; \gap: 0.2; \showValues: True; \font: {style: Bold}; \labels: {angle: -30; font: {size: 14; style: Bold}}; \axis: True; \horizontalGridLines: {unit: 40; color: "blue"}\})$chart.preview()
+var $chart:=cs.svgx.chart.new()
+$chart.verticalBar("demo_vertical_bar"; 10; 10; 400; 300; {\
+data: [\
+{label: "Jan"; value: 120; color: "yellow"; stroke: True}; \
+{label: "Feb"; value: 80; color: "tomato"}; \
+{label: "Mar"; value: 200}; \
+{label: "Apr"; value: 150}; \
+{label: "May"; value: 180; stroke: "darkgreen"}; \
+{label: "Jun"; value: 40}\
+]; \
+gap: 0.2; \
+showValues: True; \
+font: {style: Bold}; \
+labels: {angle: -30; font: {size: 14; style: Bold}}; \
+axis: True; \
+horizontalGridLines: {unit: 40; color: "blue"}\
+})
+$chart.preview()
 ```
 
 ![verticalBar](./chart/verticalBar.png)
