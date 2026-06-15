@@ -202,24 +202,43 @@ Function progressRing($id : Text; $cx : Real; $cy : Real; $r : Real; $value : Re
 	var $origin : Real:=$options.origin#Null:C1517 ? Num:C11($options.origin) : -90
 	var $thickness : Real:=$options.thickness#Null:C1517 ? Num:C11($options.thickness) : 0.7
 	var $margin : Integer:=$options.margin#Null:C1517 ? Num:C11($options.margin) : 0
+	var $linecap : Text:=$options.linecap#Null:C1517 ? String:C10($options.linecap) : "butt"
+
+	$thickness:=$thickness=0 ? 70/100 : $thickness
+	$thickness:=$thickness<1 ? $thickness*100 : $thickness
+	$thickness:=$thickness>100 ? 100 : $thickness
+
+	var $innerR : Real:=$r*Num:C11($thickness)/100
+	var $strokeW : Real:=$r-$innerR
+	$strokeW:=$strokeW<=0 ? 1 : $strokeW
+	var $midR : Real:=$innerR+($strokeW/2)
+	var $circ : Real:=2*Pi*$midR
+	var $dash : Real:=$circ*$percent/100
+	var $gap : Real:=$circ-$dash
 	
 	This:C1470.donut($id; $cx; $cy; $r; $thickness; $margin; {origin: $origin})
 	
-	// Track arc
-	This:C1470.wedge($id; 100)
-	This:C1470.fill($options.trackColor || "#E6E6E6")
+	// Track ring
+	This:C1470.circle($midR; $cx; $cy)
+	This:C1470.fill("none")
+	This:C1470.stroke($options.trackColor || "#E6E6E6")
+	This:C1470.strokeWidth($strokeW)
+	This:C1470.linecap($linecap)
+	This:C1470.setAttribute("transform"; "rotate("+String:C10($origin)+" "+String:C10($cx)+" "+String:C10($cy)+")")
 	
-	// Value arc
+	// Progress ring
 	If ($percent>0)
 		
-		This:C1470.wedge($id; $percent)
-		This:C1470.fill($options.color || "dodgerblue")
+		This:C1470.circle($midR; $cx; $cy)
+		This:C1470.fill("none")
+		This:C1470.stroke($options.color || "dodgerblue")
+		This:C1470.strokeWidth($strokeW)
+		This:C1470.linecap($linecap)
+		This:C1470.setAttribute("transform"; "rotate("+String:C10($origin)+" "+String:C10($cx)+" "+String:C10($cy)+")")
 		
-	End if 
-	
-	If ($options.stroke#Null:C1517)
-		
-		This:C1470.stroke($options.stroke)
+		If ($percent<100)
+			This:C1470.setAttribute("stroke-dasharray"; String:C10($dash)+" "+String:C10($gap))
+		End if 
 		
 	End if 
 	

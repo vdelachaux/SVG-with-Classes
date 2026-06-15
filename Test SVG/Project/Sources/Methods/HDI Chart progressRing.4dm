@@ -10,7 +10,7 @@ $chart.text("HDI Chart: progressRing").position(40; 26).fontSize(16).fontStyle(B
 $chart.progressRing("ring_1"; 150; 180; 70; 68; 100; {\
 showValue: True:C214\
 })
-$chart.text("68 / 100").position(80; 220).fontSize(18).setAttribute("text-anchor"; "middle").setAttribute("dominant-baseline"; "middle").fillColor("#666").fontStyle(Bold:K14:2)
+$chart.text("68 / 100").position(150; 290).fontSize(16).setAttribute("text-anchor"; "middle").fillColor("#666").fontStyle(Bold:K14:2)
 
 // Example 2: custom colors and thickness
 $chart.progressRing("ring_2"; 350; 180; 70; 42; 80; {\
@@ -21,18 +21,17 @@ color: "#ff7f11"; \
 showValue: True:C214; \
 valueFont: {size: 22; style: Bold:K14:2; color: "#4a4a4a"}\
 })
-$chart.text("42 / 80").position(300; 220).fontSize(18).setAttribute("text-anchor"; "middle").setAttribute("dominant-baseline"; "middle").fillColor("#666").fontStyle(Bold:K14:2)
+$chart.text("42 / 80").position(350; 290).fontSize(16).setAttribute("text-anchor"; "middle").fillColor("#666").fontStyle(Bold:K14:2)
 
-// Example 3: clamped value + custom label and stroke
+// Example 3: clamped value + custom label (value > max)
 $chart.progressRing("ring_3"; 550; 180; 70; 140; 120; {\
 thickness: 0.75; \
 trackColor: "#f1f5f9"; \
 color: "#2a9d8f"; \
-stroke: "white"; \
 showValue: True:C214; \
 label: "116.7%"; \
 valueFont: {size: 20; style: Bold:K14:2; color: "#2a9d8f"}\
 })
-$chart.text("value > max (clamped)").position(500; 220).fontSize(18).setAttribute("text-anchor"; "middle").setAttribute("dominant-baseline"; "middle").fillColor("#666").fontStyle(Bold:K14:2)
+$chart.text("value > max (clamped)").position(550; 290).fontSize(16).setAttribute("text-anchor"; "middle").fillColor("#666").fontStyle(Bold:K14:2)
 
 $chart.preview()

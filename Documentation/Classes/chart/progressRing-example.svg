@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" font-family="'lucida grande','segoe UI',sans-serif" font-size="12" height="370" preserveAspectRatio="none" shape-rendering="crispEdges" stroke="black" text-rendering="geometricPrecision" viewBox="0 0 740 370" viewport-fill="none" width="740" xmlns:vdl="https://github.com/vdelachaux/SVG-with-Classes" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <!-- Blue border rectangle -->
+  <rect x="0.5" y="0.5" width="739" height="359" fill="none" stroke="blue" stroke-width="1"/>
+  <!-- Gray separator line at bottom -->
+  <line x1="0" y1="368" x2="740" y2="368" stroke="#808080" stroke-width="1"/>
+  <g>
+    <circle cx="150" cy="130" fill="none" r="59.5" stroke="#E6E6E6" stroke-linecap="butt" stroke-width="21" transform="rotate(-90 150 130)"/>
+    <circle cx="150" cy="130" fill="none" r="59.5" stroke="dodgerblue" stroke-dasharray="254.2176775285 119.6318482487" stroke-linecap="butt" stroke-width="21" transform="rotate(-90 150 130)"/>
+    <text dominant-baseline="middle" stroke="none" text-anchor="middle" x="150" y="130">68%</text>
+  </g>
+  <g>
+    <circle cx="370" cy="130" fill="none" r="56.7" stroke="#edf2f7" stroke-linecap="butt" stroke-width="26.6" transform="rotate(-90 370 130)"/>
+    <circle cx="370" cy="130" fill="none" r="56.7" stroke="#ff7f11" stroke-dasharray="187.0347186315 169.2218882856" stroke-linecap="butt" stroke-width="26.6" transform="rotate(-90 370 130)"/>
+    <text dominant-baseline="middle" fill="#4a4a4a" font-size="22" font-weight="bold" stroke="none" text-anchor="middle" x="370" y="130">52,5%</text>
+  </g>
+  <g>
+    <circle cx="590" cy="130" fill="none" r="61.25" stroke="#f1f5f9" stroke-linecap="butt" stroke-width="17.5" transform="rotate(-90 590 130)"/>
+    <circle cx="590" cy="130" fill="none" r="61.25" stroke="#2a9d8f" stroke-linecap="butt" stroke-width="17.5" transform="rotate(-90 590 130)"/>
+    <text dominant-baseline="middle" fill="#2a9d8f" font-size="20" font-weight="bold" stroke="none" text-anchor="middle" x="590" y="130">116.7%</text>
+  </g>
+</svg>

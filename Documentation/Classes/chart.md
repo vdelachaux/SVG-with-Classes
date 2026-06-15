@@ -33,6 +33,7 @@ See the ***HDI Chart xxx*** methods
 |:----|:----:|
 |**Pie**|![pie](./chart/pie.png)|
 |**Donut**|![donut](./chart/donut.png)|
+|**progressRing**|![progressRing](./chart/progressRing-example.svg)|
 
 ### Horizontal bar
 ```4D
