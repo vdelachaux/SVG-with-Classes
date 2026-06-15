@@ -190,6 +190,7 @@ property graphic : Picture
 
 property TAU:=Pi:K30:1*2  // Angle of a complete circle
 property stackTransformation:=True:C214  // Stacks text-to-text transformations
+property autoExtendCanvas:=True:C214  // Auto-expands root width/viewBox for text/textArea
 
 //*** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
 // ⚠️ Overrides the method of the inherited class
@@ -200,6 +201,7 @@ Function _reset
 	This:C1470.latest:=""
 	This:C1470.graphic:=Null:C1517
 	This:C1470.store:=[]
+	This:C1470.autoExtendCanvas:=True:C214
 	
 	// <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <== <==
 	// Returns the cursor position
@@ -1723,114 +1725,173 @@ Function text($text : Text; $attachTo) : cs:C1710.svg
 	
 	This:C1470.latest:=Super:C1706.create($node; "text"; $o)
 	
-	If (This:C1470.success)\
-		 & (Length:C16($text)>0)
+	If (Not:C34(This:C1470.success))\
+		 || (Length:C16($text)=0)
 		
-		If (Match regex:C1019("(?mi-s)<span[^>]*>"; $text; 1)) & False:C215
+		return This:C1470
+		
+	End if 
+	
+	If (Match regex:C1019("(?mi-s)<span[^>]*>"; $text; 1))
+		
+		// Text multi-style: Parse HTML spans and convert to SVG tspans with styling
+		var $lines : Collection
+		var $lineIndex : Integer
+		var $line : Text
+		var $lineHeight : Real:=16  // Default line height in pixels
+		var $styles : Object
+		var $fontSize : Integer
+		ARRAY TEXT:C222($styleMatch; 0)
+		
+		// Split by line breaks
+		$text:=Replace string:C233($text; "<br>"; "\r"; 1)
+		$text:=Replace string:C233($text; "<br/>"; "\r"; 1)
+		$text:=Replace string:C233($text; "\r\n"; "\r")
+		$text:=Replace string:C233($text; "\n"; "\r")
+		$lines:=Split string:C1554($text; "\r")
+		
+		// Process each line
+		For ($lineIndex; 0; $lines.length-1; 1)
 			
-			$text:=Replace string:C233($text; "<SPAN"; "<tspan")
-			$text:=Replace string:C233($text; "</SPAN>"; "</tspan>")
-			$text:=Replace string:C233($text; "STYLE="; "style=")
-			$text:=Replace string:C233($text; "color:"; "fill:")
-			$text:=Replace string:C233($text; "<BR/>"; "\r")
+			$line:=$lines[$lineIndex]
+			$line:=Replace string:C233($line; "<span"; "<tspan")
+			var $normalizePass : Integer
 			
-			var $pattern:="(?m-is)<tspan[^>]*style=\"font-size:(\\d+)[^>]*>"
+			For ($normalizePass; 1; 8; 1)
+				
+				$line:=Replace string:C233($line; "</span>"; "</tspan>")
+				$line:=Replace string:C233($line; "</span >"; "</tspan>")
+				$line:=Replace string:C233($line; "</ span>"; "</tspan>")
+				$line:=Replace string:C233($line; "</tspan >"; "</tspan>")
+				$line:=Replace string:C233($line; "</t/span>"; "</tspan>")
+				
+			End for 
 			
-			// TODO: 🚧 Text multi-style
+			$line:=Replace string:C233($line; "STYLE="; "style=")
+			$line:=Replace string:C233($line; "style=\""; "style=\"")
+			$line:=Replace string:C233($line; "color:"; "fill:")
 			
-			//Repeat 
-			//$Lon_x:=Position("\r"; $Txt_text)
-			//If ($Lon_x>0)
-			//$Txt_Buffer:=Substring($Txt_text; 1; $Lon_x-1)
-			//$Txt_text:=Delete string($Txt_text; 1; Length($Txt_Buffer)+1)
-			////#ACI0093774
-			////$Txt_Span:=DOM Create XML element($Dom_svgReference;"tspan";"x";$Num_x)
-			//If (OK=1)
-			//ARRAY TEXT($tTxt_results; 0x0000)
-			//$Lon_lineFontSize:=$Lon_Font_Size  //default
-			//If (Rgx_ExtractText($Txt_pattern; $Txt_Buffer; ""; ->$tTxt_results; 0)=0)
-			//For ($Lon_i; 1; Size of array($tTxt_results); 1)
-			//If (Num($tTxt_results{$Lon_i})>$Lon_lineFontSize)
-			//$Lon_lineFontSize:=Num($tTxt_results{$Lon_i})
-			//End if 
-			//End for 
-			//End if 
-			//$Num_y:=$Num_y+$Lon_lineFontSize+Choose($Lon_count>0; $Num_interlining*8; 0)
-			////#ACI0093774
-			////DOM SET XML ATTRIBUTE($Txt_Span;"y";$Num_y)
-			////DOM SET XML ELEMENT VALUE($Txt_Span;$Txt_Buffer)
-			////#ACI0096676 {
-			////$Lon_error:=Rgx_SubstituteText ("(?mi-s)^<tspan ([^>]*>)";"<tspan x=\""+String($Num_x)+"\" y=\""+String($Num_y)+"\" \\1";->$Txt_Buffer)
-			//If ($Txt_Buffer#"<tspan@")
-			//$Txt_Buffer:="<tspan>"+$Txt_Buffer+"</tspan>"
-			//End if 
-			//$Lon_error:=Rgx_SubstituteText("(?mi-s)^<tspan([^>]*>)"; "<tspan x=\""+String($Num_x)+"\" y=\""+String($Num_y)+"\" \\1"; ->$Txt_Buffer)
-			////}
-			//$Dom_buffer:=DOM Append XML child node($Dom_svgReference; XML ELEMENT; $Txt_Buffer)
-			//End if 
-			//$Lon_Count:=$Lon_Count+1
-			//Else 
-			//If ($Lon_Count=0)
-			//DOM SET XML ELEMENT VALUE($Dom_svgReference; $Txt_text)
-			//Else 
-			//ARRAY TEXT($tTxt_results; 0x0000)
-			//$Lon_lineFontSize:=$Lon_Font_Size  //default
-			//If (Rgx_ExtractText($Txt_pattern; $Txt_text; ""; ->$tTxt_results; 0)=0)
-			//For ($Lon_i; 1; Size of array($tTxt_results); 1)
-			//If (Num($tTxt_results{$Lon_i})>$Lon_lineFontSize)
-			//$Lon_lineFontSize:=Num($tTxt_results{$Lon_i})
-			//End if 
-			//End for 
-			//End if 
-			//$Num_y:=$Num_y+$Lon_lineFontSize+Choose($Lon_count>0; $Num_interlining*8; 0)
-			////#ACI0093774
-			////$Txt_Span:=DOM Create XML element($Dom_svgReference;"tspan";"x";$Num_x;"y";$Num_y)
-			////If (OK=1)
-			////DOM SET XML ELEMENT VALUE($Txt_Span;$Txt_text)
-			////End if
-			////#ACI0096676 {
-			////$Lon_error:=Rgx_SubstituteText ("(?mi-s)^<tspan ([^>]*>)";"<tspan x=\""+String($Num_x)+"\" y=\""+String($Num_y)+"\" \\1";->$Txt_text)
-			//If ($Txt_Buffer#"<tspan@")
-			//$Txt_Buffer:="<tspan>"+$Txt_Buffer+"</tspan>"
-			//End if 
-			//$Lon_error:=Rgx_SubstituteText("(?mi-s)^<tspan([^>]*>)"; "<tspan x=\""+String($Num_x)+"\" y=\""+String($Num_y)+"\" \\1"; ->$Txt_Buffer)
-			////}
-			//$Dom_buffer:=DOM Append XML child node($Dom_svgReference; XML ELEMENT; $Txt_text)
-			//End if 
-			//End if 
-			//Until ($Lon_x=0) | (OK=0)
+			// Extract font-size from style attribute for line height calculation
+			If (Match regex:C1019("style=\"[^\"]*font-size:(\\d+)"; $line; 1; $styleMatch))
+				
+				$fontSize:=Num:C11($styleMatch{1})
+				$lineHeight:=$fontSize*1.2  // 1.2 multiplier for line spacing
+				
+			End if 
+			
+			// Wrap line content with tspan including y position
+			If (Length:C16($line)>0)
+				
+				// Keep baseline from parent <text>; only add dy on subsequent lines.
+				var $lineNode : Text
+				
+				If ($lineIndex=0)
+					
+					$lineNode:=Super:C1706.create(This:C1470.latest; "tspan")
+					
+				Else 
+					
+					$lineNode:=Super:C1706.create(This:C1470.latest; "tspan"; {dy: String:C10($lineHeight+4)})
+					
+				End if 
+				
+				var $fragmentXML:=cs:C1710.xml.new("<root>"+$line+"</root>")
+				
+				If (Not:C34($fragmentXML.success))
+					
+					// Retry once after repairing any remaining closing span variants.
+					var $safeLine:=$line
+					$safeLine:=Replace string:C233($safeLine; "</span>"; "</tspan>")
+					$safeLine:=Replace string:C233($safeLine; "</span >"; "</tspan>")
+					$safeLine:=Replace string:C233($safeLine; "</ span>"; "</tspan>")
+					$safeLine:=Replace string:C233($safeLine; "</t/span>"; "</tspan>")
+					$fragmentXML:=cs:C1710.xml.new("<root>"+$safeLine+"</root>")
+					
+					If ($fragmentXML.success)
+						
+						$line:=$safeLine
+						
+					End if 
+				End if 
+				
+				If ($fragmentXML.success)
+					
+					ARRAY LONGINT:C221($fragmentTypes; 0)
+					ARRAY TEXT:C222($fragmentNodes; 0)
+					DOM GET XML CHILD NODES:C1081($fragmentXML.root; $fragmentTypes; $fragmentNodes)
+					
+					var $fragmentIndex : Integer
+					var $fragmentName : Text
+					
+					For ($fragmentIndex; 1; Size of array:C274($fragmentTypes); 1)
+						
+						Case of 
+								
+								//________________________________________________________________________________
+							: ($fragmentTypes{$fragmentIndex}=XML DATA:K45:12)
+								
+								If (Length:C16($fragmentNodes{$fragmentIndex})>0)
+									
+									$node:=Super:C1706.appendChild($lineNode; XML DATA:K45:12; $fragmentNodes{$fragmentIndex})
+									
+								End if 
+								
+								//________________________________________________________________________________
+							: ($fragmentTypes{$fragmentIndex}=XML ELEMENT:K45:20)
+								
+								$fragmentName:=String:C10($fragmentXML.getName($fragmentNodes{$fragmentIndex}))
+								
+								If ($fragmentName="tspan")
+									
+									var $chunkNode : Text:=Super:C1706.create($lineNode; "tspan"; $fragmentXML.getAttributes($fragmentNodes{$fragmentIndex}))
+									Super:C1706.setValue($chunkNode; String:C10($fragmentXML.getValue($fragmentNodes{$fragmentIndex})))
+									
+								End if 
+								
+								//________________________________________________________________________________
+						End case 
+					End for 
+					
+				Else 
+					
+					Super:C1706.setValue($lineNode; $line)
+					
+				End if 
+				
+				This:C1470.success:=Bool:C1537(OK)
+				
+			End if 
+		End for 
+		
+	Else 
+		
+		$text:=Replace string:C233($text; "\r\n"; "\n")
+		$text:=Replace string:C233($text; "\n"; "\r")
+		
+		var $c:=Split string:C1554($text; "\r")
+		
+		If ($c.length=1)
+			
+			This:C1470.setValue($text)
 			
 		Else 
 			
-			$text:=Replace string:C233($text; "\r\n"; "\n")
-			$text:=Replace string:C233($text; "\n"; "\r")
-			
-			var $c:=Split string:C1554($text; "\r")
-			
-			If ($c.length=1)
+			For each ($line; $c) While (This:C1470.success)
 				
-				This:C1470.setValue($text)
+				If ($line#$c[0])
+					
+					// Keep x, remove y
+					OB REMOVE:C1226($o; "y")
+					
+					// Set dy
+					$o.dy:="1em"
+					
+				End if 
 				
-			Else 
+				$node:=Super:C1706.create(This:C1470.latest; "tspan"; $o)
+				Super:C1706.setValue($node; $line)
 				
-				var $line : Text
-				For each ($line; $c) While (This:C1470.success)
-					
-					If ($line#$c[0])
-						
-						// Keep x, remove y
-						OB REMOVE:C1226($o; "y")
-						
-						// Set dy
-						$o.dy:="1em"
-						
-					End if 
-					
-					$node:=Super:C1706.create(This:C1470.latest; "tspan"; $o)
-					Super:C1706.setValue($node; $line)
-					
-				End for each 
-			End if 
+			End for each 
 		End if 
 	End if 
 	
@@ -1896,41 +1957,142 @@ Function textArea($text : Text; $attachTo) : cs:C1710.svg
 	If (This:C1470.success)\
 		 & (Length:C16($text)>0)
 		
-		$text:=Replace string:C233($text; "\r\n"; "\n")
-		$text:=Replace string:C233($text; "\n"; "\r")
-		
-		var $i : Integer
-		var $line : Text
-		For each ($line; Split string:C1554($text; "\r")) While (This:C1470.success)
+		If (Match regex:C1019("(?mi-s)<span[^>]*>"; $text; 1))
 			
-			If ($i=0)
+			// Multi-style content in textArea: convert spans to tspans and append real XML nodes.
+			$text:=Replace string:C233($text; "<br>"; "\r"; 1)
+			$text:=Replace string:C233($text; "\r\n"; "\r")
+			$text:=Replace string:C233($text; "\n"; "\r")
+			
+			var $i : Integer
+			var $line : Text
+			For each ($line; Split string:C1554($text; "\r")) While (This:C1470.success)
 				
-				This:C1470.setValue($line)
-				
-			Else 
-				
-				$node:=DOM Create XML element:C865(This:C1470.latest; "tbreak")
-				This:C1470.success:=Bool:C1537(OK)
+				If ($i>0)
+					
+					$node:=Super:C1706.create(This:C1470.latest; "tbreak")
+					This:C1470.success:=Bool:C1537(OK)
+					
+				End if 
 				
 				If (This:C1470.success)\
 					 & (Length:C16($line)>0)
 					
-					$node:=DOM Append XML child node:C1080(This:C1470.latest; XML DATA:K45:12; $line)
+					$line:=Replace string:C233($line; "<span"; "<tspan")
+					var $normalizePass : Integer
+					
+					For ($normalizePass; 1; 8; 1)
+						
+						$line:=Replace string:C233($line; "</span>"; "</tspan>")
+						$line:=Replace string:C233($line; "</span >"; "</tspan>")
+						$line:=Replace string:C233($line; "</ span>"; "</tspan>")
+						$line:=Replace string:C233($line; "</tspan >"; "</tspan>")
+						$line:=Replace string:C233($line; "</t/span>"; "</tspan>")
+						
+					End for 
+					
+					$line:=Replace string:C233($line; "STYLE="; "style=")
+					$line:=Replace string:C233($line; "color:"; "fill:")
+					
+					var $fragmentXML:=cs:C1710.xml.new("<root>"+$line+"</root>")
+					
+					If ($fragmentXML.success)
+						
+						ARRAY LONGINT:C221($fragmentTypes; 0)
+						ARRAY TEXT:C222($fragmentNodes; 0)
+						DOM GET XML CHILD NODES:C1081($fragmentXML.root; $fragmentTypes; $fragmentNodes)
+						
+						var $fragmentIndex : Integer
+						var $fragmentName : Text
+						
+						For ($fragmentIndex; 1; Size of array:C274($fragmentTypes); 1)
+							
+							Case of 
+									
+									//________________________________________________________________________________
+								: ($fragmentTypes{$fragmentIndex}=XML DATA:K45:12)
+									
+									If (Length:C16($fragmentNodes{$fragmentIndex})>0)
+										
+										$node:=Super:C1706.appendChild(This:C1470.latest; XML DATA:K45:12; $fragmentNodes{$fragmentIndex})
+										
+									End if 
+									
+									//________________________________________________________________________________
+								: ($fragmentTypes{$fragmentIndex}=XML ELEMENT:K45:20)
+									
+									$fragmentName:=String:C10($fragmentXML.getName($fragmentNodes{$fragmentIndex}))
+									
+									If ($fragmentName="tspan")
+										
+										var $chunkNode : Text:=Super:C1706.create(This:C1470.latest; "tspan"; $fragmentXML.getAttributes($fragmentNodes{$fragmentIndex}))
+										Super:C1706.setValue($chunkNode; String:C10(This:C1470._getNestedText($fragmentNodes{$fragmentIndex})))
+										
+									End if 
+									
+									//________________________________________________________________________________
+							End case 
+						End for 
+						
+					Else 
+						
+						$node:=Super:C1706.appendChild(This:C1470.latest; XML DATA:K45:12; $line)
+						
+					End if 
+					
 					This:C1470.success:=Bool:C1537(OK)
 					
 				End if 
-			End if 
+				
+				$i+=1
+				
+			End for each 
 			
-			$i+=1
+		Else 
 			
-		End for each 
+			$text:=Replace string:C233($text; "\r\n"; "\n")
+			$text:=Replace string:C233($text; "\n"; "\r")
+			
+			$i:=0
+			
+			For each ($line; Split string:C1554($text; "\r")) While (This:C1470.success)
+				
+				If ($i=0)
+					
+					This:C1470.setValue($line)
+					
+				Else 
+					
+					$node:=Super:C1706.create(This:C1470.latest; "tbreak")
+					This:C1470.success:=Bool:C1537(OK)
+					
+					If (This:C1470.success)\
+						 & (Length:C16($line)>0)
+						
+						$node:=Super:C1706.appendChild(This:C1470.latest; XML DATA:K45:12; $line)
+						This:C1470.success:=Bool:C1537(OK)
+						
+					End if 
+				End if 
+				
+				$i+=1
+				
+			End for each 
+			
+		End if 
 	End if 
+	
+	This:C1470._autoExtendCanvasForText(This:C1470.latest)
 	
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
 	// Append text to a text Area
-	// TODO: Documentation
+	// Adds text content to an existing SVG textarea element.
+	// Each line is separated by a carriage return and creates a new tspan element.
+	// @param $text - The text to append
+	// @param $applyTo - Reference to the textarea element (optional, uses latest if omitted)
+	// @return - Returns the svg instance for method chaining
 Function appendText($text : Text; $applyTo) : cs:C1710.svg
 	
 	var $node:=This:C1470._getContainer($applyTo)
@@ -1953,7 +2115,7 @@ Function appendText($text : Text; $applyTo) : cs:C1710.svg
 			
 			If ($i>0)
 				
-				$node:=DOM Create XML element:C865(This:C1470.latest; "tbreak")
+				$node:=Super:C1706.create(This:C1470.latest; "tbreak")
 				This:C1470.success:=Bool:C1537(OK)
 				
 			End if 
@@ -1961,7 +2123,7 @@ Function appendText($text : Text; $applyTo) : cs:C1710.svg
 			If (This:C1470.success)\
 				 & (Length:C16($line)>0)
 				
-				$node:=DOM Append XML child node:C1080(This:C1470.latest; XML DATA:K45:12; $line)
+				$node:=Super:C1706.appendChild(This:C1470.latest; XML DATA:K45:12; $line)
 				This:C1470.success:=Bool:C1537(OK)
 				
 			End if 
@@ -1970,6 +2132,8 @@ Function appendText($text : Text; $applyTo) : cs:C1710.svg
 			
 		End for each 
 	End if 
+	
+	This:C1470._autoExtendCanvasForText(This:C1470.latest)
 	
 	return This:C1470
 	
@@ -2057,14 +2221,36 @@ Function points($points : Variant; $applyTo) : cs:C1710.svg
 	
 	//———————————————————————————————————————————————————————————
 	// Defines a new path element.
-Function path($data : Text; $attachTo) : cs:C1710.svg
+Function path($data : Variant; $attachTo) : cs:C1710.svg
 	
-	// TODO: Accept other data formats (Collection, …)
+	// Accepts multiple data formats: Text path data, Collection of points
 	
 	If (Count parameters:C259=1)\
 		 && (This:C1470._isReference($data))  // .path(attachTo)
 		
 		$data:=""
+		
+	End if 
+	
+	// Convert Collection to path data string
+	If (Value type:C1509($data)=Is collection:K8:32)
+		
+		var $pathData : Text
+		var $i : Integer
+		
+		For ($i; 0; $data.length-1; 1)
+			
+			var $point:=$data[$i]
+			
+			If ($i=0)
+				$pathData:="M "+String:C10($point.x)+","+String:C10($point.y)
+			Else 
+				$pathData:=$pathData+" L "+String:C10($point.x)+","+String:C10($point.y)
+			End if 
+			
+		End for 
+		
+		$data:=$pathData
 		
 	End if 
 	
@@ -3976,7 +4162,18 @@ Function fontFamily($fonts : Text; $applyTo) : cs:C1710.svg
 	//———————————————————————————————————————————————————————————
 Function fontSize($size : Integer; $applyTo) : cs:C1710.svg
 	
-	Super:C1706.setAttribute(This:C1470._getTarget($applyTo); "font-size"; $size)
+	var $node:=This:C1470._getTarget($applyTo)
+	Super:C1706.setAttribute($node; "font-size"; $size)
+	
+	var $name : Text
+	DOM GET XML ELEMENT NAME:C730($node; $name)
+	
+	If (($name="text")\
+		 || ($name="textarea"))
+		
+		This:C1470._autoExtendCanvasForText($node)
+		
+	End if 
 	
 	return This:C1470
 	
@@ -4048,7 +4245,7 @@ Function alignment($alignment : Integer; $applyTo) : cs:C1710.svg
 	
 	Case of 
 			
-			//…………………………………………………………………………………………
+			// …………………………………………………………………………………………
 		: ($alignment=Align center:K42:3)
 			
 			If ($name="textArea")
@@ -4061,29 +4258,29 @@ Function alignment($alignment : Integer; $applyTo) : cs:C1710.svg
 				
 			End if 
 			
-			//…………………………………………………………………………………………
+			// …………………………………………………………………………………………
 		: ($alignment=Align right:K42:4)
 			
 			Super:C1706.setAttribute($node; Choose:C955($name="textArea"; "text-align"; "text-anchor"); "end")
 			
-			//…………………………………………………………………………………………
+			// …………………………………………………………………………………………
 		: ($alignment=Align left:K42:2)\
 			 | ($alignment=Align default:K42:1)
 			
 			Super:C1706.setAttribute($node; Choose:C955($name="textArea"; "text-align"; "text-anchor"); "start")
 			
-			//…………………………………………………………………………………………
+			// …………………………………………………………………………………………
 		: ($alignment=5)\
 			 & ($name="textArea")
 			
 			Super:C1706.setAttribute($node; "text-align"; "justify")
 			
-			//…………………………………………………………………………………………
+			// …………………………………………………………………………………………
 		Else 
 			
 			Super:C1706.setAttribute($node; Choose:C955($name="textArea"; "text-align"; "text-anchor"); "inherit")
 			
-			//…………………………………………………………………………………………
+			// …………………………………………………………………………………………
 	End case 
 	
 	return This:C1470
@@ -4845,19 +5042,19 @@ Function position($x : Real; $y : Variant; $unit : Text) : cs:C1710.svg
 	
 	Case of 
 			
-			//______________________________________________________
+			// ______________________________________________________
 		: ($name="svg")\
 			 | ($name="g")
 			
 			This:C1470._pushError("You can't set position for the element"+$name+"!")
 			
-			//______________________________________________________
+			// ______________________________________________________
 		: ($name="circle")\
 			 | ($name="ellipse")
 			
 			Case of 
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				: (Count parameters:C259=3)
 					
 					If (Value type:C1509($y)=Is real:K8:4)\
@@ -4875,7 +5072,7 @@ Function position($x : Real; $y : Variant; $unit : Text) : cs:C1710.svg
 						
 					End if 
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				: (Count parameters:C259=2)
 					
 					If (Value type:C1509($y)=Is real:K8:4)\
@@ -4893,27 +5090,27 @@ Function position($x : Real; $y : Variant; $unit : Text) : cs:C1710.svg
 						
 					End if 
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				: (Count parameters:C259=1)
 					
 					Super:C1706.setAttributes($node; {\
 						cx: $x; \
 						cy: $x})
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				Else 
 					
 					This:C1470._pushError("Missing parameter")
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 			End case 
 			
-			//______________________________________________________
+			// ______________________________________________________
 		: ($name="line")
 			
 			Case of 
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				: (Count parameters:C259=3)
 					
 					If (Value type:C1509($y)=Is real:K8:4)\
@@ -4931,7 +5128,7 @@ Function position($x : Real; $y : Variant; $unit : Text) : cs:C1710.svg
 						
 					End if 
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				: (Count parameters:C259=2)
 					
 					If (Value type:C1509($y)=Is real:K8:4)\
@@ -4949,34 +5146,34 @@ Function position($x : Real; $y : Variant; $unit : Text) : cs:C1710.svg
 						
 					End if 
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				: (Count parameters:C259=1)
 					
 					Super:C1706.setAttributes($node; {\
 						x1: $x; \
 						y1: $x})
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				Else 
 					
 					This:C1470._pushError("Missing parameter")
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 			End case 
 			
-			//______________________________________________________
+			// ______________________________________________________
 		Else 
 			
 			Case of 
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				: (Count parameters:C259=3)
 					
 					Super:C1706.setAttributes($node; {\
 						x: String:C10($x; "&xml")+$unit; \
 						y: String:C10(Num:C11($y); "&xml")+$unit})
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				: (Count parameters:C259=2)
 					
 					If (Value type:C1509($y)=Is text:K8:3)
@@ -4993,23 +5190,30 @@ Function position($x : Real; $y : Variant; $unit : Text) : cs:C1710.svg
 						
 					End if 
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				: (Count parameters:C259=1)
 					
 					Super:C1706.setAttributes($node; {\
 						x: $x; \
 						y: $x})
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 				Else 
 					
 					This:C1470._pushError("Missing parameter")
 					
-					//…………………………………………………………………………………………………
+					// …………………………………………………………………………………………………
 			End case 
 			
-			//______________________________________________________
+			// ______________________________________________________
 	End case 
+	
+	If (($name="text")\
+		 || ($name="textarea"))
+		
+		This:C1470._autoExtendCanvasForText($node)
+		
+	End if 
 	
 	return This:C1470
 	
@@ -5371,14 +5575,13 @@ Function getContainerText($applyTo : Text) : Text
 	var $text : Text
 	
 	var $node:=This:C1470._getTarget($applyTo)
-	var $name : Text
-	DOM GET XML ELEMENT NAME:C730($node; $name)
+	var $name:=String:C10(This:C1470.getName($node))
 	
 	If ($name="text")\
-		 || ($name="textArea")\
+		 || ($name="textarea")\
 		 || ($name="tspan")
 		
-		var $isTextArea : Boolean:=$name="textArea"
+		var $isTextArea : Boolean:=$name="textarea"
 		ARRAY TEXT:C222($_nodes; 0)
 		ARRAY LONGINT:C221($_types; 0)
 		DOM GET XML CHILD NODES:C1081($node; $_types; $_nodes)
@@ -5399,7 +5602,7 @@ Function getContainerText($applyTo : Text) : Text
 					//______________________________________________________
 				: ($_types{$i}=XML ELEMENT:K45:20)
 					
-					DOM GET XML ELEMENT NAME:C730($_nodes{$i}; $name)
+					$name:=String:C10(This:C1470.getName($_nodes{$i}))
 					
 					Case of 
 							
@@ -5411,8 +5614,7 @@ Function getContainerText($applyTo : Text) : Text
 							//………………………………………………………………………………………………………
 						: ($name="tspan")
 							
-							var $t : Text
-							DOM GET XML ELEMENT VALUE:C731($_nodes{$i}; $t)
+							var $t : Text:=This:C1470._getNestedText($_nodes{$i})
 							
 							If (Not:C34($isTextArea))
 								
@@ -5425,7 +5627,12 @@ Function getContainerText($applyTo : Text) : Text
 								End if 
 							End if 
 							
-							$text+=$t
+							//FIXME: Turn around ACI0106386 (21R3-R4)
+							If (Length:C16($t)>0)
+								
+								$text+=$t
+								
+							End if 
 							
 							//………………………………………………………………………………………………………
 					End case 
@@ -5438,19 +5645,180 @@ Function getContainerText($applyTo : Text) : Text
 		
 	End if 
 	
+	return ""
+	
+	//———————————————————————————————————————————————————————————
+	// Returns all text data contained in a node and its descendants.
+Function _getNestedText($node : Text) : Text
+	
+	var $text : Text
+	
+	If (Not:C34(This:C1470.isReference($node)))
+		
+		return $text
+		
+	End if 
+	
+	ARRAY LONGINT:C221($types; 0)
+	ARRAY TEXT:C222($nodes; 0)
+	DOM GET XML CHILD NODES:C1081($node; $types; $nodes)
+	
+	var $i : Integer
+	For ($i; 1; Size of array:C274($types); 1)
+		
+		Case of 
+				
+				//________________________________________________________________________________
+			: ($types{$i}=XML DATA:K45:12)
+				
+				$text+=$nodes{$i}
+				
+				//________________________________________________________________________________
+			: ($types{$i}=XML ELEMENT:K45:20)
+				
+				var $name:=String:C10(This:C1470.getName($nodes{$i}))
+				
+				If ($name="tbreak")
+					
+					$text+="\r"
+					
+				Else 
+					
+					$text+=This:C1470._getNestedText($nodes{$i})
+					
+				End if 
+				
+				//________________________________________________________________________________
+		End case 
+	End for 
+	
+	return $text
+	
 	//———————————————————————————————————————————————————————————
 Function setText($text : Text; $applyTo)
 	
 	var $node:=This:C1470._getTarget($applyTo)
 	DOM SET XML ELEMENT VALUE:C868($node; "")
 	
-	$node:=DOM Append XML child node:C1080($node; XML DATA:K45:12; $text)
+	$node:=Super:C1706.appendChild($node; XML DATA:K45:12; $text)
+	
+	//———————————————————————————————————————————————————————————
+	// Expand root width/viewBox when a text node exceeds canvas bounds.
+Function _autoExtendCanvasForText($textNode : Text) : cs:C1710.svg
+	
+	If (Not:C34(This:C1470.autoExtendCanvas))
+		
+		return This:C1470
+		
+	End if 
+	
+	If (Not:C34(This:C1470.isReference($textNode)))
+		
+		return This:C1470
+		
+	End if 
+	
+	var $name : Text:=String:C10(This:C1470.getName($textNode))
+	
+	If (($name#"text")\
+		 && ($name#"textarea"))
+		
+		return This:C1470
+		
+	End if 
+	
+	var $textValue : Text:=This:C1470.getContainerText($textNode)
+	
+	If (Length:C16($textValue)=0)
+		
+		return This:C1470
+		
+	End if 
+	
+	var $fontSize : Real:=Num:C11(Super:C1706.getAttribute($textNode; "font-size"))
+	
+	If ($fontSize<=0)
+		
+		$fontSize:=Num:C11(Super:C1706.getAttribute(This:C1470.root; "font-size"))
+		
+	End if 
+	
+	$fontSize:=$fontSize<=0 ? 12 : $fontSize
+	
+	var $fontFamily:=String:C10(Super:C1706.getAttribute($textNode; "font-family"))
+	
+	If (Length:C16($fontFamily)=0)
+		
+		$fontFamily:=String:C10(Super:C1706.getAttribute(This:C1470.root; "font-family"))
+		
+	End if 
+	
+	var $x : Real:=Num:C11(Super:C1706.getAttribute($textNode; "x"))
+	var $measuredWidth : Integer:=This:C1470.getTextWidth($textValue; {size: $fontSize; family: $fontFamily})
+	var $requiredWidth : Real:=$x+$measuredWidth+10
+	
+	var $currentWidth : Real:=Num:C11(Super:C1706.getAttribute(This:C1470.root; "width"))
+	
+	// Fallback to viewBox width when root width is not numeric (e.g. percentages).
+	If ($currentWidth<=0)
+		
+		var $vb : Text:=String:C10(Super:C1706.getAttribute(This:C1470.root; "viewBox"))
+		
+		If (Length:C16($vb)=0)
+			
+			$vb:=String:C10(Super:C1706.getAttribute(This:C1470.root; "viewbox"))
+			
+		End if 
+		
+		If (Length:C16($vb)>0)
+			
+			var $parts:=Split string:C1554($vb; " ")
+			
+			If ($parts.length>=4)
+				
+				$currentWidth:=Num:C11($parts[2])
+				
+			End if 
+		End if 
+	End if 
+	
+	If (($currentWidth>0)\
+		 && ($requiredWidth>$currentWidth))
+		
+		var $newWidth : Integer:=Int:C8($requiredWidth+1)
+		Super:C1706.setAttribute(This:C1470.root; "width"; $newWidth)
+		
+		var $viewBox : Text:=String:C10(Super:C1706.getAttribute(This:C1470.root; "viewBox"))
+		
+		If (Length:C16($viewBox)=0)
+			
+			$viewBox:=String:C10(Super:C1706.getAttribute(This:C1470.root; "viewbox"))
+			
+		End if 
+		
+		If (Length:C16($viewBox)>0)
+			
+			var $vbParts:=Split string:C1554($viewBox; " ")
+			
+			If ($vbParts.length>=4)
+				
+				$vbParts[2]:=String:C10($newWidth)
+				var $newViewBox : Text:=String:C10($vbParts[0])+" "+String:C10($vbParts[1])+" "+String:C10($vbParts[2])+" "+String:C10($vbParts[3])
+				Super:C1706.setAttribute(This:C1470.root; "viewBox"; $newViewBox)
+				
+			End if 
+		End if 
+	End if 
+	
+	return This:C1470
 	
 	//———————————————————————————————————————————————————————————
 	// Returns text width
 Function getTextWidth($string : Text; $fontAttributes : Object) : Integer
 	
-	var $svg:=cs:C1710.svg.new().textArea($string)
+	var $svg:=cs:C1710.svg.new()
+	$svg.autoExtendCanvas:=False:C215
+	$svg.textArea($string)
 	
 	If (Count parameters:C259>=2)
 		

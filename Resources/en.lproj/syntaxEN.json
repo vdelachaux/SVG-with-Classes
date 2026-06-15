@@ -2579,11 +2579,11 @@
 			"Summary": ""
 		},
 		"path()": {
-			"Syntax": "**.path**( *data* : Text; *attachTo* : Variant ) : cs.svgx.svg",
+			"Syntax": "**.path**( *data* : Variant; *attachTo* : Variant ) : cs.svgx.svg",
 			"Params": [
 				[
 					"data",
-					"Text",
+					"Variant",
 					"->"
 				],
 				[
@@ -4118,6 +4118,9 @@
 			],
 			"Summary": ""
 		},
+		"autoExtendCanvas": {
+			"Syntax": "autoExtendCanvas : Boolean"
+		},
 		"stackTransformation": {
 			"Syntax": "stackTransformation : Boolean"
 		},
@@ -4141,38 +4144,6 @@
 			"Params": [
 				[
 					"text",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"findById()": {
-			"Syntax": "**.findById**( *id* : Text )->reference : Text",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"reference",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"isNull()": {
-			"Syntax": "**.isNull**( *reference* : Text ) : Boolean",
-			"Params": [
-				[
-					"reference",
 					"Text",
 					"->"
 				],
@@ -4448,27 +4419,6 @@
 			],
 			"Summary": ""
 		},
-		"find()": {
-			"Syntax": "**.find**( *node* : Text; *xpath* : Text )->references : Collection",
-			"Params": [
-				[
-					"node",
-					"Text",
-					"->"
-				],
-				[
-					"xpath",
-					"Text",
-					"->"
-				],
-				[
-					"references",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"getAttribute()": {
 			"Syntax": "**.getAttribute**( *node* : Text; *attribute* : Text )->value : Variant",
 			"Params": [
@@ -4554,6 +4504,38 @@
 				[
 					"",
 					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"isNull()": {
+			"Syntax": "**.isNull**( *reference* : Text ) : Boolean",
+			"Params": [
+				[
+					"reference",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"findById()": {
+			"Syntax": "**.findById**( *id* : Text )->reference : Text",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"reference",
+					"Text",
 					"<-"
 				]
 			],
@@ -4753,6 +4735,53 @@
 				[
 					"index",
 					"Integer",
+					"->"
+				],
+				[
+					"node",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"find()": {
+			"Syntax": "**.find**( *node* : Text; *xpath* : Text )->references : Collection",
+			"Params": [
+				[
+					"node",
+					"Text",
+					"->"
+				],
+				[
+					"xpath",
+					"Text",
+					"->"
+				],
+				[
+					"references",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"appendChild()": {
+			"Syntax": "**.appendChild**( *target* : Text; *type* : Integer; *value* : Variant )->node : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"type",
+					"Integer",
+					"->"
+				],
+				[
+					"value",
+					"Variant",
 					"->"
 				],
 				[

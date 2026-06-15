@@ -1,12 +1,10 @@
 Class extends svg
 
-property id : Text
+property id:=""
 
 Class constructor
 	
 	Super:C1705()
-	
-	This:C1470.id:=""
 	
 	//———————————————————————————————————————————————————————————————————————————
 	// Start a circular diagram defined by its center `cx` `cy` and radius `r`

@@ -43,6 +43,7 @@ This class is intended to work with the [enhanced XPath support](https://blog.4d
 |--------|------|  
 |.**create** ( XPath : `Text` {; attributes `Object | Collection`} ) → `cs.xml` <br/> .**create** ( target : `XML Ref`; XPath : `Text` {; attributes `Object | Collection`} ) → `cs.xml` | Creates a new element in the `target` element or the `root` if omitted 
 |.**append** ( target : `XML Ref`; source : `XML Ref` ) → `cs.xml` | Appends a source element to the `target` element 
+|.**appendChild** ( target : `XML Ref`; type : `Integer`; value : `Variant` ) → `XML Ref` | Appends a child node to the target (e.g. `XML DATA`, `XML comment`, processing instruction). Wrapper around DOM Append XML child node.
 |.**insert** ( target : `XML Ref`; source : `XML Ref` {; index : `Integer`} ) → `cs.xml` | Inserts a source element among the children elements of the `target` element.
 |.**clone** ( source : `XML Ref`; target : `XML Ref` {; index : `Integer`} ) → `cs.xml` |  Makes a copy of the `source` element in the `target` after the last child.
 |.**remove** ( node : `XML Ref`) → `cs.xml` |  Removes the element referenced by `node`
@@ -67,7 +68,7 @@ This class is intended to work with the [enhanced XPath support](https://blog.4d
 |.**firstChild** ( {node : `XML Ref`} {; name : `Text`}) → `XML Ref`| Returns a reference to the first “child”. <br/>If the node's reference isn't passed, return the first child of the root. <br/>If a name is passed, looks for the first child with that name
 |.**lastChild** ( {node : `XML Ref`} {; name : `Text`}) → `XML Ref`| Returns a reference to the last “child”. <br/>If the node's reference isn't passed, return the last child of the root. <br/>If a name is passed, looks for the last child with that name
 |.**childrens** ( {node : `XML Ref`} ) → `Collection`| Returns the list of the childs' references of a node or root if omitted
-|.**descendants** ( {node : `XML Ref`} ) → `Collection`|  Returns the list of the descendant' references of a node or root if omitted
+|.**descendants** ( {node : `XML Ref`} ) → `Collection`|  Returns descendant element references (children and deeper). Text/data child nodes are not returned.
 |.**nextSibling** ( node : `XML Ref` {; name: `Text`} ) → `Collection`|  Returns a reference to the next “sibling”. <br/> If a name is passed, looks for the first sibling with that name
 |.**previousSibling** ( node : `XML Ref` {; name: `Text`} ) → `Collection`|  Returns a reference to the previous “sibling”. <br/> If a name is passed, looks for the next previous sibling with that name
 
@@ -116,6 +117,15 @@ Creates a new element in the root
 Creates a new element in the target element
 
 `attributes` are attribute/value pairs. It can be an object or a collection. [see .setAttributes()]
+
+## 🔹 .appendChild()
+>.appendChild( target : `XML Ref`; type : `Integer`; value ) → `XML Ref`
+
+Appends a child node to the target node.
+
+Typical `type` values are XML constants such as `XML DATA`, `XML comment`, or processing-instruction type values.
+
+This helper exists to avoid direct DOM command usage in subclasses when appending non-element child nodes.
 
 ## 🔹 .setAttributes()
 >.setAttributes( target : `XML Ref`; attribute : `Text` ; value ) → `cs.xml` 

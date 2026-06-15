@@ -431,13 +431,23 @@ Function append($target : Text; $source : Text)->$node : Text
 	End if 
 	
 	//———————————————————————————————————————————————————————————
+	// Append a child node (data, comment, PI...) to the target element
+Function appendChild($target : Text; $type : Integer; $value)->$node : Text
+	
+	If (This:C1470._requiredParams(Count parameters:C259; 3))
+		
+		$node:=DOM Append XML child node:C1080($target; $type; $value)
+		This:C1470.success:=Bool:C1537(OK)
+		
+	End if 
+	
+	//———————————————————————————————————————————————————————————
 	// Append a comment to the target element
 Function comment($target : Text; $comment : Text)->$node : Text
 	
 	If (This:C1470._requiredParams(Count parameters:C259; 1))
 		
-		$node:=DOM Append XML child node:C1080($target; XML comment:K45:8; $comment)
-		This:C1470.success:=Bool:C1537(OK)
+		$node:=This:C1470.appendChild($target; XML comment:K45:8; $comment)
 		
 	End if 
 	
