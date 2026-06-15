@@ -72,7 +72,7 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 			
 			$value:=Num:C11($serie.value)
 			If ($value<=0)
-				Continue 
+				continue
 			End if 
 			
 			$percent:=$value/$total*100
@@ -184,20 +184,20 @@ Function donutBounded($id : Text; $x : Real; $y : Real; $width : Real; $thicknes
 	// Draw a progress ring (single-value donut)
 Function progressRing($id : Text; $cx : Real; $cy : Real; $r : Real; $value : Real; $max : Real; $options : Object) : cs:C1710.chart
 	
-	var $ratio; $percent : Real
-	var $label : Text
-	
 	$options:=$options || {}
 	
 	If ($max<=0)
+		
 		This:C1470._pushError("progressRing(): max must be greater than 0")
+		
 		return This:C1470
+		
 	End if 
 	
-	$ratio:=$value/$max
+	var $ratio:=$value/$max
 	$ratio:=$ratio<0 ? 0 : $ratio
 	$ratio:=$ratio>1 ? 1 : $ratio
-	$percent:=$ratio*100
+	var $percent:=$ratio*100
 	
 	var $origin : Real:=$options.origin#Null:C1517 ? Num:C11($options.origin) : -90
 	var $thickness : Real:=$options.thickness#Null:C1517 ? Num:C11($options.thickness) : 0.7
@@ -211,21 +211,28 @@ Function progressRing($id : Text; $cx : Real; $cy : Real; $r : Real; $value : Re
 	
 	// Value arc
 	If ($percent>0)
+		
 		This:C1470.wedge($id; $percent)
 		This:C1470.fill($options.color || "dodgerblue")
+		
 	End if 
 	
 	If ($options.stroke#Null:C1517)
+		
 		This:C1470.stroke($options.stroke)
+		
 	End if 
 	
-	If (Not:C34(Bool:C1537($options.showValue#Null:C1517 ? $options.showValue : True:C214)))
-		$label:=$options.label#Null:C1517 ? String:C10($options.label) : String:C10(Round:C94($percent; 1))+"%"
+	If ($options.showValue#Null:C1517 ? $options.showValue : True:C214)
+		
+		var $label : Text:=$options.label#Null:C1517 ? String:C10($options.label) : String:C10(Round:C94($percent; 1))+"%"
 		This:C1470.text($label; $id).position($cx; $cy).alignment(Align center:K42:3)
 		This:C1470.setAttribute("dominant-baseline"; "middle")
 		
 		If ($options.valueFont#Null:C1517)
+			
 			This:C1470.font($options.valueFont)
+			
 		End if 
 	End if 
 	
