@@ -15,6 +15,7 @@ This class is intended to work with the [enhanced XPath support](https://blog.4d
 |**.success**|Boolean|Indicates whether a function call was successfully executed|
 |**.errors**|Collection|The list of errors encoutered, if so|[ ]|
 |**.xml**|Text|The XML tree as text generated during the last call to the `.getText()` function.|**Null**|
+|**.convert**|Boolean|When `True`, `.toObject()` converts element/attribute text values to their 4D type (boolean, number, JSON collection). When `False`, values are kept as text.|**True**|
 
 \* 🚨 If `.autoClose` is set to **False** (or if you don't call a function that automatically closes the structure), once you no longer need the structure, remember to call the function `.close()` in order to free up the memory.
 
@@ -26,10 +27,12 @@ This class is intended to work with the [enhanced XPath support](https://blog.4d
 |Function|Action|
 |--------|------|   
 |.**newRef** ({root : `Text`} {; nameSpaceName : `Text`} {; nameSpaceName1 : `Text`; nameSpaceValue1 : `Text`} … {; nameSpaceNameN : `Text` ; nameSpaceValueN : `Text`}  ) → `cs.xml` | Create a new XML tree in memory
+|.**setDeclaration** ( {encoding : `Text`} {; standalone : `Boolean`} ) | Sets the XML declaration (encoding and `standalone`) of the tree. Called without parameters, defaults to `"UTF-8"` and `False`.
 |.**setOption** ( selector : `Integer` ; value : `integer` ) → `cs.xml` | Modify the value of one XML option for the structure
 |.**setOptions** ( selector : `Integer` ; value : `integer` … {selectorN : `Integer` ; valueN : `integer`}) → `cs.xml` | Modify the value of one or more XML options for the structure
 |.**parse** ( value : `Text` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` <br/> .**parse** ( value : `Blob` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` | Parses a BLOB or Text type variable containing an XML structure 
 |.**open** ( file : `4D.File` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` | Parses a document containing an XML structure
+|.**load** ( source : `Text` \| `Blob` \| `4D.File` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` | Loads an XML structure from a `Text`/`Blob` variable or a file. Releases the current tree (calls `.close()`) before loading.
 |.**save** () → `cs.xml` <br/> .**save** ( {file : `4D.File`} {; keepStructure : `Boolean`}) → `cs.xml` | Saves the XML structure to a document. If no file is provided and no previous `.file` is available, a save dialog is opened.
 |.**close** ( ) → `cs.xml` | Close the XML tree (Release the memory)
 |.**getText** ({keepStructure : `Boolean`}) → `Text` |  Returns the XML tree as text
@@ -42,8 +45,10 @@ This class is intended to work with the [enhanced XPath support](https://blog.4d
 |Function|Action|
 |--------|------|  
 |.**create** ( XPath : `Text` {; attributes `Object | Collection`} ) → `cs.xml` <br/> .**create** ( target : `XML Ref`; XPath : `Text` {; attributes `Object | Collection`} ) → `cs.xml` | Creates a new element in the `target` element or the `root` if omitted 
+|.**copy** ( {target : `XML Ref`} ) → `cs.xml` | Returns a new `cs.xml` object that is a deep copy of the `target` element (or the whole tree if omitted).
 |.**append** ( target : `XML Ref`; source : `XML Ref` ) → `cs.xml` | Appends a source element to the `target` element 
 |.**appendChild** ( target : `XML Ref`; type : `Integer`; value : `Variant` ) → `XML Ref` | Appends a child node to the target (e.g. `XML DATA`, `XML comment`, processing instruction). Wrapper around DOM Append XML child node.
+|.**comment** ( target : `XML Ref`; comment : `Text` ) → `XML Ref` | Appends a comment node to the `target` element.
 |.**insert** ( target : `XML Ref`; source : `XML Ref` {; index : `Integer`} ) → `cs.xml` | Inserts a source element among the children elements of the `target` element.
 |.**clone** ( source : `XML Ref`; target : `XML Ref` {; index : `Integer`} ) → `cs.xml` |  Makes a copy of the `source` element in the `target` after the last child.
 |.**remove** ( node : `XML Ref`) → `cs.xml` |  Removes the element referenced by `node`
