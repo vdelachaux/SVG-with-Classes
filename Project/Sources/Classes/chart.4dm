@@ -1820,6 +1820,141 @@ Function horizontalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $he
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————————————————————
+	// Heatmap chart (matrix of colored cells)
+Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
+	
+	This:C1470._closeChart(This:C1470.id)
+	This:C1470.group()
+	
+	This:C1470.id:=$id
+	
+	$options:=$options || {}
+	var $data : Collection:=$options.data || []
+	
+	If ($data.length=0)
+		return This:C1470
+	End if 
+	
+	// Flatten 2D data if nested arrays
+	var $rows : Integer:=$data.length
+	var $cols : Integer:=0
+	var $flatData : Collection:=[]
+	var $allValues : Collection:=[]
+	
+	var $i : Integer
+	var $j : Integer
+	var $row : Variant
+	For ($i:=0; $i<$rows; $i+=1)
+		$row:=$data[$i]
+		
+		If (Value type:C1509($row)=Is collection:K8:32)
+			$cols:=$row.length>$cols ? $row.length : $cols
+			For ($j:=0; $j<$row.length; $j+=1)
+				$flatData.push({row: $i; col: $j; value: Num:C11($row[$j])})
+				$allValues.push(Num:C11($row[$j]))
+			End for 
+		End if 
+	End for 
+	
+	If ($flatData.length=0)
+		return This:C1470
+	End if 
+	
+	// Compute color scale
+	var $minVal : Real:=$allValues.min()
+	var $maxVal : Real:=$allValues.max()
+	var $range : Real:=$maxVal-$minVal
+	
+	If ($range=0)
+		$range:=1
+	End if 
+	
+	// Cell dimensions
+	var $cellWidth : Real:=$width/$cols
+	var $cellHeight : Real:=$height/$rows
+	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
+	
+	This:C1470.translate($x; $y)
+	
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "heatmap"; \
+		width: $width; \
+		height: $height; \
+		rows: $rows; \
+		cols: $cols; \
+		values: $flatData}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+	
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+	
+	// Color palette (default: blue to red)
+	var $colors : Collection:=$options.colors || [\
+		"#0571B0"; \
+		"#2E8BC0"; \
+		"#92C5DE"; \
+		"#F7F7F7"; \
+		"#F4A582"; \
+		"#E08214"; \
+		"#B35806"\
+		]
+	
+	var $cell : Object
+	For each ($cell; $flatData)
+		
+		var $norm : Real:=($cell.value-$minVal)/$range
+		var $colorIdx : Integer:=Round:C94($norm*($colors.length-1); 0)
+		$colorIdx:=$colorIdx<0 ? 0 : $colorIdx
+		$colorIdx:=$colorIdx>=$colors.length ? $colors.length-1 : $colorIdx
+		
+		var $px : Real:=$cell.col*$cellWidth
+		var $py : Real:=$cell.row*$cellHeight
+		
+		This:C1470.rect($cellWidth-1; $cellHeight-1).position($px; $py)\
+			.fill($colors[$colorIdx])\
+			.stroke("white").strokeWidth(1)\
+			.setID($id+"_r"+String:C10($cell.row)+"_c"+String:C10($cell.col))
+		
+		// Optional value label
+		If (Bool:C1537($options.showValues))
+			This:C1470.text(String:C10(Round:C94($cell.value; 1)))\
+				.position($px+($cellWidth/2); $py+($cellHeight/2))\
+				.setAttribute("text-anchor"; "middle").setAttribute("dominant-baseline"; "middle")\
+				.font({size: 10; color: "#333"})
+		End if 
+		
+	End for each 
+	
+	// Row labels (left)
+	If (Bool:C1537($options.showRowLabels) && $options.rowLabels#Null:C1517)
+		
+		var $rowLabels : Collection:=$options.rowLabels
+		For ($i:=0; $i<$rows && $i<$rowLabels.length; $i+=1)
+			var $py : Real:=$i*$cellHeight+($cellHeight/2)
+			This:C1470.text(String:C10($rowLabels[$i]))\
+				.position(-$pad; $py)\
+				.setAttribute("text-anchor"; "end").setAttribute("dominant-baseline"; "middle")\
+				.font({size: 11; color: "#333"})
+		End for 
+	End if 
+	
+	// Col labels (top)
+	If (Bool:C1537($options.showColLabels) && $options.colLabels#Null:C1517)
+		
+		var $colLabels : Collection:=$options.colLabels
+		For ($j:=0; $j<$cols && $j<$colLabels.length; $j+=1)
+			var $px : Real:=$j*$cellWidth+($cellWidth/2)
+			This:C1470.text(String:C10($colLabels[$j]))\
+				.position($px; -($pad/2))\
+				.setAttribute("text-anchor"; "middle").setAttribute("dominant-baseline"; "bottom")\
+				.font({size: 11; color: "#333"})
+		End for 
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————————————————————
 	//
 Function setValues($id : Text; $values : Collection) : cs:C1710.chart
 	
