@@ -1141,6 +1141,285 @@ Function horizontalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $
 	End if 
 
 	return This:C1470
+
+	//———————————————————————————————————————————————————————————————————————————
+	// Vertical grouped bar chart
+Function verticalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
+
+	This:C1470._closeChart(This:C1470.id)
+	This:C1470.group()
+
+	This:C1470.id:=$id
+
+	$options:=$options || {}
+	var $values : Collection:=$options.data || []
+	var $n : Integer:=$values.length
+
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "bar"; \
+		orient: "verticalGrouped"; \
+		x: $x; \
+		y: $y; \
+		width: $width; \
+		height: $height; \
+		values: $values; \
+		options: $options}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+
+	If ($n=0)
+		return This:C1470
+	End if 
+
+	var $font:=This:C1470._graphFont($options.font)
+	var $showValues : Boolean:=Bool:C1537($options.showValues)
+	var $showLabels : Boolean:=Bool:C1537($options.showLabels)
+	var $groupGap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.2
+	var $innerGap : Real:=$options.innerGap#Null:C1517 ? Num:C11($options.innerGap) : 0.12
+	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
+
+	This:C1470.translate($x; $y)
+
+	// Determine max and groups count
+	var $maxValue : Real:=0
+	var $maxGroups : Integer:=1
+	var $cat : Object
+	For each ($cat; $values)
+		
+		var $groups : Collection:=$cat.groups
+		If (Value type:C1509($groups)=Is collection:K8:32)
+			$maxGroups:=$groups.length>$maxGroups ? $groups.length : $maxGroups
+			var $g : Object
+			For each ($g; $groups)
+				var $v : Real:=Num:C11($g.value)
+				$maxValue:=$v>$maxValue ? $v : $maxValue
+			End for each 
+		End if 
+		
+	End for each 
+
+	$maxValue:=$options.max#Null:C1517 ? Num:C11($options.max) : $maxValue
+	$maxValue:=$maxValue+Num:C11($maxValue=0)
+
+	var $leftOffset : Real:=$pad/2
+	var $plotWidth : Real:=$width-$pad
+	var $step : Real:=$plotWidth/$n
+	var $groupWidth : Real:=$step*(1-$groupGap)
+	var $itemWidth : Real:=$groupWidth/($maxGroups+($innerGap*($maxGroups-1)))
+
+	var $i : Integer
+	For each ($cat; $values)
+		
+		var $groups : Collection:=$cat.groups
+		If ((Value type:C1509($groups)#Is collection:K8:32) || ($groups.length=0))
+			continue
+		End if 
+		
+		$i+=1
+		
+		var $xStart : Real:=$leftOffset+(($i-1)*$step)+(($step-$groupWidth)/2)
+		var $j : Integer
+		$j:=0
+		var $g : Object
+		For each ($g; $groups)
+			
+			$j+=1
+			var $val : Real:=Num:C11($g.value)
+			If ($val<0)
+				continue
+			End if 
+			
+			var $h : Real:=($val/$maxValue)*$height
+			var $xPos : Real:=$xStart+(($j-1)*$itemWidth*(1+$innerGap))
+			var $yPos : Real:=$height-$h
+			
+			This:C1470.rect($itemWidth; $h).position($xPos; $yPos).setID(String:C10($i; "cat_###")+"_"+String:C10($j; "grp_###"))
+			
+			If ($g.color#Null:C1517)
+				This:C1470.fill($g.color)
+			Else 
+				var $color:=cs:C1710.color.new()
+				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $maxGroups)).colorToCSS($color.main; "hexLong"))
+			End if 
+			
+			If ($options.stroke#Null:C1517)
+				This:C1470.stroke($options.stroke)
+			End if 
+			
+			If ($showValues)
+				This:C1470.text(String:C10(Round:C94($val; 2))).position($xPos+($itemWidth/2); $yPos-4)\
+					.font($font).alignment(Align center:K42:3)
+			End if 
+			
+		End for each 
+		
+		If ($showLabels)
+			This:C1470.text($cat.label).position($xStart+($groupWidth/2); $height+($font.size*1.5))\
+				.font($font).alignment(Align center:K42:3)
+		End if 
+		
+	End for each 
+
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.hAxis))
+		This:C1470.line($leftOffset; $height; $leftOffset+$plotWidth; $height).stroke(1).setID("hAxis")
+	End if 
+
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.vAxis))
+		This:C1470.line(0; -5; 0; $height).stroke(1).setID("vAxis")
+	End if 
+
+	return This:C1470
+
+	//———————————————————————————————————————————————————————————————————————————
+	// Horizontal grouped bar chart
+Function horizontalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
+
+	This:C1470._closeChart(This:C1470.id)
+	This:C1470.group()
+
+	This:C1470.id:=$id
+
+	$options:=$options || {}
+	var $values : Collection:=$options.data || []
+	var $n : Integer:=$values.length
+
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "bar"; \
+		orient: "horizontalGrouped"; \
+		x: $x; \
+		y: $y; \
+		width: $width; \
+		height: $height; \
+		values: $values; \
+		options: $options}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+
+	If ($n=0)
+		return This:C1470
+	End if 
+
+	var $font:=This:C1470._graphFont($options.font)
+	var $showValues : Boolean:=Bool:C1537($options.showValues)
+	var $showLabels : Boolean:=Bool:C1537($options.showLabels)
+	var $groupGap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.2
+	var $innerGap : Real:=$options.innerGap#Null:C1517 ? Num:C11($options.innerGap) : 0.12
+	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
+	var $vPad : Real:=$options.verticalPadding#Null:C1517 ? Num:C11($options.verticalPadding) : 10
+
+	var $hOffset : Real
+	If ($showLabels)
+		var $txt : Text
+		For each ($txt; $values.extract("label"))
+			var $pic:=cs:C1710.svg.new().TextToPicture($txt; {size: $font.size})
+			var $w; $h : Real
+			PICTURE PROPERTIES:C457($pic; $w; $h)
+			$hOffset:=$w>$hOffset ? $w : $hOffset
+		End for each 
+	End if 
+
+	This:C1470.translate($x+($hOffset*Num:C11($showLabels))+$pad; $y)
+
+	// Determine max and groups count
+	var $maxValue : Real:=0
+	var $maxGroups : Integer:=1
+	var $cat : Object
+	For each ($cat; $values)
+		
+		var $groups : Collection:=$cat.groups
+		If (Value type:C1509($groups)=Is collection:K8:32)
+			$maxGroups:=$groups.length>$maxGroups ? $groups.length : $maxGroups
+			var $g : Object
+			For each ($g; $groups)
+				var $v : Real:=Num:C11($g.value)
+				$maxValue:=$v>$maxValue ? $v : $maxValue
+			End for each 
+		End if 
+		
+	End for each 
+
+	$maxValue:=$options.max#Null:C1517 ? Num:C11($options.max) : $maxValue
+	$maxValue:=$maxValue+Num:C11($maxValue=0)
+
+	var $topOffset : Real:=$vPad/2
+	var $plotHeight : Real:=$height-$vPad
+	var $step : Real:=$plotHeight/$n
+	var $groupHeight : Real:=$step*(1-$groupGap)
+	var $itemHeight : Real:=$groupHeight/($maxGroups+($innerGap*($maxGroups-1)))
+
+	var $i : Integer
+	For each ($cat; $values)
+		
+		var $groups : Collection:=$cat.groups
+		If ((Value type:C1509($groups)#Is collection:K8:32) || ($groups.length=0))
+			continue
+		End if 
+		
+		$i+=1
+		
+		var $yStart : Real:=$topOffset+(($i-1)*$step)+(($step-$groupHeight)/2)
+		var $j : Integer
+		$j:=0
+		var $g : Object
+		For each ($g; $groups)
+			
+			$j+=1
+			var $val : Real:=Num:C11($g.value)
+			If ($val<0)
+				continue
+			End if 
+			
+			var $w : Real:=($val/$maxValue)*$width
+			var $xPos : Real:=$pad
+			var $yPos : Real:=$yStart+(($j-1)*$itemHeight*(1+$innerGap))
+			
+			This:C1470.rect($w; $itemHeight).position($xPos; $yPos).setID(String:C10($i; "cat_###")+"_"+String:C10($j; "grp_###"))
+			
+			If ($g.color#Null:C1517)
+				This:C1470.fill($g.color)
+			Else 
+				var $color:=cs:C1710.color.new()
+				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $maxGroups)).colorToCSS($color.main; "hexLong"))
+			End if 
+			
+			If ($options.stroke#Null:C1517)
+				This:C1470.stroke($options.stroke)
+			End if 
+			
+			If ($showValues)
+				This:C1470.text(String:C10(Round:C94($val; 2))).position($xPos+$w+4; $yPos+($itemHeight/2))\
+					.font($font).alignment(Align left:K42:2)
+			End if 
+			
+		End for each 
+		
+		If ($showLabels)
+			This:C1470.textArea($cat.label).width($hOffset)\
+				.font($font).alignment(Align right:K42:4)\
+				.translate(-$hOffset-$pad; $yStart+($groupHeight/2)-$pad)
+		End if 
+		
+	End for each 
+
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.hAxis))
+		This:C1470.line(0; $topOffset+$plotHeight+$pad; $width+($pad*2); $topOffset+$plotHeight+$pad).stroke(1).setID("hAxis")
+	End if 
+
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.vAxis))
+		This:C1470.line(0; $topOffset; 0; $topOffset+$plotHeight+$pad).stroke(1).setID("vAxis")
+	End if 
+
+	return This:C1470
 	
 	//———————————————————————————————————————————————————————————————————————————
 	// 

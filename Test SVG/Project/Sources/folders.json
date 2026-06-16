@@ -66,6 +66,9 @@
 			"Text"
 		],
 		"methods": [
+			"HDI Chart circularGauge",
+			"HDI Chart semiDonut facture",
+			"HDI Chart stackedBar",
 			"HDI ClipPath",
 			"HDI dasharray",
 			"HDI fill rule",
