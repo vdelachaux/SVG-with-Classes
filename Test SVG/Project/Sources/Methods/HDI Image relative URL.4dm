@@ -25,4 +25,5 @@ $svg.image("./Relative URLs/medias/php.gif").size(80).position(30; 50)
 $svg.group().translate(400; 100)
 $svg.image("https://fr.4d.com/sites/all/themes/bactency/logo.png").setAttribute("width"; "20%").setAttribute("height"; "20%")
 
+
 $svg.preview()

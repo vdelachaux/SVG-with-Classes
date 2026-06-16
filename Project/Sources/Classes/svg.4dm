@@ -1688,11 +1688,73 @@ Function image($picture; $attachTo) : cs:C1710.svg
 					"height"; $height))
 			Else 
 				
-				This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "image"; New object:C1471(\
-					"xlink:href"; Replace string:C233($url; " "; "%20"); \
-					"x"; 0; \
-					"y"; 0))
+				// 4D's native SVG renderer does not fetch remote resources,
+				// so download the image and embed it as a base64 data URI.
+				var $blob : Blob
+				var $httpStatus : Integer:=HTTP Get:C1157($url; $blob)
+				This:C1470.success:=($httpStatus=200)
 				
+				If (This:C1470.success)
+					
+					// Read the dimensions (best effort)
+					BLOB TO PICTURE:C682($blob; $picture)
+					
+					If (Bool:C1537(OK))
+						
+						PICTURE PROPERTIES:C457($picture; $width; $height)
+						$picture:=$picture*0
+						
+					End if 
+					
+					// Detect the real format from the magic bytes (default: PNG)
+					var $mime : Text:="image/png"
+					
+					If (BLOB size:C605($blob)>=4)
+						
+						Case of 
+								
+								//………………………………………………………………
+							: ($blob{0}=0x00FF) & ($blob{1}=0x00D8)
+								
+								$mime:="image/jpeg"
+								
+								//………………………………………………………………
+							: ($blob{0}=0x0047) & ($blob{1}=0x0049) & ($blob{2}=0x0046)
+								
+								$mime:="image/gif"
+								
+								//………………………………………………………………
+							: ($blob{0}=0x003C)
+								
+								$mime:="image/svg+xml"
+								
+								//………………………………………………………………
+						End case 
+					End if 
+					
+					var $base64 : Text
+					BASE64 ENCODE:C895($blob; $base64)
+					
+					This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "image"; New object:C1471(\
+						"xlink:href"; "data:"+$mime+";base64,"+$base64; \
+						"x"; 0; \
+						"y"; 0; \
+						"width"; $width; \
+						"height"; $height))
+					
+				Else 
+					
+					// Could not download: keep a plain (browser-renderable) href
+					This:C1470._pushError("Failed to download image \""+$url+"\" (HTTP "+String:C10($httpStatus)+")")
+					
+					This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "image"; New object:C1471(\
+						"xlink:href"; Replace string:C233($url; " "; "%20"); \
+						"x"; 0; \
+						"y"; 0))
+					
+					This:C1470.success:=True:C214  // an <image> node was created
+					
+				End if 
 			End if 
 			
 			If (Not:C34(This:C1470.success))
