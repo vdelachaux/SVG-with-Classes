@@ -225,7 +225,7 @@ This class will be augmented according to my needs but you are strongly encourag
 |.**point**(x:`Real`;y:`Real`) →`Point` | Helper to create a point collection `[x, y]` (values rounded to 5 decimals)
 |.**polarToCartesian**(point:`Point`;r:`Real`;degree:`Integer`) →`Point` | Transforms polar coordinates (offset) into cartesian coordinates updating the given point
 |.**TextToPicture**(text:`Text`{;fontAttributes:`Object`}) →`Picture` | Returns a picture of the given text.
-|.**preview**({keepStructure:`Boolean`}) | Display the SVG image & tree into the SVG Viewer if the component 4D SVG is available.
+|.**preview**({keepStructure:`Boolean`}) | Display the SVG image & tree into the SVG Viewer if the component `4D SVG` is available. If not, generates the picture, copies it to the pasteboard and opens the clipboard.
 |.**goUp**({level:`Integer`}) →`cs.svg` | Move up one (default)  or x level(s) in the XML tree.
 
 ### Notes
