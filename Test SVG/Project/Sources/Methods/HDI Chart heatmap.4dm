@@ -1,6 +1,6 @@
 //%attributes = {}
 
-var $chart:=cs:C1710.chart.new()
+var $chart:=cs:C1710.svgx.chart.new()
 
 $chart.newCanvas({width: 900; height: 650; viewBox: "0 0 900 650"})
 

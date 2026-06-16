@@ -1580,7 +1580,7 @@ Function sparkline($id : Text; $x : Real; $y : Real; $width : Real; $height : Re
 	var $i : Integer
 	var $stepX : Real:=$width/($values.length-1)
 	
-	For ($i:=0; $i<$values.length; $i+=1)
+	For ($i; 0; $values.length-1)
 		var $normalized : Real:=($values[$i]-$min)/$range
 		// Invert Y for SVG coords
 		var $pointY : Real:=$height*(1-$normalized)
@@ -1844,12 +1844,12 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 	var $i : Integer
 	var $j : Integer
 	var $row : Variant
-	For ($i:=0; $i<$rows; $i+=1)
+	For ($i; 0; $rows-1)
 		$row:=$data[$i]
 		
 		If (Value type:C1509($row)=Is collection:K8:32)
 			$cols:=$row.length>$cols ? $row.length : $cols
-			For ($j:=0; $j<$row.length; $j+=1)
+			For ($j; 0; $row.length-1)
 				$flatData.push({row: $i; col: $j; value: Num:C11($row[$j])})
 				$allValues.push(Num:C11($row[$j]))
 			End for 
@@ -1930,7 +1930,7 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 	If (Bool:C1537($options.showRowLabels) && $options.rowLabels#Null:C1517)
 		
 		var $rowLabels : Collection:=$options.rowLabels
-		For ($i:=0; $i<$rows && $i<$rowLabels.length; $i+=1)
+		For ($i; 0; ($rows<$rowLabels.length ? $rows : $rowLabels.length)-1)
 			var $py : Real:=$i*$cellHeight+($cellHeight/2)
 			This:C1470.text(String:C10($rowLabels[$i]))\
 				.position(-$pad; $py)\
@@ -1943,7 +1943,7 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 	If (Bool:C1537($options.showColLabels) && $options.colLabels#Null:C1517)
 		
 		var $colLabels : Collection:=$options.colLabels
-		For ($j:=0; $j<$cols && $j<$colLabels.length; $j+=1)
+		For ($j; 0; ($cols<$colLabels.length ? $cols : $colLabels.length)-1)
 			var $px : Real:=$j*$cellWidth+($cellWidth/2)
 			This:C1470.text(String:C10($colLabels[$j]))\
 				.position($px; -($pad/2))\
@@ -2028,7 +2028,7 @@ Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $hei
 	var $prevCum : Real:=0
 	var $dataItem : Object
 	var $cumItem : Object
-	For ($i:=0; $i<$n; $i+=1)
+	For ($i; 0; $n-1)
 		
 		$dataItem:=$values[$i]
 		$cumItem:=$cumulative[$i]
@@ -2164,7 +2164,7 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 	var $i : Integer:=0
 	var $dataItem : Object
 	var $cumItem : Object
-	For ($i:=0; $i<$n; $i+=1)
+	For ($i; 0; $n-1)
 		
 		$dataItem:=$values[$i]
 		$cumItem:=$cumulative[$i]
@@ -2268,7 +2268,7 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 	// Draw concentric circles (levels)
 	var $levelRadius : Real
 	var $l : Integer
-	For ($l:=1; $l<=$levels; $l+=1)
+	For ($l; 1; $levels)
 		$levelRadius:=($r/$levels)*$l
 		This:C1470.circle($levelRadius; 0; 0).fill("none").stroke("#E6E6E6").strokeWidth(1).setID($id+"_level_"+String:C10($l))
 	End for 
@@ -2278,7 +2278,7 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 	var $angle : Real
 	var $label : Text
 	var $point : Collection
-	For ($i:=0; $i<$n; $i+=1)
+	For ($i; 0; $n-1)
 		$angle:=($angleSlice*$i)-90
 		$point:=This:C1470._getPoint($angle; $r; 0; 0)
 		
@@ -2310,7 +2310,7 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 		End if 
 		
 		// Build polygon points
-		For ($i:=0; $i<$n; $i+=1)
+		For ($i; 0; $n-1)
 			$angle:=($angleSlice*$i)-90
 			var $val : Real:=Num:C11($values[$i])
 			var $max : Real:=Num:C11($options.max || 10)
@@ -2342,7 +2342,7 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 		This:C1470.stroke($serieColor).strokeWidth(2)
 		
 		// Draw points
-		For ($i:=0; $i<$n; $i+=1)
+		For ($i; 0; $n-1)
 			This:C1470.circle(4; $points[$i][0]; $points[$i][1])\
 				.fill($serieColor).stroke("white").strokeWidth(1)\
 				.setID($id+"_point_"+String:C10($serieIdx)+"_"+String:C10($i))
