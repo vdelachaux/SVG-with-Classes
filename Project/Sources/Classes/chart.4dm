@@ -2229,6 +2229,154 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————————————————————
+	// Radar/Spider chart (multi-criteria evaluation)
+Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) : cs:C1710.chart
+	
+	This:C1470._closeChart(This:C1470.id)
+	This:C1470.group()
+	
+	This:C1470.id:=$id
+	
+	$options:=$options || {}
+	var $data : Object:=$options.data || {}
+	var $labels : Collection:=$data.labels || []
+	var $series : Collection:=$data.series || []
+	var $n : Integer:=$labels.length
+	
+	If ($n=0)
+		return This:C1470
+	End if 
+	
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "radar"; \
+		cx: $cx; \
+		cy: $cy; \
+		r: $r; \
+		labels: $labels; \
+		series: $series}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+	
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+	
+	var $levels : Integer:=$options.levels#Null:C1517 ? Num:C11($options.levels) : 5
+	var $angleSlice : Real:=360/$n
+	
+	This:C1470.translate($cx; $cy)
+	
+	// Draw concentric circles (levels)
+	var $levelRadius : Real
+	var $l : Integer
+	For ($l:=1; $l<=$levels; $l+=1)
+		$levelRadius:=($r/$levels)*$l
+		This:C1470.circle($levelRadius; 0; 0).fill("none").stroke("#E6E6E6").strokeWidth(1).setID($id+"_level_"+String:C10($l))
+	End for 
+	
+	// Draw axes and labels
+	var $i : Integer
+	var $angle : Real
+	var $label : Text
+	var $point : Collection
+	For ($i:=0; $i<$n; $i+=1)
+		$angle:=($angleSlice*$i)-90
+		$point:=This:C1470._getPoint($angle; $r; 0; 0)
+		
+		// Axis line
+		This:C1470.line(0; 0; $point[0]; $point[1]).stroke("#999").strokeWidth(1).setID($id+"_axis_"+String:C10($i))
+		
+		// Label
+		$label:=$labels[$i]
+		var $labelPoint : Collection:=This:C1470._getPoint($angle; $r*1.15; 0; 0)
+		This:C1470.text(String:C10($label)).position($labelPoint[0]; $labelPoint[1])\
+			.setAttribute("text-anchor"; "middle").setAttribute("dominant-baseline"; "middle")\
+			.font({size: 12; color: "#333"; style: Bold:K14:2})
+		
+	End for 
+	
+	// Draw series
+	var $color : cs:C1710.color
+	var $serie : Object
+	var $serieIdx : Integer:=0
+	
+	For each ($serie; $series)
+		
+		$serieIdx+=1
+		var $values : Collection:=$serie.values || []
+		var $points : Collection:=[]
+		
+		If ($values.length<>$n)
+			continue
+		End if 
+		
+		// Build polygon points
+		For ($i:=0; $i<$n; $i+=1)
+			$angle:=($angleSlice*$i)-90
+			var $val : Real:=Num:C11($values[$i])
+			var $max : Real:=Num:C11($options.max || 10)
+			var $radius : Real:=($val/$max)*$r
+			$point:=This:C1470._getPoint($angle; $radius; 0; 0)
+			$points.push($point)
+		End for 
+		
+		// Close polygon
+		$points.push($points[0])
+		
+		// Determine color
+		var $serieColor : Text
+		If ($serie.color#Null:C1517)
+			$serieColor:=$serie.color
+		Else 
+			var $hsl:={\
+				hue: (360-$serieIdx)*360/($series.length); \
+				saturation: 70; \
+				lightness: 50}
+			$color:=$color || cs:C1710.color.new()
+			$serieColor:=$color.setHSL($hsl).colorToCSS($color.main; "hexLong")
+		End if 
+		
+		// Draw polygon area (fill)
+		This:C1470.polygon().setID($id+"_area_"+String:C10($serieIdx))
+		This:C1470.plot($points)
+		This:C1470.fill($serieColor).fillOpacity(0.25)
+		This:C1470.stroke($serieColor).strokeWidth(2)
+		
+		// Draw points
+		For ($i:=0; $i<$n; $i+=1)
+			This:C1470.circle(4; $points[$i][0]; $points[$i][1])\
+				.fill($serieColor).stroke("white").strokeWidth(1)\
+				.setID($id+"_point_"+String:C10($serieIdx)+"_"+String:C10($i))
+		End for 
+		
+	End for each 
+	
+	// Legend
+	If (Bool:C1537($options.showLegend))
+		
+		var $legendX : Real:=$r*-0.8
+		var $legendY : Real:=$r*-0.8
+		$serieIdx:=0
+		
+		For each ($serie; $series)
+			
+			$serieIdx+=1
+			
+			// Color box
+			This:C1470.rect(12; 12).position($legendX; $legendY).fill($serie.color || "#999")
+			
+			// Label
+			This:C1470.text(String:C10($serie.label)).position($legendX+18; $legendY+6)\
+				.font({size: 11; color: "#333"})
+			
+			$legendY+=$options.legendGap || 16
+			
+		End for each 
+		
+	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————————————————————
 	//
 Function setValues($id : Text; $values : Collection) : cs:C1710.chart
 	
