@@ -31,7 +31,7 @@ $chart.heatmap("hmap1"; 100; 130; 280; 200; {\
 	})
 
 // Second heatmap with different color scheme
-$chart.text("Temperature Distribution").position(540; 100).fontSize(16).fontStyle(Bold:K14:2).fillColor("#333")
+$chart.text("Temperature Distribution").position(520; 100).fontSize(16).fontStyle(Bold:K14:2).fillColor("#333")
 
 var $tempData : Collection:=[[\
 	15; 16; 17; 18; 19; 20; 21]; \
@@ -41,7 +41,7 @@ var $tempData : Collection:=[[\
 	[8; 9; 10; 11; 12; 13; 14]\
 	]
 
-$chart.heatmap("hmap2"; 420; 130; 280; 200; {\
+$chart.heatmap("hmap2"; 500; 130; 280; 200; {\
 	data: $tempData; \
 	rowLabels: $rowLabels; \
 	colLabels: $colLabels; \

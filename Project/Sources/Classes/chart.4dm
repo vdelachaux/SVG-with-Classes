@@ -2090,10 +2090,12 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 		// Optional value label
 		If (Bool:C1537($options.showValues))
 			
+			var $txtColor : Text:=cs:C1710.color.new().fontColor($colors[$colorIdx])
+			
 			This:C1470.text(String:C10(Round:C94($cell.value; 1)))\
-				.position($px+($cellWidth/2); $py+($cellHeight/2))\
-				.setAttribute("text-anchor"; "middle").setAttribute("dominant-baseline"; "middle")\
-				.font({size: 10; color: "#333"})
+				.position($px+($cellWidth/2); $py+($cellHeight/2)+4)\
+				.setAttribute("text-anchor"; "middle")\
+				.fontSize(10).fillColor($txtColor)
 			
 		End if 
 	End for each 
@@ -2107,9 +2109,9 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 			
 			$py:=$i*$cellHeight+($cellHeight/2)
 			This:C1470.text(String:C10($rowLabels[$i]))\
-				.position(-$pad; $py)\
-				.setAttribute("text-anchor"; "end").setAttribute("dominant-baseline"; "middle")\
-				.font({size: 11; color: "#333"})
+				.position(-$pad; $py+4)\
+				.setAttribute("text-anchor"; "end")\
+				.fontSize(11).fillColor("#333")
 			
 		End for 
 	End if 
@@ -2124,11 +2126,14 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 			$px:=$j*$cellWidth+($cellWidth/2)
 			This:C1470.text(String:C10($colLabels[$j]))\
 				.position($px; -($pad/2))\
-				.setAttribute("text-anchor"; "middle").setAttribute("dominant-baseline"; "bottom")\
-				.font({size: 11; color: "#333"})
+				.setAttribute("text-anchor"; "middle")\
+				.fontSize(11).fillColor("#333")
 			
 		End for 
 	End if 
+	
+	// Back to root so following elements are not affected by the group translation
+	This:C1470.latest:=This:C1470.root
 	
 	return This:C1470
 	
