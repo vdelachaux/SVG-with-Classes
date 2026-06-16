@@ -32,6 +32,7 @@ This class is dedicated to manages color expressions, conversions from one syste
 |.**hslToCss** ( hsl : `Object` ) → `Object` | Returns an HTML color object from an HSL object
 |.**[getMatchingColors](#getMatchingColors)** ( scheme : `Integer` ) → `Collection` | Returns a collection of harmonized colors (see HDI_COLOR dialog)
 |.**[fontColor](#fontColor)** ( ) → `Text` | Gives the color to make a text readable on a background color.
+|.**isValid** ( ) → `Boolean` | Returns `True` when the color object is fully defined (`.rgb`, `.hsl` and `.css` are all set).
 
 ### 🔸cs.color.new()
 

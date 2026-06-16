@@ -22,6 +22,8 @@ For more details on properties and functions, see the class documentation:
 * [chart class](Documentation/Classes/chart.md)
 * [color class](Documentation/Classes/color.md)
 * [xml class](Documentation/Classes/xml.md)
+* [font class](Documentation/Classes/font.md)
+* [point class](Documentation/Classes/point.md)
 
 The content will be augmented according to my needs but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/SVG-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com/search?q=4D%20for%20iOS). 
 
