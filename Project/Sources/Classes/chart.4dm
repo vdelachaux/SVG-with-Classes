@@ -1955,6 +1955,280 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————————————————————
+	// Waterfall chart (cumulative analysis)
+Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
+	
+	This:C1470._closeChart(This:C1470.id)
+	This:C1470.group()
+	
+	This:C1470.id:=$id
+	
+	$options:=$options || {}
+	var $values : Collection:=$options.data || []
+	var $n : Integer:=$values.length
+	
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "waterfall"; \
+		orient: "vertical"; \
+		x: $x; \
+		y: $y; \
+		width: $width; \
+		height: $height; \
+		values: $values}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+	
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+	
+	If ($n=0)
+		return This:C1470
+	End if 
+	
+	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
+	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.15
+	
+	This:C1470.translate($x; $y)
+	
+	// Calculate cumulative values
+	var $cumulative : Collection:=[]
+	var $running : Real:=0
+	var $value : Object
+	For each ($value; $values)
+		var $val : Real:=Num:C11($value.value)
+		If ($value.isTotal#Null:C1517)
+			$cumulative.push({cum: $val; base: 0; isTotal: true})
+		Else 
+			$cumulative.push({cum: $running+$val; base: $running})
+			$running+=$val
+		End if 
+	End for each 
+	
+	// Determine scale
+	var $allValues : Collection:=$cumulative.extract("cum")
+	$allValues:=$allValues.combine($cumulative.extract("base"))
+	var $minVal : Real:=$allValues.min()
+	var $maxVal : Real:=$allValues.max()
+	var $range : Real:=$maxVal-$minVal
+	$range:=$range=0 ? 1 : $range
+	
+	var $step : Real:=$width/$n
+	var $barWidth : Real:=Round:C94($step*(1-$gap); 2)
+	
+	// Axis
+	If (Bool:C1537($options.axis)) || (Bool:C1537($options.hAxis))
+		This:C1470.line(0; $height+$pad; $width+$pad; $height+$pad).stroke(2).setID("hAxis")
+	End if 
+	
+	If (Bool:C1537($options.axis)) || (Bool:C1537($options.vAxis))
+		This:C1470.line(0; 0; 0; $height+$pad).stroke(2).setID("vAxis")
+	End if 
+	
+	var $i : Integer:=0
+	var $prevCum : Real:=0
+	var $dataItem : Object
+	var $cumItem : Object
+	For ($i:=0; $i<$n; $i+=1)
+		
+		$dataItem:=$values[$i]
+		$cumItem:=$cumulative[$i]
+		
+		var $xpos : Real:=Round:C94($i*$step+($step-$barWidth)/2; 2)
+		var $isPositive : Boolean:=Num:C11($dataItem.value)>0
+		var $isTotal : Boolean:=$cumItem.isTotal=True:C214
+		
+		// Draw bar
+		var $barH : Real
+		var $barY : Real
+		
+		If ($isTotal)
+			// Total: full bar from 0 to cumulative value
+			$barH:=Round:C94(($cumItem.cum-$minVal)/$range*$height; 2)
+			$barY:=$height-$barH
+		Else 
+			// Change: from base to base+value
+			$barH:=Round:C94(Abs:C99(Num:C11($dataItem.value))/$range*$height; 2)
+			$barY:=$isPositive ? $height-($cumItem.cum-$minVal)/$range*$height : $height-($cumItem.base-$minVal)/$range*$height
+		End if 
+		
+		// Bar fill color
+		var $color : Text
+		If ($isTotal)
+			$color:=$dataItem.color || "#1f2937"
+		Else 
+			$color:=$isPositive ? ($dataItem.color || "#4CAF50") : ($dataItem.color || "#F44336")
+		End if 
+		
+		This:C1470.rect($barWidth; $barH).position($xpos; $barY).fill($color)\
+			.stroke($options.stroke || "none").setID(String:C10($i; "bar_###"))
+		
+		// Connector line to next bar (if not last)
+		If ($i<$n-1 && !$isTotal)
+			var $nextCum : Real:=$cumulative[$i+1].base
+			var $nextXpos : Real:=Round:C94(($i+1)*$step+($step-$barWidth)/2; 2)
+			var $connectorY : Real:=$height-($nextCum-$minVal)/$range*$height
+			var $connectorX : Real:=$xpos+$barWidth
+			
+			This:C1470.line($connectorX; $barY; $nextXpos; $connectorY)\
+				.stroke("#999").strokeWidth(1).setAttribute("stroke-dasharray"; "3,3")
+		End if 
+		
+		// Label (bottom)
+		If (Bool:C1537($options.showLabels))
+			This:C1470.text($dataItem.label).position($xpos+($barWidth/2); $height+$pad+4)\
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+		End if 
+		
+		// Value (top of bar)
+		If (Bool:C1537($options.showValues))
+			This:C1470.text(String:C10($dataItem.value)).position($xpos+($barWidth/2); $barY-4)\
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+		End if 
+		
+		This:C1470.setAttribute("indx"; $i+1)
+		
+	End for each 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————————————————————
+	// Waterfall chart (cumulative analysis) - Horizontal variant
+Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
+	
+	This:C1470._closeChart(This:C1470.id)
+	This:C1470.group()
+	
+	This:C1470.id:=$id
+	
+	$options:=$options || {}
+	var $values : Collection:=$options.data || []
+	var $n : Integer:=$values.length
+	
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "waterfall"; \
+		orient: "horizontal"; \
+		x: $x; \
+		y: $y; \
+		width: $width; \
+		height: $height; \
+		values: $values}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+	
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+	
+	If ($n=0)
+		return This:C1470
+	End if 
+	
+	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
+	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.15
+	
+	This:C1470.translate($x; $y)
+	
+	// Calculate cumulative values
+	var $cumulative : Collection:=[]
+	var $running : Real:=0
+	var $value : Object
+	For each ($value; $values)
+		var $val : Real:=Num:C11($value.value)
+		If ($value.isTotal#Null:C1517)
+			$cumulative.push({cum: $val; base: 0; isTotal: true})
+		Else 
+			$cumulative.push({cum: $running+$val; base: $running})
+			$running+=$val
+		End if 
+	End for each 
+	
+	// Determine scale
+	var $allValues : Collection:=$cumulative.extract("cum")
+	$allValues:=$allValues.combine($cumulative.extract("base"))
+	var $minVal : Real:=$allValues.min()
+	var $maxVal : Real:=$allValues.max()
+	var $range : Real:=$maxVal-$minVal
+	$range:=$range=0 ? 1 : $range
+	
+	var $step : Real:=$height/$n
+	var $barHeight : Real:=Round:C94($step*(1-$gap); 2)
+	
+	// Axis
+	If (Bool:C1537($options.axis)) || (Bool:C1537($options.hAxis))
+		This:C1470.line($width+$pad; 0; $width+$pad; $height+$pad).stroke(2).setID("hAxis")
+	End if 
+	
+	If (Bool:C1537($options.axis)) || (Bool:C1537($options.vAxis))
+		This:C1470.line(0; 0; $width+$pad; 0).stroke(2).setID("vAxis")
+	End if 
+	
+	var $i : Integer:=0
+	var $dataItem : Object
+	var $cumItem : Object
+	For ($i:=0; $i<$n; $i+=1)
+		
+		$dataItem:=$values[$i]
+		$cumItem:=$cumulative[$i]
+		
+		var $ypos : Real:=Round:C94($i*$step+($step-$barHeight)/2; 2)
+		var $isPositive : Boolean:=Num:C11($dataItem.value)>0
+		var $isTotal : Boolean:=$cumItem.isTotal=True:C214
+		
+		// Draw bar
+		var $barW : Real
+		var $barX : Real
+		
+		If ($isTotal)
+			// Total: full bar from 0 to cumulative value
+			$barW:=Round:C94(($cumItem.cum-$minVal)/$range*$width; 2)
+			$barX:=0
+		Else 
+			// Change: from base to base+value
+			$barW:=Round:C94(Abs:C99(Num:C11($dataItem.value))/$range*$width; 2)
+			$barX:=$isPositive ? ($cumItem.base-$minVal)/$range*$width : ($cumItem.cum-$minVal)/$range*$width
+		End if 
+		
+		// Bar fill color
+		var $color : Text
+		If ($isTotal)
+			$color:=$dataItem.color || "#1f2937"
+		Else 
+			$color:=$isPositive ? ($dataItem.color || "#4CAF50") : ($dataItem.color || "#F44336")
+		End if 
+		
+		This:C1470.rect($barW; $barHeight).position($barX; $ypos).fill($color)\
+			.stroke($options.stroke || "none").setID(String:C10($i; "bar_###"))
+		
+		// Connector line to next bar (if not last)
+		If ($i<$n-1 && !$isTotal)
+			var $nextCum : Real:=$cumulative[$i+1].base
+			var $nextYpos : Real:=Round:C94(($i+1)*$step+($step-$barHeight)/2; 2)
+			var $connectorX : Real:=($nextCum-$minVal)/$range*$width
+			var $connectorY : Real:=$ypos+$barHeight
+			
+			This:C1470.line($barX+$barW; $ypos+$barHeight; $connectorX; $nextYpos)\
+				.stroke("#999").strokeWidth(1).setAttribute("stroke-dasharray"; "3,3")
+		End if 
+		
+		// Label (left)
+		If (Bool:C1537($options.showLabels))
+			This:C1470.textArea($dataItem.label).width(100)\
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align right:K42:4)\
+				.translate(-$pad-100; $ypos+($barHeight/2)-6)
+		End if 
+		
+		// Value (right end)
+		If (Bool:C1537($options.showValues))
+			This:C1470.text(String:C10($dataItem.value)).position($barX+$barW+4; $ypos+($barHeight/2))\
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
+		End if 
+		
+		This:C1470.setAttribute("indx"; $i+1)
+		
+	End for each 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————————————————————
 	//
 Function setValues($id : Text; $values : Collection) : cs:C1710.chart
 	
