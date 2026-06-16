@@ -2254,8 +2254,17 @@ Function path($data : Variant; $attachTo) : cs:C1710.svg
 		
 	End if 
 	
-	This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "path")
-	This:C1470.setAttribute("d"; $data; This:C1470.latest)
+	If ($attachTo#Null:C1517)
+		
+		This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "path")
+		
+	Else 
+		
+		This:C1470.latest:=Super:C1706.create(This:C1470.root; "path")
+		
+	End if 
+	
+	This:C1470.setAttribute("d"; $data || ""; This:C1470.latest)
 	
 	return This:C1470
 	
