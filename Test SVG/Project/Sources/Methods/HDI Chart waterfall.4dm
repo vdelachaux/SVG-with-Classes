@@ -27,7 +27,7 @@ padding: 12\
 })
 
 // Horizontal Waterfall - Performance Breakdown
-$chart.text("Q4 Performance Breakdown (Horizontal)").position(550; 100).fontSize(16).fontStyle(Bold:K14:2).fillColor("#333")
+$chart.text("Q4 Performance Breakdown (Horizontal)").position(500; 100).fontSize(16).fontStyle(Bold:K14:2).fillColor("#333")
 
 var $hwaterfallData : Collection:=[\
 {label: "Target"; value: 100; isTotal: True:C214; color: "#1f2937"}; \
@@ -38,7 +38,7 @@ var $hwaterfallData : Collection:=[\
 {label: "Actual"; value: 122; isTotal: True:C214; color: "#1f2937"}\
 ]
 
-$chart.horizontalWaterfall("hwf"; 420; 130; 350; 220; {\
+$chart.horizontalWaterfall("hwf"; 520; 150; 330; 220; {\
 data: $hwaterfallData; \
 showLabels: True:C214; \
 showValues: True:C214; \

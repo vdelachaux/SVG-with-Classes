@@ -2205,6 +2205,7 @@ Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $hei
 	
 	var $step : Real:=$width/$n
 	var $barWidth : Real:=Round:C94($step*(1-$gap); 2)
+	var $fontSize : Real:=$options.fontSize#Null:C1517 ? Num:C11($options.fontSize) : 12
 	
 	// Axis
 	If (Bool:C1537($options.axis))\
@@ -2230,7 +2231,7 @@ Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $hei
 		$dataItem:=$values[$i]
 		$cumItem:=$cumulative[$i]
 		
-		var $xpos : Real:=Round:C94($i*$step+($step-$barWidth)/2; 2)
+		var $xpos : Real:=Round:C94(($i*$step)+(($step-$barWidth)/2); 2)
 		var $isPositive : Boolean:=Num:C11($dataItem.value)>0
 		var $isTotal : Boolean:=$cumItem.isTotal=True:C214
 		
@@ -2241,14 +2242,14 @@ Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $hei
 		If ($isTotal)
 			
 			// Total: full bar from 0 to cumulative value
-			$barH:=Round:C94(($cumItem.cum-$minVal)/$range*$height; 2)
+			$barH:=Round:C94((($cumItem.cum-$minVal)/$range)*$height; 2)
 			$barY:=$height-$barH
 			
 		Else 
 			
 			// Change: from base to base+value
-			$barH:=Round:C94(Abs:C99(Num:C11($dataItem.value))/$range*$height; 2)
-			$barY:=$isPositive ? $height-($cumItem.cum-$minVal)/$range*$height : $height-($cumItem.base-$minVal)/$range*$height
+			$barH:=Round:C94((Abs:C99(Num:C11($dataItem.value))/$range)*$height; 2)
+			$barY:=$isPositive ? ($height-((($cumItem.cum-$minVal)/$range)*$height)) : ($height-((($cumItem.base-$minVal)/$range)*$height))
 			
 		End if 
 		
@@ -2269,14 +2270,13 @@ Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $hei
 			.stroke($options.stroke || "none").setID(String:C10($i; "bar_###"))
 		
 		// Connector line to next bar (if not last)
-		If ($i<$n-1 && Not:C34($isTotal))
+		If (($i<($n-1)) && Not:C34($isTotal))
 			
-			var $nextCum : Real:=$cumulative[$i+1].base
-			var $nextXpos : Real:=Round:C94(($i+1)*$step+($step-$barWidth)/2; 2)
-			var $connectorY : Real:=$height-($nextCum-$minVal)/$range*$height
+			var $nextXpos : Real:=Round:C94((($i+1)*$step)+(($step-$barWidth)/2); 2)
+			var $connectorY : Real:=$height-((($cumItem.cum-$minVal)/$range)*$height)
 			var $connectorX : Real:=$xpos+$barWidth
 			
-			This:C1470.line($connectorX; $barY; $nextXpos; $connectorY)\
+			This:C1470.line($connectorX; $connectorY; $nextXpos; $connectorY)\
 				.stroke("#999").strokeWidth(1).setAttribute("stroke-dasharray"; "3,3")
 			
 		End if 
@@ -2284,22 +2284,26 @@ Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $hei
 		// Label (bottom)
 		If (Bool:C1537($options.showLabels))
 			
-			This:C1470.text($dataItem.label).position($xpos+($barWidth/2); $height+$pad+4)\
-				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+			This:C1470.text($dataItem.label).position($xpos+($barWidth/2); $height+$pad+16)\
+				.fontSize($fontSize).alignment(Align center:K42:3)
 			
 		End if 
 		
-		// Value (top of bar)
+		// Value (above up-bars/totals, below down-bars)
 		If (Bool:C1537($options.showValues))
 			
-			This:C1470.text(String:C10($dataItem.value)).position($xpos+($barWidth/2); $barY-4)\
-				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+			var $valueY : Real:=($isPositive || $isTotal) ? $barY-4 : $barY+$barH+14
+			This:C1470.text(String:C10($dataItem.value)).position($xpos+($barWidth/2); $valueY)\
+				.fontSize($fontSize).alignment(Align center:K42:3)
 			
 		End if 
 		
 		This:C1470.setAttribute("indx"; $i+1)
 		
 	End for 
+	
+	// Back to root so following elements are not affected by the group translation
+	This:C1470.latest:=This:C1470.root
 	
 	return This:C1470
 	
@@ -2371,19 +2375,20 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 	
 	var $step : Real:=$height/$n
 	var $barHeight : Real:=Round:C94($step*(1-$gap); 2)
+	var $fontSize : Real:=$options.fontSize#Null:C1517 ? Num:C11($options.fontSize) : 12
 	
 	// Axis
 	If (Bool:C1537($options.axis))\
 		 || (Bool:C1537($options.hAxis))
 		
-		This:C1470.line($width+$pad; 0; $width+$pad; $height+$pad).stroke(2).setID("hAxis")
+		This:C1470.line(0; 0; 0; $height+$pad).stroke(2).setID("hAxis")
 		
 	End if 
 	
 	If (Bool:C1537($options.axis))\
 		 || (Bool:C1537($options.vAxis))
 		
-		This:C1470.line(0; 0; $width+$pad; 0).stroke(2).setID("vAxis")
+		This:C1470.line(0; $height+$pad; $width+$pad; $height+$pad).stroke(2).setID("vAxis")
 		
 	End if 
 	
@@ -2395,7 +2400,7 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 		$dataItem:=$values[$i]
 		$cumItem:=$cumulative[$i]
 		
-		var $ypos : Real:=Round:C94($i*$step+($step-$barHeight)/2; 2)
+		var $ypos : Real:=Round:C94(($i*$step)+(($step-$barHeight)/2); 2)
 		var $isPositive : Boolean:=Num:C11($dataItem.value)>0
 		var $isTotal : Boolean:=$cumItem.isTotal=True:C214
 		
@@ -2406,14 +2411,14 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 		If ($isTotal)
 			
 			// Total: full bar from 0 to cumulative value
-			$barW:=Round:C94(($cumItem.cum-$minVal)/$range*$width; 2)
+			$barW:=Round:C94((($cumItem.cum-$minVal)/$range)*$width; 2)
 			$barX:=0
 			
 		Else 
 			
 			// Change: from base to base+value
-			$barW:=Round:C94(Abs:C99(Num:C11($dataItem.value))/$range*$width; 2)
-			$barX:=$isPositive ? ($cumItem.base-$minVal)/$range*$width : ($cumItem.cum-$minVal)/$range*$width
+			$barW:=Round:C94((Abs:C99(Num:C11($dataItem.value))/$range)*$width; 2)
+			$barX:=$isPositive ? ((($cumItem.base-$minVal)/$range)*$width) : ((($cumItem.cum-$minVal)/$range)*$width)
 			
 		End if 
 		
@@ -2434,14 +2439,12 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 			.stroke($options.stroke || "none").setID(String:C10($i; "bar_###"))
 		
 		// Connector line to next bar (if not last)
-		If ($i<$n-1 && Not:C34($isTotal))
+		If (($i<($n-1)) && Not:C34($isTotal))
 			
-			var $nextCum : Real:=$cumulative[$i+1].base
-			var $nextYpos : Real:=Round:C94(($i+1)*$step+($step-$barHeight)/2; 2)
-			var $connectorX : Real:=($nextCum-$minVal)/$range*$width
-			var $connectorY : Real:=$ypos+$barHeight
+			var $nextYpos : Real:=Round:C94((($i+1)*$step)+(($step-$barHeight)/2); 2)
+			var $connectorX : Real:=(($cumItem.cum-$minVal)/$range)*$width
 			
-			This:C1470.line($barX+$barW; $ypos+$barHeight; $connectorX; $nextYpos)\
+			This:C1470.line($connectorX; $ypos+$barHeight; $connectorX; $nextYpos)\
 				.stroke("#999").strokeWidth(1).setAttribute("stroke-dasharray"; "3,3")
 			
 		End if 
@@ -2450,7 +2453,7 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 		If (Bool:C1537($options.showLabels))
 			
 			This:C1470.textArea($dataItem.label).width(100)\
-				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align right:K42:4)\
+				.font({size: $fontSize}).alignment(Align right:K42:4)\
 				.translate(-$pad-100; $ypos+($barHeight/2)-6)
 			
 		End if 
@@ -2459,13 +2462,16 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 		If (Bool:C1537($options.showValues))
 			
 			This:C1470.text(String:C10($dataItem.value)).position($barX+$barW+4; $ypos+($barHeight/2))\
-				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
+				.fontSize($fontSize).alignment(Align left:K42:2)
 			
 		End if 
 		
 		This:C1470.setAttribute("indx"; $i+1)
 		
 	End for 
+	
+	// Back to root so following elements are not affected by the group translation
+	This:C1470.latest:=This:C1470.root
 	
 	return This:C1470
 	

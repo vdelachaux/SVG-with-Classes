@@ -520,3 +520,59 @@ $chart.preview()
 ![](./chart/radar.svg)
 
 ----
+
+### Waterfall
+
+```4D
+var $chart:=cs:C1710.svgx.chart.new()
+
+$chart.newCanvas({width: 900; height: 650; viewBox: "0 0 900 650"})
+
+$chart.text("Waterfall Charts - Cumulative Analysis").position(450; 40).setAttribute("text-anchor"; "middle").fontSize(36).fontStyle(Bold).fillColor("#163a7a")
+
+// Vertical Waterfall - Financial Analysis
+$chart.text("2024 Profit Analysis (Vertical)").position(180; 100).fontSize(16).fontStyle(Bold).fillColor("#333")
+
+var $vwaterfallData : Collection:=[\
+{label: "Start"; value: 0; isTotal: True; color: "#1f2937"}; \
+{label: "Revenue"; value: 150}; \
+{label: "COGS"; value: -60}; \
+{label: "OpEx"; value: -25}; \
+{label: "Tax"; value: -15}; \
+{label: "Final"; value: 50; isTotal: True; color: "#1f2937"}\
+]
+
+$chart.verticalWaterfall("vwf"; 50; 130; 300; 280; {\
+data: $vwaterfallData; \
+showLabels: True; \
+showValues: True; \
+axis: True; \
+padding: 12\
+})
+
+// Horizontal Waterfall - Performance Breakdown
+$chart.text("Q4 Performance Breakdown (Horizontal)").position(500; 100).fontSize(16).fontStyle(Bold).fillColor("#333")
+
+var $hwaterfallData : Collection:=[\
+{label: "Target"; value: 100; isTotal: True; color: "#1f2937"}; \
+{label: "Base Sales"; value: 120}; \
+{label: "Discounts"; value: -15}; \
+{label: "Returns"; value: -8}; \
+{label: "Bonus Sales"; value: 25}; \
+{label: "Actual"; value: 122; isTotal: True; color: "#1f2937"}\
+]
+
+$chart.horizontalWaterfall("hwf"; 520; 150; 330; 220; {\
+data: $hwaterfallData; \
+showLabels: True; \
+showValues: True; \
+axis: True; \
+padding: 15\
+})
+
+$chart.preview()
+```
+<br>
+![](./chart/waterfall.svg)
+
+----

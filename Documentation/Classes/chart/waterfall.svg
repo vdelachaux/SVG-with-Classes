@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="650" viewBox="0 0 900 650" font-family="Helvetica, Arial, sans-serif">
+<rect x="0" y="0" width="900" height="650" fill="white"/>
+<text x="450" y="40" text-anchor="middle" font-size="36" font-weight="bold" fill="#163a7a">Waterfall Charts - Cumulative Analysis</text>
+<text x="180" y="100" font-size="16" font-weight="bold" fill="#333">2024 Profit Analysis (Vertical)</text>
+<g transform="translate(50,130)">
+<line x1="0" y1="292" x2="312" y2="292" stroke="black" stroke-width="2"/>
+<line x1="0" y1="0" x2="0" y2="292" stroke="black" stroke-width="2"/>
+<rect x="3.75" y="280" width="42.5" height="0" fill="#1f2937"/>
+<text x="25" y="308" text-anchor="middle" font-size="12" fill="black">Start</text>
+<text x="25" y="276" text-anchor="middle" font-size="12" fill="black">0</text>
+<rect x="53.75" y="0" width="42.5" height="280" fill="#4CAF50"/>
+<line x1="96.25" y1="0" x2="103.75" y2="0" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="75" y="308" text-anchor="middle" font-size="12" fill="black">Revenue</text>
+<text x="75" y="-4" text-anchor="middle" font-size="12" fill="black">150</text>
+<rect x="103.75" y="0" width="42.5" height="112" fill="#F44336"/>
+<line x1="146.25" y1="112" x2="153.75" y2="112" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="125" y="308" text-anchor="middle" font-size="12" fill="black">COGS</text>
+<text x="125" y="126" text-anchor="middle" font-size="12" fill="black">-60</text>
+<rect x="153.75" y="112" width="42.5" height="46.67" fill="#F44336"/>
+<line x1="196.25" y1="158.67" x2="203.75" y2="158.67" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="175" y="308" text-anchor="middle" font-size="12" fill="black">OpEx</text>
+<text x="175" y="172.67" text-anchor="middle" font-size="12" fill="black">-25</text>
+<rect x="203.75" y="158.67" width="42.5" height="28" fill="#F44336"/>
+<line x1="246.25" y1="186.67" x2="253.75" y2="186.67" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="225" y="308" text-anchor="middle" font-size="12" fill="black">Tax</text>
+<text x="225" y="200.67" text-anchor="middle" font-size="12" fill="black">-15</text>
+<rect x="253.75" y="186.67" width="42.5" height="93.33" fill="#1f2937"/>
+<text x="275" y="308" text-anchor="middle" font-size="12" fill="black">Final</text>
+<text x="275" y="182.67" text-anchor="middle" font-size="12" fill="black">50</text>
+</g>
+<text x="500" y="100" font-size="16" font-weight="bold" fill="#333">Q4 Performance Breakdown (Horizontal)</text>
+<g transform="translate(520,150)">
+<line x1="0" y1="0" x2="0" y2="235" stroke="black" stroke-width="2"/>
+<line x1="0" y1="235" x2="345" y2="235" stroke="black" stroke-width="2"/>
+<rect x="0" y="2.75" width="270.49" height="31.17" fill="#1f2937"/>
+<text x="-19" y="22.34" text-anchor="end" font-size="12" fill="black">Target</text>
+<text x="274.49" y="22.34" text-anchor="start" font-size="12" fill="black">100</text>
+<rect x="0" y="39.41" width="324.59" height="31.17" fill="#4CAF50"/>
+<line x1="324.59" y1="70.58" x2="324.59" y2="76.08" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="-19" y="58.99" text-anchor="end" font-size="12" fill="black">Base Sales</text>
+<text x="328.59" y="58.99" text-anchor="start" font-size="12" fill="black">120</text>
+<rect x="284.02" y="76.08" width="40.57" height="31.17" fill="#F44336"/>
+<line x1="284.02" y1="107.25" x2="284.02" y2="112.75" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="-19" y="95.66" text-anchor="end" font-size="12" fill="black">Discounts</text>
+<text x="328.59" y="95.66" text-anchor="start" font-size="12" fill="black">-15</text>
+<rect x="262.38" y="112.75" width="21.64" height="31.17" fill="#F44336"/>
+<line x1="262.38" y1="143.92" x2="262.38" y2="149.41" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="-19" y="132.34" text-anchor="end" font-size="12" fill="black">Returns</text>
+<text x="288.02" y="132.34" text-anchor="start" font-size="12" fill="black">-8</text>
+<rect x="262.38" y="149.41" width="67.62" height="31.17" fill="#4CAF50"/>
+<line x1="330" y1="180.58" x2="330" y2="186.08" stroke="#999" stroke-width="1" stroke-dasharray="3,3"/>
+<text x="-19" y="169" text-anchor="end" font-size="12" fill="black">Bonus Sales</text>
+<text x="334" y="169" text-anchor="start" font-size="12" fill="black">25</text>
+<rect x="0" y="186.08" width="330" height="31.17" fill="#1f2937"/>
+<text x="-19" y="205.67" text-anchor="end" font-size="12" fill="black">Actual</text>
+<text x="334" y="205.67" text-anchor="start" font-size="12" fill="black">122</text>
+</g>
+</svg>
