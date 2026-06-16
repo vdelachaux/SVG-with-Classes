@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="470" viewBox="0 0 360 470" font-family="Helvetica, Arial, sans-serif">
+  <rect x="0" y="0" width="360" height="470" fill="white"/>
+  <g stroke="black" stroke-width="4" transform="translate(10,10) scale(2)">
+    <rect x="2" y="144" width="40" height="60" fill="midnightblue"/>
+    <rect x="42" y="2" width="120" height="142" fill="red"/>
+    <g fill="white">
+      <rect x="2" y="2" width="40" height="40"/>
+      <rect x="2" y="43" width="40" height="100"/>
+      <rect x="42" y="144" width="95" height="60"/>
+      <rect x="137" y="144" width="25" height="25"/>
+      <rect x="137" y="169" width="25" height="35" fill="yellow"/>
+    </g>
+  </g>
+  <text x="180" y="446" text-anchor="middle" font-size="13" fill="#333">Inspired by Piet Mondrian - Composition II</text>
+</svg>

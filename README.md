@@ -25,6 +25,55 @@ For more details on properties and functions, see the class documentation:
 
 The content will be augmented according to my needs but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/SVG-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com/search?q=4D%20for%20iOS). 
 
+## Quick start
+
+Create an `svg` object, draw with chainable commands, and preview it — no intermediate variables needed:
+
+```4D
+var $svg:=cs.svgx.svg.new()
+
+$svg.group("mondrian").stroke(4).translate(10; 10).scale(2)
+$svg.rect(40; 60).position(2; 144).fill("midnightblue")
+$svg.rect(120; 142).position(42; 2).fill("red")
+$svg.group().fill("white")
+$svg.rect(40; 40).position(2; 2)
+$svg.rect(40; 100).position(2; 43)
+$svg.rect(95; 60).position(42; 144)
+$svg.rect(25; 25).position(137; 144)
+$svg.rect(25; 35).position(137; 169).fill("yellow")
+
+$svg.preview()  // open the result in the SVG viewer
+```
+<br>
+<img src="Documentation/gallery/mondrian.svg" height="220">
+
+The `Test SVG` project bundles dozens of such runnable examples as **HDI** (“How Do I”) methods — just open one and run it.
+
+## Gallery
+
+A few examples of what the `svg` and `chart` classes can produce (see the matching `HDI …` methods in the `Test SVG` project):
+
+<table>
+  <tr>
+    <td align="center"><img src="Documentation/gallery/stars.svg" width="260"><br><sub>Star() &amp; RegularPolygon()</sub></td>
+    <td align="center"><img src="Documentation/Classes/chart/radar.svg" width="260"><br><sub>Radar</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="Documentation/Classes/chart/waterfall.svg" width="260"><br><sub>Waterfall</sub></td>
+    <td align="center"><img src="Documentation/Classes/chart/heatmap.svg" width="260"><br><sub>Heatmap</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="Documentation/Classes/chart/sparkline.svg" width="260"><br><sub>Sparkline</sub></td>
+    <td align="center"><img src="Documentation/Classes/chart/lollipop.svg" width="260"><br><sub>Lollipop</sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="Documentation/Classes/chart/circularGauge.svg" width="260"><br><sub>Circular gauge</sub></td>
+    <td align="center"><img src="Documentation/Classes/chart/semiDonut.svg" width="260"><br><sub>Semi-donut</sub></td>
+  </tr>
+</table>
+
+See the [chart class documentation](Documentation/Classes/chart.md) for the full list and the code behind each example.
+
 ## Repository structure
 
 The repository holds, at its root, the **component source project** (a 4D project) and, in a dedicated folder, a **test project** with runnable examples.
