@@ -2256,14 +2256,30 @@ Function path($data : Variant; $attachTo) : cs:C1710.svg
 	
 	If ($attachTo#Null:C1517)
 		
-		This:C1470.latest:=Super:C1706.create(This:C1470._getContainer($attachTo); "path")
+		var $node:=This:C1470._getContainer($attachTo)
 		
 	Else 
 		
-		This:C1470.latest:=Super:C1706.create(This:C1470.root; "path")
-		
+		If (This:C1470.latest=Null:C1517) || (This:C1470.latest="")
+			
+			$node:=This:C1470.root
+			
+		Else 
+			
+			// Climb up from the current element to the nearest container
+			$node:=This:C1470.latest
+			var $name:=This:C1470.getName($node)
+			
+			While (This:C1470._notContainer.includes($name))
+				
+				$node:=This:C1470.parent($node)
+				$name:=This:C1470.getName($node)
+				
+			End while 
+		End if 
 	End if 
 	
+	This:C1470.latest:=Super:C1706.create($node; "path")
 	This:C1470.setAttribute("d"; $data || ""; This:C1470.latest)
 	
 	return This:C1470
