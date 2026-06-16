@@ -14,27 +14,47 @@ After creating and using the [4D SVG component](https://doc.4d.com/4Dv19/4D/19/4
 
 * The `svg` class simplifies the creation and manipulation of the SVG elements thanks to a set of simple functions and some automatisms, and decrease the number of variables needed. 
 
-* The `chart` class is a very succinct implementation of the SVG chart types I needed. More could be done ;-)
+* The `chart` class provides a growing collection of ready-to-use SVG chart types (bar, pie, donut, gauge, sparkline, lollipop, heatmap, radar, waterfall…). More could be done ;-)
 
 For more details on properties and functions, see the class documentation:
 
-* [svg class](SVG%20with%20Classes/Documentation/Classes/svg.md)
-* [chart class](SVG%20with%20Classes/Documentation/Classes/chart.md)
+* [svg class](Documentation/Classes/svg.md)
+* [chart class](Documentation/Classes/chart.md)
+* [color class](Documentation/Classes/color.md)
+* [xml class](Documentation/Classes/xml.md)
 
 The content will be augmented according to my needs but I strongly encouraged you to enrich this project through [pull request](https://github.com/vdelachaux/SVG-with-Classes/pulls). This can only benefit the [4D developer community](https://discuss.4d.com/search?q=4D%20for%20iOS). 
 
-## Top-level directories
+## Repository structure
 
-This repository includes 3 directories:
+The repository holds, at its root, the **component source project** (a 4D project) and, in a dedicated folder, a **test project** with runnable examples.
 
-* `BUILD`  
-  Contains the built and signed distributable artifacts of the component (packaged binaries and embedded docs).
+```
+SVG-with-Classes/
+├── BUILD/                         Built & signed component (binary, ready to deploy)
+├── Project/                       Component source — 4D project
+│   └── Sources/
+│       └── Classes/               Class sources
+│           ├── svg.4dm            SVG creation / manipulation API
+│           ├── chart.4dm          Chart types (bar, pie, donut, radar, waterfall…)
+│           ├── color.4dm          Color conversions & palettes (RGB/HSL/CSS)
+│           ├── font.4dm           Font helper
+│           ├── point.4dm          2D point helper
+│           └── xml.4dm            Low-level XML helper
+├── Documentation/
+│   └── Classes/                   Markdown docs (svg, chart, color, xml) + chart illustrations
+├── Resources/                     Component resources (colors.json, logos…)
+├── Settings/                      Build settings (buildApp, backup)
+└── Test SVG/                      Test project & runnable examples
+    └── Project/
+        └── Sources/
+            └── Methods/           “HDI …” (How Do I) demo methods, one per feature
+                                   e.g. HDI Chart radar, HDI Chart waterfall,
+                                        HDI Gradient linear, HDI Filter blur…
+```
 
-* `SVG with Classes`  
-  Component source project: class sources, resources and project files used to develop and build the component.
-
-* `Test SVG`  
-  Test project and runnable examples demonstrating how to use the component (code samples and "How do I" guides).
+> The component is developed and built from the root 4D project (`Project/`).
+> The `Test SVG` project loads the component and exposes one **HDI** (“How Do I”) method per feature, ideal to discover the API by example.
 
 
 # <a name="installation">Installation</a>
@@ -75,7 +95,7 @@ Not found? Go on and [create one](https://github.com/vdelachaux/SVG-with-Classes
 
 ## License
 
-`SVG with Classes` is licensed under the MIT License See the [LICENSE](./SVG with Classes/LICENSE) file for more details.
+`SVG with Classes` is licensed under the MIT License See the [LICENSE](./LICENSE) file for more details.
 
 ## Contact
 For any questions or inquiries, please contact the repository owner [@vdelachaux](https://github.com/vdelachaux).
