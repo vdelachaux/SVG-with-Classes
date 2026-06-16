@@ -3,7 +3,7 @@ var $chart:=cs:C1710.svgx.chart.new()
 
 $chart.newCanvas({width: 980; height: 420; viewBox: "0 0 980 420"})
 
-// $chart.text("HDI Chart: circularGauge").position(40; 30).fontSize(18).fontStyle(Bold).fillColor("#1d3557")
+$chart.text("HDI Chart: circularGauge").position(40; 30).fontSize(18).fontStyle(Bold:K14:2).fillColor("#1d3557")
 
 var $zones : Collection:=[\
 {limit: 60; color: "#22a06b"}; \
@@ -35,4 +35,4 @@ needleColor: "#0f172a"\
 })
 $chart.text("High zone").position(810; 380).setAttribute("text-anchor"; "middle").fontSize(16).fillColor("#334155")
 
-$chart.save()
+$chart.preview()
