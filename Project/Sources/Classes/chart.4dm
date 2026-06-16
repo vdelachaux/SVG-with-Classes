@@ -2535,8 +2535,8 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 		$label:=$labels[$i]
 		var $labelPoint : Collection:=This:C1470._getPoint($angle; $r*1.15; 0; 0)
 		This:C1470.text(String:C10($label)).position($labelPoint[0]; $labelPoint[1])\
-			.setAttribute("text-anchor"; "middle").setAttribute("dominant-baseline"; "middle")\
-			.font({size: 12; color: "#333"; style: Bold:K14:2})
+			.setAttribute("text-anchor"; "middle")\
+			.fontSize(12).fillColor("#333").fontStyle(Bold:K14:2)
 		
 	End for 
 	
@@ -2592,7 +2592,7 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 		
 		// Draw polygon area (fill)
 		This:C1470.polygon().setID($id+"_area_"+String:C10($serieIdx))
-		This:C1470.plot($points)
+		This:C1470.plot($points.copy())
 		This:C1470.fill($serieColor).fillOpacity(0.25)
 		This:C1470.stroke($serieColor).strokeWidth(2)
 		
@@ -2609,8 +2609,9 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 	// Legend
 	If (Bool:C1537($options.showLegend))
 		
-		var $legendX : Real:=$r*-0.8
-		var $legendY : Real:=$r*-0.8
+		// Default: top-right, outside the chart circle
+		var $legendX : Real:=$options.legendX#Null:C1517 ? Num:C11($options.legendX) : $r+20
+		var $legendY : Real:=$options.legendY#Null:C1517 ? Num:C11($options.legendY) : -$r
 		$serieIdx:=0
 		
 		For each ($serie; $series)
@@ -2621,13 +2622,16 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 			This:C1470.rect(12; 12).position($legendX; $legendY).fill($serie.color || "#999")
 			
 			// Label
-			This:C1470.text(String:C10($serie.label)).position($legendX+18; $legendY+6)\
-				.font({size: 11; color: "#333"})
+			This:C1470.text(String:C10($serie.label)).position($legendX+18; $legendY+10)\
+				.fontSize(11).fillColor("#333")
 			
 			$legendY+=$options.legendGap || 16
 			
 		End for each 
 	End if 
+	
+	// Back to root so following elements are not affected by the group translation
+	This:C1470.latest:=This:C1470.root
 	
 	return This:C1470
 	
