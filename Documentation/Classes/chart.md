@@ -23,6 +23,8 @@ This class extends the <a href="svg.md">`svg`</a>class
 |.**verticalBar** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Start a vertical bar chart. `options.data` must be a collection of objects `{label, value, [color]}`.|
 |.**horizontalStackedBar** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Start a horizontal stacked bar chart. `options.data` must be `{label; segments:[{value; [color]}...]}`.|
 |.**verticalStackedBar** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Start a vertical stacked bar chart. `options.data` must be `{label; segments:[{value; [color]}...]}`.|
+|.**verticalLollipop** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Draws a vertical lollipop chart (thin lines with circles). `options.data` must be a collection of objects `{label, value, [color]}`. Supports `circleRadius` (default 4), `showLabels`, `showValues`.|
+|.**horizontalLollipop** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Draws a horizontal lollipop chart. Same data structure and options as `verticalLollipop`.|
 |.**sparkline** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Draws a mini line chart (sparkline) for KPI cards. `options.data` must be a collection of numbers. Supports `color`, `strokeWidth`, `fill` (boolean), and `fillColor` for optional area fill.|
 |.**closeChart**({id :`Text`})| Closing the chart `id` or the current chart|
 

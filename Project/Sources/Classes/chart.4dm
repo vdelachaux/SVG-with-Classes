@@ -1607,6 +1607,219 @@ Function sparkline($id : Text; $x : Real; $y : Real; $width : Real; $height : Re
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————————————————————
+	// Lollipop chart (line + circle variant)
+Function verticalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
+	
+	This:C1470._closeChart(This:C1470.id)
+	This:C1470.group()
+	
+	This:C1470.id:=$id
+	
+	$options:=$options || {}
+	var $values : Collection:=$options.data || []
+	var $n : Integer:=$values.length
+	
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "lollipop"; \
+		orient: "vertical"; \
+		x: $x; \
+		y: $y; \
+		width: $width; \
+		height: $height; \
+		values: $values}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+	
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+	
+	If ($n=0)  // Nothing to draw
+		return This:C1470
+	End if 
+	
+	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.2
+	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
+	var $circleRadius : Real:=$options.circleRadius#Null:C1517 ? Num:C11($options.circleRadius) : 4
+	
+	This:C1470.translate($x; $y)
+	
+	// Compute max
+	var $maxValue : Real:=($options.max#Null:C1517) ? Num:C11($options.max) : $values.max("value")
+	$maxValue:=$maxValue+Num:C11($maxValue=0)
+	
+	var $step : Real:=$width/$n
+	var $stickWidth : Real:=1
+	
+	// Axis
+	If (Bool:C1537($options.axis)) || (Bool:C1537($options.hAxis))
+		This:C1470.line(0; $height+$pad; $width+$pad; $height+$pad).stroke(2).setID("hAxis")
+	End if 
+	
+	If (Bool:C1537($options.axis)) || (Bool:C1537($options.vAxis))
+		This:C1470.line(0; 0; 0; $height+$pad).stroke(2).setID("vAxis")
+	End if 
+	
+	var $color : cs:C1710.color
+	var $i : Integer
+	var $serie : Object
+	For each ($serie; $values)
+		
+		$i+=1
+		var $val : Real:=Num:C11($serie.value)
+		
+		// Position from left
+		var $xpos : Real:=Round:C94(($i-1)*$step+($step/2); 2)
+		
+		// Height scaled (from bottom up)
+		var $h : Real:=Round:C94(($val/$maxValue)*$height; 2)
+		
+		// Determine color
+		var $color_val : Text
+		If ($serie.color#Null:C1517)
+			$color_val:=$serie.color
+		Else 
+			var $hsl:={\
+				hue: (360-$i)*360/$n; \
+				saturation: 60; \
+				lightness: 50}
+			$color:=$color || cs:C1710.color.new()
+			$color_val:=$color.setHSL($hsl).colorToCSS($color.main; "hexLong")
+		End if 
+		
+		// Draw stick (vertical line)
+		This:C1470.line($xpos; $height; $xpos; $height-$h)\
+			.stroke($color_val).strokeWidth($stickWidth).setID(String:C10($i; "stick_###"))
+		
+		// Draw circle at top
+		This:C1470.circle($circleRadius; $xpos; $height-$h)\
+			.fill($color_val).stroke($options.circleStroke || "none").setID(String:C10($i; "circle_###"))
+		
+		// Label (bottom)
+		If (Bool:C1537($options.showLabels))
+			This:C1470.text($serie.label).position($xpos; $height+$pad+4)\
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+		End if 
+		
+		// Value (top)
+		If (Bool:C1537($options.showValues))
+			This:C1470.text(String:C10($val)).position($xpos; $height-$h-$circleRadius-4)\
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+		End if 
+		
+		This:C1470.setAttribute("indx"; $i)
+		
+	End for each 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————————————————————
+	// Horizontal lollipop chart
+Function horizontalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
+	
+	This:C1470._closeChart(This:C1470.id)
+	This:C1470.group()
+	
+	This:C1470.id:=$id
+	
+	$options:=$options || {}
+	var $values : Collection:=$options.data || []
+	var $n : Integer:=$values.length
+	
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "lollipop"; \
+		orient: "horizontal"; \
+		x: $x; \
+		y: $y; \
+		width: $width; \
+		height: $height; \
+		values: $values}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+	
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+	
+	If ($n=0)  // Nothing to draw
+		return This:C1470
+	End if 
+	
+	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.2
+	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
+	var $circleRadius : Real:=$options.circleRadius#Null:C1517 ? Num:C11($options.circleRadius) : 4
+	
+	This:C1470.translate($x; $y)
+	
+	// Compute max
+	var $maxValue : Real:=($options.max#Null:C1517) ? Num:C11($options.max) : $values.max("value")
+	$maxValue:=$maxValue+Num:C11($maxValue=0)
+	
+	var $step : Real:=$height/$n
+	var $stickHeight : Real:=1
+	
+	// Axis
+	If (Bool:C1537($options.axis)) || (Bool:C1537($options.hAxis))
+		This:C1470.line($width+$pad; 0; $width+$pad; $height+$pad).stroke(2).setID("hAxis")
+	End if 
+	
+	If (Bool:C1537($options.axis)) || (Bool:C1537($options.vAxis))
+		This:C1470.line(0; 0; $width+$pad; 0).stroke(2).setID("vAxis")
+	End if 
+	
+	var $color : cs:C1710.color
+	var $i : Integer
+	var $serie : Object
+	For each ($serie; $values)
+		
+		$i+=1
+		var $val : Real:=Num:C11($serie.value)
+		
+		// Position from top
+		var $ypos : Real:=Round:C94(($i-1)*$step+($step/2); 2)
+		
+		// Width scaled (from left right)
+		var $w : Real:=Round:C94(($val/$maxValue)*$width; 2)
+		
+		// Determine color
+		var $color_val : Text
+		If ($serie.color#Null:C1517)
+			$color_val:=$serie.color
+		Else 
+			var $hsl:={\
+				hue: (360-$i)*360/$n; \
+				saturation: 60; \
+				lightness: 50}
+			$color:=$color || cs:C1710.color.new()
+			$color_val:=$color.setHSL($hsl).colorToCSS($color.main; "hexLong")
+		End if 
+		
+		// Draw stick (horizontal line)
+		This:C1470.line(0; $ypos; $w; $ypos)\
+			.stroke($color_val).strokeWidth($stickHeight).setID(String:C10($i; "stick_###"))
+		
+		// Draw circle at end
+		This:C1470.circle($circleRadius; $w; $ypos)\
+			.fill($color_val).stroke($options.circleStroke || "none").setID(String:C10($i; "circle_###"))
+		
+		// Label (left)
+		If (Bool:C1537($options.showLabels))
+			This:C1470.textArea($serie.label).width(80)\
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align right:K42:4)\
+				.translate(-90; $ypos-8)
+		End if 
+		
+		// Value (right end)
+		If (Bool:C1537($options.showValues))
+			This:C1470.text(String:C10($val)).position($w+$circleRadius+4; $ypos)\
+				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
+		End if 
+		
+		This:C1470.setAttribute("indx"; $i)
+		
+	End for each 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————————————————————
 	//
 Function setValues($id : Text; $values : Collection) : cs:C1710.chart
 	

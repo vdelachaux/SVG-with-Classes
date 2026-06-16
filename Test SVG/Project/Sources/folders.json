@@ -15,11 +15,15 @@
 	"Chart": {
 		"methods": [
 			"HDI Chart as symbols",
+			"HDI Chart circularGauge",
 			"HDI Chart donut",
+			"HDI Chart groupedBar",
 			"HDI Chart horizontalBar",
 			"HDI Chart pie",
 			"HDI Chart pie 2",
 			"HDI Chart progressRing",
+			"HDI Chart semiDonut facture",
+			"HDI Chart stackedBar",
 			"HDI Chart verticalBar",
 			"HDI Chart XY Line"
 		]
@@ -66,9 +70,6 @@
 			"Text"
 		],
 		"methods": [
-			"HDI Chart circularGauge",
-			"HDI Chart semiDonut facture",
-			"HDI Chart stackedBar",
 			"HDI ClipPath",
 			"HDI dasharray",
 			"HDI fill rule",
