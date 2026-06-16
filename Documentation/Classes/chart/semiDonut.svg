@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" font-family="'lucida grande','segoe UI',sans-serif" font-size="12" height="760" preserveAspectRatio="none" shape-rendering="crispEdges" stroke="black" text-rendering="geometricPrecision" viewBox="0 0 867 760" viewport-fill="none" width="867" xmlns:vdl="https://github.com/vdelachaux/SVG-with-Classes" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <text fill="#163a7a" font-size="44" font-weight="bold" text-anchor="middle" x="340" y="52">Répartition de la facture</text>
+  <g>
+    <vdl:graph cur="90" cx="190" cy="255" id="bill_2025" margin="2" origin="-90" r="120" span="180" thickness="62" type="donut" values="[34,54,7,5]"/>
+    <path d="M70,255 A120,120 0 0,1 128.55486,151.92481 L151.90401 191.09338 A74.4,74.4 0 0,0 115.6,255Z" fill="#e63772" indx="1"/>
+    <path d="M132.18956,149.8432 A120,120 0 0,1 299.96353,206.95812 L258.17739 225.21403 A74.4,74.4 0 0,0 154.15753,189.80278Z" fill="#4f8b00" indx="2"/>
+    <path d="M301.57318,210.82505 A120,120 0 0,1 307.79526,232.10292 L263.03306 240.80381 A74.4,74.4 0 0,0 259.17537,227.61153Z" fill="#f17d1f" indx="3"/>
+    <path d="M308.5226,236.22786 A120,120 0 0,1 309.9269,250.81206 L264.35468 252.40348 A74.4,74.4 0 0,0 263.48401,243.36128Z" fill="#1271d5" indx="4"/>
+    <text fill="#2c4f95" font-size="40" font-weight="bold" text-anchor="middle" x="190" y="125">256 €</text>
+    <text fill="#2c4f95" font-size="34" font-weight="bold" text-anchor="middle" x="190" y="325">2025</text>
+  </g>
+  <g>
+    <vdl:graph cur="90" cx="490" cy="255" id="bill_2024" margin="2" origin="-90" r="120" span="180" thickness="62" type="donut" values="[33,56,6,5]"/>
+    <path d="M370,255 A120,120 0 0,1 425.34751,153.90571 L449.91545 192.32154 A74.4,74.4 0 0,0 415.6,255Z" fill="#e63772" indx="1"/>
+    <path d="M428.91503,151.71096 A120,120 0 0,1 601.4183,210.43586 L559.07935 227.37023 A74.4,74.4 0 0,0 452.12732,190.96079Z" fill="#4f8b00" indx="2"/>
+    <path d="M602.90569,214.35145 A120,120 0 0,1 607.79526,232.10292 L563.03306 240.80381 A74.4,74.4 0 0,0 560.00153,229.7979Z" fill="#f17d1f" indx="3"/>
+    <path d="M608.5226,236.22786 A120,120 0 0,1 609.9269,250.81206 L564.35468 252.40348 A74.4,74.4 0 0,0 563.48401,243.36128Z" fill="#1271d5" indx="4"/>
+    <text fill="#2c4f95" font-size="40" font-weight="bold" text-anchor="middle" x="490" y="125">247 €</text>
+    <text fill="#2c4f95" font-size="34" font-weight="bold" text-anchor="middle" x="490" y="325">2024</text>
+  </g>
+  <g>
+    <vdl:graph cur="90" cx="340" cy="490" id="bill_2023" margin="2" origin="-90" r="120" span="180" thickness="62" type="donut" values="[35,53,6,6]"/>
+    <path d="M220,490 A120,120 0 0,1 281.82285,385.04564 L303.93016 424.92829 A74.4,74.4 0 0,0 265.6,490Z" fill="#e63772" indx="1"/>
+    <path d="M285.52114,383.07922 A120,120 0 0,1 449.96353,441.95812 L408.17739 460.21403 A74.4,74.4 0 0,0 306.22311,423.70911Z" fill="#4f8b00" indx="2"/>
+    <path d="M451.57318,445.82505 A120,120 0 0,1 457.01792,463.41418 L412.55111 473.51679 A74.4,74.4 0 0,0 409.17537,462.61153Z" fill="#f17d1f" indx="3"/>
+    <path d="M457.87447,467.51424 A120,120 0 0,1 459.9269,485.81206 L414.35468 487.40348 A74.4,74.4 0 0,0 413.08217,476.05883Z" fill="#1271d5" indx="4"/>
+    <text fill="#2c4f95" font-size="40" font-weight="bold" text-anchor="middle" x="340" y="360">249 €</text>
+    <text fill="#2c4f95" font-size="34" font-weight="bold" text-anchor="middle" x="340" y="560">2023</text>
+    <rect fill="#e63772" height="20" width="20" x="160" y="625"/>
+    <text fill="#1f376e" font-size="18" x="190" y="642">Conso energie HT</text>
+    <rect fill="#4f8b00" height="20" width="20" x="370" y="625"/>
+    <text fill="#1f376e" font-size="18" x="400" y="642">Abonnement HT</text>
+    <rect fill="#f17d1f" height="20" width="20" x="220" y="680"/>
+    <text fill="#1f376e" font-size="18" x="250" y="697">Taxe hors TVA</text>
+    <rect fill="#1271d5" height="20" width="20" x="420" y="680"/>
+    <text fill="#1f376e" font-size="18" x="450" y="697">TVA</text>
+  </g>
+</svg>

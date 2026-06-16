@@ -142,6 +142,9 @@ Function donut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real;
 	$thickness:=$thickness<1 ? $thickness*100 : $thickness
 	
 	$options:=$options || {}
+	var $span : Real:=Num:C11($options.span)
+	$span:=$span=0 ? 360 : Abs:C99($span)
+	$span:=$span>360 ? 360 : $span
 	
 	// TODO:Allow title & more…
 	
@@ -158,6 +161,7 @@ Function donut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real;
 		cy: $cy; \
 		r: $r; \
 		origin: Num:C11($options.origin); \
+		span: $span; \
 		cur: Num:C11($options.origin); \
 		thickness: $thickness; \
 		margin: $margin; \
@@ -170,6 +174,20 @@ Function donut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real;
 		"dom"; This:C1470.latest))
 	
 	return This:C1470
+
+	//———————————————————————————————————————————————————————————————————————————
+	// Starting a semi-donut chart (top half by default)
+Function semiDonut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real; $margin : Integer; $options : Object) : cs:C1710.chart
+
+	$options:=$options || {}
+
+	If ($options.origin=Null:C1517)
+		$options.origin:=-90
+	End if 
+
+	$options.span:=180
+
+	return This:C1470.donut($id; $cx; $cy; $r; $thickness; $margin; $options)
 	
 	//———————————————————————————————————————————————————————————————————————————
 	// Starting a donut chart
@@ -179,6 +197,15 @@ Function donutBounded($id : Text; $x : Real; $y : Real; $width : Real; $thicknes
 	
 	$r:=$width/2
 	return This:C1470.donut($id; $x+$r; $y+$r; $r; $thickness; $margin; $options)
+
+	//———————————————————————————————————————————————————————————————————————————
+	// Starting a semi-donut chart fit into a square
+Function semiDonutBounded($id : Text; $x : Real; $y : Real; $width : Real; $thickness : Real; $margin : Integer; $options : Object) : cs:C1710.chart
+
+	var $r : Real
+
+	$r:=$width/2
+	return This:C1470.semiDonut($id; $x+$r; $y+$r; $r; $thickness; $margin; $options)
 	
 	//———————————————————————————————————————————————————————————————————————————
 	// Draw a progress ring (single-value donut)
@@ -261,7 +288,7 @@ Function progressRing($id : Text; $cx : Real; $cy : Real; $r : Real; $value : Re
 	// Draws a portion of a pie chart/donut chart
 Function wedge($id : Text; $percent : Real) : cs:C1710.chart
 	
-	var $arc; $cx; $cy; $from; $origin; $r : Real
+	var $arc; $cx; $cy; $from; $origin; $r; $span : Real
 	var $to : Real
 	var $chart : Text
 	var $o : Object
@@ -286,16 +313,18 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.chart
 	$r:=$o.r
 	$from:=$o.cur
 	$origin:=$o.origin
+	$span:=Num:C11($o.span)
+	$span:=$span=0 ? 360 : $span
 	$values:=$o.values
 	
 	If (Count parameters:C259>=2)
 		
-		$to:=$from+(360*($percent/100))-Num:C11($o.margin)
+		$to:=$from+($span*($percent/100))-Num:C11($o.margin)
 		
 	Else 
 		
 		// Complete the ring
-		$to:=$origin>=0 ? 360-$origin : 360+$origin
+		$to:=$origin+$span
 		$percent:=100-$values.sum()
 		
 	End if 
@@ -318,9 +347,11 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.chart
 			//______________________________________________________
 		: ($o.type="donut")
 			
-			If ($to>(360-$o.margin))
+			var $maxAngle : Real:=$origin+$span-Num:C11($o.margin)
+
+			If ($to>$maxAngle)
 				
-				$to:=360-$o.margin
+				$to:=$maxAngle
 				
 			End if 
 			
