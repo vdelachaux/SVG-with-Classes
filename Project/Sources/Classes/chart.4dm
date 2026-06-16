@@ -48,8 +48,11 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 		$number:=$options.data.length
 		
 		If ($number=0)
+			
 			This:C1470._pushError("pie(): options.data is empty")
+			
 			return This:C1470
+			
 		End if 
 		
 		$total:=$options.data.sum("value")
@@ -264,9 +267,10 @@ Function progressRing($id : Text; $cx : Real; $cy : Real; $r : Real; $value : Re
 		This:C1470.setAttribute("transform"; "rotate("+String:C10($origin)+" "+String:C10($cx)+" "+String:C10($cy)+")")
 		
 		If ($percent<100)
+			
 			This:C1470.setAttribute("stroke-dasharray"; String:C10($dash)+" "+String:C10($gap))
+			
 		End if 
-		
 	End if 
 	
 	If ($options.showValue#Null:C1517 ? $options.showValue : True:C214)
@@ -347,7 +351,6 @@ Function circularGauge($id : Text; $cx : Real; $cy : Real; $r : Real; $value : R
 			$prevLimit:=$limit
 			
 		End if 
-		
 	End for each 
 	
 	If ($prevLimit<$max)
@@ -861,20 +864,20 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 	End if 
 	
 	return This:C1470
-
+	
 	//———————————————————————————————————————————————————————————————————————————
 	// Vertical stacked bar chart
 Function verticalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
-
+	
 	This:C1470._closeChart(This:C1470.id)
 	This:C1470.group()
-
+	
 	This:C1470.id:=$id
-
+	
 	$options:=$options || {}
 	var $values : Collection:=$options.data || []
 	var $n : Integer:=$values.length
-
+	
 	Super:C1706.setAttributes({\
 		id: $id; \
 		type: "bar"; \
@@ -887,23 +890,25 @@ Function verticalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $he
 		options: $options}; \
 		This:C1470.create(This:C1470.latest; "vdl:graph")\
 		)
-
+	
 	This:C1470.store.push({id: $id; dom: This:C1470.latest})
-
+	
 	If ($n=0)
+		
 		return This:C1470
+		
 	End if 
-
+	
 	var $font:=This:C1470._graphFont($options.font)
 	var $showValues : Boolean:=Bool:C1537($options.showValues)
 	var $showLabels : Boolean:=Bool:C1537($options.showLabels)
-
+	
 	// Place the chart group
 	This:C1470.translate($x; $y)
-
+	
 	// Distance between bars
 	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.2
-
+	
 	// Compute totals and max stacked value
 	var $totals : Collection:=[]
 	var $serie : Object
@@ -915,43 +920,51 @@ Function verticalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $he
 		If (Value type:C1509($segments)=Is collection:K8:32)
 			
 			var $segment : Object
-			For each ($segment; $segments)
-				$total+=$segment.value
-			End for each 
 			
+			For each ($segment; $segments)
+				
+				$total+=$segment.value
+				
+			End for each 
 		End if 
 		
 		$totals.push($total)
 		
 	End for each 
-
+	
 	var $maxValue : Real:=$options.max#Null:C1517 ? Num:C11($options.max) : $totals.max()
 	$maxValue:=$maxValue+Num:C11($maxValue=0)
-
+	
 	var $step : Real:=$width/$n
 	var $barWidth : Real:=$step*(1-$gap)
-
+	
 	var $i : Integer
 	var $color : cs:C1710.color
 	For each ($serie; $values)
 		
 		$i+=1
 		
-		var $segments : Collection:=$serie.segments
+		$segments:=$serie.segments
+		
 		If (Value type:C1509($segments)#Is collection:K8:32)
+			
 			continue
+			
 		End if 
 		
 		var $xPos : Real:=(($i-1)*$step)+(($step-$barWidth)/2)
 		var $yCursor : Real:=$height
 		var $j : Integer
-		var $segment : Object
+		
 		For each ($segment; $segments)
 			
 			$j+=1
 			var $val : Real:=Num:C11($segment.value)
+			
 			If ($val<=0)
+				
 				continue
+				
 			End if 
 			
 			var $h : Real:=($val/$maxValue)*$height
@@ -960,57 +973,69 @@ Function verticalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $he
 			This:C1470.rect($barWidth; $h).position($xPos; $yCursor).setID(String:C10($i; "serie_###")+"_"+String:C10($j; "seg_###"))
 			
 			If ($segment.color#Null:C1517)
+				
 				This:C1470.fill($segment.color)
+				
 			Else 
+				
 				$color:=$color || cs:C1710.color.new()
 				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $segments.length+Num:C11($segments.length=0))).colorToCSS($color.main; "hexLong"))
+				
 			End if 
 			
 			If ($options.stroke#Null:C1517)
+				
 				This:C1470.stroke($options.stroke)
+				
 			End if 
-			
 		End for each 
 		
 		// Total value on top
 		If ($showValues)
+			
 			This:C1470.text(String:C10(Round:C94($totals[$i-1]; 2))).position($xPos+($barWidth/2); $yCursor-4)\
 				.font($font).alignment(Align center:K42:3)
+			
 		End if 
 		
 		// Bar label
 		If ($showLabels)
+			
 			This:C1470.text($serie.label).position($xPos+($barWidth/2); $height+($font.size*1.5))\
 				.font($font).alignment(Align center:K42:3)
+			
 		End if 
-		
 	End for each 
-
+	
 	If (Bool:C1537($options.axis))\
 		 || (Bool:C1537($options.hAxis))
+		
 		This:C1470.line(0; $height; $width; $height).stroke(1).setID("hAxis")
+		
 	End if 
-
+	
 	If (Bool:C1537($options.axis))\
 		 || (Bool:C1537($options.vAxis))
+		
 		This:C1470.line(0; -5; 0; $height).stroke(1).setID("vAxis")
+		
 	End if 
-
+	
 	return This:C1470
-
+	
 	//———————————————————————————————————————————————————————————————————————————
 	// Horizontal stacked bar chart
 Function horizontalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
-
+	
 	This:C1470._closeChart(This:C1470.id)
 	This:C1470.group()
-
+	
 	This:C1470.id:=$id
-
+	
 	$options:=$options || {}
 	var $values : Collection:=$options.data || []
 	var $n : Integer:=$values.length
-
+	
 	Super:C1706.setAttributes({\
 		id: $id; \
 		type: "bar"; \
@@ -1023,33 +1048,39 @@ Function horizontalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $
 		options: $options}; \
 		This:C1470.create(This:C1470.latest; "vdl:graph")\
 		)
-
+	
 	This:C1470.store.push({id: $id; dom: This:C1470.latest})
-
+	
 	If ($n=0)
+		
 		return This:C1470
+		
 	End if 
-
+	
 	var $font:=This:C1470._graphFont($options.font)
 	var $showValues : Boolean:=Bool:C1537($options.showValues)
 	var $showLabels : Boolean:=Bool:C1537($options.showLabels)
 	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
-
+	
 	var $hOffset : Real
 	If ($showLabels)
+		
 		var $t : Text
+		
 		For each ($t; $values.extract("label"))
+			
 			var $p:=cs:C1710.svg.new().TextToPicture($t; {size: $font.size})
 			var $w; $h : Real
 			PICTURE PROPERTIES:C457($p; $w; $h)
 			$hOffset:=$w>$hOffset ? $w : $hOffset
+			
 		End for each 
 	End if 
-
+	
 	This:C1470.translate($x+($hOffset*Num:C11($showLabels))+$pad; $y)
-
+	
 	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.2
-
+	
 	// Compute totals and max stacked value
 	var $totals : Collection:=[]
 	var $serie : Object
@@ -1059,58 +1090,74 @@ Function horizontalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $
 		var $segments : Collection:=$serie.segments
 		
 		If (Value type:C1509($segments)=Is collection:K8:32)
+			
 			var $segment : Object
+			
 			For each ($segment; $segments)
+				
 				$total+=$segment.value
+				
 			End for each 
 		End if 
 		
 		$totals.push($total)
 		
 	End for each 
-
+	
 	var $maxValue : Real:=$options.max#Null:C1517 ? Num:C11($options.max) : $totals.max()
 	$maxValue:=$maxValue+Num:C11($maxValue=0)
-
+	
 	var $step : Real:=$height/$n
 	var $barHeight : Real:=Round:C94($step*(1-$gap); 2)
-
+	
 	var $i : Integer
 	var $color : cs:C1710.color
 	For each ($serie; $values)
 		
 		$i+=1
 		
-		var $segments : Collection:=$serie.segments
+		$segments:=$serie.segments
+		
 		If (Value type:C1509($segments)#Is collection:K8:32)
+			
 			continue
+			
 		End if 
 		
 		var $yPos : Real:=Round:C94(($i-1)*$step+($step-$barHeight); 2)
 		var $xCursor : Real:=$pad
 		var $j : Integer
-		var $segment : Object
+		
 		For each ($segment; $segments)
 			
 			$j+=1
 			var $val : Real:=Num:C11($segment.value)
+			
 			If ($val<=0)
+				
 				continue
+				
 			End if 
 			
-			var $w : Real:=Round:C94(($val/$maxValue)*$width; 2)
+			$w:=Round:C94(($val/$maxValue)*$width; 2)
 			
 			This:C1470.rect($w; $barHeight).position($xCursor; $yPos).setID(String:C10($i; "serie_###")+"_"+String:C10($j; "seg_###"))
 			
 			If ($segment.color#Null:C1517)
+				
 				This:C1470.fill($segment.color)
+				
 			Else 
+				
 				$color:=$color || cs:C1710.color.new()
 				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $segments.length+Num:C11($segments.length=0))).colorToCSS($color.main; "hexLong"))
+				
 			End if 
 			
 			If ($options.stroke#Null:C1517)
+				
 				This:C1470.stroke($options.stroke)
+				
 			End if 
 			
 			$xCursor+=$w
@@ -1118,43 +1165,50 @@ Function horizontalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $
 		End for each 
 		
 		If ($showValues)
+			
 			This:C1470.text(String:C10(Round:C94($totals[$i-1]; 2))).position($xCursor+4; $yPos+($barHeight/2))\
 				.font($font).alignment(Align left:K42:2)
+			
 		End if 
 		
 		If ($showLabels)
+			
 			This:C1470.textArea($serie.label).width($hOffset)\
 				.font($font).alignment(Align right:K42:4)\
 				.translate(-$hOffset-$pad; $yPos+($barHeight/2)-$pad)
+			
 		End if 
-		
 	End for each 
-
+	
 	If (Bool:C1537($options.axis))\
 		 || (Bool:C1537($options.hAxis))
+		
 		This:C1470.line(0; $height+$pad; $width+($pad*2); $height+$pad).stroke(1).setID("hAxis")
+		
 	End if 
-
+	
 	If (Bool:C1537($options.axis))\
 		 || (Bool:C1537($options.vAxis))
+		
 		This:C1470.line(0; 0; 0; $height+$pad).stroke(1).setID("vAxis")
+		
 	End if 
-
+	
 	return This:C1470
-
+	
 	//———————————————————————————————————————————————————————————————————————————
 	// Vertical grouped bar chart
 Function verticalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
-
+	
 	This:C1470._closeChart(This:C1470.id)
 	This:C1470.group()
-
+	
 	This:C1470.id:=$id
-
+	
 	$options:=$options || {}
 	var $values : Collection:=$options.data || []
 	var $n : Integer:=$values.length
-
+	
 	Super:C1706.setAttributes({\
 		id: $id; \
 		type: "bar"; \
@@ -1167,22 +1221,24 @@ Function verticalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $he
 		options: $options}; \
 		This:C1470.create(This:C1470.latest; "vdl:graph")\
 		)
-
+	
 	This:C1470.store.push({id: $id; dom: This:C1470.latest})
-
+	
 	If ($n=0)
+		
 		return This:C1470
+		
 	End if 
-
+	
 	var $font:=This:C1470._graphFont($options.font)
 	var $showValues : Boolean:=Bool:C1537($options.showValues)
 	var $showLabels : Boolean:=Bool:C1537($options.showLabels)
 	var $groupGap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.2
 	var $innerGap : Real:=$options.innerGap#Null:C1517 ? Num:C11($options.innerGap) : 0.12
 	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
-
+	
 	This:C1470.translate($x; $y)
-
+	
 	// Determine max and groups count
 	var $maxValue : Real:=0
 	var $maxGroups : Integer:=1
@@ -1190,32 +1246,41 @@ Function verticalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $he
 	For each ($cat; $values)
 		
 		var $groups : Collection:=$cat.groups
+		
 		If (Value type:C1509($groups)=Is collection:K8:32)
+			
 			$maxGroups:=$groups.length>$maxGroups ? $groups.length : $maxGroups
 			var $g : Object
+			
 			For each ($g; $groups)
+				
 				var $v : Real:=Num:C11($g.value)
 				$maxValue:=$v>$maxValue ? $v : $maxValue
+				
 			End for each 
 		End if 
-		
 	End for each 
-
+	
 	$maxValue:=$options.max#Null:C1517 ? Num:C11($options.max) : $maxValue
 	$maxValue:=$maxValue+Num:C11($maxValue=0)
-
+	
 	var $leftOffset : Real:=$pad/2
 	var $plotWidth : Real:=$width-$pad
 	var $step : Real:=$plotWidth/$n
 	var $groupWidth : Real:=$step*(1-$groupGap)
 	var $itemWidth : Real:=$groupWidth/($maxGroups+($innerGap*($maxGroups-1)))
-
+	
 	var $i : Integer
 	For each ($cat; $values)
 		
-		var $groups : Collection:=$cat.groups
-		If ((Value type:C1509($groups)#Is collection:K8:32) || ($groups.length=0))
+		$groups:=$cat.groups
+		
+		If ((Value type:C1509($groups)#Is collection:K8:32)\
+			 || ($groups.length=0))
+			
+			
 			continue
+			
 		End if 
 		
 		$i+=1
@@ -1223,13 +1288,16 @@ Function verticalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $he
 		var $xStart : Real:=$leftOffset+(($i-1)*$step)+(($step-$groupWidth)/2)
 		var $j : Integer
 		$j:=0
-		var $g : Object
+		
 		For each ($g; $groups)
 			
 			$j+=1
 			var $val : Real:=Num:C11($g.value)
+			
 			If ($val<0)
+				
 				continue
+				
 			End if 
 			
 			var $h : Real:=($val/$maxValue)*$height
@@ -1239,55 +1307,67 @@ Function verticalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $he
 			This:C1470.rect($itemWidth; $h).position($xPos; $yPos).setID(String:C10($i; "cat_###")+"_"+String:C10($j; "grp_###"))
 			
 			If ($g.color#Null:C1517)
+				
 				This:C1470.fill($g.color)
+				
 			Else 
+				
 				var $color:=cs:C1710.color.new()
 				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $maxGroups)).colorToCSS($color.main; "hexLong"))
+				
 			End if 
 			
 			If ($options.stroke#Null:C1517)
+				
 				This:C1470.stroke($options.stroke)
+				
 			End if 
 			
 			If ($showValues)
+				
 				This:C1470.text(String:C10(Round:C94($val; 2))).position($xPos+($itemWidth/2); $yPos-4)\
 					.font($font).alignment(Align center:K42:3)
+				
 			End if 
-			
 		End for each 
 		
 		If ($showLabels)
+			
 			This:C1470.text($cat.label).position($xStart+($groupWidth/2); $height+($font.size*1.5))\
 				.font($font).alignment(Align center:K42:3)
+			
 		End if 
-		
 	End for each 
-
+	
 	If (Bool:C1537($options.axis))\
 		 || (Bool:C1537($options.hAxis))
+		
 		This:C1470.line($leftOffset; $height; $leftOffset+$plotWidth; $height).stroke(1).setID("hAxis")
+		
 	End if 
-
+	
 	If (Bool:C1537($options.axis))\
 		 || (Bool:C1537($options.vAxis))
+		
 		This:C1470.line(0; -5; 0; $height).stroke(1).setID("vAxis")
+		
 	End if 
-
+	
 	return This:C1470
-
+	
 	//———————————————————————————————————————————————————————————————————————————
 	// Horizontal grouped bar chart
 Function horizontalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
-
+	
 	This:C1470._closeChart(This:C1470.id)
 	This:C1470.group()
-
+	
 	This:C1470.id:=$id
-
+	
 	$options:=$options || {}
 	var $values : Collection:=$options.data || []
 	var $n : Integer:=$values.length
-
+	
 	Super:C1706.setAttributes({\
 		id: $id; \
 		type: "bar"; \
@@ -1300,13 +1380,15 @@ Function horizontalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $
 		options: $options}; \
 		This:C1470.create(This:C1470.latest; "vdl:graph")\
 		)
-
+	
 	This:C1470.store.push({id: $id; dom: This:C1470.latest})
-
+	
 	If ($n=0)
+		
 		return This:C1470
+		
 	End if 
-
+	
 	var $font:=This:C1470._graphFont($options.font)
 	var $showValues : Boolean:=Bool:C1537($options.showValues)
 	var $showLabels : Boolean:=Bool:C1537($options.showLabels)
@@ -1314,20 +1396,24 @@ Function horizontalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $
 	var $innerGap : Real:=$options.innerGap#Null:C1517 ? Num:C11($options.innerGap) : 0.12
 	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
 	var $vPad : Real:=$options.verticalPadding#Null:C1517 ? Num:C11($options.verticalPadding) : 10
-
+	
 	var $hOffset : Real
 	If ($showLabels)
+		
 		var $txt : Text
+		
 		For each ($txt; $values.extract("label"))
+			
 			var $pic:=cs:C1710.svg.new().TextToPicture($txt; {size: $font.size})
 			var $w; $h : Real
 			PICTURE PROPERTIES:C457($pic; $w; $h)
 			$hOffset:=$w>$hOffset ? $w : $hOffset
+			
 		End for each 
 	End if 
-
+	
 	This:C1470.translate($x+($hOffset*Num:C11($showLabels))+$pad; $y)
-
+	
 	// Determine max and groups count
 	var $maxValue : Real:=0
 	var $maxGroups : Integer:=1
@@ -1335,32 +1421,40 @@ Function horizontalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $
 	For each ($cat; $values)
 		
 		var $groups : Collection:=$cat.groups
+		
 		If (Value type:C1509($groups)=Is collection:K8:32)
+			
 			$maxGroups:=$groups.length>$maxGroups ? $groups.length : $maxGroups
 			var $g : Object
+			
 			For each ($g; $groups)
+				
 				var $v : Real:=Num:C11($g.value)
 				$maxValue:=$v>$maxValue ? $v : $maxValue
+				
 			End for each 
 		End if 
-		
 	End for each 
-
+	
 	$maxValue:=$options.max#Null:C1517 ? Num:C11($options.max) : $maxValue
 	$maxValue:=$maxValue+Num:C11($maxValue=0)
-
+	
 	var $topOffset : Real:=$vPad/2
 	var $plotHeight : Real:=$height-$vPad
 	var $step : Real:=$plotHeight/$n
 	var $groupHeight : Real:=$step*(1-$groupGap)
 	var $itemHeight : Real:=$groupHeight/($maxGroups+($innerGap*($maxGroups-1)))
-
+	
 	var $i : Integer
 	For each ($cat; $values)
 		
-		var $groups : Collection:=$cat.groups
-		If ((Value type:C1509($groups)#Is collection:K8:32) || ($groups.length=0))
+		$groups:=$cat.groups
+		
+		If ((Value type:C1509($groups)#Is collection:K8:32)\
+			 || ($groups.length=0))
+			
 			continue
+			
 		End if 
 		
 		$i+=1
@@ -1368,57 +1462,68 @@ Function horizontalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $
 		var $yStart : Real:=$topOffset+(($i-1)*$step)+(($step-$groupHeight)/2)
 		var $j : Integer
 		$j:=0
-		var $g : Object
+		
 		For each ($g; $groups)
 			
 			$j+=1
 			var $val : Real:=Num:C11($g.value)
+			
 			If ($val<0)
+				
 				continue
+				
 			End if 
 			
-			var $w : Real:=($val/$maxValue)*$width
+			$w:=($val/$maxValue)*$width
 			var $xPos : Real:=$pad
 			var $yPos : Real:=$yStart+(($j-1)*$itemHeight*(1+$innerGap))
 			
 			This:C1470.rect($w; $itemHeight).position($xPos; $yPos).setID(String:C10($i; "cat_###")+"_"+String:C10($j; "grp_###"))
 			
 			If ($g.color#Null:C1517)
+				
 				This:C1470.fill($g.color)
+				
 			Else 
+				
 				var $color:=cs:C1710.color.new()
 				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $maxGroups)).colorToCSS($color.main; "hexLong"))
+				
 			End if 
 			
 			If ($options.stroke#Null:C1517)
+				
 				This:C1470.stroke($options.stroke)
+				
 			End if 
 			
 			If ($showValues)
+				
 				This:C1470.text(String:C10(Round:C94($val; 2))).position($xPos+$w+4; $yPos+($itemHeight/2))\
 					.font($font).alignment(Align left:K42:2)
+				
 			End if 
-			
 		End for each 
 		
 		If ($showLabels)
+			
 			This:C1470.textArea($cat.label).width($hOffset)\
 				.font($font).alignment(Align right:K42:4)\
 				.translate(-$hOffset-$pad; $yStart+($groupHeight/2)-$pad)
+			
 		End if 
-		
 	End for each 
-
+	
 	If (Bool:C1537($options.axis))\
 		 || (Bool:C1537($options.hAxis))
 		This:C1470.line(0; $topOffset+$plotHeight+$pad; $width+($pad*2); $topOffset+$plotHeight+$pad).stroke(1).setID("hAxis")
 	End if 
-
+	
 	If (Bool:C1537($options.axis))\
 		 || (Bool:C1537($options.vAxis))
 		This:C1470.line(0; $topOffset; 0; $topOffset+$plotHeight+$pad).stroke(1).setID("vAxis")
 	End if 
-
+	
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————————————————————
@@ -1563,7 +1668,9 @@ Function sparkline($id : Text; $x : Real; $y : Real; $width : Real; $height : Re
 	var $values : Collection:=$options.data || []
 	
 	If ($values.length=0)
+		
 		return This:C1470
+		
 	End if 
 	
 	// Calculate min/max for normalization
@@ -1572,7 +1679,9 @@ Function sparkline($id : Text; $x : Real; $y : Real; $width : Real; $height : Re
 	var $range : Real:=$max-$min
 	
 	If ($range=0)
+		
 		$range:=1
+		
 	End if 
 	
 	// Build points collection [x, y]
@@ -1580,19 +1689,28 @@ Function sparkline($id : Text; $x : Real; $y : Real; $width : Real; $height : Re
 	var $i : Integer
 	var $stepX : Real:=$width/($values.length-1)
 	
-	For ($i; 0; $values.length-1)
+	For ($i; 0; $values.length-1; 1)
+		
 		var $normalized : Real:=($values[$i]-$min)/$range
+		
 		// Invert Y for SVG coords
 		var $pointY : Real:=$height*(1-$normalized)
 		$points.push([$i*$stepX; $pointY])
+		
 	End for 
 	
 	// Draw fill under curve (optional)
 	If (Bool:C1537($options.fill))
+		
+		var $fillPoints : Collection:=[[$points[0][0]; $height]]
+		$fillPoints:=$fillPoints.combine($points)
+		$fillPoints.push([$points[$points.length-1][0]; $height])
 		This:C1470.polygon().setID($id+"_fill")
-		This:C1470.plot([[$points[0][0]; $height]; ...$points; [$points[$points.length-1][0]; $height]])
-		This:C1470.fillColor($options.fillColor || "rgba(100,150,255,0.2)")
+		This:C1470.plot($fillPoints)
+		This:C1470.fillColor($options.fillColor || $options.color || "#1f77b4")
+		This:C1470.fillOpacity($options.fillOpacity || 0.2)
 		This:C1470.stroke("none")
+		
 	End if 
 	
 	// Draw line
@@ -1603,6 +1721,9 @@ Function sparkline($id : Text; $x : Real; $y : Real; $width : Real; $height : Re
 	This:C1470.fill("none")
 	
 	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+	
+	// Back to root so following elements are not affected by the group translation
+	This:C1470.latest:=This:C1470.root
 	
 	return This:C1470
 	
@@ -1634,7 +1755,9 @@ Function verticalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $heig
 	This:C1470.store.push({id: $id; dom: This:C1470.latest})
 	
 	If ($n=0)  // Nothing to draw
+		
 		return This:C1470
+		
 	End if 
 	
 	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.2
@@ -1648,15 +1771,21 @@ Function verticalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $heig
 	$maxValue:=$maxValue+Num:C11($maxValue=0)
 	
 	var $step : Real:=$width/$n
-	var $stickWidth : Real:=1
+	var $stickWidth : Real:=$options.stickWidth#Null:C1517 ? Num:C11($options.stickWidth) : 2
 	
 	// Axis
-	If (Bool:C1537($options.axis)) || (Bool:C1537($options.hAxis))
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.hAxis))
+		
 		This:C1470.line(0; $height+$pad; $width+$pad; $height+$pad).stroke(2).setID("hAxis")
+		
 	End if 
 	
-	If (Bool:C1537($options.axis)) || (Bool:C1537($options.vAxis))
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.vAxis))
+		
 		This:C1470.line(0; 0; 0; $height+$pad).stroke(2).setID("vAxis")
+		
 	End if 
 	
 	var $color : cs:C1710.color
@@ -1675,15 +1804,20 @@ Function verticalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $heig
 		
 		// Determine color
 		var $color_val : Text
+		
 		If ($serie.color#Null:C1517)
+			
 			$color_val:=$serie.color
+			
 		Else 
+			
 			var $hsl:={\
 				hue: (360-$i)*360/$n; \
 				saturation: 60; \
 				lightness: 50}
 			$color:=$color || cs:C1710.color.new()
 			$color_val:=$color.setHSL($hsl).colorToCSS($color.main; "hexLong")
+			
 		End if 
 		
 		// Draw stick (vertical line)
@@ -1696,19 +1830,26 @@ Function verticalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $heig
 		
 		// Label (bottom)
 		If (Bool:C1537($options.showLabels))
-			This:C1470.text($serie.label).position($xpos; $height+$pad+4)\
+			
+			This:C1470.text($serie.label).position($xpos; $height+$pad+16)\
 				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+			
 		End if 
 		
 		// Value (top)
 		If (Bool:C1537($options.showValues))
+			
 			This:C1470.text(String:C10($val)).position($xpos; $height-$h-$circleRadius-4)\
 				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+			
 		End if 
 		
 		This:C1470.setAttribute("indx"; $i)
 		
 	End for each 
+	
+	// Back to root so following elements are not affected by the group translation
+	This:C1470.latest:=This:C1470.root
 	
 	return This:C1470
 	
@@ -1740,7 +1881,9 @@ Function horizontalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $he
 	This:C1470.store.push({id: $id; dom: This:C1470.latest})
 	
 	If ($n=0)  // Nothing to draw
+		
 		return This:C1470
+		
 	End if 
 	
 	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.2
@@ -1754,15 +1897,21 @@ Function horizontalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $he
 	$maxValue:=$maxValue+Num:C11($maxValue=0)
 	
 	var $step : Real:=$height/$n
-	var $stickHeight : Real:=1
+	var $stickHeight : Real:=$options.stickWidth#Null:C1517 ? Num:C11($options.stickWidth) : 2
 	
 	// Axis
-	If (Bool:C1537($options.axis)) || (Bool:C1537($options.hAxis))
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.hAxis))
+		
 		This:C1470.line($width+$pad; 0; $width+$pad; $height+$pad).stroke(2).setID("hAxis")
+		
 	End if 
 	
-	If (Bool:C1537($options.axis)) || (Bool:C1537($options.vAxis))
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.vAxis))
+		
 		This:C1470.line(0; 0; $width+$pad; 0).stroke(2).setID("vAxis")
+		
 	End if 
 	
 	var $color : cs:C1710.color
@@ -1781,15 +1930,20 @@ Function horizontalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $he
 		
 		// Determine color
 		var $color_val : Text
+		
 		If ($serie.color#Null:C1517)
+			
 			$color_val:=$serie.color
+			
 		Else 
+			
 			var $hsl:={\
 				hue: (360-$i)*360/$n; \
 				saturation: 60; \
 				lightness: 50}
 			$color:=$color || cs:C1710.color.new()
 			$color_val:=$color.setHSL($hsl).colorToCSS($color.main; "hexLong")
+			
 		End if 
 		
 		// Draw stick (horizontal line)
@@ -1802,20 +1956,27 @@ Function horizontalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $he
 		
 		// Label (left)
 		If (Bool:C1537($options.showLabels))
+			
 			This:C1470.textArea($serie.label).width(80)\
 				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align right:K42:4)\
 				.translate(-90; $ypos-8)
+			
 		End if 
 		
 		// Value (right end)
 		If (Bool:C1537($options.showValues))
+			
 			This:C1470.text(String:C10($val)).position($w+$circleRadius+4; $ypos)\
 				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
+			
 		End if 
 		
 		This:C1470.setAttribute("indx"; $i)
 		
 	End for each 
+	
+	// Back to root so following elements are not affected by the group translation
+	This:C1470.latest:=This:C1470.root
 	
 	return This:C1470
 	
@@ -1832,7 +1993,9 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 	var $data : Collection:=$options.data || []
 	
 	If ($data.length=0)
+		
 		return This:C1470
+		
 	End if 
 	
 	// Flatten 2D data if nested arrays
@@ -1848,16 +2011,22 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 		$row:=$data[$i]
 		
 		If (Value type:C1509($row)=Is collection:K8:32)
+			
 			$cols:=$row.length>$cols ? $row.length : $cols
-			For ($j; 0; $row.length-1)
+			
+			For ($j; 0; $row.length-1; 1)
+				
 				$flatData.push({row: $i; col: $j; value: Num:C11($row[$j])})
 				$allValues.push(Num:C11($row[$j]))
+				
 			End for 
 		End if 
 	End for 
 	
 	If ($flatData.length=0)
+		
 		return This:C1470
+		
 	End if 
 	
 	// Compute color scale
@@ -1866,7 +2035,9 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 	var $range : Real:=$maxVal-$minVal
 	
 	If ($range=0)
+		
 		$range:=1
+		
 	End if 
 	
 	// Cell dimensions
@@ -1918,24 +2089,28 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 		
 		// Optional value label
 		If (Bool:C1537($options.showValues))
+			
 			This:C1470.text(String:C10(Round:C94($cell.value; 1)))\
 				.position($px+($cellWidth/2); $py+($cellHeight/2))\
 				.setAttribute("text-anchor"; "middle").setAttribute("dominant-baseline"; "middle")\
 				.font({size: 10; color: "#333"})
+			
 		End if 
-		
 	End for each 
 	
 	// Row labels (left)
 	If (Bool:C1537($options.showRowLabels) && $options.rowLabels#Null:C1517)
 		
 		var $rowLabels : Collection:=$options.rowLabels
-		For ($i; 0; ($rows<$rowLabels.length ? $rows : $rowLabels.length)-1)
-			var $py : Real:=$i*$cellHeight+($cellHeight/2)
+		
+		For ($i; 0; ($rows<$rowLabels.length ? $rows : $rowLabels.length)-1; 1)
+			
+			$py:=$i*$cellHeight+($cellHeight/2)
 			This:C1470.text(String:C10($rowLabels[$i]))\
 				.position(-$pad; $py)\
 				.setAttribute("text-anchor"; "end").setAttribute("dominant-baseline"; "middle")\
 				.font({size: 11; color: "#333"})
+			
 		End for 
 	End if 
 	
@@ -1943,12 +2118,15 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 	If (Bool:C1537($options.showColLabels) && $options.colLabels#Null:C1517)
 		
 		var $colLabels : Collection:=$options.colLabels
-		For ($j; 0; ($cols<$colLabels.length ? $cols : $colLabels.length)-1)
-			var $px : Real:=$j*$cellWidth+($cellWidth/2)
+		
+		For ($j; 0; ($cols<$colLabels.length ? $cols : $colLabels.length)-1; 1)
+			
+			$px:=$j*$cellWidth+($cellWidth/2)
 			This:C1470.text(String:C10($colLabels[$j]))\
 				.position($px; -($pad/2))\
 				.setAttribute("text-anchor"; "middle").setAttribute("dominant-baseline"; "bottom")\
 				.font({size: 11; color: "#333"})
+			
 		End for 
 	End if 
 	
@@ -1982,7 +2160,9 @@ Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $hei
 	This:C1470.store.push({id: $id; dom: This:C1470.latest})
 	
 	If ($n=0)
+		
 		return This:C1470
+		
 	End if 
 	
 	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
@@ -1995,12 +2175,18 @@ Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $hei
 	var $running : Real:=0
 	var $value : Object
 	For each ($value; $values)
+		
 		var $val : Real:=Num:C11($value.value)
+		
 		If ($value.isTotal#Null:C1517)
-			$cumulative.push({cum: $val; base: 0; isTotal: true})
+			
+			$cumulative.push({cum: $val; base: 0; isTotal: True:C214})
+			
 		Else 
+			
 			$cumulative.push({cum: $running+$val; base: $running})
 			$running+=$val
+			
 		End if 
 	End for each 
 	
@@ -2016,19 +2202,25 @@ Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $hei
 	var $barWidth : Real:=Round:C94($step*(1-$gap); 2)
 	
 	// Axis
-	If (Bool:C1537($options.axis)) || (Bool:C1537($options.hAxis))
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.hAxis))
+		
 		This:C1470.line(0; $height+$pad; $width+$pad; $height+$pad).stroke(2).setID("hAxis")
+		
 	End if 
 	
-	If (Bool:C1537($options.axis)) || (Bool:C1537($options.vAxis))
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.vAxis))
+		
 		This:C1470.line(0; 0; 0; $height+$pad).stroke(2).setID("vAxis")
+		
 	End if 
 	
 	var $i : Integer:=0
 	var $prevCum : Real:=0
 	var $dataItem : Object
 	var $cumItem : Object
-	For ($i; 0; $n-1)
+	For ($i; 0; $n-1; 1)
 		
 		$dataItem:=$values[$i]
 		$cumItem:=$cumulative[$i]
@@ -2042,28 +2234,38 @@ Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $hei
 		var $barY : Real
 		
 		If ($isTotal)
+			
 			// Total: full bar from 0 to cumulative value
 			$barH:=Round:C94(($cumItem.cum-$minVal)/$range*$height; 2)
 			$barY:=$height-$barH
+			
 		Else 
+			
 			// Change: from base to base+value
 			$barH:=Round:C94(Abs:C99(Num:C11($dataItem.value))/$range*$height; 2)
 			$barY:=$isPositive ? $height-($cumItem.cum-$minVal)/$range*$height : $height-($cumItem.base-$minVal)/$range*$height
+			
 		End if 
 		
 		// Bar fill color
 		var $color : Text
+		
 		If ($isTotal)
+			
 			$color:=$dataItem.color || "#1f2937"
+			
 		Else 
+			
 			$color:=$isPositive ? ($dataItem.color || "#4CAF50") : ($dataItem.color || "#F44336")
+			
 		End if 
 		
 		This:C1470.rect($barWidth; $barH).position($xpos; $barY).fill($color)\
 			.stroke($options.stroke || "none").setID(String:C10($i; "bar_###"))
 		
 		// Connector line to next bar (if not last)
-		If ($i<$n-1 && !$isTotal)
+		If ($i<$n-1 && Not:C34($isTotal))
+			
 			var $nextCum : Real:=$cumulative[$i+1].base
 			var $nextXpos : Real:=Round:C94(($i+1)*$step+($step-$barWidth)/2; 2)
 			var $connectorY : Real:=$height-($nextCum-$minVal)/$range*$height
@@ -2071,23 +2273,28 @@ Function verticalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $hei
 			
 			This:C1470.line($connectorX; $barY; $nextXpos; $connectorY)\
 				.stroke("#999").strokeWidth(1).setAttribute("stroke-dasharray"; "3,3")
+			
 		End if 
 		
 		// Label (bottom)
 		If (Bool:C1537($options.showLabels))
+			
 			This:C1470.text($dataItem.label).position($xpos+($barWidth/2); $height+$pad+4)\
 				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+			
 		End if 
 		
 		// Value (top of bar)
 		If (Bool:C1537($options.showValues))
+			
 			This:C1470.text(String:C10($dataItem.value)).position($xpos+($barWidth/2); $barY-4)\
 				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align center:K42:3)
+			
 		End if 
 		
 		This:C1470.setAttribute("indx"; $i+1)
 		
-	End for each 
+	End for 
 	
 	return This:C1470
 	
@@ -2119,7 +2326,9 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 	This:C1470.store.push({id: $id; dom: This:C1470.latest})
 	
 	If ($n=0)
+		
 		return This:C1470
+		
 	End if 
 	
 	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
@@ -2132,12 +2341,18 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 	var $running : Real:=0
 	var $value : Object
 	For each ($value; $values)
+		
 		var $val : Real:=Num:C11($value.value)
+		
 		If ($value.isTotal#Null:C1517)
-			$cumulative.push({cum: $val; base: 0; isTotal: true})
+			
+			$cumulative.push({cum: $val; base: 0; isTotal: True:C214})
+			
 		Else 
+			
 			$cumulative.push({cum: $running+$val; base: $running})
 			$running+=$val
+			
 		End if 
 	End for each 
 	
@@ -2153,18 +2368,24 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 	var $barHeight : Real:=Round:C94($step*(1-$gap); 2)
 	
 	// Axis
-	If (Bool:C1537($options.axis)) || (Bool:C1537($options.hAxis))
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.hAxis))
+		
 		This:C1470.line($width+$pad; 0; $width+$pad; $height+$pad).stroke(2).setID("hAxis")
+		
 	End if 
 	
-	If (Bool:C1537($options.axis)) || (Bool:C1537($options.vAxis))
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.vAxis))
+		
 		This:C1470.line(0; 0; $width+$pad; 0).stroke(2).setID("vAxis")
+		
 	End if 
 	
 	var $i : Integer:=0
 	var $dataItem : Object
 	var $cumItem : Object
-	For ($i; 0; $n-1)
+	For ($i; 0; $n-1; 1)
 		
 		$dataItem:=$values[$i]
 		$cumItem:=$cumulative[$i]
@@ -2178,28 +2399,38 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 		var $barX : Real
 		
 		If ($isTotal)
+			
 			// Total: full bar from 0 to cumulative value
 			$barW:=Round:C94(($cumItem.cum-$minVal)/$range*$width; 2)
 			$barX:=0
+			
 		Else 
+			
 			// Change: from base to base+value
 			$barW:=Round:C94(Abs:C99(Num:C11($dataItem.value))/$range*$width; 2)
 			$barX:=$isPositive ? ($cumItem.base-$minVal)/$range*$width : ($cumItem.cum-$minVal)/$range*$width
+			
 		End if 
 		
 		// Bar fill color
 		var $color : Text
+		
 		If ($isTotal)
+			
 			$color:=$dataItem.color || "#1f2937"
+			
 		Else 
+			
 			$color:=$isPositive ? ($dataItem.color || "#4CAF50") : ($dataItem.color || "#F44336")
+			
 		End if 
 		
 		This:C1470.rect($barW; $barHeight).position($barX; $ypos).fill($color)\
 			.stroke($options.stroke || "none").setID(String:C10($i; "bar_###"))
 		
 		// Connector line to next bar (if not last)
-		If ($i<$n-1 && !$isTotal)
+		If ($i<$n-1 && Not:C34($isTotal))
+			
 			var $nextCum : Real:=$cumulative[$i+1].base
 			var $nextYpos : Real:=Round:C94(($i+1)*$step+($step-$barHeight)/2; 2)
 			var $connectorX : Real:=($nextCum-$minVal)/$range*$width
@@ -2207,24 +2438,29 @@ Function horizontalWaterfall($id : Text; $x : Real; $y : Real; $width : Real; $h
 			
 			This:C1470.line($barX+$barW; $ypos+$barHeight; $connectorX; $nextYpos)\
 				.stroke("#999").strokeWidth(1).setAttribute("stroke-dasharray"; "3,3")
+			
 		End if 
 		
 		// Label (left)
 		If (Bool:C1537($options.showLabels))
+			
 			This:C1470.textArea($dataItem.label).width(100)\
 				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align right:K42:4)\
 				.translate(-$pad-100; $ypos+($barHeight/2)-6)
+			
 		End if 
 		
 		// Value (right end)
 		If (Bool:C1537($options.showValues))
+			
 			This:C1470.text(String:C10($dataItem.value)).position($barX+$barW+4; $ypos+($barHeight/2))\
 				.font({size: Num:C11($options.fontSize) || 12}).alignment(Align left:K42:2)
+			
 		End if 
 		
 		This:C1470.setAttribute("indx"; $i+1)
 		
-	End for each 
+	End for 
 	
 	return This:C1470
 	
@@ -2244,7 +2480,9 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 	var $n : Integer:=$labels.length
 	
 	If ($n=0)
+		
 		return This:C1470
+		
 	End if 
 	
 	Super:C1706.setAttributes({\
@@ -2268,9 +2506,11 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 	// Draw concentric circles (levels)
 	var $levelRadius : Real
 	var $l : Integer
-	For ($l; 1; $levels)
+	For ($l; 1; $levels; 1)
+		
 		$levelRadius:=($r/$levels)*$l
 		This:C1470.circle($levelRadius; 0; 0).fill("none").stroke("#E6E6E6").strokeWidth(1).setID($id+"_level_"+String:C10($l))
+		
 	End for 
 	
 	// Draw axes and labels
@@ -2278,7 +2518,8 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 	var $angle : Real
 	var $label : Text
 	var $point : Collection
-	For ($i; 0; $n-1)
+	For ($i; 0; $n-1; 1)
+		
 		$angle:=($angleSlice*$i)-90
 		$point:=This:C1470._getPoint($angle; $r; 0; 0)
 		
@@ -2305,18 +2546,22 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 		var $values : Collection:=$serie.values || []
 		var $points : Collection:=[]
 		
-		If ($values.length<>$n)
+		If ($values.length#$n)
+			
 			continue
+			
 		End if 
 		
 		// Build polygon points
-		For ($i; 0; $n-1)
+		For ($i; 0; $n-1; 1)
+			
 			$angle:=($angleSlice*$i)-90
 			var $val : Real:=Num:C11($values[$i])
 			var $max : Real:=Num:C11($options.max || 10)
 			var $radius : Real:=($val/$max)*$r
 			$point:=This:C1470._getPoint($angle; $radius; 0; 0)
 			$points.push($point)
+			
 		End for 
 		
 		// Close polygon
@@ -2324,15 +2569,20 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 		
 		// Determine color
 		var $serieColor : Text
+		
 		If ($serie.color#Null:C1517)
+			
 			$serieColor:=$serie.color
+			
 		Else 
+			
 			var $hsl:={\
 				hue: (360-$serieIdx)*360/($series.length); \
 				saturation: 70; \
 				lightness: 50}
 			$color:=$color || cs:C1710.color.new()
 			$serieColor:=$color.setHSL($hsl).colorToCSS($color.main; "hexLong")
+			
 		End if 
 		
 		// Draw polygon area (fill)
@@ -2342,12 +2592,13 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 		This:C1470.stroke($serieColor).strokeWidth(2)
 		
 		// Draw points
-		For ($i; 0; $n-1)
+		For ($i; 0; $n-1; 1)
+			
 			This:C1470.circle(4; $points[$i][0]; $points[$i][1])\
 				.fill($serieColor).stroke("white").strokeWidth(1)\
 				.setID($id+"_point_"+String:C10($serieIdx)+"_"+String:C10($i))
+			
 		End for 
-		
 	End for each 
 	
 	// Legend
@@ -2371,7 +2622,6 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 			$legendY+=$options.legendGap || 16
 			
 		End for each 
-		
 	End if 
 	
 	return This:C1470

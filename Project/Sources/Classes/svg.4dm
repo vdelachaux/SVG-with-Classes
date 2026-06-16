@@ -2240,7 +2240,7 @@ Function path($data : Variant; $attachTo) : cs:C1710.svg
 		
 		For ($i; 0; $data.length-1; 1)
 			
-			var $point:=$data[$i]
+			var $point : Object:=$data[$i]
 			
 			If ($i=0)
 				$pathData:="M "+String:C10($point.x)+","+String:C10($point.y)

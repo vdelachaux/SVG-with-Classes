@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" viewBox="0 0 800 500">
+	<text x="400" y="40" text-anchor="middle" font-family="sans-serif" font-size="36" font-weight="bold" fill="#163a7a">Sparklines - KPI Metrics</text>
+
+	<!-- Row 1: Sales -->
+	<text x="50" y="110" font-family="sans-serif" font-size="18" font-weight="bold" fill="#333">Sales</text>
+	<g id="spark_sales" transform="translate(50,130)">
+		<polygon id="spark_sales_fill" fill="#2196F3" fill-opacity="0.2" stroke="none" points="0,60 0,45.882 30,21.176 60,60 90,35.294 120,10.588 150,28.235 180,0 210,17.647 240,24.706 270,3.529 300,14.118 300,60"/>
+		<polyline id="spark_sales_line" fill="none" stroke="#2196F3" stroke-width="2" points="0,45.882 30,21.176 60,60 90,35.294 120,10.588 150,28.235 180,0 210,17.647 240,24.706 270,3.529 300,14.118"/>
+	</g>
+
+	<!-- Row 1: Revenue -->
+	<text x="450" y="110" font-family="sans-serif" font-size="18" font-weight="bold" fill="#333">Revenue</text>
+	<g id="spark_revenue" transform="translate(450,130)">
+		<polygon id="spark_revenue_fill" fill="#4CAF50" fill-opacity="0.2" stroke="none" points="0,60 0,30 30,51 60,39 90,60 120,21 150,15 180,36 210,27 240,33 270,9 300,0 300,60"/>
+		<polyline id="spark_revenue_line" fill="none" stroke="#4CAF50" stroke-width="2" points="0,30 30,51 60,39 90,60 120,21 150,15 180,36 210,27 240,33 270,9 300,0"/>
+	</g>
+
+	<!-- Row 2: Traffic -->
+	<text x="50" y="260" font-family="sans-serif" font-size="18" font-weight="bold" fill="#333">Traffic</text>
+	<g id="spark_traffic" transform="translate(50,280)">
+		<polygon id="spark_traffic_fill" fill="#FF9800" fill-opacity="0.2" stroke="none" points="0,60 0,48 30,24 60,60 90,12 120,36 150,0 180,42 210,18 240,30 270,6 300,24 300,60"/>
+		<polyline id="spark_traffic_line" fill="none" stroke="#FF9800" stroke-width="2" points="0,48 30,24 60,60 90,12 120,36 150,0 180,42 210,18 240,30 270,6 300,24"/>
+	</g>
+
+	<!-- Row 2: Users -->
+	<text x="450" y="260" font-family="sans-serif" font-size="18" font-weight="bold" fill="#333">Users</text>
+	<g id="spark_users" transform="translate(450,280)">
+		<polygon id="spark_users_fill" fill="#E91E63" fill-opacity="0.2" stroke="none" points="0,60 0,50 30,60 60,40 90,54 120,30 150,34 180,20 210,26 240,14 270,10 300,0 300,60"/>
+		<polyline id="spark_users_line" fill="none" stroke="#E91E63" stroke-width="2" points="0,50 30,60 60,40 90,54 120,30 150,34 180,20 210,26 240,14 270,10 300,0"/>
+	</g>
+</svg>

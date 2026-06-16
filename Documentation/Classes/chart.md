@@ -320,3 +320,94 @@ $chart.preview()
 ![](./chart/circularGauge.svg)
 
 ----
+
+### Sparkline
+
+```4D
+var $chart:=cs:C1710.svgx.chart.new()
+
+$chart.newCanvas({width: 800; height: 500; viewBox: "0 0 800 500"})
+
+$chart.text("Sparklines - KPI Metrics").position(400; 40).setAttribute("text-anchor"; "middle").fontSize(36).fontStyle(Bold).fillColor("#163a7a")
+
+// Sample data sets for sparklines
+var $data1 : Collection:=[12; 19; 8; 15; 22; 17; 25; 20; 18; 24; 21]
+var $data2 : Collection:=[45; 38; 42; 35; 48; 50; 43; 46; 44; 52; 55]
+var $data3 : Collection:=[8; 12; 6; 14; 10; 16; 9; 13; 11; 15; 12]
+var $data4 : Collection:=[100; 95; 105; 98; 110; 108; 115; 112; 118; 120; 125]
+
+// Row 1: Sales & Revenue
+$chart.text("Sales").position(50; 110).fontSize(18).fontStyle(Bold).fillColor("#333")
+$chart.sparkline("spark_sales"; 50; 130; 300; 60; {data: $data1; color: "#2196F3"; fill: True})
+
+$chart.text("Revenue").position(450; 110).fontSize(18).fontStyle(Bold).fillColor("#333")
+$chart.sparkline("spark_revenue"; 450; 130; 300; 60; {data: $data2; color: "#4CAF50"; fill: True})
+
+// Row 2: Traffic & Users
+$chart.text("Traffic").position(50; 260).fontSize(18).fontStyle(Bold).fillColor("#333")
+$chart.sparkline("spark_traffic"; 50; 280; 300; 60; {data: $data3; color: "#FF9800"; fill: True})
+
+$chart.text("Users").position(450; 260).fontSize(18).fontStyle(Bold).fillColor("#333")
+$chart.sparkline("spark_users"; 450; 280; 300; 60; {data: $data4; color: "#E91E63"; fill: True})
+
+$chart.preview()
+```
+<br>
+![](./chart/sparkline.svg)
+
+----
+
+### Lollipop
+
+```4D
+var $chart:=cs:C1710.svgx.chart.new()
+
+$chart.newCanvas({width: 800; height: 600; viewBox: "0 0 800 600"})
+
+$chart.text("Lollipop Charts - Elegant Data Visualization").position(400; 40).setAttribute("text-anchor"; "middle").fontSize(28).fontStyle(Bold).fillColor("#163a7a")
+
+// Vertical Lollipop Chart
+$chart.text("Sales by Quarter (Vertical)").position(200; 100).fontSize(16).fontStyle(Bold).fillColor("#333")
+
+var $vdata : Collection:=[\
+{label: "Q1"; value: 45}; \
+{label: "Q2"; value: 52}; \
+{label: "Q3"; value: 38}; \
+{label: "Q4"; value: 61}\
+]
+
+$chart.verticalLollipop("vlollipop"; 50; 130; 300; 200; {\
+data: $vdata; \
+showLabels: True; \
+showValues: True; \
+axis: True; \
+circleRadius: 5; \
+max: 70\
+})
+
+// Horizontal Lollipop Chart
+$chart.text("Department Performance (Horizontal)").position(150; 400).fontSize(16).fontStyle(Bold).fillColor("#333")
+
+var $hdata : Collection:=[\
+{label: "Engineering"; value: 92}; \
+{label: "Sales"; value: 78}; \
+{label: "Marketing"; value: 85}; \
+{label: "Support"; value: 88}; \
+{label: "Operations"; value: 72}\
+]
+
+$chart.horizontalLollipop("hlollipop"; 150; 420; 400; 150; {\
+data: $hdata; \
+showLabels: True; \
+showValues: True; \
+axis: True; \
+circleRadius: 6; \
+max: 100\
+})
+
+$chart.preview()
+```
+<br>
+![](./chart/lollipop.svg)
+
+----

@@ -145,12 +145,27 @@
 		}
 	},
 	"chart": {
-		"xy()": {
-			"Syntax": "**.xy**( *id* : Text; *options* : Object ) : cs.svgx.chart",
+		"radar()": {
+			"Syntax": "**.radar**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *options* : Object ) : cs.svgx.chart",
 			"Params": [
 				[
 					"id",
 					"Text",
+					"->"
+				],
+				[
+					"cx",
+					"Real",
+					"->"
+				],
+				[
+					"cy",
+					"Real",
+					"->"
+				],
+				[
+					"r",
+					"Real",
 					"->"
 				],
 				[
@@ -166,8 +181,8 @@
 			],
 			"Summary": ""
 		},
-		"setValues()": {
-			"Syntax": "**.setValues**( *id* : Text; *values* : Collection ) : cs.svgx.chart",
+		"horizontalLollipop()": {
+			"Syntax": "**.horizontalLollipop**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
 			"Params": [
 				[
 					"id",
@@ -175,8 +190,126 @@
 					"->"
 				],
 				[
-					"values",
-					"Collection",
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"pieBounded()": {
+			"Syntax": "**.pieBounded**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"verticalLollipop()": {
+			"Syntax": "**.verticalLollipop**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"xy()": {
+			"Syntax": "**.xy**( *id* : Text; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"options",
+					"Object",
 					"->"
 				],
 				[
@@ -228,8 +361,259 @@
 			],
 			"Summary": ""
 		},
+		"verticalWaterfall()": {
+			"Syntax": "**.verticalWaterfall**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"semiDonut()": {
+			"Syntax": "**.semiDonut**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *thickness* : Real; *margin* : Integer; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"cx",
+					"Real",
+					"->"
+				],
+				[
+					"cy",
+					"Real",
+					"->"
+				],
+				[
+					"r",
+					"Real",
+					"->"
+				],
+				[
+					"thickness",
+					"Real",
+					"->"
+				],
+				[
+					"margin",
+					"Integer",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"heatmap()": {
+			"Syntax": "**.heatmap**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"horizontalBar()": {
+			"Syntax": "**.horizontalBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"verticalStackedBar()": {
 			"Syntax": "**.verticalStackedBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"horizontalWaterfall()": {
+			"Syntax": "**.horizontalWaterfall**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"sparkline()": {
+			"Syntax": "**.sparkline**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
 			"Params": [
 				[
 					"id",
@@ -315,8 +699,8 @@
 			],
 			"Summary": ""
 		},
-		"horizontalBar()": {
-			"Syntax": "**.horizontalBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+		"setValues()": {
+			"Syntax": "**.setValues**( *id* : Text; *values* : Collection ) : cs.svgx.chart",
 			"Params": [
 				[
 					"id",
@@ -324,28 +708,8 @@
 					"->"
 				],
 				[
-					"x",
-					"Real",
-					"->"
-				],
-				[
-					"y",
-					"Real",
-					"->"
-				],
-				[
-					"width",
-					"Real",
-					"->"
-				],
-				[
-					"height",
-					"Real",
-					"->"
-				],
-				[
-					"options",
-					"Object",
+					"values",
+					"Collection",
 					"->"
 				],
 				[
@@ -422,52 +786,6 @@
 				],
 				[
 					"width",
-					"Real",
-					"->"
-				],
-				[
-					"thickness",
-					"Real",
-					"->"
-				],
-				[
-					"margin",
-					"Integer",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"semiDonut()": {
-			"Syntax": "**.semiDonut**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *thickness* : Real; *margin* : Integer; *options* : Object ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"cx",
-					"Real",
-					"->"
-				],
-				[
-					"cy",
-					"Real",
-					"->"
-				],
-				[
-					"r",
 					"Real",
 					"->"
 				],
@@ -715,42 +1033,6 @@
 				[
 					"margin",
 					"Integer",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"pieBounded()": {
-			"Syntax": "**.pieBounded**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *options* : Object ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"x",
-					"Real",
-					"->"
-				],
-				[
-					"y",
-					"Real",
-					"->"
-				],
-				[
-					"width",
-					"Real",
 					"->"
 				],
 				[
