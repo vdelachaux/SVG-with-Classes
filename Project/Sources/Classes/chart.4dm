@@ -174,19 +174,19 @@ Function donut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real;
 		"dom"; This:C1470.latest))
 	
 	return This:C1470
-
+	
 	//———————————————————————————————————————————————————————————————————————————
 	// Starting a semi-donut chart (top half by default)
 Function semiDonut($id : Text; $cx : Real; $cy : Real; $r : Real; $thickness : Real; $margin : Integer; $options : Object) : cs:C1710.chart
-
+	
 	$options:=$options || {}
-
+	
 	If ($options.origin=Null:C1517)
 		$options.origin:=-90
 	End if 
-
+	
 	$options.span:=180
-
+	
 	return This:C1470.donut($id; $cx; $cy; $r; $thickness; $margin; $options)
 	
 	//———————————————————————————————————————————————————————————————————————————
@@ -197,13 +197,13 @@ Function donutBounded($id : Text; $x : Real; $y : Real; $width : Real; $thicknes
 	
 	$r:=$width/2
 	return This:C1470.donut($id; $x+$r; $y+$r; $r; $thickness; $margin; $options)
-
+	
 	//———————————————————————————————————————————————————————————————————————————
 	// Starting a semi-donut chart fit into a square
 Function semiDonutBounded($id : Text; $x : Real; $y : Real; $width : Real; $thickness : Real; $margin : Integer; $options : Object) : cs:C1710.chart
-
+	
 	var $r : Real
-
+	
 	$r:=$width/2
 	return This:C1470.semiDonut($id; $x+$r; $y+$r; $r; $thickness; $margin; $options)
 	
@@ -230,16 +230,16 @@ Function progressRing($id : Text; $cx : Real; $cy : Real; $r : Real; $value : Re
 	var $thickness : Real:=$options.thickness#Null:C1517 ? Num:C11($options.thickness) : 0.7
 	var $margin : Integer:=$options.margin#Null:C1517 ? Num:C11($options.margin) : 0
 	var $linecap : Text:=$options.linecap#Null:C1517 ? String:C10($options.linecap) : "butt"
-
+	
 	$thickness:=$thickness=0 ? 70/100 : $thickness
 	$thickness:=$thickness<1 ? $thickness*100 : $thickness
 	$thickness:=$thickness>100 ? 100 : $thickness
-
+	
 	var $innerR : Real:=$r*Num:C11($thickness)/100
 	var $strokeW : Real:=$r-$innerR
 	$strokeW:=$strokeW<=0 ? 1 : $strokeW
 	var $midR : Real:=$innerR+($strokeW/2)
-	var $circ : Real:=2*Pi*$midR
+	var $circ : Real:=2*Pi:K30:1*$midR
 	var $dash : Real:=$circ*$percent/100
 	var $gap : Real:=$circ-$dash
 	
@@ -281,6 +281,117 @@ Function progressRing($id : Text; $cx : Real; $cy : Real; $r : Real; $value : Re
 			
 		End if 
 	End if 
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————————————————————
+	// Draw a circular gauge (colored zones + needle)
+Function circularGauge($id : Text; $cx : Real; $cy : Real; $r : Real; $value : Real; $max : Real; $options : Object) : cs:C1710.chart
+	
+	$options:=$options || {}
+	
+	If ($max<=0)
+		
+		This:C1470._pushError("circularGauge(): max must be greater than 0")
+		
+		return This:C1470
+		
+	End if 
+	
+	var $ratio : Real:=$value/$max
+	$ratio:=$ratio<0 ? 0 : $ratio
+	$ratio:=$ratio>1 ? 1 : $ratio
+	var $percent : Real:=$ratio*100
+	
+	var $origin : Real:=$options.origin#Null:C1517 ? Num:C11($options.origin) : -90
+	var $span : Real:=$options.span#Null:C1517 ? Num:C11($options.span) : 180
+	$span:=Abs:C99($span)
+	$span:=$span=0 ? 180 : $span
+	$span:=$span>360 ? 360 : $span
+	
+	var $thickness : Real:=$options.thickness#Null:C1517 ? Num:C11($options.thickness) : 0.72
+	$thickness:=$thickness=0 ? 70/100 : $thickness
+	$thickness:=$thickness<1 ? $thickness*100 : $thickness
+	$thickness:=$thickness>100 ? 100 : $thickness
+	
+	var $margin : Integer:=$options.margin#Null:C1517 ? Num:C11($options.margin) : 1
+	var $zones : Collection:=$options.zones
+	var $zoneId : Text:=$id+"_zones"
+	
+	If (Value type:C1509($zones)#Is collection:K8:32)
+		
+		$zones:=[\
+			{limit: $max*0.6; color: "#22a06b"}; \
+			{limit: $max*0.85; color: "#ff8b00"}; \
+			{limit: $max; color: "#d7263d"}\
+			]
+		
+	End if 
+	
+	This:C1470.donut($zoneId; $cx; $cy; $r; $thickness; $margin; {origin: $origin; span: $span})
+	
+	var $prevLimit : Real:=0
+	var $zone : Object
+	For each ($zone; $zones)
+		
+		var $limit : Real:=Num:C11($zone.limit)
+		$limit:=$limit<0 ? 0 : $limit
+		$limit:=$limit>$max ? $max : $limit
+		
+		var $slice : Real:=($limit-$prevLimit)/$max*100
+		
+		If ($slice>0)
+			
+			This:C1470.wedge($zoneId; $slice).fill($zone.color || "#999")
+			
+			$prevLimit:=$limit
+			
+		End if 
+		
+	End for each 
+	
+	If ($prevLimit<$max)
+		
+		This:C1470.wedge($zoneId; (($max-$prevLimit)/$max)*100).fill("#d7263d")
+		
+	End if 
+	
+	var $needleAngle : Real:=$origin+($span*$ratio)
+	var $needleLen : Real:=$r*($options.needleRatio#Null:C1517 ? Num:C11($options.needleRatio) : 0.82)
+	var $needleW : Real:=$options.needleWidth#Null:C1517 ? Num:C11($options.needleWidth) : 3
+	var $needleColor : Text:=$options.needleColor || "#1f2937"
+	var $hubR : Real:=$r*0.07
+	
+	This:C1470.line($cx; $cy; This:C1470._getPoint($needleAngle; $needleLen; $cx; $cy)[0]; This:C1470._getPoint($needleAngle; $needleLen; $cx; $cy)[1])\
+		.stroke($needleColor).strokeWidth($needleW)
+	
+	This:C1470.circle($hubR; $cx; $cy).fill($options.hubColor || "#f7f7f7").stroke($needleColor).strokeWidth(2)
+	
+	If ($options.showValue#Null:C1517 ? $options.showValue : True:C214)
+		
+		var $unit : Text:=String:C10($options.unit)
+		var $label : Text:=$options.label#Null:C1517 ? String:C10($options.label) : String:C10(Round:C94($value; 1))+$unit
+		This:C1470.text($label).position($cx; $cy+($r*0.45)).alignment(Align center:K42:3)\
+			.font($options.valueFont || {size: 18; style: Bold:K14:2; color: "#1f2937"})
+		
+	End if 
+	
+	If ($options.showMinMax#Null:C1517 ? $options.showMinMax : True:C214)
+		
+		var $leftPoint : Collection:=This:C1470._getPoint($origin; $r*1.08; $cx; $cy)
+		var $rightPoint : Collection:=This:C1470._getPoint($origin+$span; $r*1.08; $cx; $cy)
+		
+		This:C1470.text($options.minLabel#Null:C1517 ? String:C10($options.minLabel) : "0")\
+			.position($leftPoint[0]; $leftPoint[1]+14).alignment(Align center:K42:3)\
+			.font($options.scaleFont || {size: 12; color: "#4b5563"})
+		
+		This:C1470.text($options.maxLabel#Null:C1517 ? String:C10($options.maxLabel) : String:C10($max))\
+			.position($rightPoint[0]; $rightPoint[1]+14).alignment(Align center:K42:3)\
+			.font($options.scaleFont || {size: 12; color: "#4b5563"})
+		
+	End if 
+	
+	This:C1470.id:=$id
 	
 	return This:C1470
 	
@@ -348,7 +459,7 @@ Function wedge($id : Text; $percent : Real) : cs:C1710.chart
 		: ($o.type="donut")
 			
 			var $maxAngle : Real:=$origin+$span-Num:C11($o.margin)
-
+			
 			If ($to>$maxAngle)
 				
 				$to:=$maxAngle

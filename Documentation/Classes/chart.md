@@ -17,6 +17,7 @@ This class extends the <a href="svg.md">`svg`</a>class
 |.**semiDonut** ( id :`Text` ; cx : `Real` ; cy : `Real` ; r : `Real` {; thickness : `Real` {; margin : `Real` {; options : `Object`}}}) → `cs.chart` | Start a semi-donut chart (`span = 180`). Default origin is `-90` (top half).|
 |.**semiDonutBounded** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` {; thickness : `Real` {; margin : `Real` {; options : `Object`}}}) → `cs.chart` | Start a semi-donut chart that fits into a square.|
 |.**progressRing** ( id :`Text` ; cx : `Real` ; cy : `Real` ; r : `Real` ; value : `Real` ; max : `Real` {; options : `Object`} ) → `cs.chart` | Draws a single-value donut chart (progress ring). The ring is clamped to 0..100%. Supports track color, value color, origin, thickness, optional center label and font via options.|
+|.**circularGauge** ( id :`Text` ; cx : `Real` ; cy : `Real` ; r : `Real` ; value : `Real` ; max : `Real` {; options : `Object`} ) → `cs.chart` | Draws a circular gauge with colored zones, a needle and optional value/min/max labels.|
 |.**wedge**( id :`Text` ; percent : `Real`) → `cs.chart`|Draws a segment of the 360° percentage in a pie or donut chart. If the chart id is not found, an explicit error is pushed (`wedge(): chart id not found: ...`).|
 |.**horizontlBar** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Start a vertical bar chart. `options.data` must be a collection of objects `{label, value, [color]}`.|
 |.**verticalBar** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Start a vertical bar chart. `options.data` must be a collection of objects `{label, value, [color]}`.|
@@ -151,5 +152,31 @@ $chart.preview()
 ```
 <br>
 ![](./chart/semiDonut.svg)
+
+----
+
+### Circular gauge
+
+```4D
+var $chart:=cs:C1710.svgx.chart.new()
+
+$chart.newCanvas({width: 420; height: 280; viewBox: "0 0 420 280"})
+
+$chart.circularGauge("g1"; 210; 150; 110; 72; 100; {\
+	span: 180; \
+	origin: -90; \
+	thickness: 0.72; \
+	unit: "%"; \
+	zones: [\
+		{limit: 60; color: "#22a06b"}; \
+		{limit: 85; color: "#ff8b00"}; \
+		{limit: 100; color: "#d7263d"}\
+	]\
+})
+
+$chart.preview()
+```
+<br>
+![](./chart/circularGauge.svg)
 
 ----
