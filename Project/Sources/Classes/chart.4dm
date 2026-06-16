@@ -1549,6 +1549,64 @@ than in the “Cartesian” coordinates system we must tranlate Y values
 	return This:C1470
 	
 	//———————————————————————————————————————————————————————————————————————————
+	// Mini line chart for KPI cards
+Function sparkline($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
+	
+	$options:=$options || {}
+	
+	This:C1470._closeChart(This:C1470.id)
+	This:C1470.id:=$id
+	
+	// Create root group
+	This:C1470.group().translate($x; $y).setID($id)
+	
+	var $values : Collection:=$options.data || []
+	
+	If ($values.length=0)
+		return This:C1470
+	End if 
+	
+	// Calculate min/max for normalization
+	var $min : Real:=$values.min()
+	var $max : Real:=$values.max()
+	var $range : Real:=$max-$min
+	
+	If ($range=0)
+		$range:=1
+	End if 
+	
+	// Build points collection [x, y]
+	var $points : Collection:=[]
+	var $i : Integer
+	var $stepX : Real:=$width/($values.length-1)
+	
+	For ($i:=0; $i<$values.length; $i+=1)
+		var $normalized : Real:=($values[$i]-$min)/$range
+		// Invert Y for SVG coords
+		var $pointY : Real:=$height*(1-$normalized)
+		$points.push([$i*$stepX; $pointY])
+	End for 
+	
+	// Draw fill under curve (optional)
+	If (Bool:C1537($options.fill))
+		This:C1470.polygon().setID($id+"_fill")
+		This:C1470.plot([[$points[0][0]; $height]; ...$points; [$points[$points.length-1][0]; $height]])
+		This:C1470.fillColor($options.fillColor || "rgba(100,150,255,0.2)")
+		This:C1470.stroke("none")
+	End if 
+	
+	// Draw line
+	This:C1470.polyline().setID($id+"_line")
+	This:C1470.plot($points)
+	This:C1470.stroke($options.color || "#1f77b4")
+	This:C1470.strokeWidth($options.strokeWidth || 2)
+	This:C1470.fill("none")
+	
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+	
+	return This:C1470
+	
+	//———————————————————————————————————————————————————————————————————————————
 	//
 Function setValues($id : Text; $values : Collection) : cs:C1710.chart
 	
