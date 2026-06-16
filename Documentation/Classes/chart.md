@@ -64,7 +64,7 @@ $chart.horizontalBar("myHBar"; 10; 10; 400; 200; {\
 $chart.preview()
 ```
 <br>
-![horizontalBar](./chart/horizontalBar.png)
+<img src="./chart/horizontalBar.png"/>
 
 ----
 
@@ -91,7 +91,7 @@ horizontalGridLines: {unit: 40; color: "blue"}\
 $chart.preview()
 ```
 <br>
-![verticalBar](./chart/verticalBar.png)
+<img src="./chart/verticalBar.png"/>
 
 ----
 
@@ -157,7 +157,7 @@ $chart.preview()
 ```
 
 <br>
-![](./chart/stackedBars.svg)
+<img src="./chart/stackedBars.svg"/>
 
 ----
 
@@ -222,7 +222,7 @@ $chart.text("Produit C").position(674; 244).fontSize(14).fillColor("#334155")
 $chart.preview()
 ```
 <br>
-![](./chart/groupedBar.svg)
+<img src="./chart/groupedBar.svg"/>
 
 ----
 
@@ -291,7 +291,7 @@ $chart.text("TVA").position(450; 697).fontSize(18).fillColor("#1f376e")
 $chart.preview()
 ```
 <br>
-![](./chart/semiDonut.svg)
+<img src="./chart/semiDonut.svg"/>
 
 ----
 
@@ -317,7 +317,7 @@ $chart.circularGauge("g1"; 210; 150; 110; 72; 100; {\
 $chart.preview()
 ```
 <br>
-![](./chart/circularGauge.svg)
+<img src="./chart/circularGauge.svg"/>
 
 ----
 
@@ -353,7 +353,7 @@ $chart.sparkline("spark_users"; 450; 280; 300; 60; {data: $data4; color: "#E91E6
 $chart.preview()
 ```
 <br>
-![](./chart/sparkline.svg)
+<img src="./chart/sparkline.svg"/>
 
 ----
 
@@ -408,7 +408,7 @@ max: 100\
 $chart.preview()
 ```
 <br>
-![](./chart/lollipop.svg)
+<img src="./chart/lollipop.svg"/>
 
 ----
 
@@ -469,7 +469,7 @@ colors: ["#1A237E"; "#283593"; "#3F51B5"; "#7986CB"; "#FFEB3B"; "#FFA726"; "#D84
 $chart.preview()
 ```
 <br>
-![](./chart/heatmap.svg)
+<img src="./chart/heatmap.svg"/>
 
 ----
 
@@ -517,7 +517,7 @@ $chart.radar("radar2"; 750; 280; 150; {data: $radarData2; max: 10; levels: 5; sh
 $chart.preview()
 ```
 <br>
-![](./chart/radar.svg)
+<img src="./chart/radar.svg"/>
 
 ----
 
@@ -573,6 +573,6 @@ padding: 15\
 $chart.preview()
 ```
 <br>
-![](./chart/waterfall.svg)
+<img src="./chart/waterfall.svg"/>
 
 ----
