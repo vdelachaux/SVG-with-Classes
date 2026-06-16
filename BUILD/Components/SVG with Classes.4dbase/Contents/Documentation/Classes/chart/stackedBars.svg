@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" font-family="'lucida grande','segoe UI',sans-serif" font-size="12" height="700" preserveAspectRatio="none" shape-rendering="crispEdges" stroke="black" text-rendering="geometricPrecision" viewBox="0 0 1080 700" viewport-fill="none" width="1080" xmlns:vdl="https://github.com/vdelachaux/SVG-with-Classes" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <text fill="#334155" font-size="14" font-weight="bold" x="250" y="70">Vertical stacked</text>
+  <g transform="translate(40,90)">
+    <vdl:graph height="260" id="vstack" options="{&quot;data&quot;:[{&quot;label&quot;:&quot;Jan&quot;,&quot;segments&quot;:[{&quot;value&quot;:35,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:22,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:18,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Feb&quot;,&quot;segments&quot;:[{&quot;value&quot;:30,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:28,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:14,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Mar&quot;,&quot;segments&quot;:[{&quot;value&quot;:42,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:20,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Apr&quot;,&quot;segments&quot;:[{&quot;value&quot;:38,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:19,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:24,&quot;color&quot;:&quot;#22c55e&quot;}]}],&quot;showLabels&quot;:true,&quot;showValues&quot;:true,&quot;axis&quot;:true,&quot;stroke&quot;:&quot;white&quot;}" orient="verticalStacked" type="bar" values="[{&quot;label&quot;:&quot;Jan&quot;,&quot;segments&quot;:[{&quot;value&quot;:35,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:22,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:18,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Feb&quot;,&quot;segments&quot;:[{&quot;value&quot;:30,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:28,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:14,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Mar&quot;,&quot;segments&quot;:[{&quot;value&quot;:42,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:20,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Apr&quot;,&quot;segments&quot;:[{&quot;value&quot;:38,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:19,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:24,&quot;color&quot;:&quot;#22c55e&quot;}]}]" width="440" x="40" y="90"/>
+    <rect fill="#3b82f6" height="103.40909090909" id="serie_1_seg_1" stroke="white" width="88" x="11" y="156.59090909091"/>
+    <rect fill="#f97316" height="65" id="serie_1_seg_2" stroke="white" width="88" x="11" y="91.590909090909"/>
+    <rect fill="#22c55e" height="53.181818181818" id="serie_1_seg_3" stroke="white" width="88" x="11" y="38.409090909091"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="55" y="34.409090909091">75</text>
+    <text fill="black" font-size="12" text-anchor="middle" x="55" y="278">Jan</text>
+    <rect fill="#3b82f6" height="88.636363636364" id="serie_2_seg_4" stroke="white" width="88" x="121" y="171.36363636364"/>
+    <rect fill="#f97316" height="82.727272727273" id="serie_2_seg_5" stroke="white" width="88" x="121" y="88.636363636364"/>
+    <rect fill="#22c55e" height="41.363636363636" id="serie_2_seg_6" stroke="white" width="88" x="121" y="47.272727272727"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="165" y="43.272727272727">72</text>
+    <text fill="black" font-size="12" text-anchor="middle" x="165" y="278">Feb</text>
+    <rect fill="#3b82f6" height="124.09090909091" id="serie_3_seg_7" stroke="white" width="88" x="231" y="135.90909090909"/>
+    <rect fill="#f97316" height="76.818181818182" id="serie_3_seg_8" stroke="white" width="88" x="231" y="59.090909090909"/>
+    <rect fill="#22c55e" height="59.090909090909" id="serie_3_seg_9" stroke="white" width="88" x="231" y="-7.105427357601E-15"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="275" y="12">88</text>
+    <text fill="black" font-size="12" text-anchor="middle" x="275" y="278">Mar</text>
+    <rect fill="#3b82f6" height="112.27272727273" id="serie_4_seg_10" stroke="white" width="88" x="341" y="147.72727272727"/>
+    <rect fill="#f97316" height="56.136363636364" id="serie_4_seg_11" stroke="white" width="88" x="341" y="91.590909090909"/>
+    <rect fill="#22c55e" height="70.909090909091" id="serie_4_seg_12" stroke="white" width="88" x="341" y="20.681818181818"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="385" y="16.681818181818">81</text>
+    <text fill="black" font-size="12" text-anchor="middle" x="385" y="278">Apr</text>
+    <line id="hAxis" stroke-width="1" x1="0" x2="440" y1="260" y2="260"/>
+    <line id="vAxis" stroke-width="1" x1="0" x2="0" y1="-5" y2="260"/>
+    <text fill="#334155" font-size="14" font-weight="bold" x="250" y="420">Horizontal stacked</text>
+  </g>
+  <g transform="translate(72,440)">
+    <vdl:graph height="200" id="hstack" options="{&quot;data&quot;:[{&quot;label&quot;:&quot;Jan&quot;,&quot;segments&quot;:[{&quot;value&quot;:35,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:22,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:18,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Feb&quot;,&quot;segments&quot;:[{&quot;value&quot;:30,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:28,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:14,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Mar&quot;,&quot;segments&quot;:[{&quot;value&quot;:42,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:20,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Apr&quot;,&quot;segments&quot;:[{&quot;value&quot;:38,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:19,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:24,&quot;color&quot;:&quot;#22c55e&quot;}]}],&quot;showLabels&quot;:true,&quot;showValues&quot;:true,&quot;axis&quot;:true,&quot;stroke&quot;:&quot;white&quot;}" orient="horizontalStacked" type="bar" values="[{&quot;label&quot;:&quot;Jan&quot;,&quot;segments&quot;:[{&quot;value&quot;:35,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:22,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:18,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Feb&quot;,&quot;segments&quot;:[{&quot;value&quot;:30,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:28,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:14,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Mar&quot;,&quot;segments&quot;:[{&quot;value&quot;:42,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:20,&quot;color&quot;:&quot;#22c55e&quot;}]},{&quot;label&quot;:&quot;Apr&quot;,&quot;segments&quot;:[{&quot;value&quot;:38,&quot;color&quot;:&quot;#3b82f6&quot;},{&quot;value&quot;:19,&quot;color&quot;:&quot;#f97316&quot;},{&quot;value&quot;:24,&quot;color&quot;:&quot;#22c55e&quot;}]}]" width="440" x="40" y="440"/>
+    <rect fill="#3b82f6" height="40" stroke="white" width="175" x="10" y="10"/>
+    <rect fill="#f97316" height="40" stroke="white" width="110" x="185" y="10"/>
+    <rect fill="#22c55e" height="40" stroke="white" width="90" x="295" y="10"/>
+    <text fill="black" font-size="12" text-anchor="start" x="389" y="30">75</text>
+    <textArea fill="black" font-size="12" height="auto" text-align="end" transform="translate(-32,20)" width="22" x="0" y="12">Jan</textArea>
+    <rect fill="#3b82f6" height="40" stroke="white" width="150" x="10" y="60"/>
+    <rect fill="#f97316" height="40" stroke="white" width="140" x="160" y="60"/>
+    <rect fill="#22c55e" height="40" stroke="white" width="70" x="300" y="60"/>
+    <text fill="black" font-size="12" text-anchor="start" x="374" y="80">72</text>
+    <textArea fill="black" font-size="12" height="auto" text-align="end" transform="translate(-32,70)" width="22" x="0" y="12">Feb</textArea>
+    <rect fill="#3b82f6" height="40" stroke="white" width="210" x="10" y="110"/>
+    <rect fill="#f97316" height="40" stroke="white" width="130" x="220" y="110"/>
+    <rect fill="#22c55e" height="40" stroke="white" width="100" x="350" y="110"/>
+    <text fill="black" font-size="12" text-anchor="start" x="454" y="130">88</text>
+    <textArea fill="black" font-size="12" height="auto" text-align="end" transform="translate(-32,120)" width="22" x="0" y="12">Mar</textArea>
+    <rect fill="#3b82f6" height="40" stroke="white" width="190" x="10" y="160"/>
+    <rect fill="#f97316" height="40" stroke="white" width="95" x="200" y="160"/>
+    <rect fill="#22c55e" height="40" stroke="white" width="120" x="295" y="160"/>
+    <text fill="black" font-size="12" text-anchor="start" x="419" y="180">81</text>
+    <textArea fill="black" font-size="12" height="auto" text-align="end" transform="translate(-32,170)" width="22" x="0" y="12">Apr</textArea>
+    <line stroke-width="1" x1="0" x2="460" y1="210" y2="210"/>
+    <line stroke-width="1" x1="0" x2="0" y1="0" y2="210"/>
+    <rect fill="#3b82f6" height="16" width="16" x="620" y="160"/>
+    <text fill="#334155" font-size="14" x="644" y="174">Produit A</text>
+    <rect fill="#f97316" height="16" width="16" x="620" y="190"/>
+    <text fill="#334155" font-size="14" x="644" y="204">Produit B</text>
+    <rect fill="#22c55e" height="16" width="16" x="620" y="220"/>
+    <text fill="#334155" font-size="14" x="644" y="234">Produit C</text>
+  </g>
+</svg>

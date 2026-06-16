@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" font-family="'lucida grande','segoe UI',sans-serif" font-size="12" height="420" preserveAspectRatio="none" shape-rendering="crispEdges" stroke="black" text-rendering="geometricPrecision" viewBox="0 0 980 420" viewport-fill="none" width="980" xmlns:vdl="https://github.com/vdelachaux/SVG-with-Classes" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <g>
+    <vdl:graph cur="90" cx="170" cy="230" id="g_low_zones" margin="1" origin="-90" r="120" span="180" thickness="72" type="donut" values="[60,25,15]"/>
+    <path d="M50,230 A120,120 0 0,1 205.0846,115.24343 L195.26092 147.37527 A86.4,86.4 0 0,0 83.6,230Z" fill="#22a06b" indx="1"/>
+    <path d="M207.08204,115.87322 A120,120 0 0,1 275.95371,173.66341 L246.28667 189.43766 A86.4,86.4 0 0,0 196.69907,147.82872Z" fill="#ff8b00" indx="2"/>
+    <path d="M276.92078,175.52114 A120,120 0 0,1 289.98172,227.90571 L256.38684 228.49211 A86.4,86.4 0 0,0 246.98296,190.77522Z" fill="#d7263d" indx="3"/>
+    <line stroke="#0f172a" stroke-width="3" x1="170" x2="125.32733" y1="230" y2="142.32496"/>
+    <circle cx="170" cy="230" fill="#f7f7f7" r="8.4" stroke="#0f172a" stroke-width="2"/>
+    <text fill="#1f2937" font-size="18" font-weight="bold" text-anchor="middle" x="170" y="284">35%</text>
+    <text fill="#4b5563" font-size="12" text-anchor="middle" x="40.4" y="244">0</text>
+    <text fill="#4b5563" font-size="12" text-anchor="middle" x="299.6" y="244">100</text>
+    <text fill="#334155" font-size="16" text-anchor="middle" x="170" y="380">Low load</text>
+    <g>
+      <vdl:graph cur="90" cx="490" cy="230" id="g_mid_zones" margin="1" origin="-90" r="120" span="180" thickness="72" type="donut" values="[60,25,15]"/>
+      <path d="M370,230 A120,120 0 0,1 525.0846,115.24343 L515.26092 147.37527 A86.4,86.4 0 0,0 403.6,230Z" fill="#22a06b" indx="1"/>
+      <path d="M527.08204,115.87322 A120,120 0 0,1 595.95371,173.66341 L566.28667 189.43766 A86.4,86.4 0 0,0 516.69907,147.82872Z" fill="#ff8b00" indx="2"/>
+      <path d="M596.92078,175.52114 A120,120 0 0,1 609.98172,227.90571 L576.38684 228.49211 A86.4,86.4 0 0,0 566.98296,190.77522Z" fill="#d7263d" indx="3"/>
+      <line stroke="#0f172a" stroke-width="3" x1="490" x2="552.72252" y1="230" y2="154.1815"/>
+      <circle cx="490" cy="230" fill="#f7f7f7" r="8.4" stroke="#0f172a" stroke-width="2"/>
+      <text fill="#1f2937" font-size="18" font-weight="bold" text-anchor="middle" x="490" y="284">72%</text>
+      <text fill="#4b5563" font-size="12" text-anchor="middle" x="360.4" y="244">0</text>
+      <text fill="#4b5563" font-size="12" text-anchor="middle" x="619.6" y="244">100</text>
+      <text fill="#334155" font-size="16" text-anchor="middle" x="490" y="380">Nominal zone</text>
+      <g>
+        <vdl:graph cur="90" cx="810" cy="230" id="g_high_zones" margin="1" origin="-90" r="120" span="180" thickness="72" type="donut" values="[60,25,15]"/>
+        <path d="M690,230 A120,120 0 0,1 845.0846,115.24343 L835.26092 147.37527 A86.4,86.4 0 0,0 723.6,230Z" fill="#22a06b" indx="1"/>
+        <path d="M847.08204,115.87322 A120,120 0 0,1 915.95371,173.66341 L886.28667 189.43766 A86.4,86.4 0 0,0 836.69907,147.82872Z" fill="#ff8b00" indx="2"/>
+        <path d="M916.92078,175.52114 A120,120 0 0,1 929.98172,227.90571 L896.38684 228.49211 A86.4,86.4 0 0,0 886.98296,190.77522Z" fill="#d7263d" indx="3"/>
+        <line stroke="#0f172a" stroke-width="3" x1="810" x2="906.65707" y1="230" y2="211.56168"/>
+        <circle cx="810" cy="230" fill="#f7f7f7" r="8.4" stroke="#0f172a" stroke-width="2"/>
+        <text fill="#1f2937" font-size="18" font-weight="bold" text-anchor="middle" x="810" y="284">94%</text>
+        <text fill="#4b5563" font-size="12" text-anchor="middle" x="680.4" y="244">0</text>
+        <text fill="#4b5563" font-size="12" text-anchor="middle" x="939.6" y="244">100</text>
+        <text fill="#334155" font-size="16" text-anchor="middle" x="810" y="380">High zone</text>
+      </g>
+    </g>
+  </g>
+</svg>

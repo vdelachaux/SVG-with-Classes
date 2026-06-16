@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" font-family="'lucida grande','segoe UI',sans-serif" font-size="12" height="720" preserveAspectRatio="none" shape-rendering="crispEdges" stroke="black" text-rendering="geometricPrecision" viewBox="0 0 1100 720" viewport-fill="none" width="1100" xmlns:vdl="https://github.com/vdelachaux/SVG-with-Classes" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <text fill="#334155" font-size="14" font-weight="bold" x="250" y="70">Vertical grouped</text>
+  <text fill="#334155" font-size="14" font-weight="bold" x="250" y="418">Horizontal grouped</text>
+  <g transform="translate(40,90)">
+    <vdl:graph height="280" id="vgroup" options="{&quot;data&quot;:[{&quot;label&quot;:&quot;Jan&quot;,&quot;groups&quot;:[{&quot;value&quot;:42,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:18,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Feb&quot;,&quot;groups&quot;:[{&quot;value&quot;:35,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:31,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:22,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Mar&quot;,&quot;groups&quot;:[{&quot;value&quot;:46,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:29,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Apr&quot;,&quot;groups&quot;:[{&quot;value&quot;:39,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:24,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:21,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]}],&quot;showLabels&quot;:true,&quot;showValues&quot;:true,&quot;axis&quot;:true,&quot;stroke&quot;:&quot;white&quot;}" orient="verticalGrouped" type="bar" values="[{&quot;label&quot;:&quot;Jan&quot;,&quot;groups&quot;:[{&quot;value&quot;:42,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:18,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Feb&quot;,&quot;groups&quot;:[{&quot;value&quot;:35,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:31,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:22,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Mar&quot;,&quot;groups&quot;:[{&quot;value&quot;:46,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:29,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Apr&quot;,&quot;groups&quot;:[{&quot;value&quot;:39,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:24,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:21,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]}]" width="460" x="40" y="90"/>
+    <rect fill="#3b82f6" height="255.65217391304" id="cat_1_grp_1" stroke="white" width="27.777777777778" x="16.25" y="24.347826086957"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="30.138888888889" y="20.347826086957">42</text>
+    <rect fill="#f97316" height="158.26086956522" id="cat_1_grp_2" stroke="white" width="27.777777777778" x="47.361111111111" y="121.73913043478"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="61.25" y="117.73913043478">26</text>
+    <rect fill="#22c55e" height="109.5652173913" id="cat_1_grp_3" stroke="white" width="27.777777777778" x="78.472222222222" y="170.4347826087"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="92.361111111111" y="166.4347826087">18</text>
+    <text fill="black" font-size="12" text-anchor="middle" x="61.25" y="298">Jan</text>
+    <rect fill="#3b82f6" height="213.04347826087" id="cat_2_grp_1" stroke="white" width="27.777777777778" x="128.75" y="66.95652173913"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="142.63888888889" y="62.95652173913">35</text>
+    <rect fill="#f97316" height="188.69565217391" id="cat_2_grp_2" stroke="white" width="27.777777777778" x="159.86111111111" y="91.304347826087"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="173.75" y="87.304347826087">31</text>
+    <rect fill="#22c55e" height="133.91304347826" id="cat_2_grp_3" stroke="white" width="27.777777777778" x="190.97222222222" y="146.08695652174"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="204.86111111111" y="142.08695652174">22</text>
+    <text fill="black" font-size="12" text-anchor="middle" x="173.75" y="298">Feb</text>
+    <rect fill="#3b82f6" height="280" id="cat_3_grp_1" stroke="white" width="27.777777777778" x="241.25" y="0"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="255.13888888889" y="12">46</text>
+    <rect fill="#f97316" height="176.52173913043" id="cat_3_grp_2" stroke="white" width="27.777777777778" x="272.36111111111" y="103.47826086957"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="286.25" y="99.478260869565">29</text>
+    <rect fill="#22c55e" height="158.26086956522" id="cat_3_grp_3" stroke="white" width="27.777777777778" x="303.47222222222" y="121.73913043478"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="317.36111111111" y="117.73913043478">26</text>
+    <text fill="black" font-size="12" text-anchor="middle" x="286.25" y="298">Mar</text>
+    <rect fill="#3b82f6" height="237.39130434783" id="cat_4_grp_1" stroke="white" width="27.777777777778" x="353.75" y="42.608695652174"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="367.63888888889" y="38.608695652174">39</text>
+    <rect fill="#f97316" height="146.08695652174" id="cat_4_grp_2" stroke="white" width="27.777777777778" x="384.86111111111" y="133.91304347826"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="398.75" y="129.91304347826">24</text>
+    <rect fill="#22c55e" height="127.82608695652" id="cat_4_grp_3" stroke="white" width="27.777777777778" x="415.97222222222" y="152.17391304348"/>
+    <text fill="black" font-size="12" text-anchor="middle" x="429.86111111111" y="148.17391304348">21</text>
+    <text fill="black" font-size="12" text-anchor="middle" x="398.75" y="298">Apr</text>
+    <line id="hAxis" stroke-width="1" x1="5" x2="455" y1="280" y2="280"/>
+    <line id="vAxis" stroke-width="1" x1="0" x2="0" y1="-5" y2="280"/>
+  </g>
+  <g transform="translate(72,450)">
+    <vdl:graph height="220" id="hgroup" options="{&quot;data&quot;:[{&quot;label&quot;:&quot;Jan&quot;,&quot;groups&quot;:[{&quot;value&quot;:42,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:18,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Feb&quot;,&quot;groups&quot;:[{&quot;value&quot;:35,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:31,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:22,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Mar&quot;,&quot;groups&quot;:[{&quot;value&quot;:46,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:29,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Apr&quot;,&quot;groups&quot;:[{&quot;value&quot;:39,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:24,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:21,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]}],&quot;showLabels&quot;:true,&quot;showValues&quot;:true,&quot;axis&quot;:true,&quot;stroke&quot;:&quot;white&quot;}" orient="horizontalGrouped" type="bar" values="[{&quot;label&quot;:&quot;Jan&quot;,&quot;groups&quot;:[{&quot;value&quot;:42,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:18,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Feb&quot;,&quot;groups&quot;:[{&quot;value&quot;:35,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:31,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:22,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Mar&quot;,&quot;groups&quot;:[{&quot;value&quot;:46,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:29,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:26,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]},{&quot;label&quot;:&quot;Apr&quot;,&quot;groups&quot;:[{&quot;value&quot;:39,&quot;color&quot;:&quot;#3b82f6&quot;,&quot;name&quot;:&quot;Produit A&quot;},{&quot;value&quot;:24,&quot;color&quot;:&quot;#f97316&quot;,&quot;name&quot;:&quot;Produit B&quot;},{&quot;value&quot;:21,&quot;color&quot;:&quot;#22c55e&quot;,&quot;name&quot;:&quot;Produit C&quot;}]}]" width="460" x="40" y="450"/>
+    <rect fill="#3b82f6" height="12.962962962963" stroke="white" width="420" x="10" y="10.25"/>
+    <text fill="black" font-size="12" text-anchor="start" x="434" y="16.731481481481">42</text>
+    <rect fill="#f97316" height="12.962962962963" stroke="white" width="260" x="10" y="24.768518518519"/>
+    <text fill="black" font-size="12" text-anchor="start" x="274" y="31.25">26</text>
+    <rect fill="#22c55e" height="12.962962962963" stroke="white" width="180" x="10" y="39.287037037037"/>
+    <text fill="black" font-size="12" text-anchor="start" x="194" y="45.768518518519">18</text>
+    <textArea fill="black" font-size="12" height="auto" text-align="end" transform="translate(-32,21.25)" width="22" x="0" y="12">Jan</textArea>
+    <rect fill="#3b82f6" height="12.962962962963" stroke="white" width="350" x="10" y="62.75"/>
+    <text fill="black" font-size="12" text-anchor="start" x="364" y="69.231481481481">35</text>
+    <rect fill="#f97316" height="12.962962962963" stroke="white" width="310" x="10" y="77.268518518519"/>
+    <text fill="black" font-size="12" text-anchor="start" x="324" y="83.75">31</text>
+    <rect fill="#22c55e" height="12.962962962963" stroke="white" width="220" x="10" y="91.787037037037"/>
+    <text fill="black" font-size="12" text-anchor="start" x="234" y="98.268518518519">22</text>
+    <textArea fill="black" font-size="12" height="auto" text-align="end" transform="translate(-32,73.75)" width="22" x="0" y="12">Feb</textArea>
+    <rect fill="#3b82f6" height="12.962962962963" stroke="white" width="460" x="10" y="115.25"/>
+    <text fill="black" font-size="12" text-anchor="start" x="474" y="121.73148148148">46</text>
+    <rect fill="#f97316" height="12.962962962963" stroke="white" width="290" x="10" y="129.76851851852"/>
+    <text fill="black" font-size="12" text-anchor="start" x="304" y="136.25">29</text>
+    <rect fill="#22c55e" height="12.962962962963" stroke="white" width="260" x="10" y="144.28703703704"/>
+    <text fill="black" font-size="12" text-anchor="start" x="274" y="150.76851851852">26</text>
+    <textArea fill="black" font-size="12" height="auto" text-align="end" transform="translate(-32,126.25)" width="22" x="0" y="12">Mar</textArea>
+    <rect fill="#3b82f6" height="12.962962962963" stroke="white" width="390" x="10" y="167.75"/>
+    <text fill="black" font-size="12" text-anchor="start" x="404" y="174.23148148148">39</text>
+    <rect fill="#f97316" height="12.962962962963" stroke="white" width="240" x="10" y="182.26851851852"/>
+    <text fill="black" font-size="12" text-anchor="start" x="254" y="188.75">24</text>
+    <rect fill="#22c55e" height="12.962962962963" stroke="white" width="210" x="10" y="196.78703703704"/>
+    <text fill="black" font-size="12" text-anchor="start" x="224" y="203.26851851852">21</text>
+    <textArea fill="black" font-size="12" height="auto" text-align="end" transform="translate(-32,178.75)" width="22" x="0" y="12">Apr</textArea>
+    <line stroke-width="1" x1="0" x2="480" y1="225" y2="225"/>
+    <line stroke-width="1" x1="0" x2="0" y1="5" y2="225"/>
+    <rect fill="#3b82f6" height="16" width="16" x="650" y="170"/>
+    <text fill="#334155" font-size="14" x="674" y="184">Produit A</text>
+    <rect fill="#f97316" height="16" width="16" x="650" y="200"/>
+    <text fill="#334155" font-size="14" x="674" y="214">Produit B</text>
+    <rect fill="#22c55e" height="16" width="16" x="650" y="230"/>
+    <text fill="#334155" font-size="14" x="674" y="244">Produit C</text>
+  </g>
+</svg>

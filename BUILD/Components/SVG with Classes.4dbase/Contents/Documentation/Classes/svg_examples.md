@@ -34,35 +34,35 @@ Example: linear gradients (from `HDI Gradient linear.4dm`). This shows several g
 ```4D
 var $svg:=cs.svg.new()
 
-$svg.defineLinearGradient("demoGradient_1"; "red"; "yellow")
+$svg.linearGradient("demoGradient_1"; "red"; "yellow")
 $svg.rect(90; 90).position(10; 10).gradient("demoGradient_1")
 $svg.textArea("rotation = 0\rrotation = 180").position(10; 100).width(90).alignment(Align center)
 
-$svg.defineLinearGradient("demoGradient_2"; "red"; "yellow"; {rotation: -180})
+$svg.linearGradient("demoGradient_2"; "red"; "yellow"; {rotation: -180})
 $svg.rect(90; 90).position(110; 10).gradient("demoGradient_2")
 $svg.textArea("rotation = -180").position(110; 100).width(100).alignment(Align center)
 
-$svg.defineLinearGradient("demoGradient_3"; "red"; "yellow"; {rotation: 45})
+$svg.linearGradient("demoGradient_3"; "red"; "yellow"; {rotation: 45})
 $svg.rect(90; 90).position(10; 140).gradient("demoGradient_3")
 $svg.textArea("rotation = 45").position(10; 230).width(90).alignment(Align center)
 
-$svg.defineLinearGradient("demoGradient_4"; "red"; "yellow"; {rotation: -45})
+$svg.linearGradient("demoGradient_4"; "red"; "yellow"; {rotation: -45})
 $svg.rect(90; 90).position(110; 140).gradient("demoGradient_4")
 $svg.textArea("rotation = -45").position(110; 230).width(90).alignment(Align center)
 
-$svg.defineLinearGradient("demoGradient_5"; "red"; "yellow"; {rotation: 90})
+$svg.linearGradient("demoGradient_5"; "red"; "yellow"; {rotation: 90})
 $svg.rect(90; 90).position(10; 270).gradient("demoGradient_5")
 $svg.textArea("rotation = 90").position(10; 360).width(90).alignment(Align center)
 
-$svg.defineLinearGradient("demoGradient_6"; "red"; "yellow"; {rotation: -90})
+$svg.linearGradient("demoGradient_6"; "red"; "yellow"; {rotation: -90})
 $svg.rect(90; 90).position(110; 270).gradient("demoGradient_6")
 $svg.textArea("rotation = -90").position(110; 360).width(90).alignment(Align center)
 
-$svg.defineLinearGradient("demoGradient_7"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"})
+$svg.linearGradient("demoGradient_7"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"})
 $svg.rect(90; 90).position(10; 400).gradient("demoGradient_7")
 $svg.textArea("rotation = -180").position(10; 490).width(100).alignment(Align center)
 
-$svg.defineLinearGradient("demoGradient_8"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"; startOffset: 20; stopOffset: 80})
+$svg.linearGradient("demoGradient_8"; "red"; "yellow"; {rotation: -180; spreadMethod: "reflect"; startOffset: 20; stopOffset: 80})
 $svg.rect(90; 90).position(110; 400).gradient("demoGradient_8")
 $svg.textArea("rotation = -180\roffset=20/80").position(110; 490).width(100).alignment(Align center)
 
@@ -74,19 +74,19 @@ Example: radial gradient (from `HDI Gradient radial.4dm`):
 ```4D
 var $svg:=cs.svg.new()
 
-$svg.defineRadialGradient("grad1"; "yellow"; "red")
+$svg.radialGradient("grad1"; "yellow"; "red")
 $svg.rect(90).position(10; 10).gradient("grad1")
 $svg.text("grad1").position(15; 25)
 
-$svg.defineRadialGradient("grad2"; "yellow"; "red"; {cx: 50; cy: 50; r: 20; fx: 50; fy: 50})
+$svg.radialGradient("grad2"; "yellow"; "red"; {cx: 50; cy: 50; r: 20; fx: 50; fy: 50})
 $svg.rect(90).position(110; 10).gradient("grad2")
 $svg.text("grad2").position(115; 25)
 
-$svg.defineRadialGradient("grad3"; "yellow"; "red"; {cx: 80; cy: 60; r: 50; fx: 60; fy: 80})
+$svg.radialGradient("grad3"; "yellow"; "red"; {cx: 80; cy: 60; r: 50; fx: 60; fy: 80})
 $svg.rect(90).position(10; 110).gradient("grad3")
 $svg.text("grad3").position(15; 125)
 
-$svg.defineRadialGradient("grad4"; "yellow"; "red"; {cx: 20; cy: 50; r: 80; fx: 20; fy: 30})
+$svg.radialGradient("grad4"; "yellow"; "red"; {cx: 20; cy: 50; r: 80; fx: 20; fy: 30})
 $svg.rect(90).position(110; 110).gradient("grad4")
 $svg.text("grad4").position(115; 125)
 
@@ -95,42 +95,42 @@ $svg.preview()
 
 ## Patterns
 
-Example: define a pattern and use it to fill/outline (from `HDI Pattern.4dm`). Note the use of `.endPattern()` to finalize the pattern definition.
+Example: define a pattern and use it to fill/outline (from `HDI Pattern.4dm`).
 
 ```4D
 var $svg:=cs.svg.new()
 
 $svg.comment(" 📌 Setting a pattern and using it to fill an ellipse")
 
-$svg.definePattern("myPattern1"; {\
+$svg.pattern("myPattern1"; {\
 width: 100; \
 height: 100; \
 x: 0; \
 y: 0; \
 viewBox: [0; 0; 10; 10]})
 
-$svg.path("myPattern1")\
+$svg.path()\
 .moveTo([0; 0])\
 .lineTo([7; 0])\
 .lineTo([3.5; 7])\
 .closePath()\
 .fill("lightgreen")\
 .stroke("olivedrab")\
-.endPattern()
+.addTo("myPattern1")
 
 $svg.ellipse(350; 150).cx(400).cy(200).stroke(5).stroke("olive").pattern("myPattern1")
 
 $svg.comment(" 📌 Define a pattern and use it to fill and outline an ellipse\r"\
 +" 🛈 Note: that the pattern was defined into the \"defs\" element ")
 
-$svg.definePattern("myPattern2"; {\
+$svg.pattern("myPattern2"; {\
 width: 80; \
 height: 80; \
 x: 0; \
 y: 0; \
 viewBox: [0; 0; 20; 20]})
 
-$svg.rect(20; "myPattern2").stroke("white").fill("sandybrown").endPattern()
+$svg.Square(20).stroke("white").fill("sandybrown").addTo("myPattern2")
 
 $svg.ellipse(350; 150).cx(400).cy(200).pattern("myPattern2").pattern("myPattern2"; True).translate(100; 200)
 
@@ -214,8 +214,8 @@ The `liquidGlass` demo shows composition: gradients + blur + non-scaling stroke 
 ```4D
 var $svg:=cs.svg.new()
  
-$svg.defineLinearGradient("linearLiquidGlass"; "white"; "silver"; {rotation: -90; startOffset: 20})
-$svg.defineRadialGradient("radialLiquidGlass"; "white"; "silver")
+$svg.linearGradient("linearLiquidGlass"; "white"; "silver"; {rotation: -90; startOffset: 20})
+$svg.radialGradient("radialLiquidGlass"; "white"; "silver")
  
 $svg.image(File("/RESOURCES/lena.jpg"))
  
@@ -342,5 +342,15 @@ INVOKE ACTION:C1439(ak show clipboard:K76:58)
 Small example showing `point()` and `polarToCartesian()`:
 
 ```4D
-var $svg:=cs.svg.new()// Defining a point at x = 100 and y = 100var $point:=$svg.point(100; 100)// Move point by radius 50 at 45 degrees$point:=$svg.polarToCartesian($point; 50; 45)// & use it$svg.circle(10; $point[0]; $point[1]).fillColor("blue")$svg.preview()
+var $svg:=cs.svg.new()
+
+// Defining a point at x = 100 and y = 100
+var $point:=$svg.point(100; 100)
+
+// Move point by radius 50 at 45 degrees
+$point:=$svg.polarToCartesian($point; 50; 45)
+
+// & use it
+$svg.circle(10; $point[0]; $point[1]).fillColor("blue")
+$svg.preview()
 ```

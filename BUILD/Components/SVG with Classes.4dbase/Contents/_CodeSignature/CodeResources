@@ -20,14 +20,18 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			FK8RmBRHMTAin+oIoJyW5sOE0O0=
+			ThRcQKJomHVWg9hfYETRbvkMmqg=
 			</data>
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>Resources/logo.svg</key>
+		<key>Resources/logo 2.svg</key>
 		<data>
 		rI30d8CCODLMmyhxpZo4yz9zwSc=
+		</data>
+		<key>Resources/logo.svg</key>
+		<data>
+		Ml9HqxEizap2fO6nmSVlBqt4qRQ=
 		</data>
 	</dict>
 	<key>files2</key>
@@ -36,7 +40,14 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			dLRElmAk1zA77xIDQfzZemjOc6wcDKvs18MALTb45+k=
+			wOYj7zy1re6uSBROnm0bGTiSf3pVcoyS/3xDxd8G1I0=
+			</data>
+		</dict>
+		<key>Documentation/Classes/chart/circularGauge.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			4qsmNps+1+6g1E0uMBV5Sd4qYGPE0aerDbpEoUHkpSI=
 			</data>
 		</dict>
 		<key>Documentation/Classes/chart/donut.png</key>
@@ -46,11 +57,32 @@
 			nXvvSqzgPYYCG45r1Bn1t6LaNjk7iXUvV0+6ut0/52g=
 			</data>
 		</dict>
+		<key>Documentation/Classes/chart/groupedBar.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			rX/8ElVC+2nMZwMmxxpxp6TVw0dPbDV5RYoMrGvdYds=
+			</data>
+		</dict>
+		<key>Documentation/Classes/chart/heatmap.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			peWshynAql7quqgBl7e9917wBBelBtDZ9pI5m01s/nE=
+			</data>
+		</dict>
 		<key>Documentation/Classes/chart/horizontalBar.png</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			Y6WmPifiBvC8iKRMWQJGixVInGtHeXWLTz29SBCfnFI=
+			</data>
+		</dict>
+		<key>Documentation/Classes/chart/lollipop.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			ilgicwQrfvDLL2WcfKhb7naeEHpzJsUhmAHM/bA0D0M=
 			</data>
 		</dict>
 		<key>Documentation/Classes/chart/pie.png</key>
@@ -60,6 +92,41 @@
 			oY2WqaOfVakj3EqLq0Fd9qfA/kh6CxsmQohzVX348B0=
 			</data>
 		</dict>
+		<key>Documentation/Classes/chart/progressRing-example.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			O/L2mPC/dAzyZRlNxxnCBD3ZKFG2ZcKVFKVykC60PzA=
+			</data>
+		</dict>
+		<key>Documentation/Classes/chart/radar.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			S2CUyObCkibtkgDRzayarJX7wn8LlxCvqBhLL7o/4x4=
+			</data>
+		</dict>
+		<key>Documentation/Classes/chart/semiDonut.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			+ujzwESpEKVEwwwRl1fNT3Cptm3xzT/4zthsik6tv90=
+			</data>
+		</dict>
+		<key>Documentation/Classes/chart/sparkline.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			mEB/NJX74l60zYHR2JI7uioGb8sORBj8ZIrEOVU1+Oc=
+			</data>
+		</dict>
+		<key>Documentation/Classes/chart/stackedBars.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			+qrJjJNeIGRPy75fyHqF7YR8OEMoJqMQU4GOUC3sI80=
+			</data>
+		</dict>
 		<key>Documentation/Classes/chart/verticalBar.png</key>
 		<dict>
 			<key>hash2</key>
@@ -67,32 +134,67 @@
 			kxBU8qPrWPwTjK//dRY1aySxvax/MijR98LBOz22TyM=
 			</data>
 		</dict>
+		<key>Documentation/Classes/chart/waterfall.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			HVwEoAxXjWCrCuX838AASaE+Oie0OMUHXQCFh7MBSjw=
+			</data>
+		</dict>
 		<key>Documentation/Classes/color.md</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			SCtdnpCvv6ckfJNgOeyKSTMdQxnKqvyEfv5tXfZCEhw=
+			d549DYv5pnSrl5uxv2NMWBsNlqhY1P3ChbKGEgvmsXA=
+			</data>
+		</dict>
+		<key>Documentation/Classes/font.md</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			u8Lo848yGjuyNTeZZOS9RRozKbs4BVMshOZ6TRJQPss=
+			</data>
+		</dict>
+		<key>Documentation/Classes/point.md</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			RDmlS2iFUxjyj5WJiVn6z0tnAm4LXfKdmZ78xj09rlQ=
 			</data>
 		</dict>
 		<key>Documentation/Classes/svg.md</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			bjtLyeiZ+1Xbzl/RxkL3EBqd7MfpVGr2k2t5s59NQnw=
+			5Jx1y/2DWdbXRGi9HvFZl3uywUA5//NPPm6PS8DnewU=
 			</data>
 		</dict>
 		<key>Documentation/Classes/svg_examples.md</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			xTwsp0ccIIMV2Y+bj40DLfUriQAdlTtqO3YtYTkMS3g=
+			02hnm4ay/Wz+4JHe8v8TBgS1PydlpW+PCoBC95hcyrU=
 			</data>
 		</dict>
 		<key>Documentation/Classes/xml.md</key>
 		<dict>
 			<key>hash2</key>
 			<data>
-			7IGqz+y8ibqNrEvflEVZ39jEdEWA3QvsZ7vxKrG+GU8=
+			p19b1HI2YripGPmRQp6aUYgvJn2OBe7jmg9AX2gvZQc=
+			</data>
+		</dict>
+		<key>Documentation/gallery/mondrian.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			lUYJAnBb2efTzuwMiYGYE6SMeosD73VsRBb34brpAQ0=
+			</data>
+		</dict>
+		<key>Documentation/gallery/stars.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			QZVd2b1SdW+k/ecdH1xk4doHpiD6UR/PyUytP7RnzUg=
 			</data>
 		</dict>
 		<key>Documentation/svg.png</key>
@@ -106,7 +208,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			A3daWjm23ej5+kGHLvDeEJc0Py/+a1vAqeFsTqEsFJU=
+			2/fu32SNuS/e8BBtR0Zs5aKGMIQrdUWpEQQ24cg0v+c=
 			</data>
 		</dict>
 		<key>Resources/Logos/logo.png</key>
@@ -134,23 +236,30 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			p3jAwy7yUXsoV2KG6hVv7/bp42PENVqOBHY6xt7aufI=
+			wd31AUbpJNr4ucBQ4gTncep84ghwFORu0J40JuIoDfI=
 			</data>
 			<key>optional</key>
 			<true/>
 		</dict>
-		<key>Resources/logo.svg</key>
+		<key>Resources/logo 2.svg</key>
 		<dict>
 			<key>hash2</key>
 			<data>
 			s+0y04CEkeH1x8+ygc2+z5Aahb6Cc/4RoGhGKMaYmUM=
 			</data>
 		</dict>
+		<key>Resources/logo.svg</key>
+		<dict>
+			<key>hash2</key>
+			<data>
+			/oCw4MnDMPP8z8y9ePkdcx8+eqqPbvQtYI0ppL6YIsc=
+			</data>
+		</dict>
 		<key>SVG with Classes.4DZ</key>
 		<dict>
 			<key>cdhash</key>
 			<data>
-			gBpp0CEzDwLU7eerfr32g/2/CG8=
+			3lbIM3sEoxVXxqNNPlVr3Exe5ZU=
 			</data>
 			<key>requirement</key>
 			<string>identifier "SVG with Classes.4DZ" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = DYRKW64QA9</string>

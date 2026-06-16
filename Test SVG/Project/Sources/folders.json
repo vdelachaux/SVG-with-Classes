@@ -29,6 +29,7 @@
 			"HDI Chart sparkline",
 			"HDI Chart stackedBar",
 			"HDI Chart verticalBar",
+			"HDI Chart waterfall",
 			"HDI Chart XY Line"
 		]
 	},
@@ -66,7 +67,7 @@
 			"HDI Gradient radial"
 		]
 	},
-	"How Do I": {
+	"HDIs": {
 		"groups": [
 			"Chart",
 			"Drawing",

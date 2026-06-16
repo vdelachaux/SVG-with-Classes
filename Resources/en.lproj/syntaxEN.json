@@ -141,7 +141,7 @@
 			"Syntax": "polar : Boolean"
 		},
 		"value": {
-			"Syntax": "value : Collection"
+			"Syntax": "value : Variant"
 		}
 	},
 	"chart": {
@@ -4758,7 +4758,7 @@
 			"Syntax": "graphic : Picture"
 		},
 		"TAU": {
-			"Syntax": "TAU : Real"
+			"Syntax": "TAU : Variant"
 		},
 		"latest": {
 			"Syntax": "latest : Text"

@@ -141,10 +141,564 @@
 			"Syntax": "polar : Boolean"
 		},
 		"value": {
-			"Syntax": "value : Collection"
+			"Syntax": "value : Variant"
 		}
 	},
 	"chart": {
+		"radar()": {
+			"Syntax": "**.radar**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"cx",
+					"Real",
+					"->"
+				],
+				[
+					"cy",
+					"Real",
+					"->"
+				],
+				[
+					"r",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"horizontalLollipop()": {
+			"Syntax": "**.horizontalLollipop**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"pieBounded()": {
+			"Syntax": "**.pieBounded**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"verticalLollipop()": {
+			"Syntax": "**.verticalLollipop**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"xy()": {
+			"Syntax": "**.xy**( *id* : Text; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"horizontalStackedBar()": {
+			"Syntax": "**.horizontalStackedBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"verticalWaterfall()": {
+			"Syntax": "**.verticalWaterfall**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"semiDonut()": {
+			"Syntax": "**.semiDonut**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *thickness* : Real; *margin* : Integer; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"cx",
+					"Real",
+					"->"
+				],
+				[
+					"cy",
+					"Real",
+					"->"
+				],
+				[
+					"r",
+					"Real",
+					"->"
+				],
+				[
+					"thickness",
+					"Real",
+					"->"
+				],
+				[
+					"margin",
+					"Integer",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"heatmap()": {
+			"Syntax": "**.heatmap**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"horizontalBar()": {
+			"Syntax": "**.horizontalBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"verticalStackedBar()": {
+			"Syntax": "**.verticalStackedBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"horizontalWaterfall()": {
+			"Syntax": "**.horizontalWaterfall**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"sparkline()": {
+			"Syntax": "**.sparkline**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"progressRing()": {
+			"Syntax": "**.progressRing**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *value* : Real; *max* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"cx",
+					"Real",
+					"->"
+				],
+				[
+					"cy",
+					"Real",
+					"->"
+				],
+				[
+					"r",
+					"Real",
+					"->"
+				],
+				[
+					"value",
+					"Real",
+					"->"
+				],
+				[
+					"max",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"setValues()": {
 			"Syntax": "**.setValues**( *id* : Text; *values* : Collection ) : cs.svgx.chart",
 			"Params": [
@@ -166,12 +720,37 @@
 			],
 			"Summary": ""
 		},
-		"xy()": {
-			"Syntax": "**.xy**( *id* : Text; *options* : Object ) : cs.svgx.chart",
+		"semiDonutBounded()": {
+			"Syntax": "**.semiDonutBounded**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *thickness* : Real; *margin* : Integer; *options* : Object ) : cs.svgx.chart",
 			"Params": [
 				[
 					"id",
 					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"thickness",
+					"Real",
+					"->"
+				],
+				[
+					"margin",
+					"Integer",
 					"->"
 				],
 				[
@@ -233,6 +812,47 @@
 			],
 			"Summary": ""
 		},
+		"verticalGroupedBar()": {
+			"Syntax": "**.verticalGroupedBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
 		"verticalBar()": {
 			"Syntax": "**.verticalBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
 			"Params": [
@@ -258,6 +878,114 @@
 				],
 				[
 					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"horizontalGroupedBar()": {
+			"Syntax": "**.horizontalGroupedBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"x",
+					"Real",
+					"->"
+				],
+				[
+					"y",
+					"Real",
+					"->"
+				],
+				[
+					"width",
+					"Real",
+					"->"
+				],
+				[
+					"height",
+					"Real",
+					"->"
+				],
+				[
+					"options",
+					"Object",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"wedge()": {
+			"Syntax": "**.wedge**( *id* : Text; *percent* : Real ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"percent",
+					"Real",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.chart",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"circularGauge()": {
+			"Syntax": "**.circularGauge**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *value* : Real; *max* : Real; *options* : Object ) : cs.svgx.chart",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"cx",
+					"Real",
+					"->"
+				],
+				[
+					"cy",
+					"Real",
+					"->"
+				],
+				[
+					"r",
+					"Real",
+					"->"
+				],
+				[
+					"value",
+					"Real",
+					"->"
+				],
+				[
+					"max",
 					"Real",
 					"->"
 				],
@@ -320,27 +1048,6 @@
 			],
 			"Summary": ""
 		},
-		"wedge()": {
-			"Syntax": "**.wedge**( *id* : Text; *percent* : Real ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"percent",
-					"Real",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"pie()": {
 			"Syntax": "**.pie**( *id* : Text; *cx* : Real; *cy* : Real; *r* : Real; *options* : Object ) : cs.svgx.chart",
 			"Params": [
@@ -361,83 +1068,6 @@
 				],
 				[
 					"r",
-					"Real",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"pieBounded()": {
-			"Syntax": "**.pieBounded**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *options* : Object ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"x",
-					"Real",
-					"->"
-				],
-				[
-					"y",
-					"Real",
-					"->"
-				],
-				[
-					"width",
-					"Real",
-					"->"
-				],
-				[
-					"options",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.chart",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"horizontalBar()": {
-			"Syntax": "**.horizontalBar**( *id* : Text; *x* : Real; *y* : Real; *width* : Real; *height* : Real; *options* : Object ) : cs.svgx.chart",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"x",
-					"Real",
-					"->"
-				],
-				[
-					"y",
-					"Real",
-					"->"
-				],
-				[
-					"width",
-					"Real",
-					"->"
-				],
-				[
-					"height",
 					"Real",
 					"->"
 				],
@@ -2579,11 +3209,11 @@
 			"Summary": ""
 		},
 		"path()": {
-			"Syntax": "**.path**( *data* : Text; *attachTo* : Variant ) : cs.svgx.svg",
+			"Syntax": "**.path**( *data* : Variant; *attachTo* : Variant ) : cs.svgx.svg",
 			"Params": [
 				[
 					"data",
-					"Text",
+					"Variant",
 					"->"
 				],
 				[
@@ -4118,6 +4748,9 @@
 			],
 			"Summary": ""
 		},
+		"autoExtendCanvas": {
+			"Syntax": "autoExtendCanvas : Boolean"
+		},
 		"stackTransformation": {
 			"Syntax": "stackTransformation : Boolean"
 		},
@@ -4125,7 +4758,7 @@
 			"Syntax": "graphic : Picture"
 		},
 		"TAU": {
-			"Syntax": "TAU : Real"
+			"Syntax": "TAU : Variant"
 		},
 		"latest": {
 			"Syntax": "latest : Text"
@@ -4141,38 +4774,6 @@
 			"Params": [
 				[
 					"text",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"findById()": {
-			"Syntax": "**.findById**( *id* : Text )->reference : Text",
-			"Params": [
-				[
-					"id",
-					"Text",
-					"->"
-				],
-				[
-					"reference",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"isNull()": {
-			"Syntax": "**.isNull**( *reference* : Text ) : Boolean",
-			"Params": [
-				[
-					"reference",
 					"Text",
 					"->"
 				],
@@ -4448,27 +5049,6 @@
 			],
 			"Summary": ""
 		},
-		"find()": {
-			"Syntax": "**.find**( *node* : Text; *xpath* : Text )->references : Collection",
-			"Params": [
-				[
-					"node",
-					"Text",
-					"->"
-				],
-				[
-					"xpath",
-					"Text",
-					"->"
-				],
-				[
-					"references",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
 		"getAttribute()": {
 			"Syntax": "**.getAttribute**( *node* : Text; *attribute* : Text )->value : Variant",
 			"Params": [
@@ -4554,6 +5134,38 @@
 				[
 					"",
 					"Object",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"isNull()": {
+			"Syntax": "**.isNull**( *reference* : Text ) : Boolean",
+			"Params": [
+				[
+					"reference",
+					"Text",
+					"->"
+				],
+				[
+					"",
+					"Boolean",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"findById()": {
+			"Syntax": "**.findById**( *id* : Text )->reference : Text",
+			"Params": [
+				[
+					"id",
+					"Text",
+					"->"
+				],
+				[
+					"reference",
+					"Text",
 					"<-"
 				]
 			],
@@ -4753,6 +5365,53 @@
 				[
 					"index",
 					"Integer",
+					"->"
+				],
+				[
+					"node",
+					"Text",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"find()": {
+			"Syntax": "**.find**( *node* : Text; *xpath* : Text )->references : Collection",
+			"Params": [
+				[
+					"node",
+					"Text",
+					"->"
+				],
+				[
+					"xpath",
+					"Text",
+					"->"
+				],
+				[
+					"references",
+					"Collection",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"appendChild()": {
+			"Syntax": "**.appendChild**( *target* : Text; *type* : Integer; *value* : Variant )->node : Text",
+			"Params": [
+				[
+					"target",
+					"Text",
+					"->"
+				],
+				[
+					"type",
+					"Integer",
+					"->"
+				],
+				[
+					"value",
+					"Variant",
 					"->"
 				],
 				[
