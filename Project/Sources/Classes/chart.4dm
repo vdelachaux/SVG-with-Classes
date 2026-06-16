@@ -861,6 +861,286 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 	End if 
 	
 	return This:C1470
+
+	//———————————————————————————————————————————————————————————————————————————
+	// Vertical stacked bar chart
+Function verticalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
+
+	This:C1470._closeChart(This:C1470.id)
+	This:C1470.group()
+
+	This:C1470.id:=$id
+
+	$options:=$options || {}
+	var $values : Collection:=$options.data || []
+	var $n : Integer:=$values.length
+
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "bar"; \
+		orient: "verticalStacked"; \
+		x: $x; \
+		y: $y; \
+		width: $width; \
+		height: $height; \
+		values: $values; \
+		options: $options}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+
+	If ($n=0)
+		return This:C1470
+	End if 
+
+	var $font:=This:C1470._graphFont($options.font)
+	var $showValues : Boolean:=Bool:C1537($options.showValues)
+	var $showLabels : Boolean:=Bool:C1537($options.showLabels)
+
+	// Place the chart group
+	This:C1470.translate($x; $y)
+
+	// Distance between bars
+	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.2
+
+	// Compute totals and max stacked value
+	var $totals : Collection:=[]
+	var $serie : Object
+	For each ($serie; $values)
+		
+		var $total : Real:=0
+		var $segments : Collection:=$serie.segments
+		
+		If (Value type:C1509($segments)=Is collection:K8:32)
+			
+			var $segment : Object
+			For each ($segment; $segments)
+				$total+=$segment.value
+			End for each 
+			
+		End if 
+		
+		$totals.push($total)
+		
+	End for each 
+
+	var $maxValue : Real:=$options.max#Null:C1517 ? Num:C11($options.max) : $totals.max()
+	$maxValue:=$maxValue+Num:C11($maxValue=0)
+
+	var $step : Real:=$width/$n
+	var $barWidth : Real:=$step*(1-$gap)
+
+	var $i : Integer
+	var $color : cs:C1710.color
+	For each ($serie; $values)
+		
+		$i+=1
+		
+		var $segments : Collection:=$serie.segments
+		If (Value type:C1509($segments)#Is collection:K8:32)
+			continue
+		End if 
+		
+		var $xPos : Real:=(($i-1)*$step)+(($step-$barWidth)/2)
+		var $yCursor : Real:=$height
+		var $j : Integer
+		var $segment : Object
+		For each ($segment; $segments)
+			
+			$j+=1
+			var $val : Real:=Num:C11($segment.value)
+			If ($val<=0)
+				continue
+			End if 
+			
+			var $h : Real:=($val/$maxValue)*$height
+			$yCursor-=$h
+			
+			This:C1470.rect($barWidth; $h).position($xPos; $yCursor).setID(String:C10($i; "serie_###")+"_"+String:C10($j; "seg_###"))
+			
+			If ($segment.color#Null:C1517)
+				This:C1470.fill($segment.color)
+			Else 
+				$color:=$color || cs:C1710.color.new()
+				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $segments.length+Num:C11($segments.length=0))).colorToCSS($color.main; "hexLong"))
+			End if 
+			
+			If ($options.stroke#Null:C1517)
+				This:C1470.stroke($options.stroke)
+			End if 
+			
+		End for each 
+		
+		// Total value on top
+		If ($showValues)
+			This:C1470.text(String:C10(Round:C94($totals[$i-1]; 2))).position($xPos+($barWidth/2); $yCursor-4)\
+				.font($font).alignment(Align center:K42:3)
+		End if 
+		
+		// Bar label
+		If ($showLabels)
+			This:C1470.text($serie.label).position($xPos+($barWidth/2); $height+($font.size*1.5))\
+				.font($font).alignment(Align center:K42:3)
+		End if 
+		
+	End for each 
+
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.hAxis))
+		This:C1470.line(0; $height; $width; $height).stroke(1).setID("hAxis")
+	End if 
+
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.vAxis))
+		This:C1470.line(0; -5; 0; $height).stroke(1).setID("vAxis")
+	End if 
+
+	return This:C1470
+
+	//———————————————————————————————————————————————————————————————————————————
+	// Horizontal stacked bar chart
+Function horizontalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $height : Real; $options : Object) : cs:C1710.chart
+
+	This:C1470._closeChart(This:C1470.id)
+	This:C1470.group()
+
+	This:C1470.id:=$id
+
+	$options:=$options || {}
+	var $values : Collection:=$options.data || []
+	var $n : Integer:=$values.length
+
+	Super:C1706.setAttributes({\
+		id: $id; \
+		type: "bar"; \
+		orient: "horizontalStacked"; \
+		x: $x; \
+		y: $y; \
+		width: $width; \
+		height: $height; \
+		values: $values; \
+		options: $options}; \
+		This:C1470.create(This:C1470.latest; "vdl:graph")\
+		)
+
+	This:C1470.store.push({id: $id; dom: This:C1470.latest})
+
+	If ($n=0)
+		return This:C1470
+	End if 
+
+	var $font:=This:C1470._graphFont($options.font)
+	var $showValues : Boolean:=Bool:C1537($options.showValues)
+	var $showLabels : Boolean:=Bool:C1537($options.showLabels)
+	var $pad : Real:=$options.padding#Null:C1517 ? Num:C11($options.padding) : 10
+
+	var $hOffset : Real
+	If ($showLabels)
+		var $t : Text
+		For each ($t; $values.extract("label"))
+			var $p:=cs:C1710.svg.new().TextToPicture($t; {size: $font.size})
+			var $w; $h : Real
+			PICTURE PROPERTIES:C457($p; $w; $h)
+			$hOffset:=$w>$hOffset ? $w : $hOffset
+		End for each 
+	End if 
+
+	This:C1470.translate($x+($hOffset*Num:C11($showLabels))+$pad; $y)
+
+	var $gap : Real:=$options.gap#Null:C1517 ? Num:C11($options.gap) : 0.2
+
+	// Compute totals and max stacked value
+	var $totals : Collection:=[]
+	var $serie : Object
+	For each ($serie; $values)
+		
+		var $total : Real:=0
+		var $segments : Collection:=$serie.segments
+		
+		If (Value type:C1509($segments)=Is collection:K8:32)
+			var $segment : Object
+			For each ($segment; $segments)
+				$total+=$segment.value
+			End for each 
+		End if 
+		
+		$totals.push($total)
+		
+	End for each 
+
+	var $maxValue : Real:=$options.max#Null:C1517 ? Num:C11($options.max) : $totals.max()
+	$maxValue:=$maxValue+Num:C11($maxValue=0)
+
+	var $step : Real:=$height/$n
+	var $barHeight : Real:=Round:C94($step*(1-$gap); 2)
+
+	var $i : Integer
+	var $color : cs:C1710.color
+	For each ($serie; $values)
+		
+		$i+=1
+		
+		var $segments : Collection:=$serie.segments
+		If (Value type:C1509($segments)#Is collection:K8:32)
+			continue
+		End if 
+		
+		var $yPos : Real:=Round:C94(($i-1)*$step+($step-$barHeight); 2)
+		var $xCursor : Real:=$pad
+		var $j : Integer
+		var $segment : Object
+		For each ($segment; $segments)
+			
+			$j+=1
+			var $val : Real:=Num:C11($segment.value)
+			If ($val<=0)
+				continue
+			End if 
+			
+			var $w : Real:=Round:C94(($val/$maxValue)*$width; 2)
+			
+			This:C1470.rect($w; $barHeight).position($xCursor; $yPos).setID(String:C10($i; "serie_###")+"_"+String:C10($j; "seg_###"))
+			
+			If ($segment.color#Null:C1517)
+				This:C1470.fill($segment.color)
+			Else 
+				$color:=$color || cs:C1710.color.new()
+				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $segments.length+Num:C11($segments.length=0))).colorToCSS($color.main; "hexLong"))
+			End if 
+			
+			If ($options.stroke#Null:C1517)
+				This:C1470.stroke($options.stroke)
+			End if 
+			
+			$xCursor+=$w
+			
+		End for each 
+		
+		If ($showValues)
+			This:C1470.text(String:C10(Round:C94($totals[$i-1]; 2))).position($xCursor+4; $yPos+($barHeight/2))\
+				.font($font).alignment(Align left:K42:2)
+		End if 
+		
+		If ($showLabels)
+			This:C1470.textArea($serie.label).width($hOffset)\
+				.font($font).alignment(Align right:K42:4)\
+				.translate(-$hOffset-$pad; $yPos+($barHeight/2)-$pad)
+		End if 
+		
+	End for each 
+
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.hAxis))
+		This:C1470.line(0; $height+$pad; $width+($pad*2); $height+$pad).stroke(1).setID("hAxis")
+	End if 
+
+	If (Bool:C1537($options.axis))\
+		 || (Bool:C1537($options.vAxis))
+		This:C1470.line(0; 0; 0; $height+$pad).stroke(1).setID("vAxis")
+	End if 
+
+	return This:C1470
 	
 	//———————————————————————————————————————————————————————————————————————————
 	// 

@@ -21,6 +21,8 @@ This class extends the <a href="svg.md">`svg`</a>class
 |.**wedge**( id :`Text` ; percent : `Real`) → `cs.chart`|Draws a segment of the 360° percentage in a pie or donut chart. If the chart id is not found, an explicit error is pushed (`wedge(): chart id not found: ...`).|
 |.**horizontlBar** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Start a vertical bar chart. `options.data` must be a collection of objects `{label, value, [color]}`.|
 |.**verticalBar** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Start a vertical bar chart. `options.data` must be a collection of objects `{label, value, [color]}`.|
+|.**horizontalStackedBar** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Start a horizontal stacked bar chart. `options.data` must be `{label; segments:[{value; [color]}...]}`.|
+|.**verticalStackedBar** ( id :`Text` ; x : `Real` ; y : `Real` ; width : `Real` ; height : `Real` {; options : `Object`}) → `cs.chart` | Start a vertical stacked bar chart. `options.data` must be `{label; segments:[{value; [color]}...]}`.|
 |.**closeChart**({id :`Text`})| Closing the chart `id` or the current chart|
 
 ### Notes
@@ -83,6 +85,72 @@ $chart.preview()
 ```
 <br>
 ![verticalBar](./chart/verticalBar.png)
+
+----
+
+### Stacked bars
+
+```4D
+var $chart:=cs.svgx.chart.new()
+
+$chart.newCanvas({width: 1080; height: 700; viewBox: "0 0 1080 700"})
+
+$chart.text("HDI Chart: stackedBar").position(40; 30).fontSize(18).fontStyle(Bold).fillColor("#1d3557")
+
+var $data:=[\
+{label: "Jan"; segments: [\
+{value: 35; color: "#3b82f6"}; \
+{value: 22; color: "#f97316"}; \
+{value: 18; color: "#22c55e"}\
+]}; \
+{label: "Feb"; segments: [\
+{value: 30; color: "#3b82f6"}; \
+{value: 28; color: "#f97316"}; \
+{value: 14; color: "#22c55e"}\
+]}; \
+{label: "Mar"; segments: [\
+{value: 42; color: "#3b82f6"}; \
+{value: 26; color: "#f97316"}; \
+{value: 20; color: "#22c55e"}\
+]}; \
+{label: "Apr"; segments: [\
+{value: 38; color: "#3b82f6"}; \
+{value: 19; color: "#f97316"}; \
+{value: 24; color: "#22c55e"}\
+]}\
+]
+
+$chart.text("Vertical stacked").position(250; 70).fontSize(14).fontStyle(Bold).fillColor("#334155")
+$chart.verticalStackedBar("vstack"; 40; 90; 440; 260; {\
+data: $data; \
+showLabels: True; \
+showValues: True; \
+axis: True; \
+stroke: "white"\
+})
+
+$chart.text("Horizontal stacked").position(250; 420).fontSize(14).fontStyle(Bold).fillColor("#334155")
+$chart.horizontalStackedBar("hstack"; 40; 440; 440; 200; {\
+data: $data; \
+showLabels: True; \
+showValues: True; \
+axis: True; \
+stroke: "white"\
+})
+
+// Legend
+$chart.rect(16; 16).position(620; 160).fill("#3b82f6")
+$chart.text("Produit A").position(644; 174).fontSize(14).fillColor("#334155")
+$chart.rect(16; 16).position(620; 190).fill("#f97316")
+$chart.text("Produit B").position(644; 204).fontSize(14).fillColor("#334155")
+$chart.rect(16; 16).position(620; 220).fill("#22c55e")
+$chart.text("Produit C").position(644; 234).fontSize(14).fillColor("#334155")
+
+$chart.preview()
+```
+
+<br>
+![](./chart/stakedBars.svg)
 
 ----
 
