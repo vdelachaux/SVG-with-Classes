@@ -30,7 +30,7 @@ This class is intended to work with the [enhanced XPath support](https://blog.4d
 |.**setOptions** ( selector : `Integer` ; value : `integer` … {selectorN : `Integer` ; valueN : `integer`}) → `cs.xml` | Modify the value of one or more XML options for the structure
 |.**parse** ( value : `Text` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` <br/> .**parse** ( value : `Blob` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` | Parses a BLOB or Text type variable containing an XML structure 
 |.**open** ( file : `4D.File` {; validate : `Boolean` {; schema : `Text`}} ) → `cs.xml` | Parses a document containing an XML structure
-|.**save** () → `cs.xml` <br/> .**save** ( {file : `4D.File`} {; keepStructure : `Boolean`}) → `cs.xml` | Saves the XML structure to a document
+|.**save** () → `cs.xml` <br/> .**save** ( {file : `4D.File`} {; keepStructure : `Boolean`}) → `cs.xml` | Saves the XML structure to a document. If no file is provided and no previous `.file` is available, a save dialog is opened.
 |.**close** ( ) → `cs.xml` | Close the XML tree (Release the memory)
 |.**getText** ({keepStructure : `Boolean`}) → `Text` |  Returns the XML tree as text
 |.**getContent** ({keepStructure : `Boolean`}) → `Blob` |  Returns the XML tree as BLOB
@@ -126,6 +126,23 @@ Appends a child node to the target node.
 Typical `type` values are XML constants such as `XML DATA`, `XML comment`, or processing-instruction type values.
 
 This helper exists to avoid direct DOM command usage in subclasses when appending non-element child nodes.
+
+## 🔹 .save()
+>.save() → `cs.xml`
+
+Saves the current XML tree.
+
+Behavior without parameter:
+- If `.file` is already defined (from `.open()` or a previous `.save()`), this file is reused.
+- If `.file` is not defined, a save dialog is displayed to let the user choose a destination file.
+- If the user validates the dialog, the selected file is stored in `.file` and used for saving.
+- If the user cancels, `.save()` returns with `.success = False` and an error entry (`File is not defined`).
+
+>.save(file : `4D.File` {; keepStructure : `Boolean`}) → `cs.xml`
+
+Saves to the provided file directly, without opening a dialog.
+
+`keepStructure` controls whether the in-memory DOM remains open when `.autoClose` is enabled.
 
 ## 🔹 .setAttributes()
 >.setAttributes( target : `XML Ref`; attribute : `Text` ; value ) → `cs.xml` 

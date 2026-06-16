@@ -297,7 +297,21 @@ Function save($file; $keepStructure : Boolean) : cs:C1710.xml
 			
 		Else 
 			
-			$file:=This:C1470.file
+			If (This:C1470.file#Null:C1517)
+				
+				$file:=This:C1470.file
+				
+			Else 
+				
+				var $name:=Select document:C905(8858; ".svg"; ""; File name entry:K24:17+Package open:K24:8+Use sheet window:K24:11)
+				
+				If (Bool:C1537(OK))
+					
+					$file:=File:C1566(DOCUMENT; fk platform path:K87:2)
+					This:C1470.file:=$file
+					
+				End if 
+			End if 
 			
 		End if 
 	End if 
