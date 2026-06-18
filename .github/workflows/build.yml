@@ -9,14 +9,14 @@ jobs:
   build-macos:
     runs-on: macos-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Get Color with Classes
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: vdelachaux/Color-with-Classes
           path: Components/Color-with-Classes.4dbase
       - name: Build
-        uses: 4d/build4d-action@main
+        uses: ./.github/actions/4d-build
         with:
           product-line: vcs
           version: vcs
@@ -26,7 +26,7 @@ jobs:
   build-windows:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Cleanup temp 4DZ lock candidates
         shell: pwsh
         run: |
@@ -34,7 +34,7 @@ jobs:
             Where-Object { $_.Name -like "Color-with-Classes*" } |
             Remove-Item -Force -ErrorAction SilentlyContinue
       - name: Get Color with Classes
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: vdelachaux/Color-with-Classes
           path: Components/Color-with-Classes.4dbase
@@ -43,7 +43,7 @@ jobs:
         run: |
           Remove-Item -Recurse -Force "BUILD\Components\SVG with Classes.4dbase" -ErrorAction SilentlyContinue
       - name: Build
-        uses: 4d/build4d-action@main
+        uses: ./.github/actions/4d-build
         with:
           product-line: vcs
           version: vcs
