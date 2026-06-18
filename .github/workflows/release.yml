@@ -14,10 +14,10 @@ jobs:
       contents: write # for asset upload
     steps:
       - name: ⬇️ Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Get Color with Classes
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: vdelachaux/Color-with-Classes
           path: Components/Color-with-Classes.4dbase
