@@ -6,23 +6,38 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [macos-latest, windows-latest]
-    runs-on: ${{ matrix.os }}
-
+  build-macos:
+    runs-on: macos-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Get Color with Classes
         uses: actions/checkout@v4
         with:
           repository: vdelachaux/Color-with-Classes
           path: Components/Color-with-Classes.4dbase
+      - name: Build
+        uses: 4d/build4d-action@main
+        with:
+          product-line: vcs
+          version: vcs
+          build: official
+          token: ${{ secrets.DLTK }}
 
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Cleanup temp 4DZ lock candidates
+        shell: pwsh
+        run: |
+          Get-ChildItem "$env:TEMP" -Filter "*.4DZ" -ErrorAction SilentlyContinue |
+            Where-Object { $_.Name -like "Color-with-Classes*" } |
+            Remove-Item -Force -ErrorAction SilentlyContinue
+      - name: Get Color with Classes
+        uses: actions/checkout@v4
+        with:
+          repository: vdelachaux/Color-with-Classes
+          path: Components/Color-with-Classes.4dbase
       - name: Build
         uses: 4d/build4d-action@main
         with:
