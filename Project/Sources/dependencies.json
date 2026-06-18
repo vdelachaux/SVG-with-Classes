@@ -1,4 +1,9 @@
 {
 	"version": 2100,
-	"dependencies": {}
+	"dependencies": {
+		"Color with Classes": {
+			"github": "vdelachaux/Color-with-Classes",
+			"version": "4d"
+		}
+	}
 }
