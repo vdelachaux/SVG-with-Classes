@@ -22,6 +22,12 @@ jobs:
           repository: vdelachaux/Color-with-Classes
           path: Components/Color-with-Classes.4dbase
 
+      - name: Build
+        uses: ./.github/actions/4d-build
+        with:
+          actions: "build,pack,archive"
+          token: ${{ secrets.DLTK }}
+
       - name: Upload
         run: |
           gh release upload ${{ github.event.release.tag_name }} BUILD/${{ github.event.repository.name }}.zip
