@@ -2,7 +2,12 @@ name: Build
 
 on:
   push:
+    paths:
+      - '**.4dm'
+      - '**.yml'
   pull_request:
+    paths:
+      - '**.4dm'
   workflow_dispatch:
 
 jobs:
