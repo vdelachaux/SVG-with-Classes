@@ -6,42 +6,36 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-macos:
-    runs-on: macos-latest
+  build:
+    name: Build on ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v6
-      - name: Get Color with Classes
-        uses: actions/checkout@v6
-        with:
-          repository: vdelachaux/Color-with-Classes
-          path: Components/Color-with-Classes.4dbase
-      - name: Build
-        uses: ./.github/actions/4d-build
-        with:
-          product-line: vcs
-          version: vcs
-          build: official
-          token: ${{ secrets.DLTK }}
 
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v6
       - name: Cleanup temp 4DZ lock candidates
+        if: runner.os == 'Windows'
         shell: pwsh
         run: |
           Get-ChildItem "$env:TEMP" -Filter "*.4DZ" -ErrorAction SilentlyContinue |
             Where-Object { $_.Name -like "Color-with-Classes*" } |
             Remove-Item -Force -ErrorAction SilentlyContinue
+
       - name: Get Color with Classes
         uses: actions/checkout@v6
         with:
           repository: vdelachaux/Color-with-Classes
           path: Components/Color-with-Classes.4dbase
+
       - name: Remove pre-built component to avoid Windows file-lock conflict
+        if: runner.os == 'Windows'
         shell: pwsh
         run: |
           Remove-Item -Recurse -Force "BUILD\Components\SVG with Classes.4dbase" -ErrorAction SilentlyContinue
+
       - name: Build
         uses: ./.github/actions/4d-build
         with:
