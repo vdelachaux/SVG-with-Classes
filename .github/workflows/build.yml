@@ -17,6 +17,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Get Color with Classes
+        uses: actions/checkout@v4
+        with:
+          repository: vdelachaux/Color-with-Classes
+          path: Components/Color with Classes.4dbase
+
       - name: Build
         uses: 4d/build4d-action@main
         with:
