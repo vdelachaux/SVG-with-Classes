@@ -1,12 +1,6 @@
-<!--BADGES-->
-[repo]: SVG-with-Classes
-[release-shield]: https://img.shields.io/github/v/release/vdelachaux/[repo]?include_prereleases
-[release-url]: https://github.com/vdelachaux/[repo]/releases/latest
-![Static Badge](https://img.shields.io/badge/Dev%20Component-blue?logo=4d&link=https%3A%2F%2Fdeveloper.4d.com)
-![Static Badge](https://img.shields.io/badge/Project%20Dependencies-blue?logo=4d&link=https%3A%2F%2Fdeveloper.4d.com%2Fdocs%2FProject%2Fcomponents%2F%23loading-components)
+[![Dev Component](https://img.shields.io/badge/Dev%20Component-blue?logo=4d)](https://developer.4d.com) [![Project Dependencies](https://img.shields.io/badge/Project%20Dependencies-blue?logo=4d)](https://developer.4d.com/docs/Project/components/#loading-components)
 <br>
-[![release][release-shield]][release-url]
-<img src="https://img.shields.io/github/downloads/vdelachaux/SVG-with-Classes/total"/>
+[![language](https://img.shields.io/github/languages/top/vdelachaux/SVG-with-Classes.svg)](https://developer.4d.com/) ![code-size](https://img.shields.io/github/languages/code-size/vdelachaux/SVG-with-Classes.svg) [![release](https://img.shields.io/github/v/release/vdelachaux/SVG-with-Classes?include_prereleases)](https://github.com/vdelachaux/SVG-with-Classes/releases/latest) [![license](https://img.shields.io/github/license/vdelachaux/SVG-with-Classes)](LICENSE) [![Build](https://github.com/vdelachaux/SVG-with-Classes/actions/workflows/build.yml/badge.svg)](https://github.com/vdelachaux/SVG-with-Classes/actions/workflows/build.yml) ![downloads](https://img.shields.io/github/downloads/vdelachaux/SVG-with-Classes/total)
 
 # SVG with Classes
 
