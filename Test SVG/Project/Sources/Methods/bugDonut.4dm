@@ -6,7 +6,7 @@
 var $segment:=31
 var $margin:=4
 
-var $color : cs:C1710.svgx.color:=cs:C1710.svgx.color.new()
+var $color : cs:C1710.colorTools.color:=cs:C1710.colorTools.color.new()
 
 var $hsl:={\
 hue: 0; \

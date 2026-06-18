@@ -1,6 +1,13 @@
 {
 	"_method_": {},
 	"cs.svgx": {
+		"chart": {
+			"new()": {
+				"Syntax": "**.new**()",
+				"Params": [],
+				"Summary": ""
+			}
+		},
 		"point": {
 			"new()": {
 				"Syntax": "**.new**( *x* : Real; *y* : Real; *polar* : Boolean )",
@@ -21,13 +28,6 @@
 						"->"
 					]
 				],
-				"Summary": ""
-			}
-		},
-		"chart": {
-			"new()": {
-				"Syntax": "**.new**()",
-				"Params": [],
 				"Summary": ""
 			}
 		},
@@ -56,92 +56,6 @@
 				],
 				"Summary": ""
 			}
-		},
-		"color": {
-			"new()": {
-				"Syntax": "**.new**( *color* : Variant )",
-				"Params": [
-					[
-						"color",
-						"Variant",
-						"->"
-					]
-				],
-				"Summary": ""
-			}
-		}
-	},
-	"point": {
-		"polarToCartesian()": {
-			"Syntax": "**.polarToCartesian**( *r* : Real; *degree* : Integer ) : cs.svgx.point",
-			"Params": [
-				[
-					"r",
-					"Real",
-					"->"
-				],
-				[
-					"degree",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.point",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"get y()": {
-			"Syntax": "**.get y**() : Real",
-			"Params": [
-				[
-					"",
-					"Real",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"set x()": {
-			"Syntax": "**.set x**( *x* : Real )",
-			"Params": [
-				[
-					"x",
-					"Real",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"set y()": {
-			"Syntax": "**.set y**( *y* : Real )",
-			"Params": [
-				[
-					"y",
-					"Real",
-					"->"
-				]
-			],
-			"Summary": ""
-		},
-		"get x()": {
-			"Syntax": "**.get x**() : Real",
-			"Params": [
-				[
-					"",
-					"Real",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"polar": {
-			"Syntax": "polar : Boolean"
-		},
-		"value": {
-			"Syntax": "value : Variant"
 		}
 	},
 	"chart": {
@@ -1088,6 +1002,110 @@
 			"Syntax": "id : Text"
 		},
 		"_inheritedFrom_": "svg"
+	},
+	"font": {
+		"default()": {
+			"Syntax": "**.default**()",
+			"Params": [],
+			"Summary": ""
+		},
+		"rotation": {
+			"Syntax": "rotation : Real"
+		},
+		"stretch": {
+			"Syntax": "stretch : Variant"
+		},
+		"rendering": {
+			"Syntax": "rendering : Text"
+		},
+		"color": {
+			"Syntax": "color : Variant"
+		},
+		"alignment": {
+			"Syntax": "alignment : Integer"
+		},
+		"style": {
+			"Syntax": "style : Variant"
+		},
+		"size": {
+			"Syntax": "size : Integer"
+		},
+		"family": {
+			"Syntax": "family : Text"
+		}
+	},
+	"point": {
+		"polarToCartesian()": {
+			"Syntax": "**.polarToCartesian**( *r* : Real; *degree* : Integer ) : cs.svgx.point",
+			"Params": [
+				[
+					"r",
+					"Real",
+					"->"
+				],
+				[
+					"degree",
+					"Integer",
+					"->"
+				],
+				[
+					"",
+					"cs.svgx.point",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"get y()": {
+			"Syntax": "**.get y**() : Real",
+			"Params": [
+				[
+					"",
+					"Real",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"set x()": {
+			"Syntax": "**.set x**( *x* : Real )",
+			"Params": [
+				[
+					"x",
+					"Real",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"set y()": {
+			"Syntax": "**.set y**( *y* : Real )",
+			"Params": [
+				[
+					"y",
+					"Real",
+					"->"
+				]
+			],
+			"Summary": ""
+		},
+		"get x()": {
+			"Syntax": "**.get x**() : Real",
+			"Params": [
+				[
+					"",
+					"Real",
+					"<-"
+				]
+			],
+			"Summary": ""
+		},
+		"polar": {
+			"Syntax": "polar : Boolean"
+		},
+		"value": {
+			"Syntax": "value : Collection"
+		}
 	},
 	"svg": {
 		"setValue()": {
@@ -4758,7 +4776,7 @@
 			"Syntax": "graphic : Picture"
 		},
 		"TAU": {
-			"Syntax": "TAU : Variant"
+			"Syntax": "TAU : Real"
 		},
 		"latest": {
 			"Syntax": "latest : Text"
@@ -5796,328 +5814,6 @@
 		},
 		"root": {
 			"Syntax": "root : Variant"
-		}
-	},
-	"font": {
-		"default()": {
-			"Syntax": "**.default**()",
-			"Params": [],
-			"Summary": ""
-		},
-		"rotation": {
-			"Syntax": "rotation : Real"
-		},
-		"stretch": {
-			"Syntax": "stretch : Variant"
-		},
-		"rendering": {
-			"Syntax": "rendering : Text"
-		},
-		"color": {
-			"Syntax": "color : Variant"
-		},
-		"alignment": {
-			"Syntax": "alignment : Integer"
-		},
-		"style": {
-			"Syntax": "style : Variant"
-		},
-		"size": {
-			"Syntax": "size : Integer"
-		},
-		"family": {
-			"Syntax": "family : Text"
-		}
-	},
-	"color": {
-		"fontColor()": {
-			"Syntax": "**.fontColor**( *backgroundColor* : Variant; *green* : Integer; *blue* : Integer ) : Text",
-			"Params": [
-				[
-					"backgroundColor",
-					"Variant",
-					"->"
-				],
-				[
-					"green",
-					"Integer",
-					"->"
-				],
-				[
-					"blue",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"isValid()": {
-			"Syntax": "**.isValid**() : Boolean",
-			"Params": [
-				[
-					"",
-					"Boolean",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"rgbToColor()": {
-			"Syntax": "**.rgbToColor**( *rgb* : Object ) : Integer",
-			"Params": [
-				[
-					"rgb",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"getMatchingColors()": {
-			"Syntax": "**.getMatchingColors**( *kind* : Integer )->palette : Collection",
-			"Params": [
-				[
-					"kind",
-					"Integer",
-					"->"
-				],
-				[
-					"palette",
-					"Collection",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"hslToCss()": {
-			"Syntax": "**.hslToCss**( *hsl* : Object ) : Text",
-			"Params": [
-				[
-					"hsl",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Text",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setRGB()": {
-			"Syntax": "**.setRGB**( *rgb* : Object ) : cs.svgx.color",
-			"Params": [
-				[
-					"rgb",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.color",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"hslToColor()": {
-			"Syntax": "**.hslToColor**( *hsl* : Object ) : Integer",
-			"Params": [
-				[
-					"hsl",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"hslToRGB()": {
-			"Syntax": "**.hslToRGB**( *hsl* : Object ) : Object",
-			"Params": [
-				[
-					"hsl",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"colorToRGB()": {
-			"Syntax": "**.colorToRGB**( *color* : Variant ) : Object",
-			"Params": [
-				[
-					"color",
-					"Variant",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"colorToHSL()": {
-			"Syntax": "**.colorToHSL**( *color* : Integer ) : Object",
-			"Params": [
-				[
-					"color",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"rgbToHSL()": {
-			"Syntax": "**.rgbToHSL**( *rgb* : Object ) : Object",
-			"Params": [
-				[
-					"rgb",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"Object",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setColorIndexed()": {
-			"Syntax": "**.setColorIndexed**( *color* : Integer ) : cs.svgx.color",
-			"Params": [
-				[
-					"color",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.color",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"colorToCSS()": {
-			"Syntax": "**.colorToCSS**( *color* : Integer; *type* : Text )->css : Variant",
-			"Params": [
-				[
-					"color",
-					"Integer",
-					"->"
-				],
-				[
-					"type",
-					"Text",
-					"->"
-				],
-				[
-					"css",
-					"Variant",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"colorPicker()": {
-			"Syntax": "**.colorPicker**() : Integer",
-			"Params": [
-				[
-					"",
-					"Integer",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setCSS()": {
-			"Syntax": "**.setCSS**( *css* : Text ) : cs.svgx.color",
-			"Params": [
-				[
-					"css",
-					"Text",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.color",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setHSL()": {
-			"Syntax": "**.setHSL**( *hsl* : Object ) : cs.svgx.color",
-			"Params": [
-				[
-					"hsl",
-					"Object",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.color",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"setColor()": {
-			"Syntax": "**.setColor**( *color* : Integer ) : cs.svgx.color",
-			"Params": [
-				[
-					"color",
-					"Integer",
-					"->"
-				],
-				[
-					"",
-					"cs.svgx.color",
-					"<-"
-				]
-			],
-			"Summary": ""
-		},
-		"css": {
-			"Syntax": "css : Text"
-		},
-		"hsl": {
-			"Syntax": "hsl : Object"
-		},
-		"rgb": {
-			"Syntax": "rgb : Object"
-		},
-		"main": {
-			"Syntax": "main : Integer"
 		}
 	}
 }

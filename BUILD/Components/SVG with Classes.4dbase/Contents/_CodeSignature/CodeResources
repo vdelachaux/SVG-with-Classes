@@ -20,7 +20,7 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			ThRcQKJomHVWg9hfYETRbvkMmqg=
+			uoLOELWHtQskXJJR8p7Pvbwvf3g=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -40,7 +40,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			wOYj7zy1re6uSBROnm0bGTiSf3pVcoyS/3xDxd8G1I0=
+			uPEEFsGay6vBHePiQD8gUCTLIX3Sev6uYeWZ7+m3zFo=
 			</data>
 		</dict>
 		<key>Documentation/Classes/chart/circularGauge.svg</key>
@@ -208,7 +208,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			2/fu32SNuS/e8BBtR0Zs5aKGMIQrdUWpEQQ24cg0v+c=
+			eXhDDWNIXI6fIDOuO2Q8w1WsITEquxmAcFfFn+Y+Lh0=
 			</data>
 		</dict>
 		<key>Resources/Logos/logo.png</key>
@@ -236,7 +236,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			wd31AUbpJNr4ucBQ4gTncep84ghwFORu0J40JuIoDfI=
+			gxSc3+Llm5gf676ohb5xmvK2byjcOzTRrBxhALAtaxY=
 			</data>
 			<key>optional</key>
 			<true/>
@@ -259,7 +259,7 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			3lbIM3sEoxVXxqNNPlVr3Exe5ZU=
+			PFjiLNzbsK9w+f99NLsHXZNhvRE=
 			</data>
 			<key>requirement</key>
 			<string>identifier "SVG with Classes.4DZ" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = DYRKW64QA9</string>
