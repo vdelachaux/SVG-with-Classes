@@ -38,6 +38,10 @@ jobs:
         with:
           repository: vdelachaux/Color-with-Classes
           path: Components/Color-with-Classes.4dbase
+      - name: Remove pre-built component to avoid Windows file-lock conflict
+        shell: pwsh
+        run: |
+          Remove-Item -Recurse -Force "BUILD\Components\SVG with Classes.4dbase" -ErrorAction SilentlyContinue
       - name: Build
         uses: 4d/build4d-action@main
         with:
