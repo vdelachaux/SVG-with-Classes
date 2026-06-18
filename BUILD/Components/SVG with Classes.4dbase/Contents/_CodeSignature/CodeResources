@@ -208,7 +208,7 @@
 		<dict>
 			<key>hash2</key>
 			<data>
-			eXhDDWNIXI6fIDOuO2Q8w1WsITEquxmAcFfFn+Y+Lh0=
+			i6lH9pDEpQpgpsREQymEs58t9QE/e6wVUKoMUxMsFY8=
 			</data>
 		</dict>
 		<key>Resources/Logos/logo.png</key>
@@ -259,7 +259,7 @@
 		<dict>
 			<key>cdhash</key>
 			<data>
-			PFjiLNzbsK9w+f99NLsHXZNhvRE=
+			iIavBmY+nu1W1e0qo2LyImxQO/M=
 			</data>
 			<key>requirement</key>
 			<string>identifier "SVG with Classes.4DZ" and anchor apple generic and certificate 1[field.1.2.840.113635.100.6.2.6] /* exists */ and certificate leaf[field.1.2.840.113635.100.6.1.13] /* exists */ and certificate leaf[subject.OU] = DYRKW64QA9</string>
