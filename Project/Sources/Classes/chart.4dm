@@ -14,7 +14,7 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 	var $i; $number : Integer
 	var $total : Real
 	var $hsl; $serie : Object
-	var $color : cs:C1710.color
+	var $color : cs:C1710.colorTools.color
 	
 	$options:=$options || {}
 	
@@ -68,8 +68,8 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 			
 		End if 
 		
-		$color:=cs:C1710.color.new()
-		$hsl:={hue: 0; saturation: 60; lightness: 100}
+		$color:=cs:C1710.colorTools.color.new()
+		$hsl:={hue: 0; saturation: 60; lightness: 50}
 		
 		For each ($serie; $options.data)
 			
@@ -90,7 +90,7 @@ Function pie($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object) :
 				
 			Else 
 				
-				$hsl.hue:=(360-$i)*360/$number
+				$hsl.hue:=360-(($i*360)/$number)
 				This:C1470.color($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
 				
 			End if 
@@ -585,7 +585,7 @@ Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height 
 		
 	End if 
 	
-	var $color : cs:C1710.color
+	var $color : cs:C1710.colorTools.color
 	var $i : Integer
 	var $serie : Object
 	For each ($serie; $values)
@@ -610,11 +610,11 @@ Function horizontalBar($id : Text; $x : Real; $y : Real; $width : Real; $height 
 			
 			// Fallback color palette
 			var $hsl:={\
-				hue: (360-$i)*360/$n; \
+				hue: 360-(($i*360)/$n); \
 				saturation: 60; \
 				lightness: 50}
 			
-			$color:=$color || cs:C1710.color.new()
+			$color:=$color || cs:C1710.colorTools.color.new()
 			This:C1470.color($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
 			
 		End if 
@@ -767,7 +767,7 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 	$step:=$width/$n
 	var $barWidth : Real:=$step*(1-$gap)
 	
-	var $color : cs:C1710.color
+	var $color : cs:C1710.colorTools.color
 	var $i : Integer
 	var $serie : Object
 	For each ($serie; $values)
@@ -801,7 +801,7 @@ Function verticalBar($id : Text; $x : Real; $y : Real; $width : Real; $height : 
 		Else 
 			
 			// Use color palette
-			$color:=$color || cs:C1710.color.new()
+			$color:=$color || cs:C1710.colorTools.color.new()
 			
 			If ($serie.stroke#Null:C1517)
 				
@@ -939,7 +939,7 @@ Function verticalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $he
 	var $barWidth : Real:=$step*(1-$gap)
 	
 	var $i : Integer
-	var $color : cs:C1710.color
+	var $color : cs:C1710.colorTools.color
 	For each ($serie; $values)
 		
 		$i+=1
@@ -978,7 +978,7 @@ Function verticalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $he
 				
 			Else 
 				
-				$color:=$color || cs:C1710.color.new()
+				$color:=$color || cs:C1710.colorTools.color.new()
 				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $segments.length+Num:C11($segments.length=0))).colorToCSS($color.main; "hexLong"))
 				
 			End if 
@@ -1111,7 +1111,7 @@ Function horizontalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $
 	var $barHeight : Real:=Round:C94($step*(1-$gap); 2)
 	
 	var $i : Integer
-	var $color : cs:C1710.color
+	var $color : cs:C1710.colorTools.color
 	For each ($serie; $values)
 		
 		$i+=1
@@ -1149,7 +1149,7 @@ Function horizontalStackedBar($id : Text; $x : Real; $y : Real; $width : Real; $
 				
 			Else 
 				
-				$color:=$color || cs:C1710.color.new()
+				$color:=$color || cs:C1710.colorTools.color.new()
 				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $segments.length+Num:C11($segments.length=0))).colorToCSS($color.main; "hexLong"))
 				
 			End if 
@@ -1312,7 +1312,7 @@ Function verticalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $he
 				
 			Else 
 				
-				var $color:=cs:C1710.color.new()
+				var $color:=cs:C1710.colorTools.color.new()
 				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $maxGroups)).colorToCSS($color.main; "hexLong"))
 				
 			End if 
@@ -1486,7 +1486,7 @@ Function horizontalGroupedBar($id : Text; $x : Real; $y : Real; $width : Real; $
 				
 			Else 
 				
-				var $color:=cs:C1710.color.new()
+				var $color:=cs:C1710.colorTools.color.new()
 				This:C1470.fill($color.setHSL(This:C1470._getColor($j; $maxGroups)).colorToCSS($color.main; "hexLong"))
 				
 			End if 
@@ -1566,8 +1566,8 @@ Function xy($id : Text; $options : Object) : cs:C1710.chart
 		
 	End if 
 	
-	var $color:=cs:C1710.color.new()
-	var $hsl:={hue: 0; saturation: 60; lightness: 100}
+	var $color:=cs:C1710.colorTools.color.new()
+	var $hsl:={hue: 0; saturation: 60; lightness: 50}
 	
 	var $Xaxis : Collection:=[]
 	var $Yaxis:=[]
@@ -1586,7 +1586,7 @@ Function xy($id : Text; $options : Object) : cs:C1710.chart
 			
 		Else 
 			
-			$hsl.hue:=(360-$i)*360/$number
+			$hsl.hue:=360-(($i*360)/$number)
 			This:C1470.stroke($color.setHSL($hsl).colorToCSS($color.main; "hexLong"))
 			
 		End if 
@@ -1788,7 +1788,7 @@ Function verticalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $heig
 		
 	End if 
 	
-	var $color : cs:C1710.color
+	var $color : cs:C1710.colorTools.color
 	var $i : Integer
 	var $serie : Object
 	For each ($serie; $values)
@@ -1811,11 +1811,11 @@ Function verticalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $heig
 			
 		Else 
 			
-			var $hsl:={\
-				hue: (360-$i)*360/$n; \
+				var $hsl:={\
+					hue: 360-(($i*360)/$n); \
 				saturation: 60; \
 				lightness: 50}
-			$color:=$color || cs:C1710.color.new()
+			$color:=$color || cs:C1710.colorTools.color.new()
 			$color_val:=$color.setHSL($hsl).colorToCSS($color.main; "hexLong")
 			
 		End if 
@@ -1914,7 +1914,7 @@ Function horizontalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $he
 		
 	End if 
 	
-	var $color : cs:C1710.color
+	var $color : cs:C1710.colorTools.color
 	var $i : Integer
 	var $serie : Object
 	For each ($serie; $values)
@@ -1937,11 +1937,11 @@ Function horizontalLollipop($id : Text; $x : Real; $y : Real; $width : Real; $he
 			
 		Else 
 			
-			var $hsl:={\
-				hue: (360-$i)*360/$n; \
+				var $hsl:={\
+					hue: 360-(($i*360)/$n); \
 				saturation: 60; \
 				lightness: 50}
-			$color:=$color || cs:C1710.color.new()
+			$color:=$color || cs:C1710.colorTools.color.new()
 			$color_val:=$color.setHSL($hsl).colorToCSS($color.main; "hexLong")
 			
 		End if 
@@ -2090,7 +2090,7 @@ Function heatmap($id : Text; $x : Real; $y : Real; $width : Real; $height : Real
 		// Optional value label
 		If (Bool:C1537($options.showValues))
 			
-			var $txtColor : Text:=cs:C1710.color.new().fontColor($colors[$colorIdx])
+			var $txtColor : Text:=cs:C1710.colorTools.color.new().fontColor($colors[$colorIdx])
 			
 			This:C1470.text(String:C10(Round:C94($cell.value; 1)))\
 				.position($px+($cellWidth/2); $py+($cellHeight/2)+4)\
@@ -2547,7 +2547,7 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 	End for 
 	
 	// Draw series
-	var $color : cs:C1710.color
+	var $color : cs:C1710.colorTools.color
 	var $serie : Object
 	var $serieIdx : Integer:=0
 	
@@ -2587,11 +2587,11 @@ Function radar($id : Text; $cx : Real; $cy : Real; $r : Real; $options : Object)
 			
 		Else 
 			
-			var $hsl:={\
-				hue: (360-$serieIdx)*360/($series.length); \
+				var $hsl:={\
+					hue: 360-(($serieIdx*360)/($series.length)); \
 				saturation: 70; \
 				lightness: 50}
-			$color:=$color || cs:C1710.color.new()
+			$color:=$color || cs:C1710.colorTools.color.new()
 			$serieColor:=$color.setHSL($hsl).colorToCSS($color.main; "hexLong")
 			
 		End if 
@@ -2654,7 +2654,7 @@ Function setValues($id : Text; $values : Collection) : cs:C1710.chart
 Function _getColor($index : Integer; $max : Integer) : Object
 	
 	return {\
-		hue: (360-$index)*360/$max; \
+		hue: 360-(($index*360)/$max); \
 		saturation: 60; \
 		lightness: 50}
 	

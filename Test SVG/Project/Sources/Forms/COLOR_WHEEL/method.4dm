@@ -5,9 +5,9 @@ Form:C1466.colorNumber:=180
 
 var $angle : Real:=100/Form:C1466.colorNumber
 
-var $hsl:={hue: 0; saturation: 100; lightness: 100}
+var $hsl:={hue: 0; saturation: 100; lightness: 50}
 
-var $color:=cs:C1710.svgx.color.new()
+var $color:=cs:C1710.colorTools.color.new()
 
 var $chart : cs:C1710.svgx.chart:=cs:C1710.svgx.chart.new().pie("wheel"; Form:C1466.cx; Form:C1466.cy; Form:C1466.radius)
 
